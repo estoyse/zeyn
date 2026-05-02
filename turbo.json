@@ -3,6 +3,7 @@
   "ui": "tui",
   "tasks": {
     "build": {
+      "passThroughEnv": ["NODE_ENV"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
@@ -15,7 +16,8 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "passThroughEnv": ["NODE_ENV"]
     },
     "db:push": {
       "cache": false
@@ -24,10 +26,12 @@
       "cache": false
     },
     "deploy": {
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["NODE_ENV"]
     },
     "destroy": {
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["NODE_ENV"]
     }
   }
 }

@@ -4,6 +4,7 @@ import * as schema from "@shaxsiy-oyin/db/schema/auth";
 import { env } from "@shaxsiy-oyin/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { hashPassword, verifyPassword } from "./password";
 
 export function createAuth() {
   const db = createDb();
@@ -11,40 +12,42 @@ export function createAuth() {
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: "sqlite",
-
       schema: schema,
     }),
     trustedOrigins: [
       env.CORS_ORIGIN,
       "shaxsiy-oyin://",
       ...(env.NODE_ENV === "development"
-        ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081"]
+        ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081", "http://localhost:3001"]
         : []),
     ],
     emailAndPassword: {
       enabled: true,
+      password: {
+        hash: hashPassword,
+        verify: verifyPassword,
+      },
     },
-    // uncomment cookieCache setting when ready to deploy to Cloudflare using *.workers.dev domains
-    // session: {
-    //   cookieCache: {
-    //     enabled: true,
-    //     maxAge: 60,
-    //   },
-    // },
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+      },
+    },
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     advanced: {
       defaultCookieAttributes: {
-        sameSite: "none",
-        secure: true,
+        sameSite: env.NODE_ENV === "production" ? "none" : "lax",
+        secure: env.NODE_ENV === "production",
         httpOnly: true,
       },
-      // uncomment crossSubDomainCookies setting when ready to deploy and replace <your-workers-subdomain> with your actual workers subdomain
-      // https://developers.cloudflare.com/workers/wrangler/configuration/#workersdev
-      // crossSubDomainCookies: {
-      //   enabled: true,
-      //   domain: "<your-workers-subdomain>",
-      // },
+      // Note: crossSubDomainCookies is disabled because *.workers.dev is on the Public Suffix List,
+      // which prevents setting a cookie domain shared across different subdomains.
+      // CORS with credentials: true handles the session correctly without this.
+      crossSubDomainCookies: {
+        enabled: false,
+      },
     },
     plugins: [expo()],
   });

@@ -14,6 +14,7 @@
     "@better-auth/expo": "catalog:",
     "@shaxsiy-oyin/db": "workspace:*",
     "@shaxsiy-oyin/env": "workspace:*",
+    "argon2-wasm-edge": "^1.0.23",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "zod": "catalog:"
