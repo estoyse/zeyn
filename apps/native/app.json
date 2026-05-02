@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "scheme": "shaxsiy-oyin",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "shaxsiy-oyin",
+    "slug": "shaxsiy-oyin",
+    "plugins": ["expo-font"],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
