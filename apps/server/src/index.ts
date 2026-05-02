@@ -2,12 +2,14 @@ import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@shaxsiy-oyin/api/context";
 import { appRouter } from "@shaxsiy-oyin/api/routers/index";
 import { createAuth } from "@shaxsiy-oyin/auth";
-import { env } from "@shaxsiy-oyin/env/server";
+import { env, type Env } from "@shaxsiy-oyin/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
-const app = new Hono();
+import { GameRoom } from "./durable-objects/GameRoom";
+
+const app = new Hono<{ Bindings: Env }>();
 
 app.use(logger());
 app.use(
@@ -32,8 +34,16 @@ app.use(
   }),
 );
 
+app.get("/game/:id/ws", (c) => {
+  const id = c.req.param("id");
+  const doId = c.env.GAME_ROOM.idFromName(id);
+  const stub = c.env.GAME_ROOM.get(doId);
+  return stub.fetch(c.req.raw);
+});
+
 app.get("/", (c) => {
   return c.text("OK");
 });
 
+export { GameRoom };
 export default app;

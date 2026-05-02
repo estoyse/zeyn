@@ -25,6 +25,10 @@
     "db:generate": {
       "cache": false
     },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
     "deploy": {
       "cache": false,
       "passThroughEnv": ["NODE_ENV"]

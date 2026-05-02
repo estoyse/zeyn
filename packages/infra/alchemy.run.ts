@@ -1,15 +1,13 @@
 import alchemy from "alchemy";
 import { Vite } from "alchemy/cloudflare";
-import { Worker } from "alchemy/cloudflare";
+import { Worker, DurableObjectNamespace } from "alchemy/cloudflare";
 import { D1Database } from "alchemy/cloudflare";
 import { config } from "dotenv";
 
-
-
 const loadEnvs = () => {
-  const nodeEnv = process.env.NODE_ENV || 'development';
-  const isProduction = nodeEnv === 'production';
-  
+  const nodeEnv = process.env.NODE_ENV || "development";
+  const isProduction = nodeEnv === "production";
+
   console.log(`Environment: ${nodeEnv}`);
 
   if (isProduction) {
@@ -21,7 +19,7 @@ const loadEnvs = () => {
     config({ path: "../../apps/web/.env" });
     config({ path: "../../apps/server/.env" });
   }
-}
+};
 
 loadEnvs();
 
@@ -45,6 +43,10 @@ export const server = await Worker("server", {
   compatibility: "node",
   compatibilityDate: "2024-09-23",
   bindings: {
+    GAME_ROOM: DurableObjectNamespace("game_room", {
+      className: "GameRoom",
+      sqlite: true,
+    }),
     DB: db,
     CORS_ORIGIN: alchemy.env.CORS_ORIGIN!,
     BETTER_AUTH_SECRET: alchemy.secret.env.BETTER_AUTH_SECRET!,

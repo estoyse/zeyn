@@ -16,6 +16,7 @@
     "dev:server": "turbo -F server dev",
     "db:push": "turbo -F @shaxsiy-oyin/db db:push",
     "db:generate": "turbo -F @shaxsiy-oyin/db db:generate",
+    "db:studio": "turbo -F @shaxsiy-oyin/db db:studio",
     "deploy": "turbo -F @shaxsiy-oyin/infra deploy",
     "destroy": "turbo -F @shaxsiy-oyin/infra destroy"
   },
