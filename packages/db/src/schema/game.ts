@@ -19,6 +19,7 @@ export const questions = sqliteTable("questions", {
 
 export const gameHistory = sqliteTable("game_history", {
   id: text("id").primaryKey(),
+  roomId: text("room_id").notNull().default("unknown"),
   hostId: text("host_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -47,6 +48,25 @@ export const gameQuestionResults = sqliteTable(
   ]
 );
 
+export const gamePlayerResults = sqliteTable(
+  "game_player_results",
+  {
+    id: text("id").primaryKey(),
+    gameId: text("game_id")
+      .notNull()
+      .references(() => gameHistory.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    playerName: text("player_name").notNull(),
+    score: integer("score").notNull(),
+  },
+  (table) => [
+    index("game_player_results_gameId_idx").on(table.gameId),
+    index("game_player_results_userId_idx").on(table.userId),
+  ]
+);
+
 export const subjectsRelations = relations(subjects, ({ many }) => ({
   questions: many(questions),
 }));
@@ -63,7 +83,8 @@ export const gameHistoryRelations = relations(gameHistory, ({ one, many }) => ({
     fields: [gameHistory.hostId],
     references: [user.id],
   }),
-  results: many(gameQuestionResults),
+  questionResults: many(gameQuestionResults),
+  playerResults: many(gamePlayerResults),
 }));
 
 export const gameQuestionResultsRelations = relations(gameQuestionResults, ({ one }) => ({
@@ -78,5 +99,16 @@ export const gameQuestionResultsRelations = relations(gameQuestionResults, ({ on
   question: one(questions, {
     fields: [gameQuestionResults.questionId],
     references: [questions.id],
+  }),
+}));
+
+export const gamePlayerResultsRelations = relations(gamePlayerResults, ({ one }) => ({
+  game: one(gameHistory, {
+    fields: [gamePlayerResults.gameId],
+    references: [gameHistory.id],
+  }),
+  user: one(user, {
+    fields: [gamePlayerResults.userId],
+    references: [user.id],
   }),
 }));

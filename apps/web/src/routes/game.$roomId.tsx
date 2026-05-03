@@ -65,16 +65,105 @@ function Timer({ expiresAt, duration = 15000, onTimeout }: { expiresAt: number; 
 
 function GameComponent() {
   const { roomId } = Route.useParams();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
   const [answerInput, setAnswerInput] = useState("");
   
   const subjectsQuery = useQuery(trpc.game.getSubjects.queryOptions());
+  const resultsQuery = useQuery(trpc.game.getResults.queryOptions({ roomId }));
 
-  const playerId = session?.user?.id || useMemo(() => "guest-" + Math.random().toString(36).slice(2, 9), []);
-  const playerName = session?.user?.name || "Guest";
+  const playerId = session?.user?.id;
+  const playerName = session?.user?.name;
 
-  const { state, error, sendAction } = useGame(roomId, playerId, playerName);
+  const { state, error, sendAction } = useGame(roomId, playerId!, playerName!);
+
+  if (isPending) return (
+    <div className="min-h-screen bg-[#050508] flex flex-col items-center justify-center space-y-6">
+      <div className="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+      <p className="text-blue-400 font-black tracking-widest text-sm animate-pulse">CHECKING SESSION...</p>
+    </div>
+  );
+
+  if (!session) return (
+    <div className="min-h-screen bg-[#050508] flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-md w-full bg-white/5 border border-white/10 rounded-[40px] p-10 text-center space-y-8 backdrop-blur-3xl"
+      >
+        <div className="w-24 h-24 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto text-blue-500">
+          <UserCircle2 size={48} />
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-3xl font-black text-white">Login Required</h1>
+          <p className="text-gray-400 font-medium">You must be logged in to participate in the game and track your scores.</p>
+        </div>
+        <button 
+          onClick={() => window.location.href = `/login?redirectTo=/game/${roomId}`}
+          className="w-full py-5 bg-blue-600 rounded-2xl font-bold text-white shadow-xl hover:bg-blue-500 transition-all active:scale-95"
+        >
+          SIGN IN TO PLAY
+        </button>
+      </motion.div>
+    </div>
+  );
+
+  const isHost = state?.hostId === playerId;
+  const currentSubject = state?.subjects?.[state?.currentSubjectIndex ?? 0];
+  const currentQuestion = currentSubject?.questions?.[state?.currentQuestionIndex ?? 0];
+  const isMyTurn = state?.activeQuestionState?.buzzedPlayerId === playerId;
+
+  // FALLBACK TO DATABASE RESULTS IF GAME IS OVER
+  if ((error || !state) && resultsQuery.data) {
+     const dbResults = resultsQuery.data;
+     return (
+        <div className="min-h-screen bg-[#050508] text-white font-sans p-6">
+           <div className="max-w-5xl mx-auto space-y-12 py-12">
+              <div className="text-center space-y-4">
+                <div className="inline-block p-4 bg-yellow-500/10 rounded-3xl mb-4">
+                   <Trophy size={64} className="text-yellow-500" />
+                </div>
+                <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter bg-linear-to-b from-white via-white to-white/20 bg-clip-text text-transparent">
+                  MATCH RESULTS
+                </h1>
+                <p className="text-blue-400 text-xl font-black uppercase tracking-[0.4em]">Fetched from Archive</p>
+              </div>
+
+              <div className="bg-white/5 rounded-[48px] border border-white/5 p-8 md:p-12 backdrop-blur-3xl shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 blur-[100px] -z-10" />
+                  <table className="w-full">
+                    <thead>
+                      <tr className="text-left border-b border-white/5">
+                        <th className="pb-6 text-gray-500 uppercase font-black tracking-widest text-[10px]">Rank</th>
+                        <th className="pb-6 text-gray-500 uppercase font-black tracking-widest text-[10px]">Player</th>
+                        <th className="pb-6 text-right text-gray-500 uppercase font-black tracking-widest text-[10px]">Final Score</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {dbResults.results.map((p, idx) => (
+                        <tr key={p.id} className={`group hover:bg-white/5 transition-colors ${idx === 0 ? 'text-yellow-400' : ''}`}>
+                          <td className="py-6 font-black italic text-3xl opacity-20">{idx + 1}</td>
+                          <td className="py-6">
+                            <div className="flex items-center gap-4">
+                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${idx === 0 ? 'bg-yellow-500/10 border-yellow-500/20' : 'bg-white/5 border-white/5'}`}>
+                                 {idx === 0 ? <Crown size={24} /> : <UserCircle2 size={24} className="text-gray-500" />}
+                              </div>
+                              <span className="text-xl font-black tracking-tight">{p.playerName}</span>
+                            </div>
+                          </td>
+                          <td className="py-6 text-right"><span className="text-4xl font-black tabular-nums">{p.score}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+              </div>
+              <div className="text-center">
+                 <button onClick={() => window.location.href = '/'} className="px-12 py-5 bg-white text-black rounded-3xl font-black uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-xl">Back to Home</button>
+              </div>
+           </div>
+        </div>
+     );
+  }
 
   if (error) return (
     <div className="min-h-screen bg-[#050508] flex items-center justify-center p-4">
@@ -110,11 +199,6 @@ function GameComponent() {
     </div>
   );
 
-  const isHost = state.hostId === playerId;
-  const currentSubject = state.subjects[state.currentSubjectIndex];
-  const currentQuestion = currentSubject?.questions[state.currentQuestionIndex];
-  const isMyTurn = state.activeQuestionState?.buzzedPlayerId === playerId;
-
   const toggleSubject = (id: string) => {
     setSelectedSubjectIds(prev => 
       prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
@@ -122,17 +206,17 @@ function GameComponent() {
   };
 
   const handleStart = () => {
-    sendAction({ type: "START", playerId, subjectIds: selectedSubjectIds });
+    sendAction({ type: "START", playerId: playerId!, subjectIds: selectedSubjectIds });
   };
 
   const handleBuzz = () => {
-    sendAction({ type: "BUZZ", playerId });
+    sendAction({ type: "BUZZ", playerId: playerId! });
   };
 
   const handleSubmitAnswer = (e: React.FormEvent) => {
     e.preventDefault();
     if (!answerInput.trim()) return;
-    sendAction({ type: "SUBMIT_ANSWER", playerId, answer: answerInput });
+    sendAction({ type: "SUBMIT_ANSWER", playerId: playerId!, answer: answerInput });
     setAnswerInput("");
   };
 
@@ -173,8 +257,8 @@ function GameComponent() {
                 }`}
               >
                 <div className="relative">
-                  <UserCircle2 size={32} className={p.connected ? "text-gray-300" : "text-gray-600 grayscale"} />
-                  {p.connected && <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[#050508]" />}
+                   <UserCircle2 size={32} className={p.connected ? "text-gray-300" : "text-gray-600 grayscale"} />
+                   {p.connected && <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-[#050508]" />}
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-black text-gray-500 uppercase leading-none mb-1">{p.name}</span>
@@ -216,7 +300,7 @@ function GameComponent() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         key={p.id} 
-                        className="flex items-center justify-between p-5 bg-white/5 rounded-3xl border border-white/5 hover:border-white/10 hover:bg-white/[0.08] transition-all"
+                        className="flex items-center justify-between p-5 bg-white/5 rounded-3xl border border-white/5 hover:border-white/10 hover:bg-white/8 transition-all"
                       >
                         <div className="flex items-center gap-4">
                            <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-gray-400">
@@ -282,14 +366,14 @@ function GameComponent() {
                     </div>
                   )}
 
-                  <motion.button
+                    <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     disabled={selectedSubjectIds.length < 5 || selectedSubjectIds.length > 10}
                     onClick={handleStart}
                     className="group relative w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 rounded-3xl font-black text-xl shadow-2xl shadow-blue-600/20 disabled:opacity-30 disabled:grayscale transition-all overflow-hidden"
                   >
-                    <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <div className="flex items-center justify-center gap-3">
                        <Play size={24} fill="currentColor" />
                        START MATCH ({selectedSubjectIds.length})
@@ -406,11 +490,11 @@ function GameComponent() {
                         <motion.button
                           whileHover={{ scale: 1.05, rotate: [0, -1, 1, 0] }}
                           whileTap={{ scale: 0.9 }}
-                          disabled={state.activeQuestionState?.playersWhoAttempted.includes(playerId)}
+                          disabled={state.activeQuestionState?.playersWhoAttempted.includes(playerId!)}
                           onClick={handleBuzz}
                           className="group relative w-56 h-56 rounded-full bg-red-600 hover:bg-red-500 disabled:bg-gray-800 disabled:opacity-40 shadow-[0_20px_50px_rgba(220,38,38,0.4)] transition-all flex items-center justify-center cursor-pointer"
                         >
-                          <div className="absolute inset-0 rounded-full border-[10px] border-white/20 scale-105 group-hover:scale-110 transition-transform" />
+                          <div className="absolute inset-0 rounded-full border-10 border-white/20 scale-105 group-hover:scale-110 transition-transform" />
                           <div className="absolute inset-0 rounded-full bg-linear-to-b from-white/20 to-transparent" />
                           <div className="flex flex-col items-center text-white">
                              <Zap size={64} fill="currentColor" className="mb-2 animate-pulse" />
@@ -612,7 +696,7 @@ function GameComponent() {
                          <div className="flex justify-between items-center">
                             <span className="text-gray-400 text-sm font-medium">Avg Score</span>
                             <span className="font-black">
-                              {Math.round(Object.values(state.players).reduce((acc, p) => acc + p.score, 0) / Object.keys(state.players).length)}
+                               {Math.round(Object.values(state.players).reduce((acc, p) => acc + p.score, 0) / Object.keys(state.players).length)}
                             </span>
                          </div>
                       </div>
