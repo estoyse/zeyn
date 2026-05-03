@@ -1,1 +1,11 @@
 @import "@shaxsiy-oyin/ui/globals.css";
+
+body {
+  @apply bg-background text-foreground;
+  background-image: radial-gradient(
+    circle,
+    rgba(15, 15, 15, 0.08) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}

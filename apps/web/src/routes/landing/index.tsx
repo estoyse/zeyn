@@ -18,7 +18,7 @@ export default function HomeComponent() {
       <FeaturedGames />
 
       <footer className='border-t border-black/10 mt-20'>
-        <div className='max-w-6xl mx-auto px-6 py-12'>
+        <div className='max-w-7xl mx-auto px-6 py-12'>
           <div className='grid md:grid-cols-4 gap-8'>
             <div className='space-y-3'>
               <h4 className='text-sm'>Shaxsiy O'yin</h4>

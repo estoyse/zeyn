@@ -2,6 +2,7 @@ import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
+import { ModeToggle } from "../mode-toggle";
 
 export function AppHeader() {
   const { user, signOut } = useAuth();
@@ -17,7 +18,7 @@ export function AppHeader() {
 
   return (
     <header className='border-b border-black/10 bg-background'>
-      <div className='max-w-6xl mx-auto px-6 py-4'>
+      <div className='max-w-7xl mx-auto py-4'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <div className='w-8 h-8 bg-black rounded-full flex items-center justify-center'>
@@ -27,6 +28,7 @@ export function AppHeader() {
           </div>
 
           <div className='flex items-center gap-2'>
+            <ModeToggle />
             <Button variant='ghost' size='icon' title='Bildirishnomalar'>
               <Bell className='w-5 h-5' />
             </Button>

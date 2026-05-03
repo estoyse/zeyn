@@ -19,7 +19,7 @@ const LINKS = [
 export function Header() {
   return (
     <header className='border-b border-black/10 bg-background'>
-      <div className='max-w-6xl mx-auto px-6 py-4'>
+      <div className='max-w-7xl mx-auto px-6 py-4'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <div className='w-8 h-8 bg-black rounded flex items-center justify-center'>

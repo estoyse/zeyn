@@ -1,6 +1,6 @@
 export function Hero() {
   return (
-    <div className='max-w-6xl mx-auto px-6 py-20 md:py-32'>
+    <div className='max-w-7xl mx-auto px-6 py-20 md:py-32'>
       <div className='max-w-4xl mx-auto text-center space-y-8'>
         <div className='inline-block'>
           <div className='px-3 py-1 border border-accent/30 bg-accent/5 text-accent text-xs tracking-wide uppercase rounded'>

@@ -18,7 +18,7 @@ export function FeaturedGames() {
   ];
 
   return (
-    <div className='max-w-6xl mx-auto px-6 py-20'>
+    <div className='max-w-7xl mx-auto px-6 py-20'>
       <div className='grid md:grid-cols-3 gap-8'>
         {features.map((feature, index) => (
           <div key={index} className='space-y-3'>

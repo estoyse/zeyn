@@ -1,6 +1,6 @@
 export function Terminal() {
   return (
-    <div className='max-w-6xl mx-auto px-6 py-12'>
+    <div className='max-w-7xl mx-auto px-6 py-12'>
       <div className='bg-[#1a1a1a] rounded-lg overflow-hidden shadow-2xl'>
         <div className='px-4 py-3 border-b border-white/10 text-xs text-white/60'>
           Terminal — shaxsiy-oyin
