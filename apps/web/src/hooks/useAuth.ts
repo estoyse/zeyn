@@ -100,7 +100,7 @@ export function useAuth(): UseAuthReturn {
       await authClient.signOut();
       toast.success("Muvaffaqiyatli chiqildi");
       setUser(null);
-      navigate({ to: "/landing" });
+      navigate({ to: "/" });
     } catch (error) {
       toast.error("Chiqishda xatolik");
     } finally {

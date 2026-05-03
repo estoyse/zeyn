@@ -1,13 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
-import { createD1Db, inArray, schema } from "@shaxsiy-oyin/db";
+import { createD1Db, inArray, eq, schema } from "@shaxsiy-oyin/db";
 import { isFuzzyMatch } from "../utils/fuzzy-match";
-const {
-  questions,
-  subjects: subjectsTable,
-  gameHistory,
-  gameQuestionResults,
-  gamePlayerResults,
-} = schema;
 
 interface Question {
   id: string;
@@ -39,7 +32,11 @@ interface QuestionResult {
 interface GameState {
   status: "WAITING" | "PLAYING" | "FINISHED";
   roomId: string | null;
+  roomName: string | null;
   hostId: string | null;
+  maxPlayers: number;
+  isPublic: boolean;
+  hasPassword: boolean;
   players: Record<string, Player>;
   subjects: Subject[];
   currentSubjectIndex: number;
@@ -55,7 +52,13 @@ interface GameState {
 }
 
 type ClientMessage =
-  | { type: "JOIN"; playerId: string; name: string; roomId?: string }
+  | {
+      type: "JOIN";
+      playerId: string;
+      name: string;
+      roomId: string;
+      password?: string;
+    }
   | { type: "START"; playerId: string; subjectIds: string[] }
   | { type: "BUZZ"; playerId: string }
   | { type: "SUBMIT_ANSWER"; playerId: string; answer: string };
@@ -68,7 +71,11 @@ export class GameRoom extends DurableObject {
   private state: GameState = {
     status: "WAITING",
     roomId: null,
+    roomName: null,
     hostId: null,
+    maxPlayers: 10,
+    isPublic: true,
+    hasPassword: false,
     players: {},
     subjects: [],
     currentSubjectIndex: 0,
@@ -77,6 +84,7 @@ export class GameRoom extends DurableObject {
     activeQuestionState: null,
     questionResults: [],
   };
+  private roomPassword: string | null = null;
   private timerId: any = null;
 
   constructor(ctx: DurableObjectState, env: any) {
@@ -131,7 +139,13 @@ export class GameRoom extends DurableObject {
   private async handleClientAction(ws: WebSocket, action: ClientMessage) {
     switch (action.type) {
       case "JOIN":
-        this.handleJoin(ws, action.playerId, action.name, action.roomId);
+        await this.handleJoin(
+          ws,
+          action.playerId,
+          action.name,
+          action.roomId,
+          action.password
+        );
         break;
       case "START":
         await this.handleStart(ws, action.playerId, action.subjectIds);
@@ -160,11 +174,12 @@ export class GameRoom extends DurableObject {
     }
   }
 
-  private handleJoin(
+  private async handleJoin(
     ws: WebSocket,
     playerId: string,
     name: string,
-    roomId?: string
+    roomId: string,
+    password?: string
   ) {
     if (playerId.startsWith("guest-")) {
       ws.send(
@@ -177,13 +192,80 @@ export class GameRoom extends DurableObject {
       return;
     }
 
-    if (roomId && !this.state.roomId) {
+    // Hydrate room from DB if not already initialized
+    if (!this.state.roomId) {
+      const db = createD1Db(this.env.DB);
+      const room = await db
+        .select()
+        .from(schema.activeRooms)
+        .where(eq(schema.activeRooms.id, roomId))
+        .get();
+
+      if (!room) {
+        ws.send(
+          JSON.stringify({ type: "ERROR", message: "Room not found in database" })
+        );
+        ws.close();
+        return;
+      }
+
       this.state.roomId = roomId;
+      this.state.roomName = room.name;
+      this.state.hostId = room.hostId;
+      this.state.maxPlayers = room.maxPlayers;
+      this.state.isPublic = room.isPublic;
+      this.state.hasPassword = !!room.password;
+      this.roomPassword = room.password;
+
+      // Pre-load subjects
+      const subjectIds = JSON.parse(room.subjectIds) as string[];
+      const subjectsData = await db
+        .select()
+        .from(schema.subjects)
+        .where(inArray(schema.subjects.id, subjectIds));
+      const questionsData = await db
+        .select()
+        .from(schema.questions)
+        .where(inArray(schema.questions.subjectId, subjectIds));
+
+      this.state.subjects = subjectsData.map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        questions: questionsData
+          .filter((q: any) => q.subjectId === s.id)
+          .sort((a: any, b: any) => a.points - b.points)
+          .map((q: any) => ({
+            id: q.id,
+            text: q.text,
+            answer: q.answer,
+            points: q.points,
+          })),
+      }));
     }
 
-    if (!this.state.hostId) {
-      this.state.hostId = playerId;
+    // Password Validation
+    if (this.roomPassword && this.roomPassword !== password) {
+      ws.send(
+        JSON.stringify({
+          type: "ERROR",
+          code: "PASSWORD_REQUIRED",
+          message: "Incorrect or missing password for this room",
+        })
+      );
+      return;
     }
+
+    // Player Limit Check
+    if (
+      Object.keys(this.state.players).length >= this.state.maxPlayers &&
+      !this.state.players[playerId]
+    ) {
+      ws.send(
+        JSON.stringify({ type: "ERROR", message: "Room is full" })
+      );
+      return;
+    }
+
     this.state.players[playerId] = {
       id: playerId,
       name: name,
@@ -196,7 +278,7 @@ export class GameRoom extends DurableObject {
   private async handleStart(
     ws: WebSocket,
     playerId: string,
-    subjectIds: string[]
+    subjectIds?: string[]
   ) {
     if (this.state.hostId !== playerId) {
       ws.send(
@@ -214,35 +296,38 @@ export class GameRoom extends DurableObject {
       return;
     }
 
-    const db = createD1Db(this.env.DB);
-    const subjectsData = await db
-      .select()
-      .from(subjectsTable)
-      .where(inArray(subjectsTable.id, subjectIds));
-    const questionsData = await db
-      .select()
-      .from(questions)
-      .where(inArray(questions.subjectId, subjectIds));
+    // If subjects are already loaded (from DB hydration), we don't need to fetch them again
+    if (this.state.subjects.length === 0 && subjectIds && subjectIds.length > 0) {
+      const db = createD1Db(this.env.DB);
+      const subjectsData = await db
+        .select()
+        .from(schema.subjects)
+        .where(inArray(schema.subjects.id, subjectIds));
+      const questionsData = await db
+        .select()
+        .from(schema.questions)
+        .where(inArray(schema.questions.subjectId, subjectIds));
 
-    this.state.subjects = subjectsData.map((s: any) => ({
-      id: s.id,
-      name: s.name,
-      questions: questionsData
-        .filter((q: any) => q.subjectId === s.id)
-        .sort((a: any, b: any) => a.points - b.points)
-        .map((q: any) => ({
-          id: q.id,
-          text: q.text,
-          answer: q.answer,
-          points: q.points,
-        })),
-    }));
+      this.state.subjects = subjectsData.map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        questions: questionsData
+          .filter((q: any) => q.subjectId === s.id)
+          .sort((a: any, b: any) => a.points - b.points)
+          .map((q: any) => ({
+            id: q.id,
+            text: q.text,
+            answer: q.answer,
+            points: q.points,
+          })),
+      }));
+    }
 
-    if (this.state.subjects.some(s => s.questions.length !== 5)) {
+    if (this.state.subjects.length < 5) {
       ws.send(
         JSON.stringify({
           type: "ERROR",
-          message: "Each subject must have exactly 5 questions",
+          message: "Game requires at least 5 subjects to start",
         })
       );
       return;

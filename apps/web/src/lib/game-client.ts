@@ -4,7 +4,11 @@ import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 export interface GameState {
   status: "WAITING" | "PLAYING" | "FINISHED";
   roomId: string | null;
+  roomName: string | null;
   hostId: string | null;
+  maxPlayers: number;
+  isPublic: boolean;
+  hasPassword: boolean;
   players: Record<string, { id: string; name: string; score: number; connected: boolean }>;
   subjects: any[];
   currentSubjectIndex: number;
@@ -20,14 +24,15 @@ export interface GameState {
 }
 
 export type ClientMessage =
-  | { type: "JOIN"; playerId: string; name: string; roomId: string }
+  | { type: "JOIN"; playerId: string; name: string; roomId: string; password?: string }
   | { type: "START"; playerId: string; subjectIds: string[] }
   | { type: "BUZZ"; playerId: string }
   | { type: "SUBMIT_ANSWER"; playerId: string; answer: string };
 
-export function useGame(roomId: string, playerId: string, playerName: string) {
+export function useGame(roomId: string, playerId: string, playerName: string, password?: string) {
   const [state, setState] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
   const [serverTimeOffset, setServerTimeOffset] = useState(0);
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -41,7 +46,7 @@ export function useGame(roomId: string, playerId: string, playerName: string) {
     wsRef.current = ws;
 
     ws.onopen = () => {
-      ws.send(JSON.stringify({ type: "JOIN", playerId, name: playerName, roomId }));
+      ws.send(JSON.stringify({ type: "JOIN", playerId, name: playerName, roomId, password }));
     };
 
     ws.onmessage = (event) => {
@@ -51,8 +56,11 @@ export function useGame(roomId: string, playerId: string, playerName: string) {
           setServerTimeOffset(data.serverTime - Date.now());
         }
         setState(data.state);
+        setError(null);
+        setErrorCode(null);
       } else if (data.type === "ERROR") {
         setError(data.message);
+        setErrorCode(data.code);
       }
     };
 
@@ -61,13 +69,13 @@ export function useGame(roomId: string, playerId: string, playerName: string) {
     };
 
     ws.onclose = () => {
-      setError("Connection closed");
+      // Logic handled by DO closure
     };
 
     return () => {
       ws.close();
     };
-  }, [roomId, playerId, playerName]);
+  }, [roomId, playerId, playerName, password]);
 
   const sendAction = useCallback((action: ClientMessage) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -87,5 +95,5 @@ export function useGame(roomId: string, playerId: string, playerName: string) {
     };
   }, [state, serverTimeOffset]);
 
-  return { state: adjustedState, error, sendAction };
+  return { state: adjustedState, error, errorCode, sendAction };
 }

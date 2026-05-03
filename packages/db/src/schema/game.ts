@@ -67,6 +67,29 @@ export const gamePlayerResults = sqliteTable(
   ]
 );
 
+export const activeRooms = sqliteTable("active_rooms", {
+  id: text("id").primaryKey(), // The roomId (UUID)
+  name: text("name").notNull(),
+  hostId: text("host_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  maxPlayers: integer("max_players").notNull().default(10),
+  isPublic: integer("is_public", { mode: "boolean" }).notNull().default(true),
+  password: text("password"),
+  status: text("status", { enum: ["waiting", "playing", "finished"] })
+    .notNull()
+    .default("waiting"),
+  subjectIds: text("subject_ids").notNull(), // JSON array of subject IDs
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+});
+
+export const activeRoomsRelations = relations(activeRooms, ({ one }) => ({
+  host: one(user, {
+    fields: [activeRooms.hostId],
+    references: [user.id],
+  }),
+}));
+
 export const subjectsRelations = relations(subjects, ({ many }) => ({
   questions: many(questions),
 }));

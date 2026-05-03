@@ -45,7 +45,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 function RootComponent() {
   const location = useLocation();
   const isAppPage = location.pathname.startsWith("/dashboard") || location.pathname.startsWith("/game");
-  const isLoginPage = location.pathname === "/login";
+  const isLoginPage = location.pathname.startsWith("/auth");
+  const isLandingPage = location.pathname === "/";
 
   return (
     <>
@@ -57,7 +58,7 @@ function RootComponent() {
         storageKey='vite-ui-theme'
       >
         <div className='grid grid-rows-[auto_1fr] h-svh'>
-          {!isLoginPage && (isAppPage ? <AppHeader /> : <Header />)}
+          {!isLoginPage && (isAppPage ? <AppHeader /> : isLandingPage ? <Header /> : null)}
           <Outlet />
         </div>
         <Toaster richColors />

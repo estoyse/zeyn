@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 export function Hero() {
   return (
     <div className='max-w-7xl mx-auto px-6 py-20 md:py-32'>
@@ -19,9 +21,11 @@ export function Hero() {
         </p>
 
         <div className='flex flex-col sm:flex-row items-center justify-center gap-4 pt-4'>
-          <button className='px-6 py-3 bg-black text-white rounded hover:bg-black/80 transition-all'>
-            Boshlash
-          </button>
+          <Link to='/auth/login'>
+            <button className='px-6 py-3 bg-black text-white rounded hover:bg-black/80 transition-all'>
+              Boshlash
+            </button>
+          </Link>
           <button className='px-6 py-3 border border-black rounded hover:bg-black hover:text-white transition-all'>
             Qanday ishlaydi
           </button>

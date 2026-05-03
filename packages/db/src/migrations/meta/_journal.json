@@ -15,6 +15,13 @@
       "when": 1777716439023,
       "tag": "0001_lumpy_plazm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1777797031621,
+      "tag": "0002_clammy_alice",
+      "breakpoints": true
     }
   ]
 }

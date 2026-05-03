@@ -10,7 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as LandingIndexRouteImport } from './routes/landing/index'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as GameCreateRouteImport } from './routes/game.create'
 import { Route as GameRoomIdRouteImport } from './routes/game.$roomId'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
@@ -19,9 +20,14 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LandingIndexRoute = LandingIndexRouteImport.update({
-  id: '/landing/',
-  path: '/landing/',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameCreateRoute = GameCreateRouteImport.update({
+  id: '/game/create',
+  path: '/game/create',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GameRoomIdRoute = GameRoomIdRouteImport.update({
@@ -36,37 +42,52 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/game/$roomId': typeof GameRoomIdRoute
-  '/landing/': typeof LandingIndexRoute
+  '/game/create': typeof GameCreateRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/game/$roomId': typeof GameRoomIdRoute
-  '/landing': typeof LandingIndexRoute
+  '/game/create': typeof GameCreateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/auth/login': typeof AuthLoginRoute
   '/game/$roomId': typeof GameRoomIdRoute
-  '/landing/': typeof LandingIndexRoute
+  '/game/create': typeof GameCreateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/dashboard' | '/auth/login' | '/game/$roomId' | '/landing/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/auth/login'
+    | '/game/$roomId'
+    | '/game/create'
   fileRoutesByTo: FileRoutesByTo
-  to: '/dashboard' | '/auth/login' | '/game/$roomId' | '/landing'
-  id: '__root__' | '/dashboard' | '/auth/login' | '/game/$roomId' | '/landing/'
+  to: '/' | '/dashboard' | '/auth/login' | '/game/$roomId' | '/game/create'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/auth/login'
+    | '/game/$roomId'
+    | '/game/create'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   AuthLoginRoute: typeof AuthLoginRoute
   GameRoomIdRoute: typeof GameRoomIdRoute
-  LandingIndexRoute: typeof LandingIndexRoute
+  GameCreateRoute: typeof GameCreateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,11 +99,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/landing/': {
-      id: '/landing/'
-      path: '/landing'
-      fullPath: '/landing/'
-      preLoaderRoute: typeof LandingIndexRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/create': {
+      id: '/game/create'
+      path: '/game/create'
+      fullPath: '/game/create'
+      preLoaderRoute: typeof GameCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game/$roomId': {
@@ -103,10 +131,11 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   AuthLoginRoute: AuthLoginRoute,
   GameRoomIdRoute: GameRoomIdRoute,
-  LandingIndexRoute: LandingIndexRoute,
+  GameCreateRoute: GameCreateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
