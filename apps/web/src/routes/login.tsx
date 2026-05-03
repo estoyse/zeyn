@@ -5,9 +5,7 @@ import { Mail, Lock, User, GalleryVerticalEnd } from "lucide-react";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { useForm } from "@tanstack/react-form";
-import { toast } from "sonner";
 import z from "zod";
-import { authClient } from "@/lib/auth-client";
 import {
   Field,
   FieldDescription,
@@ -16,7 +14,8 @@ import {
   FieldSeparator,
 } from "@shaxsiy-oyin/ui/components/field";
 import { cn } from "@shaxsiy-oyin/ui/lib/utils";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/login")({
   component: AuthPage,
@@ -70,7 +69,7 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"form">) 
 }
 
 function LoginForm({ onSwitch }: { onSwitch: () => void }) {
-  const navigate = useNavigate();
+  const { signIn, signInWithGoogle } = useAuth();
 
   const form = useForm({
     defaultValues: {
@@ -83,24 +82,9 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
         password: z.string().min(8, "Password must be at least 8 characters"),
       }),
     },
-    onSubmit: async ({ value }) => {
-      await authClient.signIn.email(
-        {
-          email: value.email,
-          password: value.password,
-        },
-        {
-          onSuccess: () => {
-            navigate({ to: "/dashboard" });
-            toast.success("Kirish muvaffaqiyatli");
-          },
-          onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
-          },
-        }
-      );
-    },
   });
+
+  const handleSubmit = form.handleSubmit;
 
   return (
     <motion.div
@@ -176,7 +160,8 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
               className="w-full"
               onClick={(e) => {
                 e.preventDefault();
-                form.handleSubmit();
+                handleSubmit();
+                signIn(form.getFieldValue("email"), form.getFieldValue("password"));
               }}
             >
               Kirish
@@ -194,11 +179,7 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
               variant="outline"
               type="button"
               className="w-full gap-2"
-              onClick={() => {
-                authClient.signIn.social({
-                  provider: "google",
-                });
-              }}
+              onClick={signInWithGoogle}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +225,7 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
 }
 
 function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
-  const navigate = useNavigate();
+  const { signUp } = useAuth();
 
   const form = useForm({
     defaultValues: {
@@ -259,25 +240,9 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         password: z.string().min(8, "Password must be at least 8 characters"),
       }),
     },
-    onSubmit: async ({ value }) => {
-      await authClient.signUp.email(
-        {
-          email: value.email,
-          password: value.password,
-          name: value.name,
-        },
-        {
-          onSuccess: () => {
-            navigate({ to: "/dashboard" });
-            toast.success("Ro'yxatdan o'tish muvaffaqiyatli");
-          },
-          onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
-          },
-        }
-      );
-    },
   });
+
+  const handleSubmit = form.handleSubmit;
 
   return (
     <motion.div
@@ -370,7 +335,12 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
               className="w-full"
               onClick={(e) => {
                 e.preventDefault();
-                form.handleSubmit();
+                handleSubmit();
+                signUp(
+                  form.getFieldValue("email"),
+                  form.getFieldValue("password"),
+                  form.getFieldValue("name")
+                );
               }}
             >
               Ro&apos;yxatdan o&apos;tish

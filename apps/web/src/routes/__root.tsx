@@ -13,7 +13,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import type { trpc } from "@/utils/trpc";
 
 import "../index.css";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/landing/Header";
+import { AppHeader } from "@/components/app/AppHeader";
 
 export interface RouterAppContext {
   trpc: typeof trpc;
@@ -43,6 +44,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootComponent() {
   const location = useLocation();
+  const isAppPage = location.pathname.startsWith("/dashboard") || location.pathname.startsWith("/game");
   const isLoginPage = location.pathname === "/login";
 
   return (
@@ -55,7 +57,7 @@ function RootComponent() {
         storageKey='vite-ui-theme'
       >
         <div className='grid grid-rows-[auto_1fr] h-svh'>
-          {!isLoginPage && <Header />}
+          {!isLoginPage && (isAppPage ? <AppHeader /> : <Header />)}
           <Outlet />
         </div>
         <Toaster richColors />
