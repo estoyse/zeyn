@@ -1,7 +1,12 @@
 import { DurableObject } from "cloudflare:workers";
 import { createD1Db, inArray, eq, schema } from "@shaxsiy-oyin/db";
 import { isFuzzyMatch } from "../utils/fuzzy-match";
-import { gameConfig, type ClientMessage, type ServerMessage, type GameState } from "@shaxsiy-oyin/api/game-types";
+import {
+  gameConfig,
+  type ClientMessage,
+  type ServerMessage,
+  type GameState,
+} from "@shaxsiy-oyin/api/game-types";
 
 export class GameRoom extends DurableObject {
   private state: GameState = {
@@ -46,6 +51,8 @@ export class GameRoom extends DurableObject {
     const server = pair[1];
 
     this.ctx.acceptWebSocket(server);
+
+    // Send initial state
     server.send(
       JSON.stringify({
         type: "STATE_UPDATE",
@@ -139,7 +146,11 @@ export class GameRoom extends DurableObject {
 
       if (!room) {
         ws.send(
-          JSON.stringify({ type: "ERROR", code: "NOT_FOUND", message: "Room not found" })
+          JSON.stringify({
+            type: "ERROR",
+            code: "NOT_FOUND",
+            message: "Room not found",
+          })
         );
         ws.close();
         return;
@@ -147,7 +158,11 @@ export class GameRoom extends DurableObject {
 
       if (room.status === "playing") {
         ws.send(
-          JSON.stringify({ type: "ERROR", code: "ALREADY_STARTED", message: "Game already started" })
+          JSON.stringify({
+            type: "ERROR",
+            code: "ALREADY_STARTED",
+            message: "Game already started",
+          })
         );
         ws.close();
         return;
@@ -155,7 +170,11 @@ export class GameRoom extends DurableObject {
 
       if (room.status === "finished") {
         ws.send(
-          JSON.stringify({ type: "ERROR", code: "ALREADY_FINISHED", message: "Game already ended" })
+          JSON.stringify({
+            type: "ERROR",
+            code: "ALREADY_FINISHED",
+            message: "Game already ended",
+          })
         );
         ws.close();
         return;
@@ -212,9 +231,7 @@ export class GameRoom extends DurableObject {
       Object.keys(this.state.players).length >= this.state.maxPlayers &&
       !this.state.players[playerId]
     ) {
-      ws.send(
-        JSON.stringify({ type: "ERROR", message: "Room is full" })
-      );
+      ws.send(JSON.stringify({ type: "ERROR", message: "Room is full" }));
       return;
     }
 
@@ -249,7 +266,11 @@ export class GameRoom extends DurableObject {
     }
 
     // If subjects are already loaded (from DB hydration), we don't need to fetch them again
-    if (this.state.subjects.length === 0 && subjectIds && subjectIds.length > 0) {
+    if (
+      this.state.subjects.length === 0 &&
+      subjectIds &&
+      subjectIds.length > 0
+    ) {
       const db = createD1Db(this.env.DB);
       const subjectsData = await db
         .select()
@@ -314,7 +335,9 @@ export class GameRoom extends DurableObject {
       timerExpiresAt: Date.now() + gameConfig.questionTimeMs,
     };
 
-    this.setTimer(gameConfig.questionTimeMs, () => this.handleQuestionTimeout());
+    this.setTimer(gameConfig.questionTimeMs, () =>
+      this.handleQuestionTimeout()
+    );
   }
 
   private handleBuzz(_ws: WebSocket, playerId: string) {
@@ -326,7 +349,8 @@ export class GameRoom extends DurableObject {
 
     this.state.phase = "ANSWERING";
     this.state.activeQuestionState!.buzzedPlayerId = playerId;
-    this.state.activeQuestionState!.timerExpiresAt = Date.now() + gameConfig.answerTimeMs;
+    this.state.activeQuestionState!.timerExpiresAt =
+      Date.now() + gameConfig.answerTimeMs;
 
     this.setTimer(gameConfig.answerTimeMs, () => this.handleAnswerTimeout());
   }
@@ -379,12 +403,18 @@ export class GameRoom extends DurableObject {
       this.state.activeQuestionState.playersWhoAttempted.push(playerId);
       this.state.activeQuestionState.buzzedPlayerId = null;
 
-      if (this.state.activeQuestionState.wrongAttempts >= gameConfig.maxWrongAttempts) {
+      if (
+        this.state.activeQuestionState.wrongAttempts >=
+        gameConfig.maxWrongAttempts
+      ) {
         this.revealAnswer();
       } else {
         this.state.phase = "ACTIVE";
-        this.state.activeQuestionState.timerExpiresAt = Date.now() + gameConfig.questionTimeMs;
-        this.setTimer(gameConfig.questionTimeMs, () => this.handleQuestionTimeout());
+        this.state.activeQuestionState.timerExpiresAt =
+          Date.now() + gameConfig.questionTimeMs;
+        this.setTimer(gameConfig.questionTimeMs, () =>
+          this.handleQuestionTimeout()
+        );
       }
     }
   }
@@ -392,7 +422,8 @@ export class GameRoom extends DurableObject {
   private revealAnswer() {
     this.state.phase = "REVEALED";
     if (this.state.activeQuestionState) {
-      this.state.activeQuestionState.timerExpiresAt = Date.now() + gameConfig.revealTimeMs;
+      this.state.activeQuestionState.timerExpiresAt =
+        Date.now() + gameConfig.revealTimeMs;
     }
     this.broadcast({
       type: "STATE_UPDATE",
@@ -469,10 +500,6 @@ export class GameRoom extends DurableObject {
           }))
         );
       }
-
-      console.log(
-        `Successfully persisted results for game ${gameId} in room ${this.state.roomId}`
-      );
     } catch (e) {
       console.error("Failed to persist game results:", e);
     }

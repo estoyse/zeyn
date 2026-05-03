@@ -29,6 +29,7 @@ export const gameRouter = router({
         status: "waiting",
         subjectIds: JSON.stringify(input.subjectIds),
         createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       return { roomId };

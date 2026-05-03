@@ -1,0 +1,1 @@
+ALTER TABLE `active_rooms` ADD `updated_at` integer;

@@ -32,7 +32,7 @@ function GamePage() {
   const userId = session?.user?.id;
   const userName = session?.user?.name;
 
-  const { state, error, errorCode, sendAction, isConnecting } = useGame(
+  const { state, error, errorCode, sendAction, isConnecting, isConnected } = useGame(
     roomId,
     userId || "",
     userName || "",
@@ -74,8 +74,8 @@ function GamePage() {
     return <LoginRequiredView roomId={roomId} />;
   }
 
-  // Still connecting (check before connection errors)
-  if (!state && isConnecting) {
+  // Still connecting or waiting for initial state
+  if (!state && (isConnecting || isConnected) && !error) {
     return <ConnectingView />;
   }
 

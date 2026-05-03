@@ -81,6 +81,7 @@ export const activeRooms = sqliteTable("active_rooms", {
     .default("waiting"),
   subjectIds: text("subject_ids").notNull(), // JSON array of subject IDs
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
 });
 
 export const activeRoomsRelations = relations(activeRooms, ({ one }) => ({

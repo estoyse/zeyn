@@ -7,6 +7,7 @@ interface UseSocketOptions {
   onOpen?: () => void;
   onError?: (error: string) => void;
   reconnectDelay?: number;
+  maxRetries?: number;
 }
 
 export function useSocket({
@@ -15,44 +16,62 @@ export function useSocket({
   onOpen,
   onError,
   reconnectDelay = 3000,
+  maxRetries = 5,
 }: UseSocketOptions) {
   const [isConnecting, setIsConnecting] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
+  const [isReconnecting, setIsReconnecting] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<number | null>(null);
+  const retryCountRef = useRef(0);
   const onMessageRef = useRef(onMessage);
   const onOpenRef = useRef(onOpen);
-  
+  const onErrorRef = useRef(onError);
+
   useEffect(() => {
     onMessageRef.current = onMessage;
     onOpenRef.current = onOpen;
-  }, [onMessage, onOpen]);
+    onErrorRef.current = onError;
+  }, [onMessage, onOpen, onError]);
 
   const connect = useCallback(() => {
     const ws = new WebSocket(url);
     wsRef.current = ws;
     setIsConnecting(true);
+    setIsConnected(false);
+    setIsReconnecting(false);
 
     ws.onopen = () => {
+      retryCountRef.current = 0;
+      setIsConnecting(false);
+      setIsConnected(true);
       onOpenRef.current?.();
     };
-    
-    ws.onmessage = (event) => {
+
+    ws.onmessage = event => {
       const data: ServerMessage = JSON.parse(event.data);
       onMessageRef.current(data);
     };
 
-    ws.onerror = () => {
-      onError?.("Connection error");
-    };
+    ws.onerror = e => {};
 
-    ws.onclose = () => {
+    ws.onclose = e => {
       setIsConnecting(false);
-      setIsConnecting(true);
-      reconnectTimeoutRef.current = window.setTimeout(() => {
-        connect();
-      }, reconnectDelay);
+      setIsConnected(false);
+
+      if (retryCountRef.current < maxRetries) {
+        retryCountRef.current++;
+        setIsReconnecting(true);
+        const delay = reconnectDelay * retryCountRef.current;
+        reconnectTimeoutRef.current = window.setTimeout(() => {
+          connect();
+        }, delay);
+      } else {
+        setIsReconnecting(false);
+        onErrorRef.current?.("Connection failed after max retries");
+      }
     };
-  }, [url, reconnectDelay, onError]);
+  }, [url, reconnectDelay, maxRetries]);
 
   const send = useCallback((data: unknown) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -64,13 +83,14 @@ export function useSocket({
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
     }
+    retryCountRef.current = maxRetries;
     wsRef.current?.close();
-  }, []);
+  }, [maxRetries]);
 
   useEffect(() => {
     connect();
     return close;
   }, [connect, close]);
 
-  return { send, close, isConnecting };
+  return { send, close, isConnecting, isConnected, isReconnecting };
 }

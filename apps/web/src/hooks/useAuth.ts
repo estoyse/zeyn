@@ -13,9 +13,9 @@ interface User {
 interface UseAuthReturn {
   user: User | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
-  signInWithGoogle: () => void;
+  signIn: (email: string, password: string, returnTo?: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string, returnTo?: string) => Promise<void>;
+  signInWithGoogle: (returnTo?: string) => void;
   signOut: () => Promise<void>;
 }
 
@@ -48,7 +48,7 @@ export function useAuth(): UseAuthReturn {
     fetchUser();
   }, [fetchUser]);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, returnTo?: string) => {
     setIsLoading(true);
     try {
       await authClient.signIn.email(
@@ -56,7 +56,7 @@ export function useAuth(): UseAuthReturn {
         {
           onSuccess: () => {
             toast.success("Kirish muvaffaqiyatli");
-            navigate({ to: "/dashboard" });
+            navigate({ to: returnTo || "/dashboard" });
             fetchUser();
           },
           onError: (error) => {
@@ -69,7 +69,7 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email: string, password: string, name: string, returnTo?: string) => {
     setIsLoading(true);
     try {
       await authClient.signUp.email(
@@ -77,7 +77,7 @@ export function useAuth(): UseAuthReturn {
         {
           onSuccess: () => {
             toast.success("Ro'yxatdan o'tish muvaffaqiyatli");
-            navigate({ to: "/dashboard" });
+            navigate({ to: returnTo || "/dashboard" });
             fetchUser();
           },
           onError: (error) => {
@@ -90,8 +90,11 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  const signInWithGoogle = () => {
-    authClient.signIn.social({ provider: "google" });
+  const signInWithGoogle = (returnTo?: string) => {
+    const redirectUrl = returnTo
+      ? `${window.location.origin}/auth/verify?returnTo=${encodeURIComponent(returnTo)}`
+      : undefined;
+    authClient.signIn.social({ provider: "google", callbackURL: redirectUrl });
   };
 
   const signOut = async () => {

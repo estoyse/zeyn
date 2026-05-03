@@ -8,8 +8,6 @@ const loadEnvs = () => {
   const nodeEnv = process.env.NODE_ENV || "development";
   const isProduction = nodeEnv === "production";
 
-  console.log(`Environment: ${nodeEnv}`);
-
   if (isProduction) {
     config({ path: "./.env" });
     config({ path: "../../apps/web/.env.production" });

@@ -14,9 +14,10 @@ import { useAuth } from "@/hooks/useAuth";
 
 interface LoginFormProps {
   onSwitch: () => void;
+  returnTo?: string;
 }
 
-export function LoginForm({ onSwitch }: LoginFormProps) {
+export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
   const { signIn, signInWithGoogle } = useAuth();
 
   const form = useForm({
@@ -72,12 +73,6 @@ export function LoginForm({ onSwitch }: LoginFormProps) {
           <Field>
             <div className='flex items-center justify-between'>
               <FieldLabel htmlFor={field.name}>Parol</FieldLabel>
-              <a
-                href='#'
-                className='ml-auto text-sm underline-offset-4 hover:underline'
-              >
-                Unutdingizmi?
-              </a>
             </div>
             <div className='relative'>
               <Lock className='absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground' />
@@ -111,7 +106,8 @@ export function LoginForm({ onSwitch }: LoginFormProps) {
                 handleSubmit();
                 signIn(
                   form.getFieldValue("email"),
-                  form.getFieldValue("password")
+                  form.getFieldValue("password"),
+                  returnTo
                 );
               }}
             >
@@ -130,7 +126,7 @@ export function LoginForm({ onSwitch }: LoginFormProps) {
               variant='outline'
               type='button'
               className='w-full gap-2'
-              onClick={signInWithGoogle}
+              onClick={() => signInWithGoogle(returnTo)}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'

@@ -13,9 +13,10 @@ import { useAuth } from "@/hooks/useAuth";
 
 interface RegisterFormProps {
   onSwitch: () => void;
+  returnTo?: string;
 }
 
-export function RegisterForm({ onSwitch }: RegisterFormProps) {
+export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
   const { signUp } = useAuth();
 
   const form = useForm({
@@ -130,7 +131,8 @@ export function RegisterForm({ onSwitch }: RegisterFormProps) {
                 signUp(
                   form.getFieldValue("email"),
                   form.getFieldValue("password"),
-                  form.getFieldValue("name")
+                  form.getFieldValue("name"),
+                  returnTo
                 );
               }}
             >

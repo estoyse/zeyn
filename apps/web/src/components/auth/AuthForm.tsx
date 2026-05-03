@@ -7,8 +7,9 @@ import { RegisterForm } from "./RegisterForm";
 
 export function AuthForm({
   className,
+  returnTo,
   ...props
-}: React.ComponentProps<"form">) {
+}: React.ComponentProps<"form"> & { returnTo?: string }) {
   const [isRegister, setIsRegister] = useState(false);
 
   return (
@@ -19,9 +20,10 @@ export function AuthForm({
             <RegisterForm
               key='register'
               onSwitch={() => setIsRegister(false)}
+              returnTo={returnTo}
             />
           ) : (
-            <LoginForm key='login' onSwitch={() => setIsRegister(true)} />
+            <LoginForm key='login' onSwitch={() => setIsRegister(true)} returnTo={returnTo} />
           )}
         </AnimatePresence>
       </FieldGroup>

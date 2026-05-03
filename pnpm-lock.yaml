@@ -6,51 +6,12 @@ settings:
 
 catalogs:
   default:
-    '@better-auth/expo':
-      specifier: 1.5.5
-      version: 1.5.5
     '@cloudflare/workers-types':
       specifier: ^4.20251213.0
       version: 4.20260502.1
-    '@libsql/client':
-      specifier: 0.15.15
-      version: 0.15.15
-    '@tanstack/react-form':
-      specifier: ^1.28.0
-      version: 1.29.1
-    '@tanstack/react-query':
-      specifier: ^5.90.12
-      version: 5.100.8
-    '@trpc/client':
-      specifier: ^11.16.0
-      version: 11.17.0
-    '@trpc/server':
-      specifier: ^11.16.0
-      version: 11.17.0
-    '@trpc/tanstack-react-query':
-      specifier: ^11.16.0
-      version: 11.17.0
-    '@types/react-dom':
-      specifier: ^19.2.3
-      version: 19.2.3
-    alchemy:
-      specifier: ^0.91.2
-      version: 0.91.2
-    better-auth:
-      specifier: 1.5.5
-      version: 1.5.5
     dotenv:
       specifier: ^17.2.2
       version: 17.4.2
-    hono:
-      specifier: ^4.8.2
-      version: 4.12.16
-    libsql:
-      specifier: 0.5.22
-      version: 0.5.22
-    next-themes:
-      specifier: 0.4.6
-      version: 0.4.6
     zod:
       specifier: ^4.1.13
       version: 4.4.2

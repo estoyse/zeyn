@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSocket } from "./useSocket";
 import { useGameState } from "./useGameState";
 import type { GameState, ClientMessage } from "@shaxsiy-oyin/api/game-types";
@@ -8,39 +8,48 @@ export function useGame(roomId: string, playerId: string, playerName: string, pa
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const wsUrl = useMemo(() => {
-    const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000";
-    return serverUrl.replace(/^http/, "ws") + `/game/${roomId}/ws`;
+    // Use relative path - Vite proxy will handle it
+    return `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}/game/${roomId}/ws`;
   }, [roomId]);
+
+  const handleGameStateError = useCallback((err: string, code?: string) => {
+    setError(err);
+    setErrorCode(code || null);
+  }, []);
 
   const { state, handleMessage, createJoinMessage } = useGameState({
     roomId,
     playerId,
     playerName,
     password,
-    onError: (err, code) => {
-      setError(err);
-      setErrorCode(code || null);
-    },
+    onError: handleGameStateError,
   });
 
-  const { send, close, isConnecting } = useSocket({
+  const handleSocketError = useCallback((err: string) => {
+    setError(err);
+  }, []);
+
+  const { send, close, isConnecting, isConnected } = useSocket({
     url: wsUrl,
     onMessage: handleMessage,
-    onError: (err) => setError(err),
+    onError: handleSocketError,
   });
-
-  const sendAction = useCallback((action: ClientMessage) => {
-    send(action);
-  }, [send]);
 
   const join = useCallback(() => {
     const message = createJoinMessage();
     send(message);
   }, [createJoinMessage, send]);
 
-  const handleOpen = useCallback(() => {
-    join();
-  }, [join]);
+  const sendAction = useCallback((action: ClientMessage) => {
+    send(action);
+  }, [send]);
+
+  // Join once connected
+  useEffect(() => {
+    if (isConnected) {
+      join();
+    }
+  }, [isConnected, join]);
 
   return { 
     state, 
@@ -48,6 +57,7 @@ export function useGame(roomId: string, playerId: string, playerName: string, pa
     errorCode, 
     sendAction, 
     isConnecting,
+    isConnected,
     join,
   };
 }

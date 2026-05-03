@@ -21,7 +21,7 @@ export function createAuth() {
         ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081", "http://localhost:3001"]
         : []),
     ],
-    emailAndPassword: {
+emailAndPassword: {
       enabled: true,
       password: {
         hash: hashPassword,
@@ -42,9 +42,6 @@ export function createAuth() {
         secure: env.NODE_ENV === "production",
         httpOnly: true,
       },
-      // Note: crossSubDomainCookies is disabled because *.workers.dev is on the Public Suffix List,
-      // which prevents setting a cookie domain shared across different subdomains.
-      // CORS with credentials: true handles the session correctly without this.
       crossSubDomainCookies: {
         enabled: false,
       },

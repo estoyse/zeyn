@@ -1,20 +1,20 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { GalleryVerticalEnd } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { AuthForm } from "@/components/auth/AuthForm";
+import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 import { authClient } from "@/lib/auth-client";
 
-type LoginSearch = {
-  redirectTo?: string;
+type ResetPasswordSearch = {
+  token?: string;
 };
 
-export const Route = createFileRoute("/auth/login")({
-  validateSearch: (search: Record<string, unknown>): LoginSearch => {
+export const Route = createFileRoute("/auth/reset-password")({
+  validateSearch: (search: Record<string, unknown>): ResetPasswordSearch => {
     return {
-      redirectTo: search.redirectTo as string | undefined,
+      token: search.token as string | undefined,
     };
   },
-  component: AuthPage,
+  component: ResetPasswordPage,
   beforeLoad: async () => {
     const session = await authClient.getSession();
     if (session.data) {
@@ -23,9 +23,7 @@ export const Route = createFileRoute("/auth/login")({
   },
 });
 
-function AuthPage() {
-  const search = Route.useSearch();
-  const returnTo = search.redirectTo || "/dashboard";
+function ResetPasswordPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -39,7 +37,7 @@ function AuthPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <AuthForm returnTo={returnTo} />
+            <ResetPasswordForm />
           </div>
         </div>
       </div>
