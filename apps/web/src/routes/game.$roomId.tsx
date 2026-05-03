@@ -74,6 +74,11 @@ function GamePage() {
     return <LoginRequiredView roomId={roomId} />;
   }
 
+  // Still connecting (check before connection errors)
+  if (!state && isConnecting) {
+    return <ConnectingView />;
+  }
+
   // Connection error
   if (error && !state) {
     const errorMessages: Record<string, string> = {
@@ -87,11 +92,6 @@ function GamePage() {
         onRetry={() => navigate({ to: "/dashboard" })}
       />
     );
-  }
-
-  // Still connecting
-  if (!state && isConnecting) {
-    return <ConnectingView />;
   }
 
   // No state after connection attempts
