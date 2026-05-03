@@ -1,71 +1,7 @@
 import { DurableObject } from "cloudflare:workers";
 import { createD1Db, inArray, eq, schema } from "@shaxsiy-oyin/db";
 import { isFuzzyMatch } from "../utils/fuzzy-match";
-
-interface Question {
-  id: string;
-  text: string;
-  answer: string;
-  points: number;
-}
-
-interface Subject {
-  id: string;
-  name: string;
-  questions: Question[];
-}
-
-interface Player {
-  id: string;
-  name: string;
-  score: number;
-  connected: boolean;
-}
-
-interface QuestionResult {
-  questionId: string;
-  userId: string;
-  correct: boolean;
-  pointsAwarded: number;
-}
-
-interface GameState {
-  status: "WAITING" | "PLAYING" | "FINISHED";
-  roomId: string | null;
-  roomName: string | null;
-  hostId: string | null;
-  maxPlayers: number;
-  isPublic: boolean;
-  hasPassword: boolean;
-  players: Record<string, Player>;
-  subjects: Subject[];
-  currentSubjectIndex: number;
-  currentQuestionIndex: number;
-  phase: "SUBJECT_REVEAL" | "ACTIVE" | "ANSWERING" | "REVEALED";
-  activeQuestionState: {
-    buzzedPlayerId: string | null;
-    wrongAttempts: number;
-    playersWhoAttempted: string[];
-    timerExpiresAt: number;
-  } | null;
-  questionResults: QuestionResult[];
-}
-
-type ClientMessage =
-  | {
-      type: "JOIN";
-      playerId: string;
-      name: string;
-      roomId: string;
-      password?: string;
-    }
-  | { type: "START"; playerId: string; subjectIds: string[] }
-  | { type: "BUZZ"; playerId: string }
-  | { type: "SUBMIT_ANSWER"; playerId: string; answer: string };
-
-type ServerMessage =
-  | { type: "STATE_UPDATE"; state: GameState; serverTime: number }
-  | { type: "ERROR"; message: string };
+import { gameConfig, type ClientMessage, type ServerMessage, type GameState } from "@shaxsiy-oyin/api/game-types";
 
 export class GameRoom extends DurableObject {
   private state: GameState = {
@@ -80,7 +16,7 @@ export class GameRoom extends DurableObject {
     subjects: [],
     currentSubjectIndex: 0,
     currentQuestionIndex: 0,
-    phase: "SUBJECT_REVEAL",
+    phase: "ACTIVE",
     activeQuestionState: null,
     questionResults: [],
   };
@@ -203,7 +139,23 @@ export class GameRoom extends DurableObject {
 
       if (!room) {
         ws.send(
-          JSON.stringify({ type: "ERROR", message: "Room not found in database" })
+          JSON.stringify({ type: "ERROR", code: "NOT_FOUND", message: "Room not found" })
+        );
+        ws.close();
+        return;
+      }
+
+      if (room.status === "playing") {
+        ws.send(
+          JSON.stringify({ type: "ERROR", code: "ALREADY_STARTED", message: "Game already started" })
+        );
+        ws.close();
+        return;
+      }
+
+      if (room.status === "finished") {
+        ws.send(
+          JSON.stringify({ type: "ERROR", code: "ALREADY_FINISHED", message: "Game already ended" })
         );
         ws.close();
         return;
@@ -323,7 +275,7 @@ export class GameRoom extends DurableObject {
       }));
     }
 
-    if (this.state.subjects.length < 5) {
+    if (this.state.subjects.length < gameConfig.minSubjects) {
       ws.send(
         JSON.stringify({
           type: "ERROR",
@@ -333,8 +285,24 @@ export class GameRoom extends DurableObject {
       return;
     }
 
+    // Update room status to PLAYING
+    await this.updateRoomStatus("playing");
+
     this.state.status = "PLAYING";
     this.startQuestionCycle();
+  }
+
+  private async updateRoomStatus(status: "waiting" | "playing" | "finished") {
+    if (!this.state.roomId) return;
+    try {
+      const db = createD1Db(this.env.DB);
+      await db
+        .update(schema.activeRooms)
+        .set({ status })
+        .where(eq(schema.activeRooms.id, this.state.roomId));
+    } catch (e) {
+      console.error("Failed to update room status:", e);
+    }
   }
 
   private startQuestionCycle() {
@@ -343,13 +311,14 @@ export class GameRoom extends DurableObject {
       buzzedPlayerId: null,
       wrongAttempts: 0,
       playersWhoAttempted: [],
-      timerExpiresAt: Date.now() + 15000,
+      timerExpiresAt: Date.now() + gameConfig.questionTimeMs,
     };
 
-    this.setTimer(15000, () => this.handleQuestionTimeout());
+    this.setTimer(gameConfig.questionTimeMs, () => this.handleQuestionTimeout());
   }
 
   private handleBuzz(_ws: WebSocket, playerId: string) {
+    if (!this.state.players[playerId]?.connected) return;
     if (this.state.phase !== "ACTIVE") return;
     if (this.state.activeQuestionState?.buzzedPlayerId) return;
     if (this.state.activeQuestionState?.playersWhoAttempted.includes(playerId))
@@ -357,9 +326,9 @@ export class GameRoom extends DurableObject {
 
     this.state.phase = "ANSWERING";
     this.state.activeQuestionState!.buzzedPlayerId = playerId;
-    this.state.activeQuestionState!.timerExpiresAt = Date.now() + 20000;
+    this.state.activeQuestionState!.timerExpiresAt = Date.now() + gameConfig.answerTimeMs;
 
-    this.setTimer(20000, () => this.handleAnswerTimeout());
+    this.setTimer(gameConfig.answerTimeMs, () => this.handleAnswerTimeout());
   }
 
   private handleSubmitAnswer(
@@ -367,6 +336,7 @@ export class GameRoom extends DurableObject {
     playerId: string,
     answer: string
   ) {
+    if (!this.state.players[playerId]?.connected) return;
     if (this.state.phase !== "ANSWERING") return;
     if (
       !this.state.activeQuestionState ||
@@ -409,12 +379,12 @@ export class GameRoom extends DurableObject {
       this.state.activeQuestionState.playersWhoAttempted.push(playerId);
       this.state.activeQuestionState.buzzedPlayerId = null;
 
-      if (this.state.activeQuestionState.wrongAttempts >= 3) {
+      if (this.state.activeQuestionState.wrongAttempts >= gameConfig.maxWrongAttempts) {
         this.revealAnswer();
       } else {
         this.state.phase = "ACTIVE";
-        this.state.activeQuestionState.timerExpiresAt = Date.now() + 10000;
-        this.setTimer(10000, () => this.handleQuestionTimeout());
+        this.state.activeQuestionState.timerExpiresAt = Date.now() + gameConfig.questionTimeMs;
+        this.setTimer(gameConfig.questionTimeMs, () => this.handleQuestionTimeout());
       }
     }
   }
@@ -422,7 +392,7 @@ export class GameRoom extends DurableObject {
   private revealAnswer() {
     this.state.phase = "REVEALED";
     if (this.state.activeQuestionState) {
-      this.state.activeQuestionState.timerExpiresAt = Date.now() + 5000;
+      this.state.activeQuestionState.timerExpiresAt = Date.now() + gameConfig.revealTimeMs;
     }
     this.broadcast({
       type: "STATE_UPDATE",
@@ -430,7 +400,7 @@ export class GameRoom extends DurableObject {
       serverTime: Date.now(),
     });
     this.saveState();
-    this.setTimer(5000, () => this.nextQuestion());
+    this.setTimer(gameConfig.revealTimeMs, () => this.nextQuestion());
   }
 
   private async nextQuestion() {
@@ -443,7 +413,9 @@ export class GameRoom extends DurableObject {
     if (this.state.currentSubjectIndex >= this.state.subjects.length) {
       this.state.status = "FINISHED";
       this.state.phase = "REVEALED";
+      await this.updateRoomStatus("finished");
       await this.persistResults();
+      this.clearTimer();
     } else {
       this.startQuestionCycle();
     }
@@ -526,6 +498,13 @@ export class GameRoom extends DurableObject {
       clearTimeout(this.timerId);
     }
     this.timerId = setTimeout(callback, ms);
+  }
+
+  private clearTimer() {
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
   }
 
   async webSocketClose(

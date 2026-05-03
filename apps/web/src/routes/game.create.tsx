@@ -224,19 +224,19 @@ function CreateGamePage() {
               <div className="absolute top-0 right-0 size-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl" />
               <CardContent className="p-8 space-y-6 relative z-10">
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-black italic tracking-tighter">READY TO DEPLOY?</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-sm opacity-90">
+                  <h3 className="text-xl font-bold">Ready to Create?</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
                       <div className={`size-2 rounded-full ${name.length >= 3 ? "bg-white" : "bg-white/20"}`} />
-                      Name Configured
+                      Name set
                     </div>
-                    <div className="flex items-center gap-3 text-sm opacity-90">
+                    <div className="flex items-center gap-2 text-sm">
                       <div className={`size-2 rounded-full ${selectedSubjectIds.length >= 5 ? "bg-white" : "bg-white/20"}`} />
-                      Subjects Loaded ({selectedSubjectIds.length}/5 min)
+                      Subjects selected ({selectedSubjectIds.length}/5 min)
                     </div>
-                    <div className="flex items-center gap-3 text-sm opacity-90">
+                    <div className="flex items-center gap-2 text-sm">
                       <div className="size-2 rounded-full bg-white" />
-                      Security: {isPublic ? "Open Borders" : "Private Enclave"}
+                      {isPublic ? "Public" : "Private"} room
                     </div>
                   </div>
                 </div>
@@ -244,16 +244,11 @@ function CreateGamePage() {
                 <Button 
                   size="lg" 
                   variant="secondary" 
-                  className="w-full h-14 text-lg font-bold group shadow-lg shadow-black/20"
+                  className="w-full"
                   disabled={!canCreate || createRoomMutation.isPending}
                   onClick={handleCreate}
                 >
-                  {createRoomMutation.isPending ? "INITIALIZING..." : (
-                    <>
-                      CREATE GAME ROOM
-                      <ChevronRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </>
-                  )}
+                  {createRoomMutation.isPending ? "Creating..." : "Create Game"}
                 </Button>
               </CardContent>
             </Card>

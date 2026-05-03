@@ -22,60 +22,48 @@ export function QuickActions() {
   };
 
   return (
-    <div className='grid gap-6 md:grid-cols-2'>
+    <div className="grid gap-4 md:grid-cols-2">
       <Card
-        className='glass-card group hover:border-primary/50 transition-all cursor-pointer overflow-hidden relative'
+        className="group hover:border-primary/50 transition-all cursor-pointer"
         onClick={() => navigate({ to: "/game/create" })}
       >
-        <div className='absolute top-0 right-0 size-24 bg-primary/5 -mr-8 -mt-8 rounded-full blur-2xl group-hover:bg-primary/20 transition-all' />
         <CardHeader>
-          <div className='size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform'>
-            <Zap className='size-6 text-primary' />
+          <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+            <Zap className="size-5 text-primary" />
           </div>
-          <CardTitle className='text-xl italic font-black'>
-            CREATE ARENA
-          </CardTitle>
+          <CardTitle className="text-lg">Create Game</CardTitle>
           <CardDescription>
-            Setup a custom match with your own rules and subjects.
+            Host a new game with your chosen subjects.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button
-            variant='outline'
-            className='w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all uppercase font-bold tracking-widest text-xs'
-          >
-            Configure Match
-            <ArrowRight className='size-4 ml-2 group-hover:translate-x-1 transition-transform' />
+          <Button variant="outline" className="w-full">
+            Create
+            <ArrowRight className="size-4 ml-2" />
           </Button>
         </CardContent>
       </Card>
 
-      <Card className='glass-card group hover:border-secondary/50 transition-all'>
+      <Card className="group hover:border-primary/50 transition-all">
         <CardHeader>
-          <div className='size-12 rounded-xl bg-secondary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform'>
-            <PlusCircle className='size-6 text-secondary-foreground' />
+          <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+            <PlusCircle className="size-5 text-primary" />
           </div>
-          <CardTitle className='text-xl italic font-black'>
-            JOIN VIA ID
-          </CardTitle>
+          <CardTitle className="text-lg">Join by ID</CardTitle>
           <CardDescription>
-            Have a secret code? Enter the arena directly.
+            Have a room ID? Enter it below to join.
           </CardDescription>
         </CardHeader>
-        <CardContent className='space-y-4'>
-          <form onSubmit={handleJoinRoom} className='flex gap-2'>
+        <CardContent className="space-y-3">
+          <form onSubmit={handleJoinRoom} className="flex gap-2">
             <Input
-              placeholder='Enter Room ID...'
+              placeholder="Enter Room ID..."
               value={roomToJoin}
-              onChange={e => setRoomToJoin(e.target.value)}
-              className='bg-background/50 h-11'
+              onChange={(e) => setRoomToJoin(e.target.value)}
+              className="h-10"
             />
-            <Button
-              type='submit'
-              className='h-11 px-6 font-bold'
-              disabled={!roomToJoin}
-            >
-              JOIN
+            <Button type="submit" size="sm" disabled={!roomToJoin}>
+              Join
             </Button>
           </form>
         </CardContent>

@@ -4,100 +4,74 @@ import { Stats } from "@/components/landing/Stats";
 
 import { Hero } from "@/components/landing/Hero";
 import { Terminal } from "@/components/landing/Terminal";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
 });
 
-export default function HomeComponent() {
+function HomeComponent() {
   return (
-    <div className='min-h-screen'>
+    <div className="min-h-screen">
       <Hero />
       <Terminal />
       <Stats />
       <FeaturedGames />
 
-      <footer className='border-t border-black/10 mt-20'>
-        <div className='max-w-7xl mx-auto px-6 py-12'>
-          <div className='grid md:grid-cols-4 gap-8'>
-            <div className='space-y-3'>
-              <h4 className='text-sm'>Shaxsiy O'yin</h4>
-              <p className='text-sm text-muted-foreground'>
-                Premium onlayn o'yinlar platformasi
+      <footer className="border-t mt-20">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium">Shaxsiy O'yin</h4>
+              <p className="text-sm text-muted-foreground">
+                Premium online trivia games platform
               </p>
             </div>
-            <div className='space-y-3'>
-              <h4 className='text-sm'>O'yinlar</h4>
-              <div className='space-y-2 text-sm text-muted-foreground'>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Aksion
-                </a>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Strategiya
-                </a>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Poyga
-                </a>
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium">Games</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <Link to="/dashboard" className="block hover:text-foreground transition-colors">
+                  Browse Games
+                </Link>
+                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
+                  Tournaments
+                </span>
+                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
+                  Leaderboard
+                </span>
               </div>
             </div>
-            <div className='space-y-3'>
-              <h4 className='text-sm'>Jamoa</h4>
-              <div className='space-y-2 text-sm text-muted-foreground'>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Biz haqimizda
-                </a>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium">Company</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
+                  About Us
+                </span>
+                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
                   Blog
-                </a>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Aloqa
-                </a>
+                </span>
+                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
+                  Contact
+                </span>
               </div>
             </div>
-            <div className='space-y-3'>
-              <h4 className='text-sm'>Ijtimoiy</h4>
-              <div className='space-y-2 text-sm text-muted-foreground'>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Telegram
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium">Social</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <a href="#" className="block hover:text-foreground transition-colors">
+                  Twitter
                 </a>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  Instagram
+                <a href="#" className="block hover:text-foreground transition-colors">
+                  Discord
                 </a>
-                <a
-                  href='#'
-                  className='block hover:text-foreground transition-colors'
-                >
-                  YouTube
+                <a href="#" className="block hover:text-foreground transition-colors">
+                  GitHub
                 </a>
               </div>
             </div>
           </div>
-          <div className='mt-12 pt-8 border-t border-black/10 text-center text-sm text-muted-foreground'>
-            © 2026 Shaxsiy O'yin. Barcha huquqlar himoyalangan.
+          <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
+            © 2026 Shaxsiy O'yin. All rights reserved.
           </div>
         </div>
       </footer>

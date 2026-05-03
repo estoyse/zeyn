@@ -90,4 +90,24 @@ export const gameRouter = router({
         results,
       };
     }),
+
+  getRoomStatus: protectedProcedure
+    .input(z.object({ roomId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const room = await ctx.db
+        .select({ status: activeRooms.status })
+        .from(activeRooms)
+        .where(eq(activeRooms.id, input.roomId))
+        .get();
+
+      return room?.status || null;
+    }),
+
+  getHistory: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select()
+      .from(activeRooms)
+      .where(eq(activeRooms.status, "finished"))
+      .orderBy(desc(activeRooms.createdAt));
+  }),
 });

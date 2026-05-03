@@ -3,7 +3,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@shaxsiy-oyin/ui/components/avatar";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,18 +20,16 @@ export function DropdownMenuAvatar() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Button variant='ghost' size='icon'>
-          <Avatar className='rounded-none'>
-            {user?.image ? (
-              <AvatarImage src={user.image} alt={user.name ?? "User profile"} />
-            ) : null}
-            <AvatarFallback className='rounded-none'>
-              {user?.name?.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </Button>
+        <Avatar className="cursor-pointer hover:opacity-80 transition-opacity">
+          {user?.image ? (
+            <AvatarImage src={user.image} alt={user.name ?? "User profile"} />
+          ) : null}
+          <AvatarFallback>
+            {user?.name?.slice(0, 2).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
+      <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <UserIcon />
