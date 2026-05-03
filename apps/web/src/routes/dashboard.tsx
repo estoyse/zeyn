@@ -113,7 +113,6 @@ function DashboardPage() {
                     <Button
                       size='sm'
                       variant='outline'
-                      className='border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10'
                       onClick={handleCreateRoom}
                       disabled={createRoomMutation.isPending}
                     >
@@ -235,7 +234,7 @@ function DashboardPage() {
                         {[1, 2, 3].map(i => (
                           <div
                             key={i}
-                            className='flex size-6 rounded-full border-2 border-background bg-muted'
+                            className='flex size-6  border-2 border-background bg-muted'
                           />
                         ))}
                       </div>

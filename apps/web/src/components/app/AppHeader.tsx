@@ -18,10 +18,10 @@ export function AppHeader() {
 
   return (
     <header className='border-b border-black/10 bg-background'>
-      <div className='max-w-7xl mx-auto py-4'>
+      <div className='max-w-7xl mx-auto p-6'>
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
-            <div className='w-8 h-8 bg-black rounded-full flex items-center justify-center'>
+            <div className='w-8 h-8 bg-black rounded-lg flex items-center justify-center'>
               <span className='text-white font-bold'>S</span>
             </div>
             <span className='text-lg font-medium'>Shaxsiy O'yin</span>
