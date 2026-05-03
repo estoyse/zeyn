@@ -5,7 +5,7 @@ import { Stats } from "@/components/landing/Stats";
 import { Hero } from "@/components/landing/Hero";
 import { Terminal } from "@/components/landing/Terminal";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/landing/")({
   component: HomeComponent,
 });
 

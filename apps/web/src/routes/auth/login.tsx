@@ -17,7 +17,7 @@ import { cn } from "@shaxsiy-oyin/ui/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/auth/login")({
   component: AuthPage,
 });
 
@@ -26,7 +26,7 @@ export default function AuthPage() {
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
-          <Link to="/" className="flex items-center gap-2 font-medium">
+          <Link to="/landing" className="flex items-center gap-2 font-medium">
             <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <GalleryVerticalEnd className="size-4" />
             </div>

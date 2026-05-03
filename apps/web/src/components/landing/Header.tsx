@@ -49,7 +49,7 @@ export function Header() {
 
           <div className='flex items-center gap-3'>
             <ModeToggle />
-            <Link to='/login'>
+            <Link to='/auth/login'>
               <Button>Boshlash</Button>
             </Link>
             <Button variant={"outline"} className='md:hidden'>
