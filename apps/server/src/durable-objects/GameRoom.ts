@@ -463,7 +463,7 @@ export class GameRoom extends DurableObject {
 
     try {
       // 1. Create game history
-      await db.insert(gameHistory).values({
+      await db.insert(schema.gameHistory).values({
         id: gameId,
         roomId: this.state.roomId || "unknown",
         hostId: this.state.hostId,
@@ -472,7 +472,7 @@ export class GameRoom extends DurableObject {
 
       // 2. Insert question results
       if (this.state.questionResults.length > 0) {
-        await db.insert(gameQuestionResults).values(
+        await db.insert(schema.gameQuestionResults).values(
           this.state.questionResults.map(r => ({
             id: crypto.randomUUID(),
             gameId: gameId,
@@ -487,7 +487,7 @@ export class GameRoom extends DurableObject {
       // 3. Insert final player results
       const players = Object.values(this.state.players);
       if (players.length > 0) {
-        await db.insert(gamePlayerResults).values(
+        await db.insert(schema.gamePlayerResults).values(
           players.map(p => ({
             id: crypto.randomUUID(),
             gameId: gameId,
