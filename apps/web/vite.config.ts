@@ -10,6 +10,31 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("framer-motion")) {
+              return "vendor-motion";
+            }
+            if (id.includes("@base-ui")) {
+              return "vendor-ui";
+            }
+            if (id.includes("react") || id.includes("react-dom")) {
+              return "vendor-react";
+            }
+            if (id.includes("@tanstack")) {
+              return "vendor-tanstack";
+            }
+            if (id.includes("better-auth")) {
+              return "vendor-auth";
+            }
+          }
+        },
+      },
+    },
+  },
   plugins: [
     tailwindcss(),
     tanstackRouter({
