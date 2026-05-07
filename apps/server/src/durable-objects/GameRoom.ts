@@ -4,7 +4,6 @@ import { isFuzzyMatch } from "../utils/fuzzy-match";
 import {
   gameConfig,
   type ClientMessage,
-  type ServerMessage,
   type GameState,
 } from "@shaxsiy-oyin/api/game-types";
 
@@ -25,6 +24,7 @@ export class GameRoom extends DurableObject {
     activeQuestionState: null,
     questionResults: [],
   };
+  private lastBroadcastPlayers: Record<string, string> = {}; // playerId -> JSON string of player state
   private roomPassword: string | null = null;
   private timerId: any = null;
 
@@ -56,7 +56,7 @@ export class GameRoom extends DurableObject {
     server.send(
       JSON.stringify({
         type: "STATE_UPDATE",
-        state: this.state,
+        state: this.getPublicState(true),
         serverTime: Date.now(),
       })
     );
@@ -102,11 +102,7 @@ export class GameRoom extends DurableObject {
     }
 
     await this.saveState();
-    this.broadcast({
-      type: "STATE_UPDATE",
-      state: this.state,
-      serverTime: Date.now(),
-    });
+    this.broadcast();
   }
 
   private async saveState() {
@@ -124,6 +120,17 @@ export class GameRoom extends DurableObject {
     roomId: string,
     password?: string
   ) {
+    if (!playerId || !name) {
+      ws.send(
+        JSON.stringify({
+          type: "ERROR",
+          message: "Player ID and name are required to join.",
+        })
+      );
+      ws.close();
+      return;
+    }
+
     if (playerId.startsWith("guest-")) {
       ws.send(
         JSON.stringify({
@@ -235,13 +242,21 @@ export class GameRoom extends DurableObject {
       return;
     }
 
-    this.state.players[playerId] = {
-      id: playerId,
-      name: name,
-      score: 0,
-      connected: true,
-    };
+    const existingPlayer = this.state.players[playerId];
+    if (existingPlayer) {
+      existingPlayer.connected = true;
+      existingPlayer.name = name;
+    } else {
+      this.state.players[playerId] = {
+        id: playerId,
+        name: name,
+        score: 0,
+        connected: true,
+      };
+    }
+    
     (ws as any).playerId = playerId;
+    (ws as any).joinTime = Date.now();
   }
 
   private async handleStart(
@@ -425,11 +440,7 @@ export class GameRoom extends DurableObject {
       this.state.activeQuestionState.timerExpiresAt =
         Date.now() + gameConfig.revealTimeMs;
     }
-    this.broadcast({
-      type: "STATE_UPDATE",
-      state: this.state,
-      serverTime: Date.now(),
-    });
+    this.broadcast();
     this.saveState();
     this.setTimer(gameConfig.revealTimeMs, () => this.nextQuestion());
   }
@@ -452,11 +463,7 @@ export class GameRoom extends DurableObject {
     }
 
     await this.saveState();
-    this.broadcast({
-      type: "STATE_UPDATE",
-      state: this.state,
-      serverTime: Date.now(),
-    });
+    this.broadcast();
   }
 
   private async persistResults() {
@@ -541,14 +548,20 @@ export class GameRoom extends DurableObject {
     _wasClean: boolean
   ) {
     const playerId = (ws as any).playerId;
+    const joinTime = (ws as any).joinTime;
+
     if (playerId && this.state.players[playerId]) {
-      this.state.players[playerId].connected = false;
-      this.broadcast({
-        type: "STATE_UPDATE",
-        state: this.state,
-        serverTime: Date.now(),
-      });
-      await this.saveState();
+      // Only mark disconnected if this was the latest connection
+      // or if no other connections for this player exist
+      const otherConnections = this.ctx.getWebSockets().filter(s => 
+        (s as any).playerId === playerId && (s as any).joinTime > joinTime
+      );
+
+      if (otherConnections.length === 0) {
+        this.state.players[playerId].connected = false;
+        this.broadcast();
+        await this.saveState();
+      }
     }
   }
 
@@ -556,11 +569,14 @@ export class GameRoom extends DurableObject {
     this.webSocketClose(ws, 1011, "Error", false);
   }
 
-  private broadcast(message: ServerMessage) {
-    if (message.type === "STATE_UPDATE") {
-      message.serverTime = Date.now();
-    }
-    const data = JSON.stringify(message);
+  private broadcast() {
+    const publicState = this.getPublicState();
+    const data = JSON.stringify({
+      type: "STATE_UPDATE",
+      state: publicState,
+      serverTime: Date.now(),
+    });
+    
     for (const ws of this.ctx.getWebSockets()) {
       try {
         ws.send(data);
@@ -568,5 +584,53 @@ export class GameRoom extends DurableObject {
         // socket might be closed
       }
     }
+  }
+
+  private getPublicState(forceFullPlayers = false): any {
+    const { subjects, players, ...baseState } = this.state;
+    
+    // Calculate player deltas
+    const playerDeltas: Record<string, any> = {};
+    let hasChanges = false;
+
+    for (const [id, player] of Object.entries(players)) {
+      const playerJson = JSON.stringify(player);
+      if (forceFullPlayers || this.lastBroadcastPlayers[id] !== playerJson) {
+        playerDeltas[id] = player;
+        this.lastBroadcastPlayers[id] = playerJson;
+        hasChanges = true;
+      }
+    }
+
+    const publicState: any = {
+      ...baseState,
+      subjectCount: subjects.length,
+    };
+
+    if (hasChanges || forceFullPlayers) {
+      publicState.players = playerDeltas;
+    }
+
+    if (this.state.status === "PLAYING") {
+      const currentSubject = subjects[this.state.currentSubjectIndex];
+      const currentQuestion = currentSubject?.questions?.[this.state.currentQuestionIndex];
+
+      if (currentSubject) {
+        publicState.currentSubjectName = currentSubject.name;
+      }
+
+      if (currentQuestion) {
+        publicState.currentQuestion = {
+          text: currentQuestion.text,
+          points: currentQuestion.points,
+        };
+
+        if (this.state.phase === "REVEALED") {
+          publicState.currentQuestion.answer = currentQuestion.answer;
+        }
+      }
+    }
+
+    return publicState;
   }
 }

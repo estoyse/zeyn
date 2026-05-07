@@ -8,6 +8,7 @@ interface UseSocketOptions {
   onError?: (error: string) => void;
   reconnectDelay?: number;
   maxRetries?: number;
+  enabled?: boolean;
 }
 
 export function useSocket({
@@ -17,8 +18,9 @@ export function useSocket({
   onError,
   reconnectDelay = 3000,
   maxRetries = 5,
+  enabled = true,
 }: UseSocketOptions) {
-  const [isConnecting, setIsConnecting] = useState(true);
+  const [isConnecting, setIsConnecting] = useState(enabled);
   const [isConnected, setIsConnected] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
@@ -85,12 +87,19 @@ export function useSocket({
     }
     retryCountRef.current = maxRetries;
     wsRef.current?.close();
+    setIsConnected(false);
+    setIsConnecting(false);
   }, [maxRetries]);
 
   useEffect(() => {
-    connect();
-    return close;
-  }, [connect, close]);
+    if (enabled) {
+      connect();
+      return close;
+    } else {
+      setIsConnecting(false);
+      setIsConnected(false);
+    }
+  }, [enabled, connect, close]);
 
   return { send, close, isConnecting, isConnected, isReconnecting };
 }

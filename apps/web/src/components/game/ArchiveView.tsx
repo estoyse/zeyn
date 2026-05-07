@@ -5,13 +5,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@shaxsiy-oyin/ui/components/card";
-import { Trophy, LayoutGrid, Crown, UserCircle2 } from "lucide-react";
+import { Trophy, LayoutGrid, UserCircle2 } from "lucide-react";
 
 interface ResultsData {
-  results: Array<{
-    id: string;
+  playerResults: Array<{
+    userId: string;
     playerName: string;
     score: number;
+  }>;
+  questionResults: Array<{
+    userId: string;
+    points: number;
+    pointsAwarded: number;
+    correct: boolean;
   }>;
 }
 
@@ -21,6 +27,14 @@ interface ArchiveViewProps {
 }
 
 export function ArchiveView({ data, onBack }: ArchiveViewProps) {
+  const tiers = [10, 20, 30, 40, 50];
+
+  const getPointsForTier = (userId: string, tier: number) => {
+    return data.questionResults
+      .filter((r) => r.userId === userId && r.points === tier)
+      .reduce((acc, r) => acc + r.pointsAwarded, 0);
+  };
+
   return (
     <div className="min-h-screen bg-background p-6 md:p-12">
       <div className="mx-auto max-w-5xl space-y-8 py-12">
@@ -38,50 +52,54 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <LayoutGrid className="size-5" />
-              Leaderboard
+              Detailed Results
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <table className="w-full">
-              <thead>
-                <tr className="border-b text-left">
-                  <th className="pb-4 text-xs text-muted-foreground uppercase">Rank</th>
-                  <th className="pb-4 text-xs text-muted-foreground uppercase">Player</th>
-                  <th className="pb-4 text-right text-xs text-muted-foreground uppercase">Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {data.results.map((p, idx) => (
-                  <tr
-                    key={p.id}
-                    className={`hover:bg-muted/50 ${idx === 0 ? "text-primary" : ""}`}
-                  >
-                    <td className="py-4 font-bold text-2xl opacity-50">{idx + 1}</td>
-                    <td className="py-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`flex size-10 items-center justify-center rounded-lg border ${
-                            idx === 0
-                              ? "bg-primary/10 border-primary/20"
-                              : "bg-muted border-border"
-                          }`}
-                        >
-                          {idx === 0 ? (
-                            <Crown className="size-5" />
-                          ) : (
-                            <UserCircle2 className="size-5 text-muted-foreground" />
-                          )}
-                        </div>
-                        <span className="font-medium">{p.playerName}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 text-right">
-                      <span className="text-3xl font-bold tabular-nums">{p.score}</span>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b text-left">
+                    <th className="pb-4 text-xs text-muted-foreground uppercase">Player</th>
+                    {tiers.map((t, i) => (
+                      <th key={t} className="pb-4 text-center text-xs text-muted-foreground uppercase">
+                        Q{i + 1} ({t})
+                      </th>
+                    ))}
+                    <th className="pb-4 text-right text-xs text-muted-foreground uppercase">Total</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y">
+                  {data.playerResults.map((p) => (
+                    <tr key={p.userId} className="hover:bg-muted/50">
+                      <td className="py-4">
+                        <div className="flex items-center gap-3">
+                          <UserCircle2 className="size-5 text-muted-foreground" />
+                          <span className="font-medium">{p.playerName}</span>
+                        </div>
+                      </td>
+                      {tiers.map((t) => {
+                        const points = getPointsForTier(p.userId, t);
+                        return (
+                          <td key={t} className="py-4 text-center">
+                            {points !== 0 ? (
+                              <span className={`font-bold ${points > 0 ? "text-green-500" : "text-red-500"}`}>
+                                {points > 0 ? `+${points}` : points}
+                              </span>
+                            ) : (
+                              <span className="text-muted-foreground opacity-30">-</span>
+                            )}
+                          </td>
+                        );
+                      })}
+                      <td className="py-4 text-right">
+                        <span className="text-xl font-bold tabular-nums">{p.score}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </CardContent>
         </Card>
 

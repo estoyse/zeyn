@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
@@ -15,7 +15,6 @@ import { ArchiveView } from "@/components/game/ArchiveView";
 import { GameHeader } from "@/components/game/GameHeader";
 import { GameLobby } from "@/components/game/GameLobby";
 import { GamePlaying } from "@/components/game/GamePlaying";
-import { GameFinished } from "@/components/game/GameFinished";
 
 export const Route = createFileRoute("/game/$roomId")({
   component: GamePage,
@@ -41,8 +40,15 @@ function GamePage() {
 
   const resultsQuery = useQuery(trpc.game.getResults.queryOptions({ roomId }));
 
-  // Archive results view
-  if ((error || !state) && resultsQuery.data) {
+  // Refetch results when game finishes
+  useEffect(() => {
+    if (state?.status === "FINISHED") {
+      resultsQuery.refetch();
+    }
+  }, [state?.status, resultsQuery]);
+
+  // Archive results view (Either game is finished or we had a connection error but data exists)
+  if ((state?.status === "FINISHED" || error || !state) && resultsQuery.data) {
     return (
       <ArchiveView
         data={resultsQuery.data}
@@ -51,7 +57,12 @@ function GamePage() {
     );
   }
 
-  // Password required
+  // If game is finished but data hasn't arrived yet
+  if (state?.status === "FINISHED") {
+    return <LoadingView message="Fetching final results..." />;
+  }
+
+  // Session loading
   if (errorCode === "PASSWORD_REQUIRED" || showPasswordPrompt) {
     return (
       <PasswordPromptView
@@ -156,15 +167,6 @@ function GamePage() {
               setAnswerInput={setAnswerInput}
               onBuzz={handleBuzz}
               onSubmitAnswer={handleSubmitAnswer}
-            />
-          )}
-
-          {state.status === "FINISHED" && (
-            <GameFinished
-              key='finished'
-              state={state}
-              playerId={userId!}
-              onReturn={() => navigate({ to: "/dashboard" })}
             />
           )}
         </AnimatePresence>

@@ -10,7 +10,12 @@ interface GamePlayingProps {
     phase: string;
     currentSubjectIndex: number;
     currentQuestionIndex: number;
-    subjects: Array<{ name: string; questions: Array<{ text: string; answer: string; points: number }> }>;
+    currentSubjectName?: string;
+    currentQuestion?: {
+      text: string;
+      points: number;
+      answer?: string;
+    };
     activeQuestionState: {
       timerExpiresAt: number;
       buzzedPlayerId: string | null;
@@ -34,11 +39,9 @@ export function GamePlaying({
   onBuzz,
   onSubmitAnswer,
 }: GamePlayingProps) {
-  const currentSubject = state.subjects[state.currentSubjectIndex];
-  const currentQuestion = currentSubject?.questions?.[state.currentQuestionIndex];
   const isMyTurn = state.activeQuestionState?.buzzedPlayerId === playerId;
 
-  if (!currentQuestion || !currentSubject) {
+  if (!state.currentQuestion) {
     return (
       <div className="flex items-center justify-center p-8">
         <p className="text-muted-foreground">Loading question...</p>
@@ -58,7 +61,7 @@ export function GamePlaying({
         <div className="flex items-center gap-2 bg-muted px-4 py-2 rounded-lg border">
           <div className="size-2 bg-primary animate-pulse rounded-full" />
           <span className="text-xs text-muted-foreground uppercase">Current Category</span>
-          <span className="font-semibold text-primary">{currentSubject?.name}</span>
+          <span className="font-semibold text-primary">{state.currentSubjectName}</span>
         </div>
 
         <div className="flex gap-2">
@@ -91,9 +94,9 @@ export function GamePlaying({
             >
               <div className="space-y-2">
                 <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium">
-                  Question worth {currentQuestion?.points}
+                  Question worth {state.currentQuestion?.points}
                 </span>
-                <h2 className="text-xl md:text-2xl font-bold">{currentQuestion?.text}</h2>
+                <h2 className="text-xl md:text-2xl font-bold">{state.currentQuestion?.text}</h2>
               </div>
 
               <div className="w-full max-w-xs">
@@ -191,7 +194,7 @@ export function GamePlaying({
                   transition={{ repeat: Infinity, duration: 2 }}
                   className="text-3xl md:text-4xl font-bold text-green-500"
                 >
-                  {currentQuestion?.answer}
+                  {state.currentQuestion?.answer}
                 </motion.h2>
               </div>
 

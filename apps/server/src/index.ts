@@ -41,8 +41,9 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.all("/game/:id/ws", async c => {
   const id = c.req.param("id");
-  const doId = c.env.GAME_ROOM.idFromName(id);
-  const stub = c.env.GAME_ROOM.get(doId);
+  const gameRoomEnv = (c.env as any).GAME_ROOM;
+  const doId = gameRoomEnv.idFromName(id);
+  const stub: any = gameRoomEnv.get(doId);
   const response = await stub.fetch(c.req.raw as any);
   return response;
 });

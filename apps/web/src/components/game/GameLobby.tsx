@@ -16,7 +16,7 @@ interface GameLobbyProps {
     hostId: string | null;
     maxPlayers: number;
     status: string;
-    subjects: Array<{ id: string; name: string }>;
+    subjectCount: number;
   };
   playerId: string;
   onStart: () => void;
@@ -82,7 +82,7 @@ export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
             <div>
               <p className="font-medium text-sm">Game Information</p>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Game consists of {state.subjects.length} categories.
+                Game consists of {state.subjectCount} categories.
                 Each category has 5 questions worth 10-50 points.
               </p>
             </div>
@@ -97,14 +97,14 @@ export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase">Active Subjects</p>
+              <p className="text-xs text-muted-foreground uppercase">Game Progress</p>
               <div className="flex flex-wrap gap-1">
-                {state.subjects.map((s) => (
+                {Array.from({ length: state.subjectCount }).map((_, i) => (
                   <div
-                    key={s.id}
+                    key={i}
                     className="px-2 py-1 bg-background border rounded text-xs"
                   >
-                    {s.name}
+                    Category {i + 1}
                   </div>
                 ))}
               </div>

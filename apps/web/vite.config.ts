@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     port: 3001,
     proxy: {
-      '/game': {
+      '^/game/.*/ws': {
         target: 'http://localhost:3000',
         ws: true,
       },

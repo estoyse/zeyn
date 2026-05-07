@@ -33,6 +33,7 @@ export function useGame(roomId: string, playerId: string, playerName: string, pa
     url: wsUrl,
     onMessage: handleMessage,
     onError: handleSocketError,
+    enabled: !!playerId,
   });
 
   const join = useCallback(() => {

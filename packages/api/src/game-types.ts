@@ -52,6 +52,17 @@ export interface GameState {
   questionResults: QuestionResult[];
 }
 
+export interface PublicGameState extends Omit<GameState, "subjects" | "players"> {
+  subjectCount: number;
+  players?: Record<string, Partial<Player>>; // Only changed players
+  currentSubjectName?: string;
+  currentQuestion?: {
+    text: string;
+    points: number;
+    answer?: string;
+  };
+}
+
 export type ClientMessage =
   | { type: "JOIN"; playerId: string; name: string; roomId: string; password?: string }
   | { type: "START"; playerId: string; subjectIds: string[] }
@@ -59,7 +70,7 @@ export type ClientMessage =
   | { type: "SUBMIT_ANSWER"; playerId: string; answer: string };
 
 export type ServerMessage =
-  | { type: "STATE_UPDATE"; state: GameState; serverTime: number }
+  | { type: "STATE_UPDATE"; state: PublicGameState; serverTime: number }
   | { type: "ERROR"; message: string; code?: string };
 
 export const gameConfig = {

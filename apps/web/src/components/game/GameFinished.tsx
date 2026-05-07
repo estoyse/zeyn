@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 interface GameFinishedProps {
   state: {
     players: Record<string, { id: string; name: string; score: number }>;
-    subjects: Array<{ id: string; name: string }>;
+    subjectCount: number;
   };
   playerId: string;
   onReturn: () => void;
@@ -108,7 +108,7 @@ export function GameFinished({ state, playerId, onReturn }: GameFinishedProps) {
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subjects Played</span>
-                <span className="font-medium">{state.subjects.length}</span>
+                <span className="font-medium">{state.subjectCount}</span>
               </div>
               <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Avg Score</span>
