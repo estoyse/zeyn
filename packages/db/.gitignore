@@ -28,6 +28,12 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .cache
 *.tsbuildinfo
 
+# local drizzle-kit / D1 dev database
+local.sqlite
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
 # IntelliJ based IDEs
 .idea
 

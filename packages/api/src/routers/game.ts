@@ -4,11 +4,10 @@ import {
   subjects,
   gameHistory,
   gamePlayerResults,
-  activeRooms,
-  questions,
+  activeGames,
   gameQuestionResults,
 } from "@shaxsiy-oyin/db/schema";
-import { eq, desc, and } from "@shaxsiy-oyin/db";
+import { eq, desc } from "@shaxsiy-oyin/db";
 
 export const gameRouter = router({
   getSubjects: protectedProcedure.query(({ ctx }) => {
@@ -26,10 +25,10 @@ export const gameRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const roomId = crypto.randomUUID();
+      const gameId = crypto.randomUUID();
 
-      await ctx.db.insert(activeRooms).values({
-        id: roomId,
+      await ctx.db.insert(activeGames).values({
+        id: gameId,
         name: input.name,
         hostId: ctx.session.user.id,
         maxPlayers: input.maxPlayers,
@@ -41,26 +40,24 @@ export const gameRouter = router({
         updatedAt: new Date(),
       });
 
-      return { roomId };
+      return { gameId };
     }),
 
   getPublicRooms: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
       .select()
-      .from(activeRooms)
-      .where(
-        and(eq(activeRooms.isPublic, true), eq(activeRooms.status, "waiting"))
-      )
-      .orderBy(desc(activeRooms.createdAt));
+      .from(activeGames)
+      .where(eq(activeGames.isPublic, true))
+      .orderBy(desc(activeGames.createdAt));
   }),
 
   getRoomConfig: protectedProcedure
-    .input(z.object({ roomId: z.string() }))
+    .input(z.object({ gameId: z.string() }))
     .query(async ({ ctx, input }) => {
       const room = await ctx.db
         .select()
-        .from(activeRooms)
-        .where(eq(activeRooms.id, input.roomId))
+        .from(activeGames)
+        .where(eq(activeGames.id, input.gameId))
         .get();
 
       if (!room) return null;
@@ -74,58 +71,57 @@ export const gameRouter = router({
   getResults: protectedProcedure
     .input(
       z.object({
-        roomId: z.string(),
+        gameId: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
-      // Get the latest game in this room
-      console.log("Fetching latest game for room:", input.roomId);
       const latestGame = await ctx.db
         .select()
         .from(gameHistory)
-        .where(eq(gameHistory.roomId, input.roomId))
+        .where(eq(gameHistory.gameId, input.gameId))
         .orderBy(desc(gameHistory.createdAt))
         .limit(1)
         .get();
 
-      console.log("Latest game:", latestGame);
-
       if (!latestGame) return null;
 
+      // Results rows are keyed on the game_history primary key (latestGame.id),
+      // not the room's gameId. Rows come back sorted highest score first.
       const playerResults = await ctx.db
         .select()
         .from(gamePlayerResults)
-        .where(eq(gamePlayerResults.gameId, latestGame.roomId))
+        .where(eq(gamePlayerResults.gameId, latestGame.id))
         .orderBy(desc(gamePlayerResults.score));
-
-      console.log("Player results:", playerResults);
 
       const questionResults = await ctx.db
         .select({
           userId: gameQuestionResults.userId,
-          questionId: gameQuestionResults.questionId,
+          subjectName: gameQuestionResults.subjectName,
+          subjectPosition: gameQuestionResults.subjectPosition,
+          questionPosition: gameQuestionResults.questionPosition,
           correct: gameQuestionResults.correct,
           pointsAwarded: gameQuestionResults.pointsAwarded,
-          points: questions.points,
         })
         .from(gameQuestionResults)
-        .innerJoin(questions, eq(gameQuestionResults.questionId, questions.id))
         .where(eq(gameQuestionResults.gameId, latestGame.id));
+
+      const subjects = JSON.parse(latestGame.subjects) as string[];
 
       return {
         game: latestGame,
+        subjects,
         playerResults,
         questionResults,
       };
     }),
 
   getRoomStatus: protectedProcedure
-    .input(z.object({ roomId: z.string() }))
+    .input(z.object({ gameId: z.string() }))
     .query(async ({ ctx, input }) => {
       const room = await ctx.db
-        .select({ status: activeRooms.status })
-        .from(activeRooms)
-        .where(eq(activeRooms.id, input.roomId))
+        .select({ status: activeGames.status })
+        .from(activeGames)
+        .where(eq(activeGames.id, input.gameId))
         .get();
 
       return room?.status || null;
@@ -134,8 +130,8 @@ export const gameRouter = router({
   getHistory: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
       .select()
-      .from(activeRooms)
-      .where(eq(activeRooms.status, "finished"))
-      .orderBy(desc(activeRooms.createdAt));
+      .from(activeGames)
+      .where(eq(activeGames.status, "finished"))
+      .orderBy(desc(activeGames.createdAt));
   }),
 });

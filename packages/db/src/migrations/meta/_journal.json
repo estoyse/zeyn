@@ -22,6 +22,34 @@
       "when": 1777797031621,
       "tag": "0002_clammy_alice",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1778170698490,
+      "tag": "0003_low_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1778172587088,
+      "tag": "0004_lethal_misty_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1778172837351,
+      "tag": "0005_mysterious_ronan",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1782932519401,
+      "tag": "0006_flat_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE `game_history` RENAME COLUMN "gameId" TO "game_id";

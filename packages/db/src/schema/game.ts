@@ -14,15 +14,19 @@ export const questions = sqliteTable("questions", {
     .references(() => subjects.id, { onDelete: "cascade" }),
   text: text("text").notNull(),
   answer: text("answer").notNull(),
-  points: integer("points").notNull(), // 10, 20, 30, 40, 50
+  points: integer("points").notNull(),
 });
 
 export const gameHistory = sqliteTable("game_history", {
   id: text("id").primaryKey(),
-  roomId: text("room_id").notNull().default("unknown"),
+  gameId: text("game_id").notNull().default("unknown"),
   hostId: text("host_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
+  // Ordered snapshot of subject names in play order, e.g. ["Tarix","Geografiya"].
+  // Lets the scoreboard render its columns (and empty cells) without touching
+  // the live subjects table.
+  subjects: text("subjects").notNull().default("[]"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
 
@@ -36,13 +40,17 @@ export const gameQuestionResults = sqliteTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    questionId: text("question_id")
-      .notNull()
-      .references(() => questions.id, { onDelete: "cascade" }),
+    // Kept for reference only — intentionally NOT a foreign key, so editing or
+    // deleting a question never destroys historical results.
+    questionId: text("question_id").notNull(),
+    // Snapshot coordinates for the scoreboard grid.
+    subjectName: text("subject_name").notNull().default(""),
+    subjectPosition: integer("subject_position").notNull().default(0),
+    questionPosition: integer("question_position").notNull().default(0),
     correct: integer("correct", { mode: "boolean" }).notNull(),
     pointsAwarded: integer("points_awarded").notNull(),
   },
-  (table) => [
+  table => [
     index("game_question_results_gameId_idx").on(table.gameId),
     index("game_question_results_userId_idx").on(table.userId),
   ]
@@ -61,14 +69,14 @@ export const gamePlayerResults = sqliteTable(
     playerName: text("player_name").notNull(),
     score: integer("score").notNull(),
   },
-  (table) => [
+  table => [
     index("game_player_results_gameId_idx").on(table.gameId),
     index("game_player_results_userId_idx").on(table.userId),
   ]
 );
 
-export const activeRooms = sqliteTable("active_rooms", {
-  id: text("id").primaryKey(), // The roomId (UUID)
+export const activeGames = sqliteTable("active_games", {
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   hostId: text("host_id")
     .notNull()
@@ -79,14 +87,14 @@ export const activeRooms = sqliteTable("active_rooms", {
   status: text("status", { enum: ["waiting", "playing", "finished"] })
     .notNull()
     .default("waiting"),
-  subjectIds: text("subject_ids").notNull(), // JSON array of subject IDs
+  subjectIds: text("subject_ids").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
 });
 
-export const activeRoomsRelations = relations(activeRooms, ({ one }) => ({
+export const activeGameRelations = relations(activeGames, ({ one }) => ({
   host: one(user, {
-    fields: [activeRooms.hostId],
+    fields: [activeGames.hostId],
     references: [user.id],
   }),
 }));
@@ -111,28 +119,30 @@ export const gameHistoryRelations = relations(gameHistory, ({ one, many }) => ({
   playerResults: many(gamePlayerResults),
 }));
 
-export const gameQuestionResultsRelations = relations(gameQuestionResults, ({ one }) => ({
-  game: one(gameHistory, {
-    fields: [gameQuestionResults.gameId],
-    references: [gameHistory.id],
-  }),
-  user: one(user, {
-    fields: [gameQuestionResults.userId],
-    references: [user.id],
-  }),
-  question: one(questions, {
-    fields: [gameQuestionResults.questionId],
-    references: [questions.id],
-  }),
-}));
+export const gameQuestionResultsRelations = relations(
+  gameQuestionResults,
+  ({ one }) => ({
+    game: one(gameHistory, {
+      fields: [gameQuestionResults.gameId],
+      references: [gameHistory.id],
+    }),
+    user: one(user, {
+      fields: [gameQuestionResults.userId],
+      references: [user.id],
+    }),
+  })
+);
 
-export const gamePlayerResultsRelations = relations(gamePlayerResults, ({ one }) => ({
-  game: one(gameHistory, {
-    fields: [gamePlayerResults.gameId],
-    references: [gameHistory.id],
-  }),
-  user: one(user, {
-    fields: [gamePlayerResults.userId],
-    references: [user.id],
-  }),
-}));
+export const gamePlayerResultsRelations = relations(
+  gamePlayerResults,
+  ({ one }) => ({
+    game: one(gameHistory, {
+      fields: [gamePlayerResults.gameId],
+      references: [gameHistory.id],
+    }),
+    user: one(user, {
+      fields: [gamePlayerResults.userId],
+      references: [user.id],
+    }),
+  })
+);

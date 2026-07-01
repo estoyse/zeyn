@@ -1,7 +1,7 @@
 import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@shaxsiy-oyin/api/context";
 import { appRouter } from "@shaxsiy-oyin/api/routers/index";
-import { createAuth } from "@shaxsiy-oyin/auth";
+import { createAuth } from "../../../packages/auth/src";
 import { env, type Env } from "@shaxsiy-oyin/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -18,8 +18,8 @@ async function cleanupAbandonedRooms(db: ReturnType<typeof createD1Db>) {
 
     const abandoned = await db
       .select()
-      .from(schema.activeRooms)
-      .where(eq(schema.activeRooms.status, "waiting"));
+      .from(schema.activeGames)
+      .where(eq(schema.activeGames.status, "waiting"));
 
     const toDelete = abandoned.filter(
       room => room.createdAt.getTime() < cutoff.getTime()
@@ -28,8 +28,8 @@ async function cleanupAbandonedRooms(db: ReturnType<typeof createD1Db>) {
     if (toDelete.length > 0) {
       for (const room of toDelete) {
         await db
-          .delete(schema.activeRooms)
-          .where(eq(schema.activeRooms.id, room.id));
+          .delete(schema.activeGames)
+          .where(eq(schema.activeGames.id, room.id));
       }
     }
   } catch (e) {

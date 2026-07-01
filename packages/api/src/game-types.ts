@@ -26,6 +26,11 @@ export interface QuestionResult {
   userId: string;
   correct: boolean;
   pointsAwarded: number;
+  // Snapshot of where this question sat in the game, so results stay
+  // renderable even if the subject/question bank changes later.
+  subjectIndex: number;
+  questionIndex: number;
+  subjectName: string;
 }
 
 export interface ActiveQuestionState {
@@ -37,8 +42,8 @@ export interface ActiveQuestionState {
 
 export interface GameState {
   status: "WAITING" | "PLAYING" | "FINISHED";
-  roomId: string | null;
-  roomName: string | null;
+  gameId: string | null;
+  gameName: string | null;
   hostId: string | null;
   maxPlayers: number;
   isPublic: boolean;
@@ -52,7 +57,8 @@ export interface GameState {
   questionResults: QuestionResult[];
 }
 
-export interface PublicGameState extends Omit<GameState, "subjects" | "players"> {
+export interface PublicGameState
+  extends Omit<GameState, "subjects" | "players"> {
   subjectCount: number;
   players?: Record<string, Partial<Player>>; // Only changed players
   currentSubjectName?: string;
@@ -64,7 +70,13 @@ export interface PublicGameState extends Omit<GameState, "subjects" | "players">
 }
 
 export type ClientMessage =
-  | { type: "JOIN"; playerId: string; name: string; roomId: string; password?: string }
+  | {
+      type: "JOIN";
+      playerId: string;
+      name: string;
+      gameId: string;
+      password?: string;
+    }
   | { type: "START"; playerId: string; subjectIds: string[] }
   | { type: "BUZZ"; playerId: string }
   | { type: "SUBMIT_ANSWER"; playerId: string; answer: string };

@@ -7,11 +7,24 @@ import {
   type GameState,
 } from "@shaxsiy-oyin/api/game-types";
 
+// Cloudflare D1 rejects any query with more than 100 bound parameters. Multi-row
+// inserts must be split so (columns * rows) stays under this ceiling.
+const D1_MAX_PARAMS_PER_QUERY = 99;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const maxPerChunk = Math.max(1, Math.floor(size));
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += maxPerChunk) {
+    chunks.push(items.slice(i, i + maxPerChunk));
+  }
+  return chunks;
+}
+
 export class GameRoom extends DurableObject {
   private state: GameState = {
     status: "WAITING",
-    roomId: null,
-    roomName: null,
+    gameId: null,
+    gameName: null,
     hostId: null,
     maxPlayers: 10,
     isPublic: true,
@@ -25,7 +38,7 @@ export class GameRoom extends DurableObject {
     questionResults: [],
   };
   private lastBroadcastPlayers: Record<string, string> = {}; // playerId -> JSON string of player state
-  private roomPassword: string | null = null;
+  private gamePassword: string | null = null;
   private timerId: any = null;
 
   constructor(ctx: DurableObjectState, env: any) {
@@ -86,7 +99,7 @@ export class GameRoom extends DurableObject {
           ws,
           action.playerId,
           action.name,
-          action.roomId,
+          action.gameId,
           action.password
         );
         break;
@@ -117,7 +130,7 @@ export class GameRoom extends DurableObject {
     ws: WebSocket,
     playerId: string,
     name: string,
-    roomId: string,
+    gameId: string,
     password?: string
   ) {
     if (!playerId || !name) {
@@ -143,12 +156,12 @@ export class GameRoom extends DurableObject {
     }
 
     // Hydrate room from DB if not already initialized
-    if (!this.state.roomId) {
+    if (!this.state.gameId) {
       const db = createD1Db(this.env.DB);
       const room = await db
         .select()
-        .from(schema.activeRooms)
-        .where(eq(schema.activeRooms.id, roomId))
+        .from(schema.activeGames)
+        .where(eq(schema.activeGames.id, gameId))
         .get();
 
       if (!room) {
@@ -187,13 +200,13 @@ export class GameRoom extends DurableObject {
         return;
       }
 
-      this.state.roomId = roomId;
-      this.state.roomName = room.name;
+      this.state.gameId = gameId;
+      this.state.gameName = room.name;
       this.state.hostId = room.hostId;
       this.state.maxPlayers = room.maxPlayers;
       this.state.isPublic = room.isPublic;
       this.state.hasPassword = !!room.password;
-      this.roomPassword = room.password;
+      this.gamePassword = room.password;
 
       // Pre-load subjects
       const subjectIds = JSON.parse(room.subjectIds) as string[];
@@ -222,7 +235,7 @@ export class GameRoom extends DurableObject {
     }
 
     // Password Validation
-    if (this.roomPassword && this.roomPassword !== password) {
+    if (this.gamePassword && this.gamePassword !== password) {
       ws.send(
         JSON.stringify({
           type: "ERROR",
@@ -254,7 +267,7 @@ export class GameRoom extends DurableObject {
         connected: true,
       };
     }
-    
+
     (ws as any).playerId = playerId;
     (ws as any).joinTime = Date.now();
   }
@@ -329,13 +342,13 @@ export class GameRoom extends DurableObject {
   }
 
   private async updateRoomStatus(status: "waiting" | "playing" | "finished") {
-    if (!this.state.roomId) return;
+    if (!this.state.gameId) return;
     try {
       const db = createD1Db(this.env.DB);
       await db
-        .update(schema.activeRooms)
+        .update(schema.activeGames)
         .set({ status })
-        .where(eq(schema.activeRooms.id, this.state.roomId));
+        .where(eq(schema.activeGames.id, this.state.gameId));
     } catch (e) {
       console.error("Failed to update room status:", e);
     }
@@ -400,6 +413,9 @@ export class GameRoom extends DurableObject {
         userId: playerId,
         correct: true,
         pointsAwarded: currentQuestion.points,
+        subjectIndex: this.state.currentSubjectIndex,
+        questionIndex: this.state.currentQuestionIndex,
+        subjectName: subject.name,
       });
       this.revealAnswer();
     } else {
@@ -412,6 +428,9 @@ export class GameRoom extends DurableObject {
         userId: playerId,
         correct: false,
         pointsAwarded: -currentQuestion.points,
+        subjectIndex: this.state.currentSubjectIndex,
+        questionIndex: this.state.currentQuestionIndex,
+        subjectName: subject.name,
       });
 
       this.state.activeQuestionState.wrongAttempts++;
@@ -472,40 +491,50 @@ export class GameRoom extends DurableObject {
     const gameId = crypto.randomUUID();
 
     try {
-      // 1. Create game history
+      // 1. Create game history (snapshot subject order for the scoreboard)
       await db.insert(schema.gameHistory).values({
         id: gameId,
-        roomId: this.state.roomId || "unknown",
+        gameId: this.state.gameId || "unknown",
         hostId: this.state.hostId,
+        subjects: JSON.stringify(this.state.subjects.map(s => s.name)),
         createdAt: new Date(),
       });
 
-      // 2. Insert question results
+      // 2. Insert question results.
+      // NOTE: D1 caps a query at 100 bound parameters, so these multi-row
+      // inserts must be chunked (9 columns -> max 11 rows/query). A full game
+      // easily produces dozens of rows; a single insert would throw and, being
+      // swallowed below, silently drop every result. See CHUNK_SIZES.
       if (this.state.questionResults.length > 0) {
-        await db.insert(schema.gameQuestionResults).values(
-          this.state.questionResults.map(r => ({
-            id: crypto.randomUUID(),
-            gameId: gameId,
-            userId: r.userId,
-            questionId: r.questionId,
-            correct: r.correct,
-            pointsAwarded: r.pointsAwarded,
-          }))
-        );
+        const rows = this.state.questionResults.map(r => ({
+          id: crypto.randomUUID(),
+          gameId: gameId,
+          userId: r.userId,
+          questionId: r.questionId,
+          subjectName: r.subjectName,
+          subjectPosition: r.subjectIndex,
+          questionPosition: r.questionIndex,
+          correct: r.correct,
+          pointsAwarded: r.pointsAwarded,
+        }));
+        for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 9)) {
+          await db.insert(schema.gameQuestionResults).values(part);
+        }
       }
 
-      // 3. Insert final player results
+      // 3. Insert final player results (5 columns -> max 20 rows/query).
       const players = Object.values(this.state.players);
       if (players.length > 0) {
-        await db.insert(schema.gamePlayerResults).values(
-          players.map(p => ({
-            id: crypto.randomUUID(),
-            gameId: gameId,
-            userId: p.id,
-            playerName: p.name,
-            score: p.score,
-          }))
-        );
+        const rows = players.map(p => ({
+          id: crypto.randomUUID(),
+          gameId: gameId,
+          userId: p.id,
+          playerName: p.name,
+          score: p.score,
+        }));
+        for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 5)) {
+          await db.insert(schema.gamePlayerResults).values(part);
+        }
       }
     } catch (e) {
       console.error("Failed to persist game results:", e);
@@ -553,9 +582,12 @@ export class GameRoom extends DurableObject {
     if (playerId && this.state.players[playerId]) {
       // Only mark disconnected if this was the latest connection
       // or if no other connections for this player exist
-      const otherConnections = this.ctx.getWebSockets().filter(s => 
-        (s as any).playerId === playerId && (s as any).joinTime > joinTime
-      );
+      const otherConnections = this.ctx
+        .getWebSockets()
+        .filter(
+          s =>
+            (s as any).playerId === playerId && (s as any).joinTime > joinTime
+        );
 
       if (otherConnections.length === 0) {
         this.state.players[playerId].connected = false;
@@ -576,7 +608,7 @@ export class GameRoom extends DurableObject {
       state: publicState,
       serverTime: Date.now(),
     });
-    
+
     for (const ws of this.ctx.getWebSockets()) {
       try {
         ws.send(data);
@@ -588,7 +620,7 @@ export class GameRoom extends DurableObject {
 
   private getPublicState(forceFullPlayers = false): any {
     const { subjects, players, ...baseState } = this.state;
-    
+
     // Calculate player deltas
     const playerDeltas: Record<string, any> = {};
     let hasChanges = false;
@@ -613,7 +645,8 @@ export class GameRoom extends DurableObject {
 
     if (this.state.status === "PLAYING") {
       const currentSubject = subjects[this.state.currentSubjectIndex];
-      const currentQuestion = currentSubject?.questions?.[this.state.currentQuestionIndex];
+      const currentQuestion =
+        currentSubject?.questions?.[this.state.currentQuestionIndex];
 
       if (currentSubject) {
         publicState.currentSubjectName = currentSubject.name;

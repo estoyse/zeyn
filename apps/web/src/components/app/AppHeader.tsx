@@ -3,18 +3,10 @@ import { Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
 import { ModeToggle } from "../mode-toggle";
+import { Link } from "@tanstack/react-router";
 
 export function AppHeader() {
-  const { user, signOut } = useAuth();
-
-  const userInitials = user?.name
-    ? user.name
-        .split(" ")
-        .map(n => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : "U";
+  const { user } = useAuth();
 
   return (
     <header className='border-b border-black/10 bg-background'>
@@ -24,7 +16,9 @@ export function AppHeader() {
             <div className='w-8 h-8 bg-black rounded-lg flex items-center justify-center'>
               <span className='text-white font-bold'>S</span>
             </div>
-            <span className='text-lg font-medium'>Shaxsiy O'yin</span>
+            <Link to='/dashboard'>
+              <span className='text-lg font-medium'>Shaxsiy O'yin</span>
+            </Link>
           </div>
 
           <div className='flex items-center gap-2'>

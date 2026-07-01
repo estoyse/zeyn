@@ -27,14 +27,14 @@ export function Timer({ expiresAt, duration = 15000, onTimeout }: TimerProps) {
   const isUrgent = timeLeft < 5000;
 
   return (
-    <div className="w-full space-y-2">
-      <div className="flex justify-between text-xs text-muted-foreground">
+    <div className='w-full space-y-2'>
+      <div className='flex justify-between text-xs text-muted-foreground'>
         <span className={cn(isUrgent && "text-destructive animate-pulse")}>
           {isUrgent ? "HURRY UP!" : "TIME REMAINING"}
         </span>
         <span>{(timeLeft / 1000).toFixed(1)}s</span>
       </div>
-      <div className="w-full h-3 bg-muted overflow-hidden border p-[2px] rounded-md">
+      <div className='w-full h-3 bg-muted overflow-hidden border p-[2px] rounded-md'>
         <motion.div
           initial={false}
           animate={{ width: `${percentage}%` }}

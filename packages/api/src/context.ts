@@ -1,4 +1,4 @@
-import { createAuth } from "@shaxsiy-oyin/auth";
+import { createAuth } from "../../auth/src";
 import type { Context as HonoContext } from "hono";
 import { type Env } from "@shaxsiy-oyin/env/server";
 

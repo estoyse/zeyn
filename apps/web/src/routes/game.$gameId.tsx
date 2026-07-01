@@ -16,12 +16,12 @@ import { GameHeader } from "@/components/game/GameHeader";
 import { GameLobby } from "@/components/game/GameLobby";
 import { GamePlaying } from "@/components/game/GamePlaying";
 
-export const Route = createFileRoute("/game/$roomId")({
+export const Route = createFileRoute("/game/$gameId")({
   component: GamePage,
 });
 
 function GamePage() {
-  const { roomId } = Route.useParams();
+  const { gameId } = Route.useParams();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [answerInput, setAnswerInput] = useState("");
@@ -31,14 +31,10 @@ function GamePage() {
   const userId = session?.user?.id;
   const userName = session?.user?.name;
 
-  const { state, error, errorCode, sendAction, isConnecting, isConnected } = useGame(
-    roomId,
-    userId || "",
-    userName || "",
-    password
-  );
+  const { state, error, errorCode, sendAction, isConnecting, isConnected } =
+    useGame(gameId, userId || "", userName || "", password);
 
-  const resultsQuery = useQuery(trpc.game.getResults.queryOptions({ roomId }));
+  const resultsQuery = useQuery(trpc.game.getResults.queryOptions({ gameId }));
 
   // Refetch results when game finishes
   useEffect(() => {
@@ -59,7 +55,7 @@ function GamePage() {
 
   // If game is finished but data hasn't arrived yet
   if (state?.status === "FINISHED") {
-    return <LoadingView message="Fetching final results..." />;
+    return <LoadingView message='Fetching final results...' />;
   }
 
   // Session loading
@@ -82,7 +78,7 @@ function GamePage() {
 
   // Not logged in
   if (!session) {
-    return <LoginRequiredView roomId={roomId} />;
+    return <LoginRequiredView gameId={gameId} />;
   }
 
   // Still connecting or waiting for initial state
@@ -109,7 +105,7 @@ function GamePage() {
   if (!state) {
     return (
       <ConnectionErrorView
-        error="Could not connect to game"
+        error='Could not connect to game'
         onRetry={() => window.location.reload()}
       />
     );
@@ -143,7 +139,7 @@ function GamePage() {
     <div className='min-h-screen bg-background p-4 md:p-6'>
       <div className='mx-auto max-w-7xl space-y-6'>
         <GameHeader
-          roomId={roomId}
+          gameId={gameId}
           state={state}
           onLeave={() => navigate({ to: "/dashboard" })}
         />

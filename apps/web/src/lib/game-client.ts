@@ -1,16 +1,23 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSocket } from "./useSocket";
 import { useGameState } from "./useGameState";
-import type { GameState, ClientMessage } from "@shaxsiy-oyin/api/game-types";
+import type { ClientMessage } from "@shaxsiy-oyin/api/game-types";
 
-export function useGame(roomId: string, playerId: string, playerName: string, password?: string) {
+export function useGame(
+  gameId: string,
+  playerId: string,
+  playerName: string,
+  password?: string
+) {
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const wsUrl = useMemo(() => {
     // Use relative path - Vite proxy will handle it
-    return `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}/game/${roomId}/ws`;
-  }, [roomId]);
+    return `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+      window.location.host
+    }/game/${gameId}/ws`;
+  }, [gameId]);
 
   const handleGameStateError = useCallback((err: string, code?: string) => {
     setError(err);
@@ -18,7 +25,7 @@ export function useGame(roomId: string, playerId: string, playerName: string, pa
   }, []);
 
   const { state, handleMessage, createJoinMessage } = useGameState({
-    roomId,
+    gameId,
     playerId,
     playerName,
     password,
@@ -41,9 +48,12 @@ export function useGame(roomId: string, playerId: string, playerName: string, pa
     send(message);
   }, [createJoinMessage, send]);
 
-  const sendAction = useCallback((action: ClientMessage) => {
-    send(action);
-  }, [send]);
+  const sendAction = useCallback(
+    (action: ClientMessage) => {
+      send(action);
+    },
+    [send]
+  );
 
   // Join once connected
   useEffect(() => {
@@ -52,11 +62,11 @@ export function useGame(roomId: string, playerId: string, playerName: string, pa
     }
   }, [isConnected, join]);
 
-  return { 
-    state, 
-    error, 
-    errorCode, 
-    sendAction, 
+  return {
+    state,
+    error,
+    errorCode,
+    sendAction,
     isConnecting,
     isConnected,
     join,

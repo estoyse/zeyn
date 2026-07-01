@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GameCreateRouteImport } from './routes/game.create'
-import { Route as GameRoomIdRouteImport } from './routes/game.$roomId'
+import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
@@ -33,9 +33,9 @@ const GameCreateRoute = GameCreateRouteImport.update({
   path: '/game/create',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GameRoomIdRoute = GameRoomIdRouteImport.update({
-  id: '/game/$roomId',
-  path: '/game/$roomId',
+const GameGameIdRoute = GameGameIdRouteImport.update({
+  id: '/game/$gameId',
+  path: '/game/$gameId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
@@ -65,7 +65,7 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/game/$roomId': typeof GameRoomIdRoute
+  '/game/$gameId': typeof GameGameIdRoute
   '/game/create': typeof GameCreateRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
 }
@@ -75,7 +75,7 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/game/$roomId': typeof GameRoomIdRoute
+  '/game/$gameId': typeof GameGameIdRoute
   '/game/create': typeof GameCreateRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
 }
@@ -86,7 +86,7 @@ export interface FileRoutesById {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/game/$roomId': typeof GameRoomIdRoute
+  '/game/$gameId': typeof GameGameIdRoute
   '/game/create': typeof GameCreateRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
 }
@@ -98,7 +98,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
-    | '/game/$roomId'
+    | '/game/$gameId'
     | '/game/create'
     | '/auth/verify/verify'
   fileRoutesByTo: FileRoutesByTo
@@ -108,7 +108,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
-    | '/game/$roomId'
+    | '/game/$gameId'
     | '/game/create'
     | '/auth/verify/verify'
   id:
@@ -118,7 +118,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
-    | '/game/$roomId'
+    | '/game/$gameId'
     | '/game/create'
     | '/auth/verify/verify'
   fileRoutesById: FileRoutesById
@@ -129,7 +129,7 @@ export interface RootRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
-  GameRoomIdRoute: typeof GameRoomIdRoute
+  GameGameIdRoute: typeof GameGameIdRoute
   GameCreateRoute: typeof GameCreateRoute
   AuthVerifyVerifyRoute: typeof AuthVerifyVerifyRoute
 }
@@ -157,11 +157,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GameCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/game/$roomId': {
-      id: '/game/$roomId'
-      path: '/game/$roomId'
-      fullPath: '/game/$roomId'
-      preLoaderRoute: typeof GameRoomIdRouteImport
+    '/game/$gameId': {
+      id: '/game/$gameId'
+      path: '/game/$gameId'
+      fullPath: '/game/$gameId'
+      preLoaderRoute: typeof GameGameIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/reset-password': {
@@ -201,7 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
-  GameRoomIdRoute: GameRoomIdRoute,
+  GameGameIdRoute: GameGameIdRoute,
   GameCreateRoute: GameCreateRoute,
   AuthVerifyVerifyRoute: AuthVerifyVerifyRoute,
 }

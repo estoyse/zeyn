@@ -41,6 +41,14 @@ This project uses SQLite with Drizzle ORM.
 pnpm run db:push
 ```
 
+4. Seed the trivia content (subjects & questions). A fresh database is empty,
+   and creating a game room requires at least 5 subjects, so seed before playing.
+   This is idempotent and safe to re-run:
+
+```bash
+pnpm run db:seed
+```
+
 Then, run the development server:
 
 ```bash
@@ -110,3 +118,4 @@ shaxsiy-oyin/
 - `pnpm run dev:native`: Start the React Native/Expo development server
 - `pnpm run db:push`: Push schema changes to database
 - `pnpm run db:generate`: Generate database client/types
+- `pnpm run db:seed`: Seed the local database with subjects & questions (idempotent)
