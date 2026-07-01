@@ -1,16 +1,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { LayoutGrid, Clock, UserCircle2 } from "lucide-react";
+import type { GameView } from "@/lib/useGameState";
 
 interface GameHeaderProps {
   gameId: string;
-  state: {
-    players: Record<
-      string,
-      { id: string; name: string; score: number; connected: boolean }
-    >;
-    activeQuestionState: { buzzedPlayerId: string | null } | null;
-  };
+  state: GameView;
   onLeave: () => void;
 }
 

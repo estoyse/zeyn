@@ -3,7 +3,15 @@ import type {
   GameState,
   ClientMessage,
   PublicGameState,
+  Player,
 } from "@shaxsiy-oyin/api/game-types";
+
+// The client-side view of the game. Mirrors the server's PublicGameState, but
+// after useGameState has merged the per-message player deltas (so players are
+// complete, not Partial) and adjusted the question timer for clock skew.
+export type GameView = Omit<PublicGameState, "players"> & {
+  players: Record<string, Player>;
+};
 
 interface UseGameStateOptions {
   gameId: string;
@@ -74,9 +82,9 @@ export function useGameState({
     [playerId, playerName, gameId, password]
   );
 
-  const adjustedState = state
+  const adjustedState: GameView | null = state
     ? {
-        ...(state as any),
+        ...(state as GameView),
         activeQuestionState: state.activeQuestionState
           ? {
               ...state.activeQuestionState,
@@ -88,7 +96,7 @@ export function useGameState({
     : null;
 
   return {
-    state: adjustedState as any,
+    state: adjustedState,
     handleMessage,
     createJoinMessage,
     serverTimeOffset,

@@ -212,7 +212,7 @@ function CreateGamePage() {
                   </div>
                 ) : (
                   <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
-                    {subjectsQuery.data?.map((s: any) => (
+                    {subjectsQuery.data?.map(s => (
                       <button
                         key={s.id}
                         onClick={() => toggleSubject(s.id)}

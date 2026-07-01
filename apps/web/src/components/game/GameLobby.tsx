@@ -9,15 +9,11 @@ import {
 } from "@shaxsiy-oyin/ui/components/card";
 import { toast } from "sonner";
 import { Users, Play, Info, Crown, UserCircle2, Copy } from "lucide-react";
+import { gameConfig } from "@shaxsiy-oyin/api/game-types";
+import type { GameView } from "@/lib/useGameState";
 
 interface GameLobbyProps {
-  state: {
-    players: Record<string, { id: string; name: string; score: number; connected: boolean }>;
-    hostId: string | null;
-    maxPlayers: number;
-    status: string;
-    subjectCount: number;
-  };
+  state: GameView;
   playerId: string;
   onStart: () => void;
 }
@@ -135,7 +131,7 @@ export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
               <Button
                 className="w-full"
                 onClick={onStart}
-                disabled={Object.keys(state.players).length < 2}
+                disabled={Object.keys(state.players).length < gameConfig.minPlayers}
               >
                 <Play className="size-4 mr-2" />
                 Start Game

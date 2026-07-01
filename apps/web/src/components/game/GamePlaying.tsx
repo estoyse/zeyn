@@ -3,27 +3,12 @@ import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
 import { Zap, Clock } from "lucide-react";
+import { gameConfig } from "@shaxsiy-oyin/api/game-types";
+import type { GameView } from "@/lib/useGameState";
 import { Timer } from "./Timer";
 
 interface GamePlayingProps {
-  state: {
-    phase: string;
-    currentSubjectIndex: number;
-    currentQuestionIndex: number;
-    currentSubjectName?: string;
-    currentQuestion?: {
-      text: string;
-      points: number;
-      answer?: string;
-    };
-    activeQuestionState: {
-      timerExpiresAt: number;
-      buzzedPlayerId: string | null;
-      playersWhoAttempted: string[];
-    } | null;
-    players: Record<string, { id: string; name: string; score: number }>;
-    status: string;
-  };
+  state: GameView;
   playerId: string;
   answerInput: string;
   setAnswerInput: (value: string) => void;
@@ -109,7 +94,7 @@ export function GamePlaying({
                 {state.activeQuestionState && (
                   <Timer
                     expiresAt={state.activeQuestionState.timerExpiresAt}
-                    duration={15000}
+                    duration={gameConfig.questionTimeMs}
                   />
                 )}
               </div>
@@ -159,7 +144,7 @@ export function GamePlaying({
                         {state.activeQuestionState && (
                           <Timer
                             expiresAt={state.activeQuestionState.timerExpiresAt}
-                            duration={20000}
+                            duration={gameConfig.answerTimeMs}
                           />
                         )}
                         <Button type='submit'>Submit</Button>
@@ -186,7 +171,7 @@ export function GamePlaying({
                     {state.activeQuestionState && (
                       <Timer
                         expiresAt={state.activeQuestionState.timerExpiresAt}
-                        duration={20000}
+                        duration={gameConfig.answerTimeMs}
                       />
                     )}
                   </CardContent>
