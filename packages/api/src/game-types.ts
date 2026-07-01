@@ -1,6 +1,3 @@
-// Shared game types for client and server
-// Used by game-client.ts and GameRoom.ts
-
 import { z } from "zod";
 
 export interface Player {

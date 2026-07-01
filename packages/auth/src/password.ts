@@ -12,8 +12,8 @@ setWASMModules({
 
 const opts = {
   memorySize: 65536, // 64 MiB
-  iterations: 3, // 3 iterations
-  parallelism: 4, // 4 lanes
+  iterations: 3,
+  parallelism: 4,
   hashLength: 32,
   outputType: "encoded" as const,
 };

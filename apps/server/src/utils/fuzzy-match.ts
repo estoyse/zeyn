@@ -1,6 +1,3 @@
-/**
- * Computes the Levenshtein distance between two strings.
- */
 export function levenshteinDistance(a: string, b: string): number {
   const n = a.length;
   const m = b.length;
@@ -51,10 +48,8 @@ export function isFuzzyMatch(input: string, correct: string): boolean {
   const distance = levenshteinDistance(s1, s2);
   const maxLength = Math.max(s1.length, s2.length);
 
-  // If very short, only allow 1 error
   if (maxLength <= 5) return distance <= 1;
   
-  // Similarity threshold
   const similarity = 1 - distance / maxLength;
   return similarity >= 0.85;
 }

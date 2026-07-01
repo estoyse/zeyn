@@ -11,9 +11,6 @@ interface AuthFieldProps {
   icon: LucideIcon;
 }
 
-// A single TanStack-Form text field with an icon and inline errors. Replaces the
-// ~25-line label/icon/input/error block that was copy-pasted across every auth
-// form.
 export function AuthField({
   field,
   label,

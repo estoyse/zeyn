@@ -55,7 +55,6 @@ export function useGame(
     [send]
   );
 
-  // Join once connected
   useEffect(() => {
     if (isConnected) {
       join();

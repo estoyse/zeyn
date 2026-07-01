@@ -59,7 +59,6 @@ export function useGameState({
                 }
               : message.state!;
 
-            // Trigger callback with merged state
             onStateUpdate?.(newState as any);
             return newState;
           });
