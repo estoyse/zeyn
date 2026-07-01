@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@shaxsiy-oyin/ui/components/card";
-import { StatusBadge } from "@/components/StatusBadge";
+import { StatusBadge } from "@/shared/components/StatusBadge";
 
 interface RoomCardRoom {
   id: string;

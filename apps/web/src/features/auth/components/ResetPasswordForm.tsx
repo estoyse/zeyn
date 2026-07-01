@@ -6,10 +6,10 @@ import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
 import { Field } from "@shaxsiy-oyin/ui/components/field";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/features/auth/lib/auth-client";
 import { toast } from "sonner";
 import { AuthField } from "./AuthField";
-import { passwordSchema } from "@/lib/authSchemas";
+import { passwordSchema } from "@/features/auth/lib/authSchemas";
 
 export function ResetPasswordForm() {
   const navigate = useNavigate();

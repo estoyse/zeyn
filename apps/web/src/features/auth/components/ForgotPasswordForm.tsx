@@ -5,10 +5,10 @@ import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
 import { Field } from "@shaxsiy-oyin/ui/components/field";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/features/auth/lib/auth-client";
 import { toast } from "sonner";
 import { AuthField } from "./AuthField";
-import { emailSchema } from "@/lib/authSchemas";
+import { emailSchema } from "@/features/auth/lib/authSchemas";
 
 interface ForgotPasswordFormProps {
   onBack: () => void;

@@ -2,9 +2,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 
-import Loader from "./components/loader";
+import Loader from "./shared/components/loader";
 import { routeTree } from "./routeTree.gen";
-import { queryClient, trpc } from "./utils/trpc";
+import { queryClient, trpc } from "./shared/lib/trpc";
 
 const router = createRouter({
   routeTree,

@@ -1,6 +1,6 @@
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Bell } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
 import { ModeToggle } from "../mode-toggle";
 import { Link } from "@tanstack/react-router";

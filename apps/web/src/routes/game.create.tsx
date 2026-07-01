@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Settings2 } from "lucide-react";
-import { useCreateGameForm } from "@/lib/useCreateGameForm";
-import { GeneralConfigCard } from "@/components/game/create/GeneralConfigCard";
-import { SubjectPicker } from "@/components/game/create/SubjectPicker";
-import { CreateSummary } from "@/components/game/create/CreateSummary";
+import { useCreateGameForm } from "@/features/game/hooks/useCreateGameForm";
+import { GeneralConfigCard } from "@/features/game/components/create/GeneralConfigCard";
+import { SubjectPicker } from "@/features/game/components/create/SubjectPicker";
+import { CreateSummary } from "@/features/game/components/create/CreateSummary";
 
 export const Route = createFileRoute("/game/create")({
   component: CreateGamePage,

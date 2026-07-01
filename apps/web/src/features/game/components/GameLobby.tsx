@@ -10,7 +10,7 @@ import {
 import { toast } from "sonner";
 import { Users, Play, Info, Crown, UserCircle2, Copy } from "lucide-react";
 import { gameConfig } from "@shaxsiy-oyin/api/game-types";
-import type { GameView } from "@/lib/useGameState";
+import type { GameView } from "@/features/game/hooks/useGameState";
 
 interface GameLobbyProps {
   state: GameView;

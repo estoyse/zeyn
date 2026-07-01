@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@shaxsiy-oyin/ui/components/card";
 import { Trophy, LayoutGrid } from "lucide-react";
-import { buildScoreboard, type ScoreboardResults } from "@/lib/scoreboard";
+import { buildScoreboard, type ScoreboardResults } from "@/features/game/lib/scoreboard";
 
 interface ArchiveViewProps {
   data: ScoreboardResults;

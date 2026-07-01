@@ -1,9 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { authClient } from "@/lib/auth-client";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { QuickActions } from "@/components/dashboard/QuickActions";
-import { PublicArenas } from "@/components/dashboard/PublicArenas";
-import { Sidebar } from "@/components/dashboard/Sidebar";
+import { authClient } from "@/features/auth/lib/auth-client";
+import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
+import { QuickActions } from "@/features/dashboard/components/QuickActions";
+import { PublicArenas } from "@/features/dashboard/components/PublicArenas";
+import { Sidebar } from "@/features/dashboard/components/Sidebar";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,

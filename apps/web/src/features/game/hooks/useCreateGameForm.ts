@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { roomLimits } from "@shaxsiy-oyin/api/game-types";
-import { trpc } from "@/utils/trpc";
+import { trpc } from "@/shared/lib/trpc";
 
 // Owns all state, derived validity and the create mutation for the create-game
 // page, so the route/components are purely presentational.

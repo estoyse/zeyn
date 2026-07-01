@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { AuthForm } from "@/components/auth/AuthForm";
-import { AuthLayout } from "@/components/auth/AuthLayout";
-import { authClient } from "@/lib/auth-client";
+import { AuthForm } from "@/features/auth/components/AuthForm";
+import { AuthLayout } from "@/features/auth/components/AuthLayout";
+import { authClient } from "@/features/auth/lib/auth-client";
 
 type LoginSearch = {
   redirectTo?: string;

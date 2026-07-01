@@ -1,8 +1,8 @@
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Link } from "@tanstack/react-router";
 import { Gamepad2 } from "lucide-react";
-import { ModeToggle } from "@/components/mode-toggle";
-import { authClient } from "@/lib/auth-client";
+import { ModeToggle } from "@/shared/components/mode-toggle";
+import { authClient } from "@/features/auth/lib/auth-client";
 
 const LINKS = [
   { name: "Play", to: "/dashboard" },

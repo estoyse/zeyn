@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { LayoutGrid, Clock, UserCircle2 } from "lucide-react";
-import type { GameView } from "@/lib/useGameState";
+import type { GameView } from "@/features/game/hooks/useGameState";
 
 interface GameHeaderProps {
   gameId: string;

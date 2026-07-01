@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@shaxsiy-oyin/ui/components/dropdown-menu";
 import { BellIcon, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 export function DropdownMenuAvatar() {
   const { user, signOut } = useAuth();

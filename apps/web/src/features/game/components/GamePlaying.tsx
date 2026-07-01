@@ -4,7 +4,7 @@ import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
 import { Zap, Clock } from "lucide-react";
 import { gameConfig } from "@shaxsiy-oyin/api/game-types";
-import type { GameView } from "@/lib/useGameState";
+import type { GameView } from "@/features/game/hooks/useGameState";
 import { Timer } from "./Timer";
 
 interface GamePlayingProps {

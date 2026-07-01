@@ -1,8 +1,8 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence } from "framer-motion";
-import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
-import { AuthLayout } from "@/components/auth/AuthLayout";
-import { authClient } from "@/lib/auth-client";
+import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
+import { AuthLayout } from "@/features/auth/components/AuthLayout";
+import { authClient } from "@/features/auth/lib/auth-client";
 
 export const Route = createFileRoute("/auth/forgot-password")({
   component: ForgotPasswordPage,

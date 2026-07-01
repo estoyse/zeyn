@@ -1,16 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence } from "framer-motion";
-import { useGameRoom } from "@/lib/useGameRoom";
+import { useGameRoom } from "@/features/game/hooks/useGameRoom";
 
 // Components
-import { LoadingView, ConnectingView } from "@/components/game/LoadingView";
-import { LoginRequiredView } from "@/components/game/LoginRequiredView";
-import { PasswordPromptView } from "@/components/game/PasswordPromptView";
-import { ConnectionErrorView } from "@/components/game/ErrorViews";
-import { ArchiveView } from "@/components/game/ArchiveView";
-import { GameHeader } from "@/components/game/GameHeader";
-import { GameLobby } from "@/components/game/GameLobby";
-import { GamePlaying } from "@/components/game/GamePlaying";
+import { LoadingView, ConnectingView } from "@/features/game/components/LoadingView";
+import { LoginRequiredView } from "@/features/game/components/LoginRequiredView";
+import { PasswordPromptView } from "@/features/game/components/PasswordPromptView";
+import { ConnectionErrorView } from "@/features/game/components/ErrorViews";
+import { ArchiveView } from "@/features/game/components/ArchiveView";
+import { GameHeader } from "@/features/game/components/GameHeader";
+import { GameLobby } from "@/features/game/components/GameLobby";
+import { GamePlaying } from "@/features/game/components/GamePlaying";
 
 export const Route = createFileRoute("/game/$gameId")({
   component: GamePage,

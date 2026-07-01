@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { ClientMessage } from "@shaxsiy-oyin/api/game-types";
-import { authClient } from "./auth-client";
+import { authClient } from "@/features/auth/lib/auth-client";
 import { useGame } from "./game-client";
-import { resolveGameView } from "./resolveGameView";
-import { trpc } from "@/utils/trpc";
+import { resolveGameView } from "@/features/game/lib/resolveGameView";
+import { trpc } from "@/shared/lib/trpc";
 
 // Owns everything the game page needs: session, socket, results query, local
 // input/prompt state, and the derived view. The route component stays a thin

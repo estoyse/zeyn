@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { trpc } from "@/utils/trpc";
+import { trpc } from "@/shared/lib/trpc";
 import { Globe, RefreshCw, Gamepad2 } from "lucide-react";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";

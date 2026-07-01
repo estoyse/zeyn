@@ -9,12 +9,12 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import { ThemeProvider } from "@/components/theme-provider";
-import type { trpc } from "@/utils/trpc";
+import { ThemeProvider } from "@/shared/components/theme-provider";
+import type { trpc } from "@/shared/lib/trpc";
 
 import "../index.css";
-import { Header } from "@/components/landing/Header";
-import { AppHeader } from "@/components/app/AppHeader";
+import { Header } from "@/features/landing/components/Header";
+import { AppHeader } from "@/shared/components/app/AppHeader";
 
 export interface RouterAppContext {
   trpc: typeof trpc;

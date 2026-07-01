@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
-import { AuthLayout } from "@/components/auth/AuthLayout";
-import { authClient } from "@/lib/auth-client";
+import { ResetPasswordForm } from "@/features/auth/components/ResetPasswordForm";
+import { AuthLayout } from "@/features/auth/components/AuthLayout";
+import { authClient } from "@/features/auth/lib/auth-client";
 
 type ResetPasswordSearch = {
   token?: string;

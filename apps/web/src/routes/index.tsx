@@ -1,9 +1,9 @@
-import { FeaturedGames } from "@/components/landing/FeaturedGames";
+import { FeaturedGames } from "@/features/landing/components/FeaturedGames";
 import { createFileRoute } from "@tanstack/react-router";
-import { Stats } from "@/components/landing/Stats";
+import { Stats } from "@/features/landing/components/Stats";
 
-import { Hero } from "@/components/landing/Hero";
-import { Terminal } from "@/components/landing/Terminal";
+import { Hero } from "@/features/landing/components/Hero";
+import { Terminal } from "@/features/landing/components/Terminal";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({

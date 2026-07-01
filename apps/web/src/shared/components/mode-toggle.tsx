@@ -6,7 +6,7 @@ import {
 } from "@shaxsiy-oyin/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/shared/components/theme-provider";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 
 export function ModeToggle() {
