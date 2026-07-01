@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { roomLimits } from "../game-types";
 import { protectedProcedure, router } from "../index";
 import {
   subjects,
@@ -17,11 +18,21 @@ export const gameRouter = router({
   createRoom: protectedProcedure
     .input(
       z.object({
-        name: z.string().min(3).max(50),
-        maxPlayers: z.number().min(2).max(20).default(10),
+        name: z
+          .string()
+          .min(roomLimits.nameMinLength)
+          .max(roomLimits.nameMaxLength),
+        maxPlayers: z
+          .number()
+          .min(roomLimits.minPlayers)
+          .max(roomLimits.maxPlayers)
+          .default(roomLimits.defaultMaxPlayers),
         isPublic: z.boolean().default(true),
         password: z.string().optional(),
-        subjectIds: z.array(z.string()).min(5).max(10),
+        subjectIds: z
+          .array(z.string())
+          .min(roomLimits.minSubjects)
+          .max(roomLimits.maxSubjects),
       })
     )
     .mutation(async ({ ctx, input }) => {

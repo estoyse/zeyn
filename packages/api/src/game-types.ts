@@ -97,3 +97,17 @@ export const gameConfig = {
 } as const;
 
 export type GameConfig = typeof gameConfig;
+
+// Room-creation limits, shared by the createRoom validator (server) and the
+// create-game form (client) so the two never drift.
+export const roomLimits = {
+  nameMinLength: 3,
+  nameMaxLength: 50,
+  minPlayers: 2,
+  maxPlayers: 20,
+  defaultMaxPlayers: 10,
+  minSubjects: 5,
+  maxSubjects: 10,
+} as const;
+
+export type RoomLimits = typeof roomLimits;
