@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
@@ -34,14 +34,17 @@ function GamePage() {
   const { state, error, errorCode, sendAction, isConnecting, isConnected } =
     useGame(gameId, userId || "", userName || "", password);
 
-  const resultsQuery = useQuery(trpc.game.getResults.queryOptions({ gameId }));
+  // Only fetch results once the game is actually over — either it finished
+  // live, or we joined a room that had already finished. Gating with `enabled`
+  // (instead of an effect that calls refetch) means exactly one request when
+  // results become available, with no refetch loop.
+  const wantResults =
+    state?.status === "FINISHED" || errorCode === "ALREADY_FINISHED";
 
-  // Refetch results when game finishes
-  useEffect(() => {
-    if (state?.status === "FINISHED") {
-      resultsQuery.refetch();
-    }
-  }, [state?.status, resultsQuery]);
+  const resultsQuery = useQuery({
+    ...trpc.game.getResults.queryOptions({ gameId }),
+    enabled: wantResults,
+  });
 
   // Archive results view (Either game is finished or we had a connection error but data exists)
   if ((state?.status === "FINISHED" || error || !state) && resultsQuery.data) {
