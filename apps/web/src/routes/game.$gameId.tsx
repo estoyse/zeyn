@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence } from "framer-motion";
 import { useGameRoom } from "@/features/game/hooks/useGameRoom";
 
-// Components
 import { LoadingView, ConnectingView } from "@/features/game/components/LoadingView";
 import { LoginRequiredView } from "@/features/game/components/LoginRequiredView";
 import { PasswordPromptView } from "@/features/game/components/PasswordPromptView";

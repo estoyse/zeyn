@@ -16,8 +16,6 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-// Small pill used for room status, roles, etc. Centralises the repeated
-// "rounded bg-*/10 text-* text-xs" badge styling.
 export function StatusBadge({
   children,
   tone = "primary",

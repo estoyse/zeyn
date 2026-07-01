@@ -2,8 +2,6 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { GalleryVerticalEnd } from "lucide-react";
 
-// Shared split-screen scaffold for the auth pages (login, forgot/reset
-// password). Previously duplicated verbatim in each route.
 export function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
