@@ -1,7 +1,7 @@
 import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@shaxsiy-oyin/api/context";
 import { appRouter } from "@shaxsiy-oyin/api/routers/index";
-import { createAuth } from "../../../packages/auth/src";
+import { createAuth } from "@shaxsiy-oyin/auth";
 import { env, type Env } from "@shaxsiy-oyin/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
