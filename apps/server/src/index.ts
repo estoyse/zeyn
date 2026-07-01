@@ -33,13 +33,14 @@ async function cleanupAbandonedRooms(db: ReturnType<typeof createDb>) {
 
 const app = new Hono<{ Bindings: Env }>();
 
-app.all("/game/:id/ws", async c => {
+app.all("/game/:id/ws", c => {
   const id = c.req.param("id");
-  const gameRoomEnv = (c.env as any).GAME_ROOM;
-  const doId = gameRoomEnv.idFromName(id);
-  const stub: any = gameRoomEnv.get(doId);
-  const response = await stub.fetch(c.req.raw as any);
-  return response;
+  // Cast to the base namespace interface: the typed DurableObjectNamespace<
+  // GameRoom> pulls the DO's whole RPC surface into the type and blows past
+  // tsc's instantiation depth. idFromName/get/fetch exist on the base type.
+  const ns = c.env.GAME_ROOM as DurableObjectNamespace;
+  const stub = ns.get(ns.idFromName(id));
+  return stub.fetch(c.req.raw);
 });
 
 app.use(logger());
