@@ -3,6 +3,9 @@ import {
   clientMessageSchema,
   gameConfig,
   type GameState,
+  type Player,
+  type Question,
+  type ServerMessage,
 } from "@shaxsiy-oyin/api/game-types";
 import {
   buzz,
@@ -17,6 +20,25 @@ import {
 } from "./engine";
 
 const NOW = 1_000_000;
+
+// Accessors that assert presence, so tests read cleanly under
+// noUncheckedIndexedAccess and fail loudly if a fixture assumption breaks.
+function player(s: GameState, id: string): Player {
+  const p = s.players[id];
+  if (!p) throw new Error(`expected player "${id}" to exist`);
+  return p;
+}
+
+function questionAt(s: GameState, subjectIdx: number, questionIdx: number): Question {
+  const q = s.subjects[subjectIdx]?.questions[questionIdx];
+  if (!q) throw new Error(`expected question ${subjectIdx}/${questionIdx} to exist`);
+  return q;
+}
+
+function errText(reply: ServerMessage | undefined): string {
+  if (!reply || reply.type !== "ERROR") throw new Error("expected an ERROR reply");
+  return reply.message;
+}
 
 function room(overrides: Partial<RoomRow> = {}): RoomRow {
   return {
@@ -153,7 +175,7 @@ describe("join", () => {
     expect(s.players["p2"]).toBeUndefined();
 
     // Existing player reconnecting is always allowed and flips connected back on.
-    s.players["p1"].connected = false;
+    player(s, "p1").connected = false;
     const rejoin = join(s, { playerId: "p1", name: "Ann2", roomPassword: null });
     expect(rejoin.accepted).toBe(true);
     expect(s.players["p1"]).toMatchObject({ connected: true, name: "Ann2", score: 0 });
@@ -172,7 +194,7 @@ describe("hydrateRoom", () => {
       maxPlayers: 4,
       hasPassword: true,
     });
-    expect((s as Record<string, unknown>).password).toBeUndefined();
+    expect((s as unknown as Record<string, unknown>).password).toBeUndefined();
   });
 
   it("rejects missing / in-progress / finished rooms", () => {
@@ -198,7 +220,9 @@ describe("start", () => {
   it("requires the minimum number of subjects", () => {
     const s = seededState();
     s.subjects = s.subjects.slice(0, gameConfig.minSubjects - 1);
-    expect(start(s, "host", NOW).reply?.message).toContain(String(gameConfig.minSubjects));
+    expect(errText(start(s, "host", NOW).reply)).toContain(
+      String(gameConfig.minSubjects)
+    );
     expect(s.status).toBe("WAITING");
   });
 
@@ -232,7 +256,7 @@ describe("buzz", () => {
 
   it("ignores disconnected players and players who already attempted", () => {
     const s = startedState();
-    s.players["p1"].connected = false;
+    player(s, "p1").connected = false;
     expect(buzz(s, "p1", NOW)).toEqual({});
     expect(s.phase).toBe("ACTIVE");
   });
@@ -241,10 +265,10 @@ describe("buzz", () => {
 describe("submitAnswer", () => {
   it("awards points and reveals on a correct answer", () => {
     const s = startedState();
-    const question = s.subjects[0].questions[0];
+    const question = questionAt(s, 0, 0);
     buzz(s, "p1", NOW);
     const d = submitAnswer(s, "p1", question.answer, NOW);
-    expect(s.players["p1"].score).toBe(question.points);
+    expect(player(s, "p1").score).toBe(question.points);
     expect(s.phase).toBe("REVEALED");
     expect(d.alarmAt).toBe(NOW + gameConfig.revealTimeMs);
     expect(s.questionResults.at(-1)).toMatchObject({ correct: true, pointsAwarded: question.points });
@@ -252,10 +276,10 @@ describe("submitAnswer", () => {
 
   it("deducts points and reopens the question on a wrong answer", () => {
     const s = startedState();
-    const question = s.subjects[0].questions[0];
+    const question = questionAt(s, 0, 0);
     buzz(s, "p1", NOW);
     const d = submitAnswer(s, "p1", "definitely wrong", NOW);
-    expect(s.players["p1"].score).toBe(-question.points);
+    expect(player(s, "p1").score).toBe(-question.points);
     expect(s.phase).toBe("ACTIVE");
     expect(s.activeQuestionState?.buzzedPlayerId).toBeNull();
     expect(s.activeQuestionState?.playersWhoAttempted).toContain("p1");
@@ -293,10 +317,10 @@ describe("handleTimeout", () => {
 
   it("counts an answer timeout as a wrong answer for the buzzed player", () => {
     const s = startedState();
-    const question = s.subjects[0].questions[0];
+    const question = questionAt(s, 0, 0);
     buzz(s, "p1", NOW);
     handleTimeout(s, NOW);
-    expect(s.players["p1"].score).toBe(-question.points);
+    expect(player(s, "p1").score).toBe(-question.points);
   });
 
   it("advances to the next question after a reveal", () => {
