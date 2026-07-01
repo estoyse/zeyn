@@ -4,6 +4,8 @@
   "main": "src/index.ts",
   "scripts": {
     "check-types": "tsc -b",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server"
   },
   "dependencies": {
@@ -25,6 +27,7 @@
     "alchemy": "catalog:",
     "tsdown": "^0.21.9",
     "typescript": "^6",
+    "vitest": "^4.1.9",
     "wrangler": "^4.77.0"
   }
 }

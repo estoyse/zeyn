@@ -1,37 +1,31 @@
 import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@shaxsiy-oyin/api/context";
 import { appRouter } from "@shaxsiy-oyin/api/routers/index";
-import { createAuth } from "../../../packages/auth/src";
+import { createAuth } from "@shaxsiy-oyin/auth";
 import { env, type Env } from "@shaxsiy-oyin/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { createD1Db, eq, schema } from "@shaxsiy-oyin/db";
+import { createDb, and, eq, lt, schema } from "@shaxsiy-oyin/db";
 
 import { GameRoom } from "./durable-objects/GameRoom";
 
 const ABANDONED_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
-async function cleanupAbandonedRooms(db: ReturnType<typeof createD1Db>) {
+// Delete rooms still in "waiting" past the abandonment window. The age filter
+// runs in SQL (single DELETE) rather than fetching every waiting room and
+// filtering/deleting row-by-row in JS, so it stays cheap as rooms accumulate.
+async function cleanupAbandonedRooms(db: ReturnType<typeof createDb>) {
   try {
     const cutoff = new Date(Date.now() - ABANDONED_TIMEOUT_MS);
-
-    const abandoned = await db
-      .select()
-      .from(schema.activeGames)
-      .where(eq(schema.activeGames.status, "waiting"));
-
-    const toDelete = abandoned.filter(
-      room => room.createdAt.getTime() < cutoff.getTime()
-    );
-
-    if (toDelete.length > 0) {
-      for (const room of toDelete) {
-        await db
-          .delete(schema.activeGames)
-          .where(eq(schema.activeGames.id, room.id));
-      }
-    }
+    await db
+      .delete(schema.activeGames)
+      .where(
+        and(
+          eq(schema.activeGames.status, "waiting"),
+          lt(schema.activeGames.createdAt, cutoff)
+        )
+      );
   } catch (e) {
     console.error("Failed to cleanup abandoned rooms:", e);
   }
@@ -39,13 +33,14 @@ async function cleanupAbandonedRooms(db: ReturnType<typeof createD1Db>) {
 
 const app = new Hono<{ Bindings: Env }>();
 
-app.all("/game/:id/ws", async c => {
+app.all("/game/:id/ws", c => {
   const id = c.req.param("id");
-  const gameRoomEnv = (c.env as any).GAME_ROOM;
-  const doId = gameRoomEnv.idFromName(id);
-  const stub: any = gameRoomEnv.get(doId);
-  const response = await stub.fetch(c.req.raw as any);
-  return response;
+  // Cast to the base namespace interface: the typed DurableObjectNamespace<
+  // GameRoom> pulls the DO's whole RPC surface into the type and blows past
+  // tsc's instantiation depth. idFromName/get/fetch exist on the base type.
+  const ns = c.env.GAME_ROOM as DurableObjectNamespace;
+  const stub = ns.get(ns.idFromName(id));
+  return stub.fetch(c.req.raw);
 });
 
 app.use(logger());
@@ -73,11 +68,18 @@ app.use(
   })
 );
 
-app.get("/", async c => {
-  const db = createD1Db(c.env.DB);
-  await cleanupAbandonedRooms(db);
-  return c.text("OK");
-});
+app.get("/", c => c.text("OK"));
+
+// Cloudflare Cron Trigger: periodically sweep abandoned "waiting" rooms. This
+// used to run on every GET / (an unauthenticated request doing unbounded work);
+// it now runs on a schedule configured via `crons` on the Worker in
+// packages/infra/alchemy.run.ts.
+async function scheduled(_controller: ScheduledController, workerEnv: Env) {
+  await cleanupAbandonedRooms(createDb(workerEnv.DB));
+}
 
 export { GameRoom };
-export default app;
+export default {
+  fetch: app.fetch,
+  scheduled,
+};
