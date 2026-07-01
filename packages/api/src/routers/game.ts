@@ -8,7 +8,17 @@ import {
   activeGames,
   gameQuestionResults,
 } from "@shaxsiy-oyin/db/schema";
-import { eq, desc } from "@shaxsiy-oyin/db";
+import { eq, desc, and, lt } from "@shaxsiy-oyin/db";
+
+// Keyset pagination shared by the room/history lists. `cursor` is the
+// createdAt (epoch ms) of the last row a client has seen; passing it fetches the
+// next page of older rows. Input is optional so callers can omit it entirely.
+const listPageInput = z
+  .object({
+    limit: z.number().int().min(1).max(100).default(50),
+    cursor: z.number().int().optional(),
+  })
+  .optional();
 
 export const gameRouter = router({
   getSubjects: protectedProcedure.query(({ ctx }) => {
@@ -54,13 +64,23 @@ export const gameRouter = router({
       return { gameId };
     }),
 
-  getPublicRooms: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select()
-      .from(activeGames)
-      .where(eq(activeGames.isPublic, true))
-      .orderBy(desc(activeGames.createdAt));
-  }),
+  getPublicRooms: protectedProcedure
+    .input(listPageInput)
+    .query(async ({ ctx, input }) => {
+      const limit = input?.limit ?? 50;
+      const where = input?.cursor
+        ? and(
+            eq(activeGames.isPublic, true),
+            lt(activeGames.createdAt, new Date(input.cursor))
+          )
+        : eq(activeGames.isPublic, true);
+      return ctx.db
+        .select()
+        .from(activeGames)
+        .where(where)
+        .orderBy(desc(activeGames.createdAt))
+        .limit(limit);
+    }),
 
   getRoomConfig: protectedProcedure
     .input(z.object({ gameId: z.string() }))
@@ -97,24 +117,26 @@ export const gameRouter = router({
       if (!latestGame) return null;
 
       // Results rows are keyed on the game_history primary key (latestGame.id),
-      // not the room's gameId. Rows come back sorted highest score first.
-      const playerResults = await ctx.db
-        .select()
-        .from(gamePlayerResults)
-        .where(eq(gamePlayerResults.gameId, latestGame.id))
-        .orderBy(desc(gamePlayerResults.score));
-
-      const questionResults = await ctx.db
-        .select({
-          userId: gameQuestionResults.userId,
-          subjectName: gameQuestionResults.subjectName,
-          subjectPosition: gameQuestionResults.subjectPosition,
-          questionPosition: gameQuestionResults.questionPosition,
-          correct: gameQuestionResults.correct,
-          pointsAwarded: gameQuestionResults.pointsAwarded,
-        })
-        .from(gameQuestionResults)
-        .where(eq(gameQuestionResults.gameId, latestGame.id));
+      // not the room's gameId. The player/question queries are independent, so
+      // run them concurrently. Player rows come back sorted highest score first.
+      const [playerResults, questionResults] = await Promise.all([
+        ctx.db
+          .select()
+          .from(gamePlayerResults)
+          .where(eq(gamePlayerResults.gameId, latestGame.id))
+          .orderBy(desc(gamePlayerResults.score)),
+        ctx.db
+          .select({
+            userId: gameQuestionResults.userId,
+            subjectName: gameQuestionResults.subjectName,
+            subjectPosition: gameQuestionResults.subjectPosition,
+            questionPosition: gameQuestionResults.questionPosition,
+            correct: gameQuestionResults.correct,
+            pointsAwarded: gameQuestionResults.pointsAwarded,
+          })
+          .from(gameQuestionResults)
+          .where(eq(gameQuestionResults.gameId, latestGame.id)),
+      ]);
 
       const subjects = JSON.parse(latestGame.subjects) as string[];
 
@@ -138,11 +160,21 @@ export const gameRouter = router({
       return room?.status || null;
     }),
 
-  getHistory: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select()
-      .from(activeGames)
-      .where(eq(activeGames.status, "finished"))
-      .orderBy(desc(activeGames.createdAt));
-  }),
+  getHistory: protectedProcedure
+    .input(listPageInput)
+    .query(async ({ ctx, input }) => {
+      const limit = input?.limit ?? 50;
+      const where = input?.cursor
+        ? and(
+            eq(activeGames.status, "finished"),
+            lt(activeGames.createdAt, new Date(input.cursor))
+          )
+        : eq(activeGames.status, "finished");
+      return ctx.db
+        .select()
+        .from(activeGames)
+        .where(where)
+        .orderBy(desc(activeGames.createdAt))
+        .limit(limit);
+    }),
 });

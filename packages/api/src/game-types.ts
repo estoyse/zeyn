@@ -1,6 +1,8 @@
 // Shared game types for client and server
 // Used by game-client.ts and GameRoom.ts
 
+import { z } from "zod";
+
 export interface Player {
   id: string;
   name: string;
@@ -69,17 +71,37 @@ export interface PublicGameState
   };
 }
 
-export type ClientMessage =
-  | {
-      type: "JOIN";
-      playerId: string;
-      name: string;
-      gameId: string;
-      password?: string;
-    }
-  | { type: "START"; playerId: string; subjectIds: string[] }
-  | { type: "BUZZ"; playerId: string }
-  | { type: "SUBMIT_ANSWER"; playerId: string; answer: string };
+// Zod schema for messages arriving over the WebSocket — the untrusted client
+// boundary. This is the single source of truth: `ClientMessage` is inferred
+// from it, so the type and the runtime guard can never drift. Validation here is
+// purely structural (shapes + generous size caps to reject abusive payloads);
+// semantic rules (host-only START, room full, password, empty name) live in the
+// game engine so it can return specific error messages.
+export const clientMessageSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("JOIN"),
+    playerId: z.string().max(200),
+    name: z.string().max(200),
+    gameId: z.string().max(200),
+    password: z.string().max(200).optional(),
+  }),
+  z.object({
+    type: z.literal("START"),
+    playerId: z.string().max(200),
+    subjectIds: z.array(z.string().max(200)).max(100),
+  }),
+  z.object({
+    type: z.literal("BUZZ"),
+    playerId: z.string().max(200),
+  }),
+  z.object({
+    type: z.literal("SUBMIT_ANSWER"),
+    playerId: z.string().max(200),
+    answer: z.string().max(2000),
+  }),
+]);
+
+export type ClientMessage = z.infer<typeof clientMessageSchema>;
 
 export type ServerMessage =
   | { type: "STATE_UPDATE"; state: PublicGameState; serverTime: number }
