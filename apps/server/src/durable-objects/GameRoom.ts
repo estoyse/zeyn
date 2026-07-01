@@ -39,7 +39,6 @@ export class GameRoom extends DurableObject {
   };
   private lastBroadcastPlayers: Record<string, string> = {}; // playerId -> JSON string of player state
   private gamePassword: string | null = null;
-  private timerId: any = null;
 
   constructor(ctx: DurableObjectState, env: any) {
     super(ctx, env);
@@ -107,10 +106,10 @@ export class GameRoom extends DurableObject {
         await this.handleStart(ws, action.playerId, action.subjectIds);
         break;
       case "BUZZ":
-        this.handleBuzz(ws, action.playerId);
+        await this.handleBuzz(ws, action.playerId);
         break;
       case "SUBMIT_ANSWER":
-        this.handleSubmitAnswer(ws, action.playerId, action.answer);
+        await this.handleSubmitAnswer(ws, action.playerId, action.answer);
         break;
     }
 
@@ -338,7 +337,7 @@ export class GameRoom extends DurableObject {
     await this.updateRoomStatus("playing");
 
     this.state.status = "PLAYING";
-    this.startQuestionCycle();
+    await this.startQuestionCycle();
   }
 
   private async updateRoomStatus(status: "waiting" | "playing" | "finished") {
@@ -354,7 +353,7 @@ export class GameRoom extends DurableObject {
     }
   }
 
-  private startQuestionCycle() {
+  private async startQuestionCycle() {
     this.state.phase = "ACTIVE";
     this.state.activeQuestionState = {
       buzzedPlayerId: null,
@@ -363,12 +362,10 @@ export class GameRoom extends DurableObject {
       timerExpiresAt: Date.now() + gameConfig.questionTimeMs,
     };
 
-    this.setTimer(gameConfig.questionTimeMs, () =>
-      this.handleQuestionTimeout()
-    );
+    await this.scheduleAlarm(gameConfig.questionTimeMs);
   }
 
-  private handleBuzz(_ws: WebSocket, playerId: string) {
+  private async handleBuzz(_ws: WebSocket, playerId: string) {
     if (!this.state.players[playerId]?.connected) return;
     if (this.state.phase !== "ACTIVE") return;
     if (this.state.activeQuestionState?.buzzedPlayerId) return;
@@ -380,10 +377,10 @@ export class GameRoom extends DurableObject {
     this.state.activeQuestionState!.timerExpiresAt =
       Date.now() + gameConfig.answerTimeMs;
 
-    this.setTimer(gameConfig.answerTimeMs, () => this.handleAnswerTimeout());
+    await this.scheduleAlarm(gameConfig.answerTimeMs);
   }
 
-  private handleSubmitAnswer(
+  private async handleSubmitAnswer(
     _ws: WebSocket | null,
     playerId: string,
     answer: string
@@ -417,7 +414,7 @@ export class GameRoom extends DurableObject {
         questionIndex: this.state.currentQuestionIndex,
         subjectName: subject.name,
       });
-      this.revealAnswer();
+      await this.revealAnswer();
     } else {
       const player = this.state.players[playerId];
       if (player) {
@@ -441,27 +438,25 @@ export class GameRoom extends DurableObject {
         this.state.activeQuestionState.wrongAttempts >=
         gameConfig.maxWrongAttempts
       ) {
-        this.revealAnswer();
+        await this.revealAnswer();
       } else {
         this.state.phase = "ACTIVE";
         this.state.activeQuestionState.timerExpiresAt =
           Date.now() + gameConfig.questionTimeMs;
-        this.setTimer(gameConfig.questionTimeMs, () =>
-          this.handleQuestionTimeout()
-        );
+        await this.scheduleAlarm(gameConfig.questionTimeMs);
       }
     }
   }
 
-  private revealAnswer() {
+  private async revealAnswer() {
     this.state.phase = "REVEALED";
     if (this.state.activeQuestionState) {
       this.state.activeQuestionState.timerExpiresAt =
         Date.now() + gameConfig.revealTimeMs;
     }
     this.broadcast();
-    this.saveState();
-    this.setTimer(gameConfig.revealTimeMs, () => this.nextQuestion());
+    await this.saveState();
+    await this.scheduleAlarm(gameConfig.revealTimeMs);
   }
 
   private async nextQuestion() {
@@ -476,9 +471,9 @@ export class GameRoom extends DurableObject {
       this.state.phase = "REVEALED";
       await this.updateRoomStatus("finished");
       await this.persistResults();
-      this.clearTimer();
+      await this.ctx.storage.deleteAlarm();
     } else {
-      this.startQuestionCycle();
+      await this.startQuestionCycle();
     }
 
     await this.saveState();
@@ -541,33 +536,48 @@ export class GameRoom extends DurableObject {
     }
   }
 
-  private handleQuestionTimeout() {
+  private async handleQuestionTimeout() {
     if (this.state.phase === "ACTIVE") {
-      this.revealAnswer();
+      await this.revealAnswer();
     }
   }
 
-  private handleAnswerTimeout() {
+  private async handleAnswerTimeout() {
     if (this.state.phase === "ANSWERING") {
       const playerId = this.state.activeQuestionState?.buzzedPlayerId;
       if (playerId) {
-        this.handleSubmitAnswer(null, playerId, "");
+        await this.handleSubmitAnswer(null, playerId, "");
       }
     }
   }
 
-  private setTimer(ms: number, callback: () => void) {
-    if (this.timerId) {
-      clearTimeout(this.timerId);
-    }
-    this.timerId = setTimeout(callback, ms);
+  // Schedule the next phase deadline. Durable Object alarms are persisted and
+  // survive hibernation/eviction, unlike setTimeout — so a game can no longer
+  // stall mid-question if the DO is evicted between events. Only one alarm can
+  // be pending at a time; setAlarm replaces any existing one.
+  private async scheduleAlarm(ms: number) {
+    await this.ctx.storage.setAlarm(Date.now() + ms);
   }
 
-  private clearTimer() {
-    if (this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
+  // Fired by the runtime when a scheduled deadline elapses. The action is
+  // implied by the current phase, mirroring the old setTimer callbacks.
+  async alarm() {
+    if (this.state.status !== "PLAYING") return;
+
+    switch (this.state.phase) {
+      case "ACTIVE":
+        await this.handleQuestionTimeout();
+        break;
+      case "ANSWERING":
+        await this.handleAnswerTimeout();
+        break;
+      case "REVEALED":
+        await this.nextQuestion();
+        break;
     }
+
+    await this.saveState();
+    this.broadcast();
   }
 
   async webSocketClose(
