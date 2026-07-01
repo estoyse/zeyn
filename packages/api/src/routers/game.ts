@@ -7,7 +7,17 @@ import {
   activeGames,
   gameQuestionResults,
 } from "@shaxsiy-oyin/db/schema";
-import { eq, desc } from "@shaxsiy-oyin/db";
+import { eq, desc, and, lt } from "@shaxsiy-oyin/db";
+
+// Keyset pagination shared by the room/history lists. `cursor` is the
+// createdAt (epoch ms) of the last row a client has seen; passing it fetches the
+// next page of older rows. Input is optional so callers can omit it entirely.
+const listPageInput = z
+  .object({
+    limit: z.number().int().min(1).max(100).default(50),
+    cursor: z.number().int().optional(),
+  })
+  .optional();
 
 export const gameRouter = router({
   getSubjects: protectedProcedure.query(({ ctx }) => {
@@ -43,13 +53,23 @@ export const gameRouter = router({
       return { gameId };
     }),
 
-  getPublicRooms: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select()
-      .from(activeGames)
-      .where(eq(activeGames.isPublic, true))
-      .orderBy(desc(activeGames.createdAt));
-  }),
+  getPublicRooms: protectedProcedure
+    .input(listPageInput)
+    .query(async ({ ctx, input }) => {
+      const limit = input?.limit ?? 50;
+      const where = input?.cursor
+        ? and(
+            eq(activeGames.isPublic, true),
+            lt(activeGames.createdAt, new Date(input.cursor))
+          )
+        : eq(activeGames.isPublic, true);
+      return ctx.db
+        .select()
+        .from(activeGames)
+        .where(where)
+        .orderBy(desc(activeGames.createdAt))
+        .limit(limit);
+    }),
 
   getRoomConfig: protectedProcedure
     .input(z.object({ gameId: z.string() }))
@@ -129,11 +149,21 @@ export const gameRouter = router({
       return room?.status || null;
     }),
 
-  getHistory: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select()
-      .from(activeGames)
-      .where(eq(activeGames.status, "finished"))
-      .orderBy(desc(activeGames.createdAt));
-  }),
+  getHistory: protectedProcedure
+    .input(listPageInput)
+    .query(async ({ ctx, input }) => {
+      const limit = input?.limit ?? 50;
+      const where = input?.cursor
+        ? and(
+            eq(activeGames.status, "finished"),
+            lt(activeGames.createdAt, new Date(input.cursor))
+          )
+        : eq(activeGames.status, "finished");
+      return ctx.db
+        .select()
+        .from(activeGames)
+        .where(where)
+        .orderBy(desc(activeGames.createdAt))
+        .limit(limit);
+    }),
 });
