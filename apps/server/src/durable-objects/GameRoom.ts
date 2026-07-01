@@ -19,8 +19,15 @@ import { GameRepository } from "../game/repository";
 import { StateSerializer } from "../game/serializer";
 
 // Attachment stored on each accepted WebSocket so we can attribute close events.
-type SocketMeta = { playerId?: string; joinTime?: number };
-const meta = (ws: WebSocket): SocketMeta => ws as unknown as SocketMeta;
+// Persisted via serializeAttachment so it survives DO hibernation (in-memory
+// properties on the socket would be lost when the DO is evicted between events).
+type SocketMeta = { playerId: string; joinTime: number };
+function readMeta(ws: WebSocket): SocketMeta | null {
+  const attachment = ws.deserializeAttachment();
+  return attachment && typeof attachment === "object"
+    ? (attachment as SocketMeta)
+    : null;
+}
 
 /**
  * Durable Object that owns one game room. It is a thin transport shell: it
@@ -165,8 +172,10 @@ export class GameRoom extends DurableObject<Env> {
   ) {
     if (ws && d.reply) ws.send(JSON.stringify(d.reply));
     if (ws && action && d.accepted) {
-      meta(ws).playerId = action.playerId;
-      meta(ws).joinTime = Date.now();
+      ws.serializeAttachment({
+        playerId: action.playerId,
+        joinTime: Date.now(),
+      } satisfies SocketMeta);
     }
 
     if (d.updateRoomStatus && this.state.gameId) {
@@ -209,20 +218,18 @@ export class GameRoom extends DurableObject<Env> {
     _reason: string,
     _wasClean: boolean
   ) {
-    const { playerId, joinTime } = meta(ws);
-    if (!playerId || !this.state.players[playerId]) return;
+    const self = readMeta(ws);
+    const player = self && this.state.players[self.playerId];
+    if (!self || !player) return;
 
     // Only mark disconnected if no newer connection for this player exists.
-    const hasNewerConnection = this.ctx
-      .getWebSockets()
-      .some(
-        s =>
-          meta(s).playerId === playerId &&
-          (meta(s).joinTime ?? 0) > (joinTime ?? 0)
-      );
+    const hasNewerConnection = this.ctx.getWebSockets().some(s => {
+      const other = readMeta(s);
+      return other?.playerId === self.playerId && other.joinTime > self.joinTime;
+    });
 
     if (!hasNewerConnection) {
-      this.state.players[playerId].connected = false;
+      player.connected = false;
       await this.saveState();
       this.broadcast();
     }
