@@ -86,24 +86,26 @@ export const gameRouter = router({
       if (!latestGame) return null;
 
       // Results rows are keyed on the game_history primary key (latestGame.id),
-      // not the room's gameId. Rows come back sorted highest score first.
-      const playerResults = await ctx.db
-        .select()
-        .from(gamePlayerResults)
-        .where(eq(gamePlayerResults.gameId, latestGame.id))
-        .orderBy(desc(gamePlayerResults.score));
-
-      const questionResults = await ctx.db
-        .select({
-          userId: gameQuestionResults.userId,
-          subjectName: gameQuestionResults.subjectName,
-          subjectPosition: gameQuestionResults.subjectPosition,
-          questionPosition: gameQuestionResults.questionPosition,
-          correct: gameQuestionResults.correct,
-          pointsAwarded: gameQuestionResults.pointsAwarded,
-        })
-        .from(gameQuestionResults)
-        .where(eq(gameQuestionResults.gameId, latestGame.id));
+      // not the room's gameId. The player/question queries are independent, so
+      // run them concurrently. Player rows come back sorted highest score first.
+      const [playerResults, questionResults] = await Promise.all([
+        ctx.db
+          .select()
+          .from(gamePlayerResults)
+          .where(eq(gamePlayerResults.gameId, latestGame.id))
+          .orderBy(desc(gamePlayerResults.score)),
+        ctx.db
+          .select({
+            userId: gameQuestionResults.userId,
+            subjectName: gameQuestionResults.subjectName,
+            subjectPosition: gameQuestionResults.subjectPosition,
+            questionPosition: gameQuestionResults.questionPosition,
+            correct: gameQuestionResults.correct,
+            pointsAwarded: gameQuestionResults.pointsAwarded,
+          })
+          .from(gameQuestionResults)
+          .where(eq(gameQuestionResults.gameId, latestGame.id)),
+      ]);
 
       const subjects = JSON.parse(latestGame.subjects) as string[];
 
