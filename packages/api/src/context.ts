@@ -14,7 +14,6 @@ export async function createContext({ context }: CreateContextOptions) {
   });
   const db = createDb();
   return {
-    auth: null,
     session,
     env: context.env as Env,
     db,

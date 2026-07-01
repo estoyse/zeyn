@@ -6,13 +6,13 @@ import { env, type Env } from "@shaxsiy-oyin/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { createD1Db, eq, schema } from "@shaxsiy-oyin/db";
+import { createDb, eq, schema } from "@shaxsiy-oyin/db";
 
 import { GameRoom } from "./durable-objects/GameRoom";
 
 const ABANDONED_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
-async function cleanupAbandonedRooms(db: ReturnType<typeof createD1Db>) {
+async function cleanupAbandonedRooms(db: ReturnType<typeof createDb>) {
   try {
     const cutoff = new Date(Date.now() - ABANDONED_TIMEOUT_MS);
 
@@ -74,7 +74,7 @@ app.use(
 );
 
 app.get("/", async c => {
-  const db = createD1Db(c.env.DB);
+  const db = createDb(c.env.DB);
   await cleanupAbandonedRooms(db);
   return c.text("OK");
 });

@@ -2,7 +2,7 @@
 // pure engine. The DO holds one instance and calls these methods to hydrate a
 // room, flip its status, and flush results when a match ends.
 
-import { createD1Db, inArray, eq, schema } from "@shaxsiy-oyin/db";
+import { createDb, inArray, eq, schema } from "@shaxsiy-oyin/db";
 import type { GameState, Subject } from "@shaxsiy-oyin/api/game-types";
 import { mapSubjects, type RoomRow } from "./engine";
 
@@ -26,10 +26,10 @@ export interface RoomRecord extends RoomRow {
 }
 
 export class GameRepository {
-  private readonly db: ReturnType<typeof createD1Db>;
+  private readonly db: ReturnType<typeof createDb>;
 
   constructor(binding: D1Database) {
-    this.db = createD1Db(binding);
+    this.db = createDb(binding);
   }
 
   /** Load the room row, or `undefined` if it no longer exists. */
