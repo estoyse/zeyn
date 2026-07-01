@@ -31,7 +31,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Deploy
-        run: pnpm run deploy
+        # Run the infra package's deploy script directly (not `pnpm deploy`,
+        # which is pnpm's built-in command, and not via turbo, whose strict env
+        # mode would strip the Cloudflare/Alchemy secrets before alchemy sees them).
+        run: pnpm --filter @shaxsiy-oyin/infra run deploy
         env:
           # Cloudflare auth + remote Alchemy state store
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
