@@ -40,6 +40,9 @@ export const server = await Worker("server", {
   entrypoint: "src/index.ts",
   compatibility: "node",
   compatibilityDate: "2024-09-23",
+  // Runs the exported `scheduled` handler every 15 minutes to sweep abandoned
+  // "waiting" rooms (previously piggybacked on GET /).
+  crons: ["*/15 * * * *"],
   bindings: {
     GAME_ROOM: DurableObjectNamespace("game_room", {
       className: "GameRoom",
