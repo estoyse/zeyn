@@ -26,9 +26,12 @@ const app = await alchemy("shaxsiy-oyin", {
   // Pin production to a fixed stage so every production deploy -- local or CI --
   // targets the same Cloudflare resources. Alchemy otherwise derives the stage
   // from $USER, so CI (stage "runner") and a laptop (stage "estoyse") each
-  // deploy a separate parallel copy of the whole app. Non-production keeps the
+  // deploy a separate parallel copy of the whole app. An explicit ALCHEMY_STAGE
+  // still wins (e.g. to destroy an orphaned stage); non-production keeps the
   // per-user default so `alchemy dev` stays isolated per developer.
-  stage: process.env.NODE_ENV === "production" ? "production" : undefined,
+  stage:
+    process.env.ALCHEMY_STAGE ??
+    (process.env.NODE_ENV === "production" ? "production" : undefined),
   // Keep deploy state in Cloudflare (a Durable Object) instead of the local,
   // gitignored `.alchemy/` folder, so local and CI deploys share one source of
   // truth. Without this, a fresh CI runner would try to recreate everything.
