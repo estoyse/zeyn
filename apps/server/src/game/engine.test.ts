@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { gameConfig, type GameState } from "@shaxsiy-oyin/api/game-types";
+import {
+  clientMessageSchema,
+  gameConfig,
+  type GameState,
+} from "@shaxsiy-oyin/api/game-types";
 import {
   buzz,
   createInitialState,
@@ -56,6 +60,47 @@ function startedState(): GameState {
   start(state, "host", NOW);
   return state;
 }
+
+describe("clientMessageSchema (WebSocket boundary)", () => {
+  it("accepts each well-formed message type", () => {
+    const valid = [
+      { type: "JOIN", playerId: "p1", name: "Ann", gameId: "g1" },
+      { type: "JOIN", playerId: "p1", name: "Ann", gameId: "g1", password: "x" },
+      { type: "START", playerId: "p1", subjectIds: ["s1", "s2"] },
+      { type: "BUZZ", playerId: "p1" },
+      { type: "SUBMIT_ANSWER", playerId: "p1", answer: "42" },
+    ];
+    for (const msg of valid) {
+      expect(clientMessageSchema.safeParse(msg).success).toBe(true);
+    }
+  });
+
+  it("rejects unknown types and structurally invalid payloads", () => {
+    const invalid = [
+      { type: "NUKE", playerId: "p1" }, // unknown discriminator
+      { type: "JOIN", playerId: "p1", name: "Ann" }, // missing gameId
+      { type: "BUZZ" }, // missing playerId
+      { type: "SUBMIT_ANSWER", playerId: "p1", answer: 42 }, // wrong type
+      { type: "START", playerId: "p1", subjectIds: "s1" }, // not an array
+      "not even an object",
+      null,
+    ];
+    for (const msg of invalid) {
+      expect(clientMessageSchema.safeParse(msg).success).toBe(false);
+    }
+  });
+
+  it("rejects abusive oversized free-text fields", () => {
+    const huge = "a".repeat(5000);
+    expect(
+      clientMessageSchema.safeParse({
+        type: "SUBMIT_ANSWER",
+        playerId: "p1",
+        answer: huge,
+      }).success
+    ).toBe(false);
+  });
+});
 
 describe("join", () => {
   it("admits a valid new player", () => {

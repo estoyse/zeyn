@@ -1,6 +1,10 @@
 import { DurableObject } from "cloudflare:workers";
 import type { Env } from "@shaxsiy-oyin/env/server";
-import type { ClientMessage, GameState } from "@shaxsiy-oyin/api/game-types";
+import {
+  clientMessageSchema,
+  type ClientMessage,
+  type GameState,
+} from "@shaxsiy-oyin/api/game-types";
 import {
   buzz,
   createInitialState,
@@ -69,15 +73,27 @@ export class GameRoom extends DurableObject<Env> {
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     if (typeof message !== "string") return;
 
-    let action: ClientMessage;
+    // Validate the untrusted client payload before it reaches any handler: parse
+    // JSON, then check the shape against the shared schema. Anything malformed is
+    // rejected here so handlers only ever see a well-formed ClientMessage.
+    let raw: unknown;
     try {
-      action = JSON.parse(message);
+      raw = JSON.parse(message);
     } catch {
       ws.send(
         JSON.stringify({ type: "ERROR", message: "Invalid message format" })
       );
       return;
     }
+
+    const parsed = clientMessageSchema.safeParse(raw);
+    if (!parsed.success) {
+      ws.send(
+        JSON.stringify({ type: "ERROR", message: "Invalid message format" })
+      );
+      return;
+    }
+    const action: ClientMessage = parsed.data;
 
     const now = Date.now();
     let directives: EngineDirectives;
