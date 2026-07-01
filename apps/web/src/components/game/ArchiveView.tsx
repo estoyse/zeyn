@@ -6,44 +6,17 @@ import {
   CardTitle,
 } from "@shaxsiy-oyin/ui/components/card";
 import { Trophy, LayoutGrid } from "lucide-react";
-
-const QUESTIONS_PER_SUBJECT = 5;
-
-interface ResultsData {
-  subjects: string[];
-  playerResults: Array<{
-    userId: string;
-    playerName: string;
-    score: number;
-  }>;
-  questionResults: Array<{
-    userId: string;
-    subjectPosition: number;
-    questionPosition: number;
-    pointsAwarded: number;
-    correct: boolean;
-  }>;
-}
+import { buildScoreboard, type ScoreboardResults } from "@/lib/scoreboard";
 
 interface ArchiveViewProps {
-  data: ResultsData;
+  data: ScoreboardResults;
   onBack: () => void;
 }
 
 export function ArchiveView({ data, onBack }: ArchiveViewProps) {
-  const { subjects, playerResults, questionResults } = data;
-
-  // (userId, subjectPos, questionPos) -> pointsAwarded, for O(1) cell lookup.
-  const cellPoints = new Map<string, number>();
-  for (const r of questionResults) {
-    cellPoints.set(
-      `${r.userId}:${r.subjectPosition}:${r.questionPosition}`,
-      r.pointsAwarded
-    );
-  }
-
+  const { subjects, questionsPerSubject, rows } = buildScoreboard(data);
   const questionSlots = Array.from(
-    { length: QUESTIONS_PER_SUBJECT },
+    { length: questionsPerSubject },
     (_, i) => i
   );
 
@@ -87,7 +60,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                     {subjects.map((name, si) => (
                       <th
                         key={si}
-                        colSpan={QUESTIONS_PER_SUBJECT}
+                        colSpan={questionsPerSubject}
                         className="px-2 py-2 text-center text-xs font-semibold uppercase border-r"
                         title={name}
                       >
@@ -107,7 +80,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                         <th
                           key={`${si}:${qi}`}
                           className={`px-2 py-1 text-center text-xs text-muted-foreground ${
-                            qi === QUESTIONS_PER_SUBJECT - 1 ? "border-r" : ""
+                            qi === questionsPerSubject - 1 ? "border-r" : ""
                           }`}
                         >
                           {qi + 1}
@@ -117,20 +90,17 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {playerResults.map((p, rowIdx) => (
-                    <tr key={p.userId} className="hover:bg-muted/50">
+                  {rows.map((row, rowIdx) => (
+                    <tr key={row.userId} className="hover:bg-muted/50">
                       <td className="px-2 py-2 text-center text-muted-foreground border-r tabular-nums">
                         {rowIdx + 1}
                       </td>
                       <td className="px-3 py-2 font-medium border-r whitespace-nowrap">
-                        {p.playerName}
+                        {row.playerName}
                       </td>
-                      {subjects.map((_, si) =>
-                        questionSlots.map(qi => {
-                          const points = cellPoints.get(
-                            `${p.userId}:${si}:${qi}`
-                          );
-                          const isSubjectEnd = qi === QUESTIONS_PER_SUBJECT - 1;
+                      {row.cells.map((subjectCells, si) =>
+                        subjectCells.map((points, qi) => {
+                          const isSubjectEnd = qi === questionsPerSubject - 1;
                           return (
                             <td
                               key={`${si}:${qi}`}
@@ -138,7 +108,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                                 isSubjectEnd ? "border-r" : ""
                               }`}
                             >
-                              {points !== undefined ? (
+                              {points !== null ? (
                                 <span
                                   className={`font-semibold ${
                                     points > 0
@@ -159,12 +129,12 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                       )}
                       <td
                         className={`px-3 py-2 text-center font-bold tabular-nums ${
-                          p.score > 0
+                          row.score > 0
                             ? "bg-yellow-400/20 text-yellow-500"
                             : ""
                         }`}
                       >
-                        {p.score}
+                        {row.score}
                       </td>
                     </tr>
                   ))}
