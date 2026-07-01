@@ -41,7 +41,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
           ALCHEMY_STATE_TOKEN: ${{ secrets.ALCHEMY_STATE_TOKEN }}
-          # App config normally read from the gitignored .env.production files
+          # App config (production secrets)
           VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
           CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}

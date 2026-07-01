@@ -6,15 +6,14 @@ import { CloudflareStateStore } from "alchemy/state";
 import { config } from "dotenv";
 
 const loadEnvs = () => {
-  const nodeEnv = process.env.NODE_ENV || "development";
-  const isProduction = nodeEnv === "production";
+  // Infra-local secrets (e.g. ALCHEMY_PASSWORD); no-ops in CI where the file is
+  // absent and the value comes from the environment.
+  config({ path: "./.env" });
 
-  if (isProduction) {
-    config({ path: "./.env" });
-    config({ path: "../../apps/web/.env.production" });
-    config({ path: "../../apps/server/.env.production" });
-  } else {
-    config({ path: "./.env" });
+  // In production, app config comes from the environment -- GitHub Actions
+  // secrets in CI, or exported manually for a local prod deploy. Only the local
+  // dev .env files are loaded outside production.
+  if (process.env.NODE_ENV !== "production") {
     config({ path: "../../apps/web/.env" });
     config({ path: "../../apps/server/.env" });
   }
