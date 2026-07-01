@@ -1,581 +1,188 @@
 import { DurableObject } from "cloudflare:workers";
-import { createD1Db, inArray, eq, schema } from "@shaxsiy-oyin/db";
-import { isFuzzyMatch } from "../utils/fuzzy-match";
+import type { Env } from "@shaxsiy-oyin/env/server";
+import type { ClientMessage, GameState } from "@shaxsiy-oyin/api/game-types";
 import {
-  gameConfig,
-  type ClientMessage,
-  type GameState,
-} from "@shaxsiy-oyin/api/game-types";
+  buzz,
+  createInitialState,
+  hydrateRoom,
+  join,
+  start,
+  submitAnswer,
+  handleTimeout,
+  type EngineDirectives,
+} from "../game/engine";
+import { GameRepository } from "../game/repository";
+import { StateSerializer } from "../game/serializer";
 
-// Cloudflare D1 rejects any query with more than 100 bound parameters. Multi-row
-// inserts must be split so (columns * rows) stays under this ceiling.
-const D1_MAX_PARAMS_PER_QUERY = 99;
+// Attachment stored on each accepted WebSocket so we can attribute close events.
+type SocketMeta = { playerId?: string; joinTime?: number };
+const meta = (ws: WebSocket): SocketMeta => ws as unknown as SocketMeta;
 
-function chunk<T>(items: T[], size: number): T[][] {
-  const maxPerChunk = Math.max(1, Math.floor(size));
-  const chunks: T[][] = [];
-  for (let i = 0; i < items.length; i += maxPerChunk) {
-    chunks.push(items.slice(i, i + maxPerChunk));
-  }
-  return chunks;
-}
-
-export class GameRoom extends DurableObject {
-  private state: GameState = {
-    status: "WAITING",
-    gameId: null,
-    gameName: null,
-    hostId: null,
-    maxPlayers: 10,
-    isPublic: true,
-    hasPassword: false,
-    players: {},
-    subjects: [],
-    currentSubjectIndex: 0,
-    currentQuestionIndex: 0,
-    phase: "ACTIVE",
-    activeQuestionState: null,
-    questionResults: [],
-  };
-  private lastBroadcastPlayers: Record<string, string> = {}; // playerId -> JSON string of player state
+/**
+ * Durable Object that owns one game room. It is a thin transport shell: it
+ * accepts sockets, routes client messages to the pure `engine` transitions,
+ * carries out the side effects those return via the `repository`, and broadcasts
+ * the serialized public state. All game rules live in `../game/engine`.
+ */
+export class GameRoom extends DurableObject<Env> {
+  private state: GameState = createInitialState();
   private gamePassword: string | null = null;
+  private readonly serializer = new StateSerializer();
+  private readonly repo: GameRepository;
 
-  constructor(ctx: DurableObjectState, env: any) {
+  constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
+    this.repo = new GameRepository(env.DB);
     this.ctx.blockConcurrencyWhile(async () => {
-      const savedState = await this.ctx.storage.get<GameState>("state");
-      if (savedState) {
-        this.state = savedState;
-      }
+      const saved = await this.ctx.storage.get<GameState>("state");
+      if (saved) this.state = saved;
+      // Persisted so a password-protected room stays protected if the DO is
+      // evicted after hydration (empty string means "no password").
+      const secret = await this.ctx.storage.get<string>("gamePassword");
+      if (secret) this.gamePassword = secret;
     });
   }
 
-  async fetch(_request: Request): Promise<Response> {
-    if (_request.headers.get("Upgrade") === "websocket") {
-      return this.handleWebSocket(_request);
+  async fetch(request: Request): Promise<Response> {
+    if (request.headers.get("Upgrade") === "websocket") {
+      return this.handleWebSocket();
     }
     return new Response("Not found", { status: 404 });
   }
 
-  async handleWebSocket(_request: Request): Promise<Response> {
+  private handleWebSocket(): Response {
     const pair = new WebSocketPair();
-    const client = pair[0];
-    const server = pair[1];
-
+    const [client, server] = [pair[0], pair[1]];
     this.ctx.acceptWebSocket(server);
 
-    // Send initial state
     server.send(
       JSON.stringify({
         type: "STATE_UPDATE",
-        state: this.getPublicState(true),
+        state: this.serializer.toPublic(this.state, true),
         serverTime: Date.now(),
       })
     );
 
-    return new Response(null, {
-      status: 101,
-      webSocket: client,
-    });
+    return new Response(null, { status: 101, webSocket: client });
   }
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     if (typeof message !== "string") return;
+
+    let action: ClientMessage;
     try {
-      const data: ClientMessage = JSON.parse(message);
-      await this.handleClientAction(ws, data);
-    } catch (e) {
+      action = JSON.parse(message);
+    } catch {
       ws.send(
         JSON.stringify({ type: "ERROR", message: "Invalid message format" })
       );
+      return;
     }
-  }
 
-  private async handleClientAction(ws: WebSocket, action: ClientMessage) {
+    const now = Date.now();
+    let directives: EngineDirectives;
     switch (action.type) {
       case "JOIN":
-        await this.handleJoin(
-          ws,
-          action.playerId,
-          action.name,
-          action.gameId,
-          action.password
-        );
+        directives = await this.onJoin(action);
         break;
       case "START":
-        await this.handleStart(ws, action.playerId, action.subjectIds);
+        directives = await this.onStart(action, now);
         break;
       case "BUZZ":
-        await this.handleBuzz(ws, action.playerId);
+        directives = buzz(this.state, action.playerId, now);
         break;
       case "SUBMIT_ANSWER":
-        await this.handleSubmitAnswer(ws, action.playerId, action.answer);
+        directives = submitAnswer(
+          this.state,
+          action.playerId,
+          action.answer,
+          now
+        );
         break;
+      default:
+        return;
     }
 
+    await this.applyDirectives(directives, ws, action);
     await this.saveState();
     this.broadcast();
   }
 
-  private async saveState() {
-    try {
-      await this.ctx.storage.put("state", this.state);
-    } catch (e) {
-      console.error("Failed to save state to storage:", e);
-    }
-  }
-
-  private async handleJoin(
-    ws: WebSocket,
-    playerId: string,
-    name: string,
-    gameId: string,
-    password?: string
-  ) {
-    if (!playerId || !name) {
-      ws.send(
-        JSON.stringify({
-          type: "ERROR",
-          message: "Player ID and name are required to join.",
-        })
-      );
-      ws.close();
-      return;
-    }
-
-    if (playerId.startsWith("guest-")) {
-      ws.send(
-        JSON.stringify({
-          type: "ERROR",
-          message: "Guest access is disabled. Please login.",
-        })
-      );
-      ws.close();
-      return;
-    }
-
-    // Hydrate room from DB if not already initialized
+  /** Hydrate the room from the DB on first join, then admit the player. */
+  private async onJoin(
+    action: Extract<ClientMessage, { type: "JOIN" }>
+  ): Promise<EngineDirectives> {
     if (!this.state.gameId) {
-      const db = createD1Db(this.env.DB);
-      const room = await db
-        .select()
-        .from(schema.activeGames)
-        .where(eq(schema.activeGames.id, gameId))
-        .get();
+      const room = await this.repo.getRoom(action.gameId);
+      const hydrated = hydrateRoom(this.state, action.gameId, room);
+      if (hydrated.reply) return hydrated;
 
-      if (!room) {
-        ws.send(
-          JSON.stringify({
-            type: "ERROR",
-            code: "NOT_FOUND",
-            message: "Room not found",
-          })
-        );
-        ws.close();
-        return;
-      }
-
-      if (room.status === "playing") {
-        ws.send(
-          JSON.stringify({
-            type: "ERROR",
-            code: "ALREADY_STARTED",
-            message: "Game already started",
-          })
-        );
-        ws.close();
-        return;
-      }
-
-      if (room.status === "finished") {
-        ws.send(
-          JSON.stringify({
-            type: "ERROR",
-            code: "ALREADY_FINISHED",
-            message: "Game already ended",
-          })
-        );
-        ws.close();
-        return;
-      }
-
-      this.state.gameId = gameId;
-      this.state.gameName = room.name;
-      this.state.hostId = room.hostId;
-      this.state.maxPlayers = room.maxPlayers;
-      this.state.isPublic = room.isPublic;
-      this.state.hasPassword = !!room.password;
-      this.gamePassword = room.password;
-
-      // Pre-load subjects
-      const subjectIds = JSON.parse(room.subjectIds) as string[];
-      const subjectsData = await db
-        .select()
-        .from(schema.subjects)
-        .where(inArray(schema.subjects.id, subjectIds));
-      const questionsData = await db
-        .select()
-        .from(schema.questions)
-        .where(inArray(schema.questions.subjectId, subjectIds));
-
-      this.state.subjects = subjectsData.map((s: any) => ({
-        id: s.id,
-        name: s.name,
-        questions: questionsData
-          .filter((q: any) => q.subjectId === s.id)
-          .sort((a: any, b: any) => a.points - b.points)
-          .map((q: any) => ({
-            id: q.id,
-            text: q.text,
-            answer: q.answer,
-            points: q.points,
-          })),
-      }));
+      this.gamePassword = room!.password;
+      await this.ctx.storage.put("gamePassword", room!.password ?? "");
+      this.state.subjects = await this.repo.loadSubjects(room!.subjectIds);
     }
 
-    // Password Validation
-    if (this.gamePassword && this.gamePassword !== password) {
-      ws.send(
-        JSON.stringify({
-          type: "ERROR",
-          code: "PASSWORD_REQUIRED",
-          message: "Incorrect or missing password for this room",
-        })
-      );
-      return;
-    }
-
-    // Player Limit Check
-    if (
-      Object.keys(this.state.players).length >= this.state.maxPlayers &&
-      !this.state.players[playerId]
-    ) {
-      ws.send(JSON.stringify({ type: "ERROR", message: "Room is full" }));
-      return;
-    }
-
-    const existingPlayer = this.state.players[playerId];
-    if (existingPlayer) {
-      existingPlayer.connected = true;
-      existingPlayer.name = name;
-    } else {
-      this.state.players[playerId] = {
-        id: playerId,
-        name: name,
-        score: 0,
-        connected: true,
-      };
-    }
-
-    (ws as any).playerId = playerId;
-    (ws as any).joinTime = Date.now();
+    return join(this.state, {
+      playerId: action.playerId,
+      name: action.name,
+      password: action.password,
+      roomPassword: this.gamePassword,
+    });
   }
 
-  private async handleStart(
-    ws: WebSocket,
-    playerId: string,
-    subjectIds?: string[]
+  /** Lazily load subjects if the host supplied ids, then start the match. */
+  private async onStart(
+    action: Extract<ClientMessage, { type: "START" }>,
+    now: number
+  ): Promise<EngineDirectives> {
+    if (this.state.subjects.length === 0 && action.subjectIds?.length) {
+      this.state.subjects = await this.repo.loadSubjects(action.subjectIds);
+    }
+    return start(this.state, action.playerId, now);
+  }
+
+  /** Execute the side effects a transition asked for. */
+  private async applyDirectives(
+    d: EngineDirectives,
+    ws?: WebSocket,
+    action?: ClientMessage
   ) {
-    if (this.state.hostId !== playerId) {
-      ws.send(
-        JSON.stringify({
-          type: "ERROR",
-          message: "Only the host can start the game",
-        })
+    if (ws && d.reply) ws.send(JSON.stringify(d.reply));
+    if (ws && action && d.accepted) {
+      meta(ws).playerId = action.playerId;
+      meta(ws).joinTime = Date.now();
+    }
+
+    if (d.updateRoomStatus && this.state.gameId) {
+      const gameId = this.state.gameId;
+      const status = d.updateRoomStatus;
+      await this.guard(
+        () => this.repo.updateRoomStatus(gameId, status),
+        "update room status"
       );
-      return;
     }
-    if (this.state.status !== "WAITING") {
-      ws.send(
-        JSON.stringify({ type: "ERROR", message: "Game already started" })
+    if (d.persistResults) {
+      await this.guard(
+        () => this.repo.persistResults(this.state),
+        "persist results"
       );
-      return;
     }
 
-    // If subjects are already loaded (from DB hydration), we don't need to fetch them again
-    if (
-      this.state.subjects.length === 0 &&
-      subjectIds &&
-      subjectIds.length > 0
-    ) {
-      const db = createD1Db(this.env.DB);
-      const subjectsData = await db
-        .select()
-        .from(schema.subjects)
-        .where(inArray(schema.subjects.id, subjectIds));
-      const questionsData = await db
-        .select()
-        .from(schema.questions)
-        .where(inArray(schema.questions.subjectId, subjectIds));
-
-      this.state.subjects = subjectsData.map((s: any) => ({
-        id: s.id,
-        name: s.name,
-        questions: questionsData
-          .filter((q: any) => q.subjectId === s.id)
-          .sort((a: any, b: any) => a.points - b.points)
-          .map((q: any) => ({
-            id: q.id,
-            text: q.text,
-            answer: q.answer,
-            points: q.points,
-          })),
-      }));
-    }
-
-    if (this.state.subjects.length < gameConfig.minSubjects) {
-      ws.send(
-        JSON.stringify({
-          type: "ERROR",
-          message: "Game requires at least 5 subjects to start",
-        })
-      );
-      return;
-    }
-
-    // Update room status to PLAYING
-    await this.updateRoomStatus("playing");
-
-    this.state.status = "PLAYING";
-    await this.startQuestionCycle();
-  }
-
-  private async updateRoomStatus(status: "waiting" | "playing" | "finished") {
-    if (!this.state.gameId) return;
-    try {
-      const db = createD1Db(this.env.DB);
-      await db
-        .update(schema.activeGames)
-        .set({ status })
-        .where(eq(schema.activeGames.id, this.state.gameId));
-    } catch (e) {
-      console.error("Failed to update room status:", e);
-    }
-  }
-
-  private async startQuestionCycle() {
-    this.state.phase = "ACTIVE";
-    this.state.activeQuestionState = {
-      buzzedPlayerId: null,
-      wrongAttempts: 0,
-      playersWhoAttempted: [],
-      timerExpiresAt: Date.now() + gameConfig.questionTimeMs,
-    };
-
-    await this.scheduleAlarm(gameConfig.questionTimeMs);
-  }
-
-  private async handleBuzz(_ws: WebSocket, playerId: string) {
-    if (!this.state.players[playerId]?.connected) return;
-    if (this.state.phase !== "ACTIVE") return;
-    if (this.state.activeQuestionState?.buzzedPlayerId) return;
-    if (this.state.activeQuestionState?.playersWhoAttempted.includes(playerId))
-      return;
-
-    this.state.phase = "ANSWERING";
-    this.state.activeQuestionState!.buzzedPlayerId = playerId;
-    this.state.activeQuestionState!.timerExpiresAt =
-      Date.now() + gameConfig.answerTimeMs;
-
-    await this.scheduleAlarm(gameConfig.answerTimeMs);
-  }
-
-  private async handleSubmitAnswer(
-    _ws: WebSocket | null,
-    playerId: string,
-    answer: string
-  ) {
-    if (!this.state.players[playerId]?.connected) return;
-    if (this.state.phase !== "ANSWERING") return;
-    if (
-      !this.state.activeQuestionState ||
-      this.state.activeQuestionState.buzzedPlayerId !== playerId
-    )
-      return;
-
-    const subject = this.state.subjects[this.state.currentSubjectIndex];
-    if (!subject) return;
-    const currentQuestion = subject.questions[this.state.currentQuestionIndex];
-    if (!currentQuestion) return;
-
-    const isCorrect = isFuzzyMatch(answer, currentQuestion.answer);
-
-    if (isCorrect) {
-      const player = this.state.players[playerId];
-      if (player) {
-        player.score += currentQuestion.points;
-      }
-      this.state.questionResults.push({
-        questionId: currentQuestion.id,
-        userId: playerId,
-        correct: true,
-        pointsAwarded: currentQuestion.points,
-        subjectIndex: this.state.currentSubjectIndex,
-        questionIndex: this.state.currentQuestionIndex,
-        subjectName: subject.name,
-      });
-      await this.revealAnswer();
-    } else {
-      const player = this.state.players[playerId];
-      if (player) {
-        player.score -= currentQuestion.points;
-      }
-      this.state.questionResults.push({
-        questionId: currentQuestion.id,
-        userId: playerId,
-        correct: false,
-        pointsAwarded: -currentQuestion.points,
-        subjectIndex: this.state.currentSubjectIndex,
-        questionIndex: this.state.currentQuestionIndex,
-        subjectName: subject.name,
-      });
-
-      this.state.activeQuestionState.wrongAttempts++;
-      this.state.activeQuestionState.playersWhoAttempted.push(playerId);
-      this.state.activeQuestionState.buzzedPlayerId = null;
-
-      if (
-        this.state.activeQuestionState.wrongAttempts >=
-        gameConfig.maxWrongAttempts
-      ) {
-        await this.revealAnswer();
-      } else {
-        this.state.phase = "ACTIVE";
-        this.state.activeQuestionState.timerExpiresAt =
-          Date.now() + gameConfig.questionTimeMs;
-        await this.scheduleAlarm(gameConfig.questionTimeMs);
-      }
-    }
-  }
-
-  private async revealAnswer() {
-    this.state.phase = "REVEALED";
-    if (this.state.activeQuestionState) {
-      this.state.activeQuestionState.timerExpiresAt =
-        Date.now() + gameConfig.revealTimeMs;
-    }
-    this.broadcast();
-    await this.saveState();
-    await this.scheduleAlarm(gameConfig.revealTimeMs);
-  }
-
-  private async nextQuestion() {
-    this.state.currentQuestionIndex++;
-    if (this.state.currentQuestionIndex >= 5) {
-      this.state.currentQuestionIndex = 0;
-      this.state.currentSubjectIndex++;
-    }
-
-    if (this.state.currentSubjectIndex >= this.state.subjects.length) {
-      this.state.status = "FINISHED";
-      this.state.phase = "REVEALED";
-      await this.updateRoomStatus("finished");
-      await this.persistResults();
+    if (d.cancelAlarm) {
       await this.ctx.storage.deleteAlarm();
-    } else {
-      await this.startQuestionCycle();
+    } else if (d.alarmAt !== undefined) {
+      await this.ctx.storage.setAlarm(d.alarmAt);
     }
 
-    await this.saveState();
-    this.broadcast();
+    if (ws && d.closeSocket) ws.close();
   }
 
-  private async persistResults() {
-    if (!this.state.hostId) return;
-    const db = createD1Db(this.env.DB);
-    const gameId = crypto.randomUUID();
-
-    try {
-      // 1. Create game history (snapshot subject order for the scoreboard)
-      await db.insert(schema.gameHistory).values({
-        id: gameId,
-        gameId: this.state.gameId || "unknown",
-        hostId: this.state.hostId,
-        subjects: JSON.stringify(this.state.subjects.map(s => s.name)),
-        createdAt: new Date(),
-      });
-
-      // 2. Insert question results.
-      // NOTE: D1 caps a query at 100 bound parameters, so these multi-row
-      // inserts must be chunked (9 columns -> max 11 rows/query). A full game
-      // easily produces dozens of rows; a single insert would throw and, being
-      // swallowed below, silently drop every result. See CHUNK_SIZES.
-      if (this.state.questionResults.length > 0) {
-        const rows = this.state.questionResults.map(r => ({
-          id: crypto.randomUUID(),
-          gameId: gameId,
-          userId: r.userId,
-          questionId: r.questionId,
-          subjectName: r.subjectName,
-          subjectPosition: r.subjectIndex,
-          questionPosition: r.questionIndex,
-          correct: r.correct,
-          pointsAwarded: r.pointsAwarded,
-        }));
-        for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 9)) {
-          await db.insert(schema.gameQuestionResults).values(part);
-        }
-      }
-
-      // 3. Insert final player results (5 columns -> max 20 rows/query).
-      const players = Object.values(this.state.players);
-      if (players.length > 0) {
-        const rows = players.map(p => ({
-          id: crypto.randomUUID(),
-          gameId: gameId,
-          userId: p.id,
-          playerName: p.name,
-          score: p.score,
-        }));
-        for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 5)) {
-          await db.insert(schema.gamePlayerResults).values(part);
-        }
-      }
-    } catch (e) {
-      console.error("Failed to persist game results:", e);
-    }
-  }
-
-  private async handleQuestionTimeout() {
-    if (this.state.phase === "ACTIVE") {
-      await this.revealAnswer();
-    }
-  }
-
-  private async handleAnswerTimeout() {
-    if (this.state.phase === "ANSWERING") {
-      const playerId = this.state.activeQuestionState?.buzzedPlayerId;
-      if (playerId) {
-        await this.handleSubmitAnswer(null, playerId, "");
-      }
-    }
-  }
-
-  // Schedule the next phase deadline. Durable Object alarms are persisted and
-  // survive hibernation/eviction, unlike setTimeout — so a game can no longer
-  // stall mid-question if the DO is evicted between events. Only one alarm can
-  // be pending at a time; setAlarm replaces any existing one.
-  private async scheduleAlarm(ms: number) {
-    await this.ctx.storage.setAlarm(Date.now() + ms);
-  }
-
-  // Fired by the runtime when a scheduled deadline elapses. The action is
-  // implied by the current phase, mirroring the old setTimer callbacks.
+  // Fired by the runtime when a scheduled phase deadline elapses. Durable Object
+  // alarms are persisted and survive hibernation/eviction, so a game can't stall
+  // mid-question if the DO is evicted between events.
   async alarm() {
-    if (this.state.status !== "PLAYING") return;
-
-    switch (this.state.phase) {
-      case "ACTIVE":
-        await this.handleQuestionTimeout();
-        break;
-      case "ANSWERING":
-        await this.handleAnswerTimeout();
-        break;
-      case "REVEALED":
-        await this.nextQuestion();
-        break;
-    }
-
+    const directives = handleTimeout(this.state, Date.now());
+    await this.applyDirectives(directives);
     await this.saveState();
     this.broadcast();
   }
@@ -586,94 +193,57 @@ export class GameRoom extends DurableObject {
     _reason: string,
     _wasClean: boolean
   ) {
-    const playerId = (ws as any).playerId;
-    const joinTime = (ws as any).joinTime;
+    const { playerId, joinTime } = meta(ws);
+    if (!playerId || !this.state.players[playerId]) return;
 
-    if (playerId && this.state.players[playerId]) {
-      // Only mark disconnected if this was the latest connection
-      // or if no other connections for this player exist
-      const otherConnections = this.ctx
-        .getWebSockets()
-        .filter(
-          s =>
-            (s as any).playerId === playerId && (s as any).joinTime > joinTime
-        );
+    // Only mark disconnected if no newer connection for this player exists.
+    const hasNewerConnection = this.ctx
+      .getWebSockets()
+      .some(
+        s =>
+          meta(s).playerId === playerId &&
+          (meta(s).joinTime ?? 0) > (joinTime ?? 0)
+      );
 
-      if (otherConnections.length === 0) {
-        this.state.players[playerId].connected = false;
-        this.broadcast();
-        await this.saveState();
-      }
+    if (!hasNewerConnection) {
+      this.state.players[playerId].connected = false;
+      await this.saveState();
+      this.broadcast();
     }
   }
 
-  async webSocketError(ws: WebSocket, _error: any) {
-    this.webSocketClose(ws, 1011, "Error", false);
+  async webSocketError(ws: WebSocket) {
+    await this.webSocketClose(ws, 1011, "Error", false);
   }
 
   private broadcast() {
-    const publicState = this.getPublicState();
     const data = JSON.stringify({
       type: "STATE_UPDATE",
-      state: publicState,
+      state: this.serializer.toPublic(this.state),
       serverTime: Date.now(),
     });
-
     for (const ws of this.ctx.getWebSockets()) {
       try {
         ws.send(data);
-      } catch (e) {
-        // socket might be closed
+      } catch {
+        // Socket may be closing; the next broadcast / close event handles it.
       }
     }
   }
 
-  private getPublicState(forceFullPlayers = false): any {
-    const { subjects, players, ...baseState } = this.state;
+  private async saveState() {
+    await this.guard(
+      () => this.ctx.storage.put("state", this.state),
+      "save state"
+    );
+  }
 
-    // Calculate player deltas
-    const playerDeltas: Record<string, any> = {};
-    let hasChanges = false;
-
-    for (const [id, player] of Object.entries(players)) {
-      const playerJson = JSON.stringify(player);
-      if (forceFullPlayers || this.lastBroadcastPlayers[id] !== playerJson) {
-        playerDeltas[id] = player;
-        this.lastBroadcastPlayers[id] = playerJson;
-        hasChanges = true;
-      }
+  /** Run a side effect, logging (but not throwing on) failures. */
+  private async guard(fn: () => Promise<unknown>, label: string) {
+    try {
+      await fn();
+    } catch (e) {
+      console.error(`GameRoom failed to ${label}:`, e);
     }
-
-    const publicState: any = {
-      ...baseState,
-      subjectCount: subjects.length,
-    };
-
-    if (hasChanges || forceFullPlayers) {
-      publicState.players = playerDeltas;
-    }
-
-    if (this.state.status === "PLAYING") {
-      const currentSubject = subjects[this.state.currentSubjectIndex];
-      const currentQuestion =
-        currentSubject?.questions?.[this.state.currentQuestionIndex];
-
-      if (currentSubject) {
-        publicState.currentSubjectName = currentSubject.name;
-      }
-
-      if (currentQuestion) {
-        publicState.currentQuestion = {
-          text: currentQuestion.text,
-          points: currentQuestion.points,
-        };
-
-        if (this.state.phase === "REVEALED") {
-          publicState.currentQuestion.answer = currentQuestion.answer;
-        }
-      }
-    }
-
-    return publicState;
   }
 }
