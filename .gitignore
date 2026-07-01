@@ -49,3 +49,6 @@ coverage
 .cache
 tmp
 temp
+
+# Claude Code local worktrees
+.claude/worktrees/

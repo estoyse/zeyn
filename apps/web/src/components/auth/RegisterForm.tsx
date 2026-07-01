@@ -1,15 +1,12 @@
 import { motion } from "framer-motion";
 import { Mail, Lock, User } from "lucide-react";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
-import {
-  Field,
-  FieldDescription,
-  FieldLabel,
-} from "@shaxsiy-oyin/ui/components/field";
+import { Field, FieldDescription } from "@shaxsiy-oyin/ui/components/field";
 import { useAuth } from "@/hooks/useAuth";
+import { AuthField } from "./AuthField";
+import { emailSchema, passwordSchema, nameSchema } from "@/lib/authSchemas";
 
 interface RegisterFormProps {
   onSwitch: () => void;
@@ -27,14 +24,12 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
     },
     validators: {
       onSubmit: z.object({
-        name: z.string().min(2, "Name must be at least 2 characters"),
-        email: z.string().email("Invalid email address"),
-        password: z.string().min(8, "Password must be at least 8 characters"),
+        name: nameSchema,
+        email: emailSchema,
+        password: passwordSchema,
       }),
     },
   });
-
-  const handleSubmit = form.handleSubmit;
 
   return (
     <motion.div
@@ -46,77 +41,35 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
     >
       <form.Field name='name'>
         {field => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Ism</FieldLabel>
-            <div className='relative'>
-              <User className='absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground' />
-              <Input
-                id={field.name}
-                type='text'
-                placeholder='Ali Valiyev'
-                className='pl-11'
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
-                required
-              />
-            </div>
-            {field.state.meta.errors.map(error => (
-              <p key={error?.message} className='text-sm text-destructive'>
-                {error?.message}
-              </p>
-            ))}
-          </Field>
+          <AuthField
+            field={field}
+            label='Ism'
+            type='text'
+            placeholder='Ali Valiyev'
+            icon={User}
+          />
         )}
       </form.Field>
       <form.Field name='email'>
         {field => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-            <div className='relative'>
-              <Mail className='absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground' />
-              <Input
-                id={field.name}
-                type='email'
-                placeholder='sizning@email.com'
-                className='pl-11'
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
-                required
-              />
-            </div>
-            {field.state.meta.errors.map(error => (
-              <p key={error?.message} className='text-sm text-destructive'>
-                {error?.message}
-              </p>
-            ))}
-          </Field>
+          <AuthField
+            field={field}
+            label='Email'
+            type='email'
+            placeholder='sizning@email.com'
+            icon={Mail}
+          />
         )}
       </form.Field>
       <form.Field name='password'>
         {field => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Parol</FieldLabel>
-            <div className='relative'>
-              <Lock className='absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground' />
-              <Input
-                id={field.name}
-                type='password'
-                placeholder='••••••••'
-                className='pl-11'
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
-                required
-              />
-            </div>
-            {field.state.meta.errors.map(error => (
-              <p key={error?.message} className='text-sm text-destructive'>
-                {error?.message}
-              </p>
-            ))}
-          </Field>
+          <AuthField
+            field={field}
+            label='Parol'
+            type='password'
+            placeholder='••••••••'
+            icon={Lock}
+          />
         )}
       </form.Field>
       <form.Subscribe selector={state => state.canSubmit}>
@@ -127,7 +80,7 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
               className='w-full'
               onClick={e => {
                 e.preventDefault();
-                handleSubmit();
+                form.handleSubmit();
                 signUp(
                   form.getFieldValue("email"),
                   form.getFieldValue("password"),

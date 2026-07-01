@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
-import {
-  Field,
-  FieldLabel,
-} from "@shaxsiy-oyin/ui/components/field";
+import { Field } from "@shaxsiy-oyin/ui/components/field";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { AuthField } from "./AuthField";
+import { passwordSchema } from "@/lib/authSchemas";
 
 export function ResetPasswordForm() {
   const navigate = useNavigate();
@@ -25,38 +23,35 @@ export function ResetPasswordForm() {
       confirmPassword: "",
     },
     validators: {
-      onSubmit: z.object({
-        password: z.string().min(8, "Password must be at least 8 characters"),
-        confirmPassword: z.string(),
-      }),
+      onSubmit: z
+        .object({
+          password: passwordSchema,
+          confirmPassword: z.string(),
+        })
+        .refine(d => d.password === d.confirmPassword, {
+          message: "Passwords do not match",
+          path: ["confirmPassword"],
+        }),
+    },
+    // Runs only after validation passes, so mismatched passwords are blocked.
+    onSubmit: async ({ value }) => {
+      setIsLoading(true);
+      try {
+        await authClient.resetPassword({
+          newPassword: value.password,
+          token: token as string,
+        });
+        toast.success("Password reset successfully");
+        navigate({ to: "/auth/login" });
+      } catch (error) {
+        toast.error(
+          "Failed to reset password. The link may be invalid or expired."
+        );
+      } finally {
+        setIsLoading(false);
+      }
     },
   });
-
-  const handleSubmit = form.handleSubmit;
-
-  const handleReset = async () => {
-    const password = form.getFieldValue("password");
-    const confirmPassword = form.getFieldValue("confirmPassword");
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await authClient.resetPassword({
-        newPassword: password,
-        token: token as string,
-      });
-      toast.success("Password reset successfully");
-      navigate({ to: "/auth/login" });
-    } catch (error) {
-      toast.error("Failed to reset password. The link may be invalid or expired.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   if (!token) {
     return (
@@ -88,53 +83,25 @@ export function ResetPasswordForm() {
 
       <form.Field name="password">
         {field => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>New Password</FieldLabel>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
-              <Input
-                id={field.name}
-                type="password"
-                placeholder="••••••••"
-                className="pl-11"
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
-                required
-              />
-            </div>
-            {field.state.meta.errors.map(error => (
-              <p key={error?.message} className="text-sm text-destructive">
-                {error?.message}
-              </p>
-            ))}
-          </Field>
+          <AuthField
+            field={field}
+            label="New Password"
+            type="password"
+            placeholder="••••••••"
+            icon={Lock}
+          />
         )}
       </form.Field>
 
       <form.Field name="confirmPassword">
         {field => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
-              <Input
-                id={field.name}
-                type="password"
-                placeholder="••••••••"
-                className="pl-11"
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
-                required
-              />
-            </div>
-            {field.state.meta.errors.map(error => (
-              <p key={error?.message} className="text-sm text-destructive">
-                {error?.message}
-              </p>
-            ))}
-          </Field>
+          <AuthField
+            field={field}
+            label="Confirm Password"
+            type="password"
+            placeholder="••••••••"
+            icon={Lock}
+          />
         )}
       </form.Field>
 
@@ -147,8 +114,7 @@ export function ResetPasswordForm() {
               disabled={isLoading}
               onClick={e => {
                 e.preventDefault();
-                handleSubmit();
-                handleReset();
+                form.handleSubmit();
               }}
             >
               {isLoading ? "Resetting..." : "Reset Password"}

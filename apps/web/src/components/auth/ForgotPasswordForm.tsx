@@ -2,15 +2,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
-import {
-  Field,
-  FieldLabel,
-} from "@shaxsiy-oyin/ui/components/field";
+import { Field } from "@shaxsiy-oyin/ui/components/field";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { AuthField } from "./AuthField";
+import { emailSchema } from "@/lib/authSchemas";
 
 interface ForgotPasswordFormProps {
   onBack: () => void;
@@ -25,7 +23,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
     },
     validators: {
       onSubmit: z.object({
-        email: z.string().email("Invalid email address"),
+        email: emailSchema,
       }),
     },
   });
@@ -83,27 +81,13 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
 
       <form.Field name="email">
         {field => (
-          <Field>
-            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
-              <Input
-                id={field.name}
-                type="email"
-                placeholder="sizning@email.com"
-                className="pl-11"
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={e => field.handleChange(e.target.value)}
-                required
-              />
-            </div>
-            {field.state.meta.errors.map(error => (
-              <p key={error?.message} className="text-sm text-destructive">
-                {error?.message}
-              </p>
-            ))}
-          </Field>
+          <AuthField
+            field={field}
+            label="Email"
+            type="email"
+            placeholder="sizning@email.com"
+            icon={Mail}
+          />
         )}
       </form.Field>
 
