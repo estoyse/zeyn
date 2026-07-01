@@ -12,7 +12,9 @@ export function useCreateGameForm() {
   const createRoom = useMutation(trpc.game.createRoom.mutationOptions());
 
   const [name, setName] = useState("");
-  const [maxPlayers, setMaxPlayers] = useState(roomLimits.defaultMaxPlayers);
+  const [maxPlayers, setMaxPlayers] = useState<number>(
+    roomLimits.defaultMaxPlayers
+  );
   const [isPublic, setIsPublic] = useState(true);
   const [password, setPassword] = useState("");
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
