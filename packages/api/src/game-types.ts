@@ -106,8 +106,8 @@ export interface PublicGameState extends BasePublicGameState {
 // semantic rules (host-only START, room full, password, empty name) live in the
 // game engine so it can return specific error messages.
 // Platform-level messages, common to every game type: joining a room and the
-// host starting the match. (`subjectIds` on START is a buzzer-specific payload
-// that will move behind the game module once the create flow is generalized.)
+// host starting the match. The room's content is loaded from its stored config
+// at join, so START carries no game-specific payload.
 export const platformMessageSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("JOIN"),
@@ -119,7 +119,6 @@ export const platformMessageSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("START"),
     playerId: z.string().max(200),
-    subjectIds: z.array(z.string().max(200)).max(100),
   }),
 ]);
 
@@ -138,17 +137,27 @@ export const buzzerActionSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
+export const musicActionSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("ANSWER"),
+    playerId: z.string().max(200),
+    optionIndex: z.number().int().min(0).max(10),
+  }),
+]);
+
 export const clientMessageSchema = z.union([
   platformMessageSchema,
   buzzerActionSchema,
+  musicActionSchema,
 ]);
 
 export type PlatformMessage = z.infer<typeof platformMessageSchema>;
 export type BuzzerAction = z.infer<typeof buzzerActionSchema>;
+export type MusicAction = z.infer<typeof musicActionSchema>;
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 
 export type ServerMessage =
-  | { type: "STATE_UPDATE"; state: PublicGameState; serverTime: number }
+  | { type: "STATE_UPDATE"; state: BasePublicGameState; serverTime: number }
   | { type: "ERROR"; message: string; code?: string };
 
 /**

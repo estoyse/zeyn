@@ -1,7 +1,7 @@
 import type {
   BaseGameState,
+  BasePublicGameState,
   EngineDirectives,
-  PublicGameState,
 } from "@shaxsiy-oyin/api/game-types";
 
 /** Parameters the platform passes to a game when admitting a player. */
@@ -47,11 +47,10 @@ export interface RoomGame {
   /** Validate and admit a player, or reconnect an existing one. */
   join(state: BaseGameState, params: JoinParams): EngineDirectives;
 
-  /** Host starts the match; `subjectIds` is the (game-specific) START payload. */
+  /** Host starts the match; content was already loaded at hydrate. */
   start(
     state: BaseGameState,
     playerId: string,
-    subjectIds: string[],
     now: number
   ): Promise<EngineDirectives>;
 
@@ -66,7 +65,10 @@ export interface RoomGame {
   handleTimeout(state: BaseGameState, now: number): EngineDirectives;
 
   /** Build the public view broadcast to clients. */
-  toPublic(state: BaseGameState, forceFullPlayers?: boolean): PublicGameState;
+  toPublic(
+    state: BaseGameState,
+    forceFullPlayers?: boolean
+  ): BasePublicGameState;
 
   /** Flush a finished match to the history tables. */
   persistResults(state: BaseGameState): Promise<void>;

@@ -4,11 +4,11 @@ import { Input } from "@shaxsiy-oyin/ui/components/input";
 import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
 import { Zap, Clock } from "lucide-react";
 import { gameConfig } from "@shaxsiy-oyin/api/game-types";
-import type { GameView } from "@/features/game/hooks/useGameState";
+import type { BuzzerView } from "@/features/games/buzzer/types";
 import { Timer } from "./Timer";
 
 interface GamePlayingProps {
-  state: GameView;
+  state: BuzzerView;
   playerId: string;
   answerInput: string;
   setAnswerInput: (value: string) => void;

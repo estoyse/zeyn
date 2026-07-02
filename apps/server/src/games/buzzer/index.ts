@@ -54,14 +54,9 @@ class BuzzerGame implements RoomGame {
   async start(
     base: BaseGameState,
     playerId: string,
-    subjectIds: string[],
     now: number
   ): Promise<EngineDirectives> {
-    const state = base as GameState;
-    if (state.subjects.length === 0 && subjectIds.length) {
-      state.subjects = await this.repo.loadSubjects(subjectIds);
-    }
-    return start(state, playerId, now);
+    return start(base as GameState, playerId, now);
   }
 
   handleAction(

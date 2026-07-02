@@ -186,7 +186,7 @@ export class GameRoom extends DurableObject<Env> {
     action: Extract<PlatformMessage, { type: "START" }>,
     now: number
   ): Promise<EngineDirectives> {
-    return this.game.start(this.state, action.playerId, action.subjectIds, now);
+    return this.game.start(this.state, action.playerId, now);
   }
 
   /** Execute the side effects a transition asked for. */

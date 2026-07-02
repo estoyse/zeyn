@@ -88,7 +88,7 @@ describe("clientMessageSchema (WebSocket boundary)", () => {
     const valid = [
       { type: "JOIN", playerId: "p1", name: "Ann", gameId: "g1" },
       { type: "JOIN", playerId: "p1", name: "Ann", gameId: "g1", password: "x" },
-      { type: "START", playerId: "p1", subjectIds: ["s1", "s2"] },
+      { type: "START", playerId: "p1" },
       { type: "BUZZ", playerId: "p1" },
       { type: "SUBMIT_ANSWER", playerId: "p1", answer: "42" },
     ];
@@ -103,7 +103,7 @@ describe("clientMessageSchema (WebSocket boundary)", () => {
       { type: "JOIN", playerId: "p1", name: "Ann" }, // missing gameId
       { type: "BUZZ" }, // missing playerId
       { type: "SUBMIT_ANSWER", playerId: "p1", answer: 42 }, // wrong type
-      { type: "START", playerId: "p1", subjectIds: "s1" }, // not an array
+      { type: "START" }, // missing playerId
       "not even an object",
       null,
     ];
