@@ -66,10 +66,31 @@ export interface GameState extends BaseGameState {
   questionResults: QuestionResult[];
 }
 
-export interface PublicGameState
-  extends Omit<GameState, "subjects" | "players"> {
-  subjectCount: number;
+// The broadcast fields common to every game type: everything the platform-level
+// UI (room header, player list, lobby, connection state) reads, independent of
+// which game is being played.
+export interface BasePublicGameState {
+  status: "WAITING" | "PLAYING" | "FINISHED";
+  gameType: string;
+  gameId: string | null;
+  gameName: string | null;
+  hostId: string | null;
+  maxPlayers: number;
+  isPublic: boolean;
+  hasPassword: boolean;
   players?: Record<string, Partial<Player>>; // Only changed players
+}
+
+// The buzzer game's public (client-facing) state. The buzzer-specific fields
+// below will move under a game-specific payload once a second game exists and
+// the web renderer is split per game type (see migration plan, Phase 4).
+export interface PublicGameState extends BasePublicGameState {
+  subjectCount: number;
+  currentSubjectIndex: number;
+  currentQuestionIndex: number;
+  phase: "ACTIVE" | "ANSWERING" | "REVEALED";
+  activeQuestionState: ActiveQuestionState | null;
+  questionResults: QuestionResult[];
   currentSubjectName?: string;
   currentQuestion?: {
     text: string;

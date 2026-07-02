@@ -209,8 +209,21 @@ speculative one-size-fits-all results table while keeping the common
   **NOTE on remaining phases:** the tRPC `createRoom`/`getResults` and the web
   create/play flow still use `subjectIds` directly — untouched by Phase 1 and
   fully working. Those are Phase 3/4.
-- **Phase 2 — Generalize protocol + results.** `union(platform, module.action)`
-  validation; per-game `loadResults`; move `gameQuestionResults` to buzzer-owned.
+- **Phase 2 — Generalize protocol + results. ✅ DONE.** Protocol: the DO already
+  validates `platformMessageSchema` → the room game's `actionSchema` (landed in
+  Phase 1c). Results: `getResults` now owns only the platform scoreboard
+  (`game_history` + `game_player_results`); the buzzer subject/question grid moved
+  behind a game-owned, gameType-dispatched provider
+  (`packages/api/src/games/results.ts`, server-only — not re-exported to the web
+  bundle). `game_question_results` is now buzzer-owned on both write (repository)
+  and read (provider). Also split `PublicGameState` into `BasePublicGameState`
+  (generic broadcast fields) + the buzzer extension — a pure type reorg, no
+  behavior change, to seed the Phase 4 web split. Response shape unchanged, so the
+  web is untouched; 78 tests pass, full workspace typechecks.
+  - **Still deferred:** the flat/typed `getResults` response stays buzzer-shaped
+    (`GameResultsDetail` is a one-member union today). It splits into per-game
+    endpoints in Phase 3 once a second game's detail shape diverges. Physical
+    state nesting under a `game` key is still folded into Phase 4 (web).
 - **Phase 3 — Generalize tRPC.** `createRoom` takes `gameType`+`config`;
   per-game sub-routers; list endpoints return `gameType`.
 - **Phase 4 — Web registry + catalog.** Game picker, game-type-aware create/play

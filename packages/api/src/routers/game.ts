@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { roomLimits } from "../game-types";
+import { loadResultsDetail } from "../games/results";
 import { protectedProcedure, router } from "../index";
 import {
   subjects,
   gameHistory,
   gamePlayerResults,
   activeGames,
-  gameQuestionResults,
 } from "@shaxsiy-oyin/db/schema";
 import { eq, desc, and, lt } from "@shaxsiy-oyin/db";
 
@@ -118,35 +118,23 @@ export const gameRouter = router({
 
       if (!latestGame) return null;
 
-      // Results rows are keyed on the game_history primary key (latestGame.id),
-      // not the room's gameId. The player/question queries are independent, so
-      // run them concurrently. Player rows come back sorted highest score first.
-      const [playerResults, questionResults] = await Promise.all([
+      // Platform owns the universal scoreboard (player rows, highest score
+      // first); the game-specific detail (buzzer's subject/question grid) is
+      // loaded by that game type's own provider. Both are keyed on the
+      // game_history primary key and independent, so run them concurrently.
+      const [playerResults, detail] = await Promise.all([
         ctx.db
           .select()
           .from(gamePlayerResults)
           .where(eq(gamePlayerResults.gameId, latestGame.id))
           .orderBy(desc(gamePlayerResults.score)),
-        ctx.db
-          .select({
-            userId: gameQuestionResults.userId,
-            subjectName: gameQuestionResults.subjectName,
-            subjectPosition: gameQuestionResults.subjectPosition,
-            questionPosition: gameQuestionResults.questionPosition,
-            correct: gameQuestionResults.correct,
-            pointsAwarded: gameQuestionResults.pointsAwarded,
-          })
-          .from(gameQuestionResults)
-          .where(eq(gameQuestionResults.gameId, latestGame.id)),
+        loadResultsDetail(ctx.db, latestGame),
       ]);
-
-      const subjects = JSON.parse(latestGame.subjects) as string[];
 
       return {
         game: latestGame,
-        subjects,
         playerResults,
-        questionResults,
+        ...detail,
       };
     }),
 
