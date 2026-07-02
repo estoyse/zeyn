@@ -44,7 +44,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootComponent() {
   const location = useLocation();
-  const isAppPage = location.pathname.startsWith("/dashboard") || location.pathname.startsWith("/game");
+  const isAppPage = /^\/(dashboard|games?)(\/|$)/.test(location.pathname);
   const isLoginPage = location.pathname.startsWith("/auth");
   const isLandingPage = location.pathname === "/";
 

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GamesGameTypeRouteImport } from './routes/games.$gameType'
 import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
@@ -27,6 +28,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesGameTypeRoute = GamesGameTypeRouteImport.update({
+  id: '/games/$gameType',
+  path: '/games/$gameType',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GameGameIdRoute = GameGameIdRouteImport.update({
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/games/$gameType': typeof GamesGameTypeRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof GameCreateGameTypeRoute
   '/game/create/': typeof GameCreateIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/games/$gameType': typeof GamesGameTypeRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof GameCreateGameTypeRoute
   '/game/create': typeof GameCreateIndexRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/games/$gameType': typeof GamesGameTypeRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof GameCreateGameTypeRoute
   '/game/create/': typeof GameCreateIndexRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
+    | '/games/$gameType'
     | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create/'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
+    | '/games/$gameType'
     | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
+    | '/games/$gameType'
     | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create/'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   GameGameIdRoute: typeof GameGameIdRoute
+  GamesGameTypeRoute: typeof GamesGameTypeRoute
   AuthVerifyVerifyRoute: typeof AuthVerifyVerifyRoute
   GameCreateGameTypeRoute: typeof GameCreateGameTypeRoute
   GameCreateIndexRoute: typeof GameCreateIndexRoute
@@ -161,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games/$gameType': {
+      id: '/games/$gameType'
+      path: '/games/$gameType'
+      fullPath: '/games/$gameType'
+      preLoaderRoute: typeof GamesGameTypeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game/$gameId': {
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   GameGameIdRoute: GameGameIdRoute,
+  GamesGameTypeRoute: GamesGameTypeRoute,
   AuthVerifyVerifyRoute: AuthVerifyVerifyRoute,
   GameCreateGameTypeRoute: GameCreateGameTypeRoute,
   GameCreateIndexRoute: GameCreateIndexRoute,

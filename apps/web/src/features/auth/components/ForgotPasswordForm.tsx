@@ -50,10 +50,12 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-4"
       >
-        <div className="mx-auto mb-4 flex size-12 items-center justify-center bg-green-100 rounded-full">
-          <Mail className="size-6 text-green-600" />
+        <div className="mx-auto mb-4 flex size-12 items-center justify-center bg-success/10 text-success">
+          <Mail className="size-6" />
         </div>
-        <h2 className="text-xl font-semibold">Check your email</h2>
+        <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
+          Check your email
+        </h2>
         <p className="text-muted-foreground text-sm">
           We sent a password reset link to your email address.
         </p>
@@ -73,7 +75,9 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
       className="space-y-4"
     >
       <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold">Forgot password?</h2>
+        <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
+          Forgot password?
+        </h2>
         <p className="text-muted-foreground text-sm mt-1">
           Enter your email and we'll send you a reset link.
         </p>
@@ -96,6 +100,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
           <Field>
             <Button
               type="submit"
+              variant="brand"
               className="w-full"
               onClick={e => {
                 e.preventDefault();

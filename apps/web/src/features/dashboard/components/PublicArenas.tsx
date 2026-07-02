@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { trpc } from "@/shared/lib/trpc";
+import type { GameType } from "@shaxsiy-oyin/api/games";
 import { Globe, RefreshCw, Gamepad2 } from "lucide-react";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
@@ -8,11 +9,17 @@ import { RoomCard } from "./RoomCard";
 
 interface PublicArenasProps {
   userId?: string;
+  gameType?: string;
+  title?: string;
 }
 
-export function PublicArenas({ userId }: PublicArenasProps) {
+export function PublicArenas({ userId, gameType, title = "Public Rooms" }: PublicArenasProps) {
   const navigate = useNavigate();
-  const publicRoomsQuery = useQuery(trpc.game.getPublicRooms.queryOptions());
+  const publicRoomsQuery = useQuery(
+    trpc.game.getPublicRooms.queryOptions({
+      gameType: gameType as GameType | undefined,
+    })
+  );
   const rooms = publicRoomsQuery.data;
 
   return (
@@ -20,7 +27,7 @@ export function PublicArenas({ userId }: PublicArenasProps) {
       <div className='flex items-center justify-between'>
         <h3 className='text-xl font-bold flex items-center gap-3'>
           <Globe className='size-5' />
-          Public Rooms
+          {title}
         </h3>
         <Button
           variant='ghost'
@@ -40,16 +47,20 @@ export function PublicArenas({ userId }: PublicArenasProps) {
       {publicRoomsQuery.isLoading ? (
         <div className='grid gap-4 sm:grid-cols-2'>
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className='h-32 rounded-xl' />
+            <Skeleton key={i} className='h-32' />
           ))}
         </div>
       ) : rooms?.length === 0 ? (
-        <div className='p-12 text-center border-2 border-dashed rounded-xl bg-muted/10'>
-          <Gamepad2 className='size-10 text-muted-foreground/30 mx-auto mb-3' />
+        <div className='p-12 text-center border-2 border-dashed bg-muted/50'>
+          <Gamepad2 className='size-10 text-muted-foreground mx-auto mb-3' />
           <p className='text-muted-foreground'>No public rooms available.</p>
           <Button
             variant='link'
-            onClick={() => navigate({ to: "/game/create" })}
+            onClick={() =>
+              gameType
+                ? navigate({ to: "/game/create/$gameType", params: { gameType } })
+                : navigate({ to: "/game/create" })
+            }
             className='mt-2'
           >
             Create a Game

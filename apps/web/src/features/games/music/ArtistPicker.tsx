@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { Music2, CheckCircle2 } from "lucide-react";
+import { Music2, Check } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -7,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@shaxsiy-oyin/ui/components/card";
+import { Badge } from "@shaxsiy-oyin/ui/components/badge";
 import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
 
 interface Artist {
@@ -29,22 +29,16 @@ export function ArtistPicker({
   onToggle,
 }: ArtistPickerProps) {
   return (
-    <Card className='glass-card'>
-      <CardHeader className='bg-muted/30'>
+    <Card>
+      <CardHeader className='bg-muted/50'>
         <CardTitle className='text-lg flex items-center justify-between'>
           <div className='flex items-center gap-2'>
-            <Music2 className='size-5 text-primary' />
+            <Music2 className='size-5 text-brand' />
             Select Artists
           </div>
-          <div
-            className={`text-xs px-2 py-1 rounded-full ${
-              selectedIds.length === 0
-                ? "bg-destructive/10 text-destructive"
-                : "bg-primary/10 text-primary"
-            }`}
-          >
-            {selectedIds.length} SELECTED
-          </div>
+          <Badge tone={selectedIds.length === 0 ? "destructive" : "brand"}>
+            {selectedIds.length} Selected
+          </Badge>
         </CardTitle>
         <CardDescription>
           Pick one or more artists. Songs are drawn from your selection.
@@ -54,7 +48,7 @@ export function ArtistPicker({
         {isLoading ? (
           <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className='h-20 rounded-lg' />
+              <Skeleton key={i} className='h-20 rounded-none' />
             ))}
           </div>
         ) : artists.length === 0 ? (
@@ -69,29 +63,33 @@ export function ArtistPicker({
                 <button
                   key={a.id}
                   onClick={() => onToggle(a.id)}
-                  className={`relative flex items-center gap-3 p-3 text-left border transition-all hover:scale-[1.02] active:scale-[0.98] rounded-xl overflow-hidden ${
+                  className={`group flex items-center gap-3 p-3 text-left border transition-colors active:translate-y-px overflow-hidden ${
                     selected
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50 bg-card"
+                      ? "border-brand bg-brand/10"
+                      : "border-border bg-card hover:border-brand/50 hover:bg-muted/50"
                   }`}
                 >
                   {a.artworkUrl ? (
                     <img
                       src={a.artworkUrl}
                       alt=''
-                      className='size-10 rounded-md object-cover'
+                      className='size-12 shrink-0 object-cover'
                     />
                   ) : (
-                    <div className='flex size-10 items-center justify-center rounded-md bg-muted'>
+                    <div className='flex size-12 shrink-0 items-center justify-center bg-muted'>
                       <Music2 className='size-5 text-muted-foreground' />
                     </div>
                   )}
-                  <span className='font-bold truncate'>{a.name}</span>
-                  {selected && (
-                    <div className='absolute top-2 right-2 text-primary'>
-                      <CheckCircle2 className='size-4' />
-                    </div>
-                  )}
+                  <span className='truncate text-sm font-semibold'>{a.name}</span>
+                  <span
+                    className={`ml-auto flex size-5 shrink-0 items-center justify-center border transition-colors ${
+                      selected
+                        ? "border-brand bg-brand text-brand-foreground"
+                        : "border-border text-transparent group-hover:border-brand/50"
+                    }`}
+                  >
+                    <Check className='size-3.5' />
+                  </span>
                 </button>
               );
             })}

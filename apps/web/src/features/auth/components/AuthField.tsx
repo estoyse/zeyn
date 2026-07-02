@@ -20,7 +20,12 @@ export function AuthField({
 }: AuthFieldProps) {
   return (
     <Field>
-      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+      <FieldLabel
+        htmlFor={field.name}
+        className="text-xs uppercase tracking-widest text-muted-foreground"
+      >
+        {label}
+      </FieldLabel>
       <div className="relative">
         <Icon className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
         <Input

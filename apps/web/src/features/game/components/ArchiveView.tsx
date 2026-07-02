@@ -24,8 +24,8 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
     <div className="min-h-screen bg-background p-6 md:p-12">
       <div className="mx-auto max-w-6xl space-y-8 py-12">
         <div className="text-center space-y-4">
-          <div className="mx-auto inline-block bg-primary/10 p-4 rounded-lg">
-            <Trophy className="size-12 text-primary" />
+          <div className="mx-auto inline-block bg-brand/10 p-4 text-brand">
+            <Trophy className="size-12" />
           </div>
           <h1 className="text-4xl md:text-6xl font-bold">Game Results</h1>
           <p className="text-muted-foreground text-sm uppercase tracking-widest">
@@ -112,14 +112,14 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                                 <span
                                   className={`font-semibold ${
                                     points > 0
-                                      ? "text-green-500"
-                                      : "text-red-500"
+                                      ? "text-success"
+                                      : "text-destructive"
                                   }`}
                                 >
                                   {points}
                                 </span>
                               ) : (
-                                <span className="text-muted-foreground opacity-20">
+                                <span className="text-muted-foreground/30">
                                   ·
                                 </span>
                               )}
@@ -130,7 +130,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                       <td
                         className={`px-3 py-2 text-center font-bold tabular-nums ${
                           row.score > 0
-                            ? "bg-yellow-400/20 text-yellow-500"
+                            ? "bg-brand/10 text-brand"
                             : ""
                         }`}
                       >
@@ -145,7 +145,9 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
         </Card>
 
         <div className="text-center">
-          <Button onClick={onBack}>Back to Dashboard</Button>
+          <Button variant="brand" onClick={onBack}>
+            Back to Dashboard
+          </Button>
         </div>
       </div>
     </div>

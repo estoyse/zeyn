@@ -68,6 +68,7 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
           <Field>
             <Button
               type='submit'
+              variant='brand'
               className='w-full'
               onClick={e => {
                 e.preventDefault();

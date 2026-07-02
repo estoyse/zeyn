@@ -10,7 +10,11 @@ import {
 } from "@shaxsiy-oyin/ui/components/card";
 import { listClientGames } from "@/features/games/registry";
 
-export function GameCatalog() {
+interface GameCatalogProps {
+  variant?: "create" | "play";
+}
+
+export function GameCatalog({ variant = "create" }: GameCatalogProps) {
   const games = listClientGames();
 
   return (
@@ -18,11 +22,11 @@ export function GameCatalog() {
       {games.map(game => (
         <Card
           key={game.type}
-          className='group flex flex-col hover:border-primary/50 transition-all'
+          className='group flex flex-col hover:ring-brand/50 transition-all'
         >
           <CardHeader>
-            <div className='size-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform'>
-              <game.Icon className='size-5 text-primary' />
+            <div className='size-10 bg-brand/10 text-brand flex items-center justify-center mb-2'>
+              <game.Icon className='size-5' />
             </div>
             <CardTitle className='text-lg'>{game.meta.title}</CardTitle>
             <CardDescription>{game.meta.description}</CardDescription>
@@ -34,16 +38,29 @@ export function GameCatalog() {
                 {game.meta.minPlayers}-{game.meta.maxPlayers} players
               </span>
             </div>
-            <Link
-              to='/game/create/$gameType'
-              params={{ gameType: game.type }}
-              className='block'
-            >
-              <Button variant='outline' className='w-full'>
-                Create
-                <ArrowRight className='size-4 ml-2' />
-              </Button>
-            </Link>
+            {variant === "play" ? (
+              <Link
+                to='/games/$gameType'
+                params={{ gameType: game.type }}
+                className='block'
+              >
+                <Button variant='outline' className='w-full'>
+                  Play
+                  <ArrowRight className='size-4 ml-2' />
+                </Button>
+              </Link>
+            ) : (
+              <Link
+                to='/game/create/$gameType'
+                params={{ gameType: game.type }}
+                className='block'
+              >
+                <Button variant='outline' className='w-full'>
+                  Create
+                  <ArrowRight className='size-4 ml-2' />
+                </Button>
+              </Link>
+            )}
           </CardContent>
         </Card>
       ))}

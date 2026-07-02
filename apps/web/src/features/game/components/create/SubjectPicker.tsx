@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@shaxsiy-oyin/ui/components/card";
+import { Badge } from "@shaxsiy-oyin/ui/components/badge";
 import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
 import { roomLimits } from "@shaxsiy-oyin/api/game-types";
 
@@ -31,22 +32,16 @@ export function SubjectPicker({
   const belowMin = selectedIds.length < roomLimits.minSubjects;
 
   return (
-    <Card className='glass-card'>
-      <CardHeader className='bg-muted/30'>
+    <Card>
+      <CardHeader className='bg-muted/50'>
         <CardTitle className='text-lg flex items-center justify-between'>
           <div className='flex items-center gap-2'>
-            <Zap className='size-5 text-primary' />
+            <Zap className='size-5 text-brand' />
             Select Subjects
           </div>
-          <div
-            className={`text-xs px-2 py-1 rounded-full ${
-              belowMin
-                ? "bg-destructive/10 text-destructive"
-                : "bg-primary/10 text-primary"
-            }`}
-          >
-            {selectedIds.length} / {roomLimits.maxSubjects} SELECTED
-          </div>
+          <Badge tone={belowMin ? "destructive" : "brand"}>
+            {selectedIds.length} / {roomLimits.maxSubjects} Selected
+          </Badge>
         </CardTitle>
         <CardDescription>
           Choose {roomLimits.minSubjects}-{roomLimits.maxSubjects} categories for
@@ -57,7 +52,7 @@ export function SubjectPicker({
         {isLoading ? (
           <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className='h-20 rounded-lg' />
+              <Skeleton key={i} className='h-20 rounded-none' />
             ))}
           </div>
         ) : (
@@ -68,10 +63,10 @@ export function SubjectPicker({
                 <button
                   key={s.id}
                   onClick={() => onToggle(s.id)}
-                  className={`relative p-4 text-left border transition-all hover:scale-[1.02] active:scale-[0.98] rounded-xl overflow-hidden group ${
+                  className={`relative p-4 text-left border transition-all active:scale-[0.98] overflow-hidden group ${
                     selected
-                      ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(var(--primary),0.1)]"
-                      : "border-border hover:border-primary/50 bg-card"
+                      ? "border-brand bg-brand/10"
+                      : "border-border hover:border-brand/50 bg-card"
                   }`}
                 >
                   <div className='relative z-10 space-y-1'>
@@ -83,7 +78,7 @@ export function SubjectPicker({
                   {selected && (
                     <motion.div
                       layoutId='check'
-                      className='absolute top-2 right-2 text-primary'
+                      className='absolute top-2 right-2 text-brand'
                     >
                       <CheckCircle2 className='size-4' />
                     </motion.div>
@@ -91,8 +86,8 @@ export function SubjectPicker({
                   <div
                     className={`absolute bottom-0 left-0 h-1 transition-all ${
                       selected
-                        ? "w-full bg-primary"
-                        : "w-0 bg-primary/20 group-hover:w-full"
+                        ? "w-full bg-brand"
+                        : "w-0 bg-brand/20 group-hover:w-full"
                     }`}
                   />
                 </button>
