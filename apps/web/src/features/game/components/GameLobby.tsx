@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Input } from "@shaxsiy-oyin/ui/components/input";
+import { Badge } from "@shaxsiy-oyin/ui/components/badge";
 import {
   Card,
   CardContent,
@@ -44,7 +45,7 @@ export function GameLobby({
                 <Users className="size-5" />
                 Players in Lobby
               </CardTitle>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground">
                 {Object.keys(state.players).length} / {state.maxPlayers} joined
               </span>
             </div>
@@ -57,19 +58,19 @@ export function GameLobby({
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   key={p.id}
-                  className="flex items-center justify-between border bg-muted/20 p-3 rounded-lg"
+                  className="flex items-center justify-between border bg-muted/50 p-3"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`flex size-8 items-center justify-center rounded-md ${p.connected ? "bg-muted" : "bg-muted/50 opacity-50"}`}>
+                    <div className={`flex size-8 items-center justify-center ${p.connected ? "bg-muted" : "bg-muted/50 opacity-50"}`}>
                       <UserCircle2 className={`size-4 ${p.connected ? "text-muted-foreground" : "text-muted-foreground/50"}`} />
                     </div>
                     <span className={`font-medium text-sm ${p.connected ? "" : "line-through"}`}>{p.name}</span>
                   </div>
                   {p.id === state.hostId && (
-                    <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded text-[10px] text-primary">
+                    <Badge tone="brand">
                       <Crown className="size-2" />
-                      HOST
-                    </div>
+                      Host
+                    </Badge>
                   )}
                 </motion.div>
               ))}
@@ -77,10 +78,10 @@ export function GameLobby({
           </CardContent>
         </Card>
 
-        <Card className="bg-muted/10 border-dashed">
+        <Card className="bg-muted/50 border-dashed">
           <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex size-10 items-center justify-center bg-primary/10 rounded-lg">
-              <Info className="size-5 text-primary" />
+            <div className="flex size-10 items-center justify-center bg-brand/10 text-brand">
+              <Info className="size-5" />
             </div>
             <div>
               <p className="font-medium text-sm">Game Information</p>
@@ -99,7 +100,7 @@ export function GameLobby({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase">Share Entry Point</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Share Entry Point</p>
               <div className="flex gap-1">
                 <Input
                   readOnly
@@ -121,6 +122,7 @@ export function GameLobby({
 
             {isHost ? (
               <Button
+                variant="brand"
                 className="w-full"
                 onClick={onStart}
                 disabled={Object.keys(state.players).length < minPlayers}
@@ -129,8 +131,8 @@ export function GameLobby({
                 Start Game
               </Button>
             ) : (
-              <div className="flex flex-col items-center gap-2 p-4 text-center bg-muted/30 rounded-lg border border-dashed">
-                <div className="size-2 bg-primary rounded-full animate-ping" />
+              <div className="flex flex-col items-center gap-2 p-4 text-center bg-muted/50 border border-dashed">
+                <div className="size-2 bg-brand rounded-full animate-ping" />
                 <p className="text-xs text-muted-foreground">Waiting for host to start...</p>
               </div>
             )}

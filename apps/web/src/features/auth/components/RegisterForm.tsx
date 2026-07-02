@@ -77,6 +77,7 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
           <Field>
             <Button
               type='submit'
+              variant='brand'
               className='w-full'
               onClick={e => {
                 e.preventDefault();

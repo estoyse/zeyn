@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { Input } from "@shaxsiy-oyin/ui/components/input";
+import { Badge } from "@shaxsiy-oyin/ui/components/badge";
 import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
 import { Zap, Clock } from "lucide-react";
 import { gameConfig } from "@shaxsiy-oyin/api/game-types";
@@ -43,12 +44,12 @@ export function GamePlaying({
       className='space-y-6'
     >
       <div className='flex flex-col items-center gap-3 text-center'>
-        <div className='flex items-center gap-2 bg-muted px-4 py-2 rounded-lg border'>
-          <div className='size-2 bg-primary animate-pulse rounded-full' />
-          <span className='text-xs text-muted-foreground uppercase'>
+        <div className='flex items-center gap-2 border bg-muted px-4 py-2'>
+          <div className='size-2 bg-brand animate-pulse rounded-full' />
+          <span className='text-xs uppercase tracking-widest text-muted-foreground'>
             Current Category
           </span>
-          <span className='font-semibold text-primary'>
+          <span className='font-semibold text-brand'>
             {state.currentSubjectName}
           </span>
         </div>
@@ -60,14 +61,14 @@ export function GamePlaying({
               initial={false}
               animate={{
                 width: idx === state.currentQuestionIndex ? 16 : 8,
-                backgroundColor:
-                  idx < state.currentQuestionIndex
-                    ? "oklch(0% 0 0 / 0.1)"
-                    : idx === state.currentQuestionIndex
-                    ? "oklch(0.627 0.265 303.9)"
-                    : "oklch(0.963 0.002 197.1)",
               }}
-              className='h-2 rounded-md border'
+              className={
+                idx < state.currentQuestionIndex
+                  ? "h-2 border bg-muted-foreground/30"
+                  : idx === state.currentQuestionIndex
+                  ? "h-2 border border-brand bg-brand"
+                  : "h-2 border bg-muted"
+              }
             />
           ))}
         </div>
@@ -82,9 +83,9 @@ export function GamePlaying({
               className='w-full text-center space-y-4'
             >
               <div className='space-y-2'>
-                <span className='inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium'>
+                <Badge tone='primary'>
                   Question worth {state.currentQuestion?.points}
-                </span>
+                </Badge>
                 <h2 className='text-xl md:text-2xl font-bold'>
                   {state.currentQuestion?.text}
                 </h2>
@@ -101,7 +102,7 @@ export function GamePlaying({
 
               <Button
                 size='lg'
-                variant='destructive'
+                variant='brand'
                 className='size-28 rounded-full'
                 onClick={onBuzz}
                 disabled={state.activeQuestionState?.playersWhoAttempted.includes(
@@ -122,11 +123,11 @@ export function GamePlaying({
               animate={{ y: 0, opacity: 1 }}
               className='w-full space-y-4'
             >
-              <div className='text-center'>
-                <span className='inline-flex items-center gap-1 rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-500'>
+              <div className='flex justify-center'>
+                <Badge tone='warning'>
                   <Zap className='size-3' />
                   Awaiting Answer
-                </span>
+                </Badge>
               </div>
 
               <Card>
@@ -153,7 +154,7 @@ export function GamePlaying({
                   </CardContent>
                 ) : (
                   <CardContent className='flex flex-col items-center gap-3 p-4'>
-                    <div className='flex size-12 items-center justify-center bg-muted rounded-lg'>
+                    <div className='flex size-12 items-center justify-center bg-muted'>
                       <Clock className='size-6 text-muted-foreground animate-spin' />
                     </div>
                     <div className='text-center'>
@@ -164,7 +165,7 @@ export function GamePlaying({
                           ]?.name
                         }
                       </p>
-                      <p className='text-xs text-muted-foreground uppercase'>
+                      <p className='text-xs uppercase tracking-widest text-muted-foreground'>
                         Is thinking...
                       </p>
                     </div>
@@ -187,25 +188,25 @@ export function GamePlaying({
               className='w-full text-center space-y-4'
             >
               <div className='space-y-1'>
-                <p className='text-xs text-muted-foreground uppercase'>
+                <p className='text-xs uppercase tracking-widest text-muted-foreground'>
                   Correct Answer
                 </p>
                 <motion.h2
                   animate={{ y: [0, -5, 0] }}
                   transition={{ repeat: Infinity, duration: 2 }}
-                  className='text-3xl md:text-4xl font-bold text-green-500'
+                  className='text-3xl md:text-4xl font-bold text-success'
                 >
                   {state.currentQuestion?.answer}
                 </motion.h2>
               </div>
 
               <div className='flex flex-col items-center gap-2 pt-3'>
-                <div className='h-1 w-full max-w-xs rounded-full bg-muted overflow-hidden'>
+                <div className='h-1 w-full max-w-xs bg-muted overflow-hidden'>
                   <motion.div
                     initial={{ width: "100%" }}
                     animate={{ width: "0%" }}
                     transition={{ duration: 5, ease: "linear" }}
-                    className='h-full bg-primary'
+                    className='h-full bg-brand'
                   />
                 </div>
                 <p className='text-xs text-muted-foreground'>

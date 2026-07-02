@@ -14,8 +14,8 @@ export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
     <div className='min-h-screen bg-background flex items-center justify-center p-4'>
       <Card className='max-w-md w-full text-center'>
         <CardContent className='p-8'>
-          <div className='mx-auto mb-6 flex size-16 items-center justify-center bg-primary/10 rounded-lg'>
-            <UserCircle2 className='size-10 text-primary' />
+          <div className='mx-auto mb-6 flex size-16 items-center justify-center bg-brand/10 text-brand'>
+            <UserCircle2 className='size-10' />
           </div>
           <div className='space-y-2'>
             <h1 className='text-2xl font-bold'>Login Required</h1>
@@ -24,6 +24,7 @@ export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
             </p>
           </div>
           <Button
+            variant='brand'
             className='w-full mt-6'
             onClick={() =>
               (window.location.href = `/auth/login?redirectTo=/game/${gameId}`)

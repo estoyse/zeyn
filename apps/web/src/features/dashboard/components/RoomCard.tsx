@@ -28,10 +28,10 @@ export function RoomCard({ room, isHost, onJoin }: RoomCardProps) {
   const locked = !!room.password;
 
   return (
-    <Card className='hover:border-primary/50 transition-all relative'>
+    <Card className='hover:border-brand/50 transition-all relative'>
       <div
         className={`absolute top-2 right-2 ${
-          locked ? "text-destructive" : "text-green-500"
+          locked ? "text-destructive" : "text-success"
         }`}
       >
         {locked ? <Lock className='size-4' /> : <Unlock className='size-4' />}

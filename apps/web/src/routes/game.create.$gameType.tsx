@@ -35,8 +35,8 @@ function CreateGamePage() {
       <div className='mx-auto max-w-6xl space-y-8'>
         <header className='flex items-start justify-between gap-4'>
           <div className='flex items-center gap-3'>
-            <div className='flex size-12 items-center justify-center bg-primary rounded-xl'>
-              <Settings2 className='size-6 text-primary-foreground' />
+            <div className='flex size-12 items-center justify-center bg-brand text-brand-foreground'>
+              <Settings2 className='size-6' />
             </div>
             <div>
               <h1 className='text-3xl font-bold tracking-tight'>

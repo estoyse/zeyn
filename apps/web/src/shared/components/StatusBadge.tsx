@@ -1,13 +1,16 @@
 import type { ReactNode } from "react";
+import { Badge } from "@shaxsiy-oyin/ui/components/badge";
 import { cn } from "@shaxsiy-oyin/ui/lib/utils";
 
-type Tone = "primary" | "success" | "destructive" | "muted";
+type Tone = "primary" | "success" | "destructive" | "muted" | "brand" | "warning";
 
-const TONES: Record<Tone, string> = {
-  primary: "bg-primary/10 text-primary",
-  success: "bg-green-500/10 text-green-500",
-  destructive: "bg-destructive/10 text-destructive",
-  muted: "bg-muted text-muted-foreground",
+const STATUS_TONE: Record<string, Tone> = {
+  waiting: "warning",
+  lobby: "warning",
+  playing: "success",
+  active: "success",
+  finished: "muted",
+  archived: "muted",
 };
 
 interface StatusBadgeProps {
@@ -16,20 +19,16 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-export function StatusBadge({
-  children,
-  tone = "primary",
-  className,
-}: StatusBadgeProps) {
+export function StatusBadge({ children, tone, className }: StatusBadgeProps) {
+  const resolved =
+    tone ??
+    (typeof children === "string"
+      ? STATUS_TONE[children.toLowerCase()] ?? "primary"
+      : "primary");
+
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs font-medium",
-        TONES[tone],
-        className
-      )}
-    >
+    <Badge tone={resolved === "muted" ? "default" : resolved} className={cn(className)}>
       {children}
-    </span>
+    </Badge>
   );
 }

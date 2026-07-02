@@ -56,11 +56,16 @@ export function ResetPasswordForm() {
   if (!token) {
     return (
       <div className="text-center space-y-4">
-        <h2 className="text-xl font-semibold">Invalid Link</h2>
+        <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
+          Invalid Link
+        </h2>
         <p className="text-muted-foreground text-sm">
           This password reset link is invalid or has expired.
         </p>
-        <Button onClick={() => navigate({ to: "/auth/forgot-password" })}>
+        <Button
+          variant="brand"
+          onClick={() => navigate({ to: "/auth/forgot-password" })}
+        >
           Request New Link
         </Button>
       </div>
@@ -75,7 +80,9 @@ export function ResetPasswordForm() {
       className="space-y-4"
     >
       <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold">Reset your password</h2>
+        <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
+          Reset your password
+        </h2>
         <p className="text-muted-foreground text-sm mt-1">
           Enter your new password below.
         </p>
@@ -110,6 +117,7 @@ export function ResetPasswordForm() {
           <Field>
             <Button
               type="submit"
+              variant="brand"
               className="w-full"
               disabled={isLoading}
               onClick={e => {

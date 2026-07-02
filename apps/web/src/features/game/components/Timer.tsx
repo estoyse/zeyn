@@ -34,14 +34,14 @@ export function Timer({ expiresAt, duration = 15000, onTimeout }: TimerProps) {
         </span>
         <span>{(timeLeft / 1000).toFixed(1)}s</span>
       </div>
-      <div className='w-full h-3 bg-muted overflow-hidden border p-[2px] rounded-md'>
+      <div className='w-full h-3 bg-muted overflow-hidden border p-[2px]'>
         <motion.div
           initial={false}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.2 }}
           className={cn(
-            "h-full rounded-md",
-            isUrgent ? "bg-destructive" : "bg-primary"
+            "h-full",
+            isUrgent ? "bg-destructive" : "bg-brand"
           )}
         />
       </div>

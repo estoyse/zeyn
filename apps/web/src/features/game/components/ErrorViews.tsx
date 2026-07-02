@@ -17,8 +17,8 @@ export function NotFoundView({ onBack }: NotFoundViewProps) {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full text-center">
         <CardHeader className="space-y-4">
-          <div className="mx-auto flex size-16 items-center justify-center bg-destructive/10 rounded-lg">
-            <XCircle className="size-10 text-destructive" />
+          <div className="mx-auto flex size-16 items-center justify-center bg-destructive/10 text-destructive">
+            <XCircle className="size-10" />
           </div>
           <CardTitle>Room Not Found</CardTitle>
           <CardDescription>
@@ -26,7 +26,7 @@ export function NotFoundView({ onBack }: NotFoundViewProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={onBack} className="w-full">
+          <Button onClick={onBack} variant="brand" className="w-full">
             Back to Dashboard
           </Button>
         </CardContent>
@@ -45,14 +45,14 @@ export function ConnectionErrorView({ error, onRetry }: ConnectionErrorViewProps
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full text-center">
         <CardHeader className="space-y-4">
-          <div className="mx-auto flex size-16 items-center justify-center bg-destructive/10 rounded-lg">
-            <XCircle className="size-10 text-destructive" />
+          <div className="mx-auto flex size-16 items-center justify-center bg-destructive/10 text-destructive">
+            <XCircle className="size-10" />
           </div>
           <CardTitle className="text-destructive">Connection Failed</CardTitle>
           <CardDescription>{error}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={onRetry} className="w-full">
+          <Button onClick={onRetry} variant="brand" className="w-full">
             Retry Connection
           </Button>
         </CardContent>

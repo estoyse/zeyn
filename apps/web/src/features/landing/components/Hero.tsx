@@ -1,14 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Badge } from "@shaxsiy-oyin/ui/components/badge";
 
 export function Hero() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-20 md:py-32">
       <div className="max-w-4xl mx-auto text-center space-y-8">
         <div className="inline-block">
-          <div className="px-3 py-1 border border-primary/30 bg-primary/5 text-primary text-xs tracking-wide uppercase rounded">
-            Premium Online Games
-          </div>
+          <Badge tone="brand">Premium Online Games</Badge>
         </div>
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl tracking-tight font-heading">
@@ -23,7 +22,7 @@ export function Hero() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           <Link to="/auth/login">
-            <Button size="lg">
+            <Button variant="brand" size="lg">
               Get Started
             </Button>
           </Link>

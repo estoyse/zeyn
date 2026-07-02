@@ -33,8 +33,8 @@ export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) 
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto flex size-16 items-center justify-center bg-primary/10 rounded-lg">
-            <LockKeyhole className="size-10 text-primary" />
+          <div className="mx-auto flex size-16 items-center justify-center bg-brand/10 text-brand">
+            <LockKeyhole className="size-10" />
           </div>
           <CardTitle>Private Room</CardTitle>
           <CardDescription>
@@ -61,7 +61,7 @@ export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) 
               <Button type="button" variant="outline" onClick={onBack} className="flex-1">
                 Back
               </Button>
-              <Button type="submit" className="flex-1">
+              <Button type="submit" variant="brand" className="flex-1">
                 Join Room
               </Button>
             </div>

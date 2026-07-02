@@ -46,12 +46,12 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
       className='space-y-6'
     >
       <div className='flex flex-col items-center gap-3 text-center'>
-        <div className='flex items-center gap-2 bg-muted px-4 py-2 rounded-lg border'>
-          <Music2 className='size-4 text-primary' />
-          <span className='text-xs text-muted-foreground uppercase'>
+        <div className='flex items-center gap-2 border bg-muted px-4 py-2'>
+          <Music2 className='size-4 text-brand' />
+          <span className='text-xs uppercase tracking-widest text-muted-foreground'>
             Question
           </span>
-          <span className='font-semibold text-primary'>
+          <span className='font-semibold text-brand'>
             {state.currentQuestionIndex + 1} / {state.totalQuestions}
           </span>
         </div>
@@ -81,18 +81,18 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
                   key={index}
                   onClick={() => onAnswer(index)}
                   disabled={isReveal || alreadyAnswered}
-                  className={`flex items-center justify-between gap-2 rounded-xl border p-4 text-left font-medium transition-all ${
+                  className={`flex items-center justify-between gap-2 border p-4 text-left font-medium transition-all ${
                     correct
-                      ? "border-green-500 bg-green-500/10"
+                      ? "border-success bg-success/10 text-success"
                       : wrongPick
-                      ? "border-destructive bg-destructive/10"
+                      ? "border-destructive bg-destructive/10 text-destructive"
                       : picked === index
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/50 disabled:opacity-60"
+                      ? "border-brand bg-brand/10"
+                      : "border-border hover:border-brand/50 disabled:opacity-50"
                   }`}
                 >
                   <span>{label}</span>
-                  {correct && <Check className='size-5 text-green-500' />}
+                  {correct && <Check className='size-5 text-success' />}
                   {wrongPick && <X className='size-5 text-destructive' />}
                 </button>
               );
@@ -101,10 +101,10 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
 
           {isReveal && state.reveal && (
             <div className='text-center space-y-1'>
-              <p className='text-xs text-muted-foreground uppercase'>
+              <p className='text-xs uppercase tracking-widest text-muted-foreground'>
                 Correct Answer
               </p>
-              <p className='text-lg font-bold text-green-500'>
+              <p className='text-lg font-bold text-success'>
                 {state.reveal.correctTitle}
               </p>
               <p className='text-sm text-muted-foreground'>

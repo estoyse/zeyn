@@ -12,8 +12,8 @@ function CreatePickerPage() {
       <div className='mx-auto max-w-6xl space-y-8'>
         <header className='space-y-2'>
           <div className='flex items-center gap-3'>
-            <div className='flex size-12 items-center justify-center bg-primary rounded-xl'>
-              <Gamepad2 className='size-6 text-primary-foreground' />
+            <div className='flex size-12 items-center justify-center bg-brand text-brand-foreground'>
+              <Gamepad2 className='size-6' />
             </div>
             <div>
               <h1 className='text-3xl font-bold tracking-tight'>Choose a Game</h1>

@@ -13,12 +13,12 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
   return (
     <header className='flex flex-col md:flex-row justify-between items-center gap-4 pb-6 border-b'>
       <div className='flex items-center gap-3'>
-        <div className='flex size-10 items-center justify-center bg-primary rounded-lg'>
-          <LayoutGrid className='size-5 text-primary-foreground' />
+        <div className='flex size-10 items-center justify-center bg-brand text-brand-foreground'>
+          <LayoutGrid className='size-5' />
         </div>
         <div>
           <h1 className='text-xl font-bold'>Shaxsiy O'yin</h1>
-          <p className='text-xs text-muted-foreground flex items-center gap-1'>
+          <p className='text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-1'>
             <Clock className='size-3' /> Room: {gameId}
           </p>
         </div>
@@ -29,7 +29,7 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
           <motion.div
             layout
             key={p.id}
-            className='flex items-center gap-2 px-3 py-2 rounded-lg border transition-all bg-muted border-border'
+            className='flex items-center gap-2 px-3 py-2 border transition-all bg-muted border-border'
           >
             <div className='relative'>
               <UserCircle2
@@ -40,7 +40,7 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
                 }
               />
               {p.connected && (
-                <div className='absolute -top-0.5 -right-0.5 size-2 rounded-full bg-green-500 border-2 border-background' />
+                <div className='absolute -top-0.5 -right-0.5 size-2 rounded-full bg-success border-2 border-background' />
               )}
             </div>
             <div className='flex flex-col'>

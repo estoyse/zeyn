@@ -53,7 +53,7 @@ export function FeaturedGames() {
 
       <div className="text-center mt-12">
         <Link to="/auth/login">
-          <Button size="lg">
+          <Button variant="brand" size="lg">
             Start Playing Now
           </Button>
         </Link>

@@ -8,7 +8,7 @@ import {
 } from "@shaxsiy-oyin/ui/components/card";
 import type { GameResultsViewProps } from "@/features/games/types";
 
-const RANK_COLORS = ["text-yellow-500", "text-slate-400", "text-amber-700"];
+const RANK_COLORS = ["text-brand", "text-muted-foreground", "text-muted-foreground"];
 
 export function MusicResults({ results, onBack }: GameResultsViewProps) {
   const rows = [...results.playerResults].sort((a, b) => b.score - a.score);
@@ -17,8 +17,8 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
     <div className='min-h-screen bg-background p-6 md:p-12'>
       <div className='mx-auto max-w-2xl space-y-8 py-12'>
         <div className='text-center space-y-4'>
-          <div className='mx-auto inline-block bg-primary/10 p-4 rounded-lg'>
-            <Trophy className='size-12 text-primary' />
+          <div className='mx-auto inline-block bg-brand/10 p-4 text-brand'>
+            <Trophy className='size-12' />
           </div>
           <h1 className='text-4xl md:text-6xl font-bold'>Final Leaderboard</h1>
           <p className='text-muted-foreground text-sm uppercase tracking-widest'>
@@ -34,8 +34,8 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
             {rows.map((p, i) => (
               <div
                 key={p.userId}
-                className={`flex items-center justify-between rounded-lg border p-4 ${
-                  i === 0 ? "bg-primary/5 border-primary/40" : "bg-muted/20"
+                className={`flex items-center justify-between border p-4 ${
+                  i === 0 ? "border-brand bg-brand/10" : "bg-muted/50"
                 }`}
               >
                 <div className='flex items-center gap-3'>
@@ -60,7 +60,9 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
         </Card>
 
         <div className='flex justify-center'>
-          <Button onClick={onBack}>Back to Dashboard</Button>
+          <Button variant='brand' onClick={onBack}>
+            Back to Dashboard
+          </Button>
         </div>
       </div>
     </div>
