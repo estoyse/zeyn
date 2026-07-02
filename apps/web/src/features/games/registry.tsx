@@ -1,5 +1,5 @@
 import { Zap, Music2 } from "lucide-react";
-import { buzzerMeta, musicMeta } from "@shaxsiy-oyin/api/games";
+import { buzzerMeta, musicMeta } from "@zeyn/api/games";
 import type { ClientGameModule } from "./types";
 import { BuzzerCreateForm } from "./buzzer/BuzzerCreateForm";
 import { BuzzerPlaying } from "./buzzer/BuzzerPlaying";

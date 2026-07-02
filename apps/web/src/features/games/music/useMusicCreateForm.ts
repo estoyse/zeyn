@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { roomLimits } from "@shaxsiy-oyin/api/game-types";
+import { roomLimits } from "@zeyn/api/game-types";
 import { trpc } from "@/shared/lib/trpc";
 
 export function useMusicCreateForm() {

@@ -1,14 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { LayoutGrid, Users, Lock, Globe, Shield, Minus, Plus } from "lucide-react";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
-import { Label } from "@shaxsiy-oyin/ui/components/label";
+import { Input } from "@zeyn/ui/components/input";
+import { Label } from "@zeyn/ui/components/label";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
-import { roomLimits } from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/ui/components/card";
+import { roomLimits } from "@zeyn/api/game-types";
 
 interface GeneralConfigCardProps {
   name: string;

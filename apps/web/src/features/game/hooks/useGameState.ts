@@ -3,7 +3,7 @@ import type {
   BasePublicGameState,
   ClientMessage,
   Player,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 
 export type ClientRoomState = Omit<BasePublicGameState, "players"> & {
   players: Record<string, Player>;

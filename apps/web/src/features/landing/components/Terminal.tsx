@@ -1,15 +1,15 @@
-import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
+import { Card, CardContent } from "@zeyn/ui/components/card";
 
 export function Terminal() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       <Card className="overflow-hidden">
         <div className="px-4 py-3 border-b text-xs text-muted-foreground bg-muted">
-          Terminal — shaxsiy-oyin
+          Terminal — zeyn
         </div>
         <CardContent className="p-6 font-mono text-sm">
           <div className="text-foreground">
-            <span className="text-muted-foreground">$</span> shaxsiy-oyin
+            <span className="text-muted-foreground">$</span> zeyn
           </div>
           <div className="text-primary mt-2">
             {">"} /join "championship tournament"

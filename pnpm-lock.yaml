@@ -59,7 +59,7 @@ importers:
 
   .:
     dependencies:
-      '@shaxsiy-oyin/env':
+      '@zeyn/env':
         specifier: workspace:*
         version: link:packages/env
       dotenv:
@@ -72,12 +72,12 @@ importers:
       '@cloudflare/workers-types':
         specifier: 'catalog:'
         version: 4.20260502.1
-      '@shaxsiy-oyin/config':
-        specifier: workspace:*
-        version: link:packages/config
       '@types/node':
         specifier: ^22.13.14
         version: 22.19.17
+      '@zeyn/config':
+        specifier: workspace:*
+        version: link:packages/config
       turbo:
         specifier: ^2.8.12
         version: 2.9.7
@@ -105,12 +105,6 @@ importers:
       '@react-navigation/elements':
         specifier: ^2.9.14
         version: 2.9.15(@react-navigation/native@7.2.2(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0))(react-native-safe-area-context@5.6.2(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0))(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)
-      '@shaxsiy-oyin/api':
-        specifier: workspace:*
-        version: link:../../packages/api
-      '@shaxsiy-oyin/env':
-        specifier: workspace:*
-        version: link:../../packages/env
       '@tanstack/react-form':
         specifier: 'catalog:'
         version: 1.29.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -126,6 +120,12 @@ importers:
       '@trpc/tanstack-react-query':
         specifier: 'catalog:'
         version: 11.17.0(@tanstack/react-query@5.100.8(react@19.2.0))(@trpc/client@11.17.0(@trpc/server@11.17.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.17.0(typescript@5.9.3))(react@19.2.0)(typescript@5.9.3)
+      '@zeyn/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@zeyn/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       better-auth:
         specifier: 'catalog:'
         version: 1.5.5(@cloudflare/workers-types@4.20260502.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260502.1)(@libsql/client@0.15.15)(kysely@0.28.16))(mongodb@7.2.0(@aws-sdk/credential-providers@3.1041.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.1.9(@types/node@24.12.2)(msw@2.14.2(@types/node@24.12.2)(typescript@5.9.3))(vite@8.0.10(@types/node@24.12.2)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3)))
@@ -214,15 +214,15 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@types/node':
         specifier: ^24.10.0
         version: 24.12.2
       '@types/react':
         specifier: ~19.2.10
         version: 19.2.14
+      '@zeyn/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       typescript:
         specifier: ~5.9.2
         version: 5.9.3
@@ -232,21 +232,21 @@ importers:
       '@hono/trpc-server':
         specifier: ^0.4.0
         version: 0.4.2(@trpc/server@11.17.0(typescript@6.0.3))(hono@4.12.16)
-      '@shaxsiy-oyin/api':
-        specifier: workspace:*
-        version: link:../../packages/api
-      '@shaxsiy-oyin/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
-      '@shaxsiy-oyin/db':
-        specifier: workspace:*
-        version: link:../../packages/db
-      '@shaxsiy-oyin/env':
-        specifier: workspace:*
-        version: link:../../packages/env
       '@trpc/server':
         specifier: 'catalog:'
         version: 11.17.0(typescript@6.0.3)
+      '@zeyn/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@zeyn/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@zeyn/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@zeyn/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       better-auth:
         specifier: 'catalog:'
         version: 1.5.5(@cloudflare/workers-types@4.20260502.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260502.1)(@libsql/client@0.15.15)(kysely@0.28.16))(mongodb@7.2.0(@aws-sdk/credential-providers@3.1041.0))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(vitest@4.1.9(@types/node@22.19.17)(msw@2.14.2(@types/node@22.19.17)(typescript@6.0.3))(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3)))
@@ -263,12 +263,12 @@ importers:
       '@cloudflare/workers-types':
         specifier: 'catalog:'
         version: 4.20260502.1
-      '@shaxsiy-oyin/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@types/node':
         specifier: ^22.13.14
         version: 22.19.17
+      '@zeyn/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       alchemy:
         specifier: 'catalog:'
         version: 0.91.2(@libsql/client@0.15.15)(kysely@0.28.16)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3))(workerd@1.20260430.1)(wrangler@4.87.0(@cloudflare/workers-types@4.20260502.1))
@@ -293,18 +293,6 @@ importers:
       '@libsql/client':
         specifier: 'catalog:'
         version: 0.15.15
-      '@shaxsiy-oyin/api':
-        specifier: workspace:*
-        version: link:../../packages/api
-      '@shaxsiy-oyin/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
-      '@shaxsiy-oyin/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      '@shaxsiy-oyin/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@tailwindcss/vite':
         specifier: ^4.2.2
         version: 4.2.4(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3))
@@ -326,6 +314,18 @@ importers:
       '@trpc/tanstack-react-query':
         specifier: 'catalog:'
         version: 11.17.0(@tanstack/react-query@5.100.8(react@19.2.5))(@trpc/client@11.17.0(@trpc/server@11.17.0(typescript@6.0.3))(typescript@6.0.3))(@trpc/server@11.17.0(typescript@6.0.3))(react@19.2.5)(typescript@6.0.3)
+      '@zeyn/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@zeyn/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@zeyn/env':
+        specifier: workspace:*
+        version: link:../../packages/env
+      '@zeyn/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       better-auth:
         specifier: 'catalog:'
         version: 1.5.5(@cloudflare/workers-types@4.20260502.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260502.1)(@libsql/client@0.15.15)(kysely@0.28.16))(mongodb@7.2.0(@aws-sdk/credential-providers@3.1041.0))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(vitest@4.1.9(@types/node@22.19.17)(msw@2.14.2(@types/node@22.19.17)(typescript@6.0.3))(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3)))
@@ -357,9 +357,6 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@tanstack/react-query-devtools':
         specifier: ^5.91.1
         version: 5.100.8(@tanstack/react-query@5.100.8(react@19.2.5))(react@19.2.5)
@@ -381,6 +378,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.1
         version: 6.0.1(babel-plugin-react-compiler@1.0.0)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3))
+      '@zeyn/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       alchemy:
         specifier: 'catalog:'
         version: 0.91.2(@libsql/client@0.15.15)(kysely@0.28.16)(vite@8.0.10(@types/node@22.19.17)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3))(workerd@1.20260430.1)(wrangler@4.87.0(@cloudflare/workers-types@4.20260502.1))
@@ -399,21 +399,21 @@ importers:
 
   packages/api:
     dependencies:
-      '@shaxsiy-oyin/auth':
-        specifier: workspace:*
-        version: link:../auth
-      '@shaxsiy-oyin/db':
-        specifier: workspace:*
-        version: link:../db
-      '@shaxsiy-oyin/env':
-        specifier: workspace:*
-        version: link:../env
       '@trpc/client':
         specifier: 'catalog:'
         version: 11.17.0(@trpc/server@11.17.0(typescript@6.0.3))(typescript@6.0.3)
       '@trpc/server':
         specifier: 'catalog:'
         version: 11.17.0(typescript@6.0.3)
+      '@zeyn/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@zeyn/db':
+        specifier: workspace:*
+        version: link:../db
+      '@zeyn/env':
+        specifier: workspace:*
+        version: link:../env
       dotenv:
         specifier: 'catalog:'
         version: 17.4.2
@@ -421,7 +421,7 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
+      '@zeyn/config':
         specifier: workspace:*
         version: link:../config
       hono:
@@ -436,10 +436,10 @@ importers:
       '@better-auth/expo':
         specifier: 'catalog:'
         version: 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260502.1)(better-call@1.3.2(zod@4.4.2))(jose@6.2.3)(kysely@0.28.16)(nanostores@1.3.0))(better-auth@1.5.5(@cloudflare/workers-types@4.20260502.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260502.1)(@libsql/client@0.15.15)(kysely@0.28.16))(mongodb@7.2.0(@aws-sdk/credential-providers@3.1041.0))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(vitest@4.1.9(@types/node@24.12.2)(msw@2.14.2(@types/node@24.12.2)(typescript@6.0.3))(vite@8.0.10(@types/node@24.12.2)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3))))(expo-constants@55.0.15)(expo-linking@55.0.14)(expo-network@55.0.13(expo@55.0.19)(react@19.2.5))(expo-web-browser@55.0.14(expo@55.0.19)(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5)))
-      '@shaxsiy-oyin/db':
+      '@zeyn/db':
         specifier: workspace:*
         version: link:../db
-      '@shaxsiy-oyin/env':
+      '@zeyn/env':
         specifier: workspace:*
         version: link:../env
       argon2-wasm-edge:
@@ -455,7 +455,7 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
+      '@zeyn/config':
         specifier: workspace:*
         version: link:../config
       typescript:
@@ -469,7 +469,7 @@ importers:
       '@libsql/client':
         specifier: 'catalog:'
         version: 0.15.15
-      '@shaxsiy-oyin/env':
+      '@zeyn/env':
         specifier: workspace:*
         version: link:../env
       dotenv:
@@ -485,7 +485,7 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
+      '@zeyn/config':
         specifier: workspace:*
         version: link:../config
       drizzle-kit:
@@ -507,15 +507,15 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
-        specifier: workspace:*
-        version: link:../config
-      '@shaxsiy-oyin/infra':
-        specifier: workspace:*
-        version: link:../infra
       '@types/node':
         specifier: ^22.13.14
         version: 22.19.17
+      '@zeyn/config':
+        specifier: workspace:*
+        version: link:../config
+      '@zeyn/infra':
+        specifier: workspace:*
+        version: link:../infra
       typescript:
         specifier: ^6
         version: 6.0.3
@@ -529,7 +529,7 @@ importers:
         specifier: 'catalog:'
         version: 4.4.2
     devDependencies:
-      '@shaxsiy-oyin/config':
+      '@zeyn/config':
         specifier: workspace:*
         version: link:../config
       alchemy:
@@ -581,15 +581,15 @@ importers:
         specifier: ^1.3.4
         version: 1.4.0
     devDependencies:
-      '@shaxsiy-oyin/config':
-        specifier: workspace:*
-        version: link:../config
       '@types/react':
         specifier: ^19.2.10
         version: 19.2.14
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.14)
+      '@zeyn/config':
+        specifier: workspace:*
+        version: link:../config
       tailwindcss:
         specifier: ^4.1.18
         version: 4.2.4
@@ -12410,7 +12410,7 @@ snapshots:
       resolve-from: 5.0.0
     optionalDependencies:
       '@babel/runtime': 7.29.2
-      expo: 55.0.19(@babel/core@7.29.0)(@expo/dom-webview@55.0.5)(@expo/metro-runtime@55.0.10)(expo-router@55.0.13)(react-dom@19.2.5(react@19.2.5))(react-native-worklets@0.7.4(@babel/core@7.29.0)(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(typescript@6.0.3)
+      expo: 55.0.19(@babel/core@7.29.0)(@expo/dom-webview@55.0.5)(@expo/metro-runtime@55.0.10)(expo-router@55.0.13)(react-dom@19.2.0(react@19.2.0))(react-native-worklets@0.7.4(@babel/core@7.29.0)(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0))(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color

@@ -1,10 +1,10 @@
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 import { Trophy, LayoutGrid } from "lucide-react";
 import { buildScoreboard, type ScoreboardResults } from "@/features/game/lib/scoreboard";
 

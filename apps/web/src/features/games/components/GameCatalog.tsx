@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Users } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 import { listClientGames } from "@/features/games/registry";
 
 interface GameCatalogProps {

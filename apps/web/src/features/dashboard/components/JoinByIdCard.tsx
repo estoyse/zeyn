@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { PlusCircle } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
+import { Button } from "@zeyn/ui/components/button";
+import { Input } from "@zeyn/ui/components/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 
 export function JoinByIdCard() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { env } from "@shaxsiy-oyin/env/server";
+import { env } from "@zeyn/env/server";
 import { drizzle } from "drizzle-orm/d1";
 
 import * as schema from "./schema";

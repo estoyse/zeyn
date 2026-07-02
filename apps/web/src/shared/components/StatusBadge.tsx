@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { Badge } from "@shaxsiy-oyin/ui/components/badge";
-import { cn } from "@shaxsiy-oyin/ui/lib/utils";
+import { Badge } from "@zeyn/ui/components/badge";
+import { cn } from "@zeyn/ui/lib/utils";
 
 type Tone = "primary" | "success" | "destructive" | "muted" | "brand" | "warning";
 

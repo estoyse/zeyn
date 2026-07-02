@@ -2,7 +2,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@shaxsiy-oyin/ui/components/avatar";
+} from "@zeyn/ui/components/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@shaxsiy-oyin/ui/components/dropdown-menu";
+} from "@zeyn/ui/components/dropdown-menu";
 import { BellIcon, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 

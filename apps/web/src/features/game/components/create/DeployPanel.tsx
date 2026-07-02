@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Check, Info, Rocket } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Card } from "@shaxsiy-oyin/ui/components/card";
+import { Button } from "@zeyn/ui/components/button";
+import { Card } from "@zeyn/ui/components/card";
 
 export interface DeployCheck {
   label: ReactNode;

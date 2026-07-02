@@ -1,4 +1,4 @@
-# Design system — Shaxsiy O'yin
+# Design system — Zeyn
 
 One system: **terminal / brutalist, monochrome + one electric brand accent.** Every screen
 must read as the same product. When in doubt, match `Button` and `Card` in `packages/ui`.
@@ -52,15 +52,15 @@ Pick from this small set only:
 
 ## Components — reach for these before hand-rolling
 
-- **Button** (`@shaxsiy-oyin/ui/components/button`): variants `default` (ink), `brand` (accent CTA),
+- **Button** (`@zeyn/ui/components/button`): variants `default` (ink), `brand` (accent CTA),
   `outline`, `secondary`, `ghost`, `destructive`, `link`. Buttons are already uppercase +
   `rounded-none`; don't override those. The single most important action on a screen =
   `variant="brand"`; everything secondary = `outline`/`ghost`/`secondary`.
-- **Badge** (`@shaxsiy-oyin/ui/components/badge`): tones `default` `brand` `primary` `success`
+- **Badge** (`@zeyn/ui/components/badge`): tones `default` `brand` `primary` `success`
   `warning` `destructive` `outline`. Already uppercase + tracking + square. Use for all
   pills/tags/chips/eyebrows (HOST, status, "QUESTION 1/5", "worth 200", category).
 - **StatusBadge** (`@/shared/components/StatusBadge`): wraps Badge; maps room status strings to tones.
-- **Card** (`@shaxsiy-oyin/ui/components/card`): already square, `ring-1`, uppercase `CardTitle`.
+- **Card** (`@zeyn/ui/components/card`): already square, `ring-1`, uppercase `CardTitle`.
   Use `size="sm"` for denser cards. Don't add `rounded-*` or heavy shadows.
 
 ## Patterns

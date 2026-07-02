@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
 import {
   Field,
   FieldDescription,
   FieldSeparator,
-} from "@shaxsiy-oyin/ui/components/field";
+} from "@zeyn/ui/components/field";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { AuthField } from "./AuthField";
 import { emailSchema, passwordSchema } from "@/features/auth/lib/authSchemas";

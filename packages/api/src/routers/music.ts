@@ -1,5 +1,5 @@
 import { protectedProcedure, router } from "../index";
-import { artists } from "@shaxsiy-oyin/db/schema";
+import { artists } from "@zeyn/db/schema";
 
 export const musicRouter = router({
   getArtists: protectedProcedure.query(({ ctx }) => {

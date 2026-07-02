@@ -1,4 +1,4 @@
-import { gameConfig } from "@shaxsiy-oyin/api/game-types";
+import { gameConfig } from "@zeyn/api/game-types";
 
 // Raw shape returned by trpc.game.getResults (the parts the scoreboard needs).
 export interface ScoreboardResults {

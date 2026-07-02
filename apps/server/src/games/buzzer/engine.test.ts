@@ -6,7 +6,7 @@ import {
   type Player,
   type Question,
   type ServerMessage,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 import {
   buzz,
   createInitialState,

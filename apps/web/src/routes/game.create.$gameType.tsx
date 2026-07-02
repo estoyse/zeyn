@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Settings2, ArrowLeft } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { getClientGame } from "@/features/games/registry";
 
 export const Route = createFileRoute("/game/create/$gameType")({

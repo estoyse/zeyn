@@ -1,11 +1,11 @@
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 import { XCircle } from "lucide-react";
 
 interface NotFoundViewProps {

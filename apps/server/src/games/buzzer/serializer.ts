@@ -7,7 +7,7 @@ import type {
   GameState,
   Player,
   PublicGameState,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 
 export class StateSerializer {
   // playerId -> JSON of the last player state we broadcast, for delta detection.

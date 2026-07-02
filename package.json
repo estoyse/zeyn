@@ -1,5 +1,5 @@
 {
-  "name": "shaxsiy-oyin",
+  "name": "zeyn",
   "private": true,
   "workspaces": {
     "packages": [
@@ -34,22 +34,22 @@
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
     "dev:server": "turbo -F server dev",
-    "db:push": "turbo -F @shaxsiy-oyin/db db:push",
-    "db:generate": "turbo -F @shaxsiy-oyin/db db:generate",
-    "db:studio": "turbo -F @shaxsiy-oyin/db db:studio",
-    "db:seed": "turbo -F @shaxsiy-oyin/db db:seed",
-    "db:seed:sql": "turbo -F @shaxsiy-oyin/db db:seed:sql",
-    "deploy": "turbo -F @shaxsiy-oyin/infra deploy",
-    "destroy": "turbo -F @shaxsiy-oyin/infra destroy"
+    "db:push": "turbo -F @zeyn/db db:push",
+    "db:generate": "turbo -F @zeyn/db db:generate",
+    "db:studio": "turbo -F @zeyn/db db:studio",
+    "db:seed": "turbo -F @zeyn/db db:seed",
+    "db:seed:sql": "turbo -F @zeyn/db db:seed:sql",
+    "deploy": "turbo -F @zeyn/infra deploy",
+    "destroy": "turbo -F @zeyn/infra destroy"
   },
   "dependencies": {
-    "@shaxsiy-oyin/env": "workspace:*",
+    "@zeyn/env": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "@types/node": "^22.13.14",
     "turbo": "^2.8.12",
     "typescript": "^6"

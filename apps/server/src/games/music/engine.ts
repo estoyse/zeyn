@@ -2,8 +2,8 @@ import {
   musicGameConfig,
   type MusicQuestion,
   type MusicQuizState,
-} from "@shaxsiy-oyin/api/games";
-import type { EngineDirectives } from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/games";
+import type { EngineDirectives } from "@zeyn/api/game-types";
 import { gameError, initBaseState } from "../base";
 
 export interface SongRow {

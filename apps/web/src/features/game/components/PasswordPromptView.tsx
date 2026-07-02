@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
+import { Button } from "@zeyn/ui/components/button";
+import { Input } from "@zeyn/ui/components/input";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 import { LockKeyhole } from "lucide-react";
 
 interface PasswordPromptViewProps {

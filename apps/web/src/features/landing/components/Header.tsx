@@ -1,4 +1,4 @@
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { Link } from "@tanstack/react-router";
 import { Gamepad2 } from "lucide-react";
 import { ModeToggle } from "@/shared/components/mode-toggle";
@@ -21,7 +21,7 @@ export function Header() {
             <div className="w-8 h-8 bg-primary flex items-center justify-center">
               <Gamepad2 className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className='text-lg font-medium'>Shaxsiy O'yin</span>
+            <span className='text-lg font-medium'>Zeyn</span>
           </Link>
 
           <nav className='hidden md:flex items-center gap-8'>

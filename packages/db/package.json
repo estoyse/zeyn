@@ -1,5 +1,5 @@
 {
-  "name": "@shaxsiy-oyin/db",
+  "name": "@zeyn/db",
   "type": "module",
   "exports": {
     ".": {
@@ -21,14 +21,14 @@
   },
   "dependencies": {
     "@libsql/client": "catalog:",
-    "@shaxsiy-oyin/env": "workspace:*",
+    "@zeyn/env": "workspace:*",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.1",
     "libsql": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "drizzle-kit": "^0.31.8",
     "typescript": "^6"
   }

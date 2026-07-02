@@ -1,12 +1,12 @@
 import { DurableObject } from "cloudflare:workers";
-import type { Env } from "@shaxsiy-oyin/env/server";
+import type { Env } from "@zeyn/env/server";
 import {
   platformMessageSchema,
   type BaseGameState,
   type EngineDirectives,
   type PlatformMessage,
-} from "@shaxsiy-oyin/api/game-types";
-import { getGameMeta } from "@shaxsiy-oyin/api/games";
+} from "@zeyn/api/game-types";
+import { getGameMeta } from "@zeyn/api/games";
 import type { RoomGame } from "../games/contract";
 import {
   createRoomGame,

@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
-import { Badge } from "@shaxsiy-oyin/ui/components/badge";
+import { Button } from "@zeyn/ui/components/button";
+import { Input } from "@zeyn/ui/components/input";
+import { Badge } from "@zeyn/ui/components/badge";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 import { toast } from "sonner";
 import { Users, Play, Info, Crown, UserCircle2, Copy } from "lucide-react";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";

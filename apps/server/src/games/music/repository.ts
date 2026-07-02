@@ -1,5 +1,5 @@
-import { createDb, inArray, eq, schema } from "@shaxsiy-oyin/db";
-import type { MusicQuizState } from "@shaxsiy-oyin/api/games";
+import { createDb, inArray, eq, schema } from "@zeyn/db";
+import type { MusicQuizState } from "@zeyn/api/games";
 import type { RoomMeta } from "../base";
 import type { SongRow } from "./engine";
 

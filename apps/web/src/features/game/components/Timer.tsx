@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@shaxsiy-oyin/ui/lib/utils";
+import { cn } from "@zeyn/ui/lib/utils";
 
 interface TimerProps {
   expiresAt: number;

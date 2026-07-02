@@ -2,8 +2,8 @@
 // pure engine. The DO holds one instance and calls these methods to hydrate a
 // room, flip its status, and flush results when a match ends.
 
-import { createDb, inArray, eq, schema } from "@shaxsiy-oyin/db";
-import type { GameState, Subject } from "@shaxsiy-oyin/api/game-types";
+import { createDb, inArray, eq, schema } from "@zeyn/db";
+import type { GameState, Subject } from "@zeyn/api/game-types";
 import { mapSubjects, type RoomRow } from "./engine";
 
 // Cloudflare D1 rejects any query with more than 100 bound parameters, so

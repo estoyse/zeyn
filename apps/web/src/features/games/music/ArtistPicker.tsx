@@ -5,9 +5,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
-import { Badge } from "@shaxsiy-oyin/ui/components/badge";
-import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
+} from "@zeyn/ui/components/card";
+import { Badge } from "@zeyn/ui/components/badge";
+import { Skeleton } from "@zeyn/ui/components/skeleton";
 
 interface Artist {
   id: string;

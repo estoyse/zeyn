@@ -1,8 +1,8 @@
-import { createAuth } from "@shaxsiy-oyin/auth";
+import { createAuth } from "@zeyn/auth";
 import type { Context as HonoContext } from "hono";
-import { type Env } from "@shaxsiy-oyin/env/server";
+import { type Env } from "@zeyn/env/server";
 
-import { createDb } from "@shaxsiy-oyin/db";
+import { createDb } from "@zeyn/db";
 
 export type CreateContextOptions = {
   context: HonoContext;

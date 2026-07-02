@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
-import { Field } from "@shaxsiy-oyin/ui/components/field";
+import { Field } from "@zeyn/ui/components/field";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { toast } from "sonner";
 import { AuthField } from "./AuthField";

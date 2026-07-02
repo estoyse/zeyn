@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
+import { Button } from "@zeyn/ui/components/button";
+import { Card, CardContent } from "@zeyn/ui/components/card";
 import { UserCircle2 } from "lucide-react";
 
 interface LoginRequiredViewProps {

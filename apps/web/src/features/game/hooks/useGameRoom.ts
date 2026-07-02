@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { ClientMessage } from "@shaxsiy-oyin/api/game-types";
+import type { ClientMessage } from "@zeyn/api/game-types";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { useGame } from "./game-client";
 import { resolveGameView } from "@/features/game/lib/resolveGameView";

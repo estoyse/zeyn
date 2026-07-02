@@ -1,4 +1,4 @@
-import { Toaster } from "@shaxsiy-oyin/ui/components/sonner";
+import { Toaster } from "@zeyn/ui/components/sonner";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -26,11 +26,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "shaxsiy-oyin",
+        title: "Zeyn",
       },
       {
         name: "description",
-        content: "shaxsiy-oyin is a web application",
+        content: "Zeyn — multiplayer trivia quiz games",
       },
     ],
     links: [

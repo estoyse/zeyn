@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@hono/trpc-server": "^0.4.0",
-    "@shaxsiy-oyin/api": "workspace:*",
-    "@shaxsiy-oyin/auth": "workspace:*",
-    "@shaxsiy-oyin/db": "workspace:*",
-    "@shaxsiy-oyin/env": "workspace:*",
+    "@zeyn/api": "workspace:*",
+    "@zeyn/auth": "workspace:*",
+    "@zeyn/db": "workspace:*",
+    "@zeyn/env": "workspace:*",
     "@trpc/server": "catalog:",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "@types/node": "^22.13.14",
     "alchemy": "catalog:",
     "tsdown": "^0.21.9",

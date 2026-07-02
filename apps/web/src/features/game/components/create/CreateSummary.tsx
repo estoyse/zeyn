@@ -1,4 +1,4 @@
-import { roomLimits } from "@shaxsiy-oyin/api/game-types";
+import { roomLimits } from "@zeyn/api/game-types";
 import { DeployPanel } from "./DeployPanel";
 
 interface CreateSummaryProps {

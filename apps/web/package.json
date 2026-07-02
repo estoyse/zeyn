@@ -13,10 +13,10 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@libsql/client": "catalog:",
-    "@shaxsiy-oyin/api": "workspace:*",
-    "@shaxsiy-oyin/auth": "workspace:*",
-    "@shaxsiy-oyin/env": "workspace:*",
-    "@shaxsiy-oyin/ui": "workspace:*",
+    "@zeyn/api": "workspace:*",
+    "@zeyn/auth": "workspace:*",
+    "@zeyn/env": "workspace:*",
+    "@zeyn/ui": "workspace:*",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-query": "catalog:",
@@ -36,7 +36,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "@tanstack/react-query-devtools": "^5.91.1",
     "@tanstack/react-router-devtools": "^1.166.13",
     "@tanstack/router-plugin": "^1.167.22",

@@ -1,7 +1,7 @@
 import { expo } from "@better-auth/expo";
-import { createDb } from "@shaxsiy-oyin/db";
-import * as schema from "@shaxsiy-oyin/db/schema/auth";
-import { env } from "@shaxsiy-oyin/env/server";
+import { createDb } from "@zeyn/db";
+import * as schema from "@zeyn/db/schema/auth";
+import { env } from "@zeyn/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "./password";
@@ -16,7 +16,7 @@ export function createAuth() {
     }),
     trustedOrigins: [
       env.CORS_ORIGIN,
-      "shaxsiy-oyin://",
+      "zeyn://",
       ...(env.NODE_ENV === "development"
         ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081", "http://localhost:3001"]
         : []),

@@ -13,11 +13,11 @@
   "iconLibrary": "lucide",
   "rtl": false,
   "aliases": {
-    "components": "@shaxsiy-oyin/ui/components",
-    "utils": "@shaxsiy-oyin/ui/lib/utils",
-    "hooks": "@shaxsiy-oyin/ui/hooks",
-    "lib": "@shaxsiy-oyin/ui/lib",
-    "ui": "@shaxsiy-oyin/ui/components"
+    "components": "@zeyn/ui/components",
+    "utils": "@zeyn/ui/lib/utils",
+    "hooks": "@zeyn/ui/hooks",
+    "lib": "@zeyn/ui/lib",
+    "ui": "@zeyn/ui/components"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

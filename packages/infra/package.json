@@ -1,5 +1,5 @@
 {
-  "name": "@shaxsiy-oyin/infra",
+  "name": "@zeyn/infra",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "alchemy": "catalog:",
     "typescript": "^6"
   }

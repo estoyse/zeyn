@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { ArrowLeft, Zap } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { PublicArenas } from "@/features/dashboard/components/PublicArenas";
 import { RecentGamesSection } from "@/features/dashboard/components/RecentGamesSection";

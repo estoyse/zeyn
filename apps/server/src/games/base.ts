@@ -1,9 +1,9 @@
-import { roomLimits } from "@shaxsiy-oyin/api/game-types";
+import { roomLimits } from "@zeyn/api/game-types";
 import type {
   BaseGameState,
   EngineDirectives,
   ServerMessage,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 import type { JoinParams } from "./contract";
 
 export interface RoomMeta {

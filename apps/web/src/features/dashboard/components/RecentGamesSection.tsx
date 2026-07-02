@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import type { GameType } from "@shaxsiy-oyin/api/games";
+import type { GameType } from "@zeyn/api/games";
 import { History, Trophy, Users } from "lucide-react";
-import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
+import { Skeleton } from "@zeyn/ui/components/skeleton";
 import { getClientGame } from "@/features/games/registry";
 import { trpc } from "@/shared/lib/trpc";
 

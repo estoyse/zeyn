@@ -22,7 +22,7 @@ function HomeComponent() {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-3">
-              <h4 className="text-sm font-medium">Shaxsiy O'yin</h4>
+              <h4 className="text-sm font-medium">Zeyn</h4>
               <p className="text-sm text-muted-foreground">
                 Premium online trivia games platform
               </p>
@@ -71,7 +71,7 @@ function HomeComponent() {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-            © 2026 Shaxsiy O'yin. All rights reserved.
+            © 2026 Zeyn. All rights reserved.
           </div>
         </div>
       </footer>

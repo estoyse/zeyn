@@ -1,5 +1,5 @@
-import type { MusicPublicState } from "@shaxsiy-oyin/api/games";
-import type { Player } from "@shaxsiy-oyin/api/game-types";
+import type { MusicPublicState } from "@zeyn/api/games";
+import type { Player } from "@zeyn/api/game-types";
 
 export type MusicView = Omit<MusicPublicState, "players"> & {
   players: Record<string, Player>;
