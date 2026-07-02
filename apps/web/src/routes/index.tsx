@@ -1,80 +1,130 @@
-import { FeaturedGames } from "@/features/landing/components/FeaturedGames";
-import { createFileRoute } from "@tanstack/react-router";
-import { Stats } from "@/features/landing/components/Stats";
-
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Gamepad2 } from "lucide-react";
 import { Hero } from "@/features/landing/components/Hero";
-import { Terminal } from "@/features/landing/components/Terminal";
-import { Link } from "@tanstack/react-router";
+import { Marquee } from "@/features/landing/components/Marquee";
+import { PlayableRound } from "@/features/landing/components/PlayableRound";
+import { GamesShowcase } from "@/features/landing/components/GamesShowcase";
+import { HowItWorks } from "@/features/landing/components/HowItWorks";
+import { BentoFeatures } from "@/features/landing/components/BentoFeatures";
+import { Stats } from "@/features/landing/components/Stats";
+import { CTA } from "@/features/landing/components/CTA";
+import { ScrollProgress } from "@/features/landing/components/ScrollProgress";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
 });
 
+const FOOTER_SECTIONS = [
+  {
+    heading: "Games",
+    links: [
+      { label: "Browse games", to: "/dashboard" as const },
+      { label: "Tournaments", disabled: true },
+      { label: "Leaderboard", disabled: true },
+    ],
+  },
+  {
+    heading: "Company",
+    links: [
+      { label: "About us", disabled: true },
+      { label: "Blog", disabled: true },
+      { label: "Contact", disabled: true },
+    ],
+  },
+  {
+    heading: "Social",
+    links: [
+      { label: "Twitter", href: "#" },
+      { label: "Discord", href: "#" },
+      { label: "GitHub", href: "#" },
+    ],
+  },
+];
+
 function HomeComponent() {
   return (
-    <div className="min-h-screen">
+    <div>
+      <ScrollProgress />
       <Hero />
-      <Terminal />
+      <Marquee />
+      <PlayableRound />
+      <GamesShowcase />
+      <BentoFeatures />
+      <HowItWorks />
       <Stats />
-      <FeaturedGames />
-
-      <footer className="border-t mt-20">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="space-y-3">
-              <h4 className="text-sm font-medium">Shaxsiy O'yin</h4>
-              <p className="text-sm text-muted-foreground">
-                Premium online trivia games platform
-              </p>
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-sm font-medium">Games</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <Link to="/dashboard" className="block hover:text-foreground transition-colors">
-                  Browse Games
-                </Link>
-                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
-                  Tournaments
-                </span>
-                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
-                  Leaderboard
-                </span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-sm font-medium">Company</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
-                  About Us
-                </span>
-                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
-                  Blog
-                </span>
-                <span className="block hover:text-foreground transition-colors opacity-50 cursor-not-allowed">
-                  Contact
-                </span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-sm font-medium">Social</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <a href="#" className="block hover:text-foreground transition-colors">
-                  Twitter
-                </a>
-                <a href="#" className="block hover:text-foreground transition-colors">
-                  Discord
-                </a>
-                <a href="#" className="block hover:text-foreground transition-colors">
-                  GitHub
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-            © 2026 Shaxsiy O'yin. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <CTA />
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className='border-t'>
+      <div className='max-w-7xl mx-auto px-6 py-14'>
+        <div className='grid gap-10 md:grid-cols-4'>
+          <div className='space-y-3'>
+            <Link to='/' className='flex items-center gap-2.5'>
+              <div className='w-8 h-8 bg-brand flex items-center justify-center'>
+                <Gamepad2 className='w-5 h-5 text-brand-foreground' />
+              </div>
+              <span className='text-lg font-heading font-semibold tracking-tight'>
+                Shaxsiy O'yin
+              </span>
+            </Link>
+            <p className='text-sm text-muted-foreground max-w-xs'>
+              Real-time multiplayer trivia. Fast games, live scoring, endless
+              rematches.
+            </p>
+          </div>
+
+          {FOOTER_SECTIONS.map(section => (
+            <div key={section.heading} className='space-y-3'>
+              <h4 className='text-xs font-mono uppercase tracking-widest text-muted-foreground'>
+                {section.heading}
+              </h4>
+              <div className='space-y-2 text-sm'>
+                {section.links.map(link => {
+                  if ("to" in link && link.to) {
+                    return (
+                      <Link
+                        key={link.label}
+                        to={link.to}
+                        className='block text-muted-foreground hover:text-foreground transition-colors'
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  }
+                  if ("href" in link && link.href) {
+                    return (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        className='block text-muted-foreground hover:text-foreground transition-colors'
+                      >
+                        {link.label}
+                      </a>
+                    );
+                  }
+                  return (
+                    <span
+                      key={link.label}
+                      className='block text-muted-foreground/50 cursor-not-allowed'
+                    >
+                      {link.label}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className='mt-12 pt-8 border-t text-center text-sm text-muted-foreground'>
+          © 2026 Shaxsiy O'yin. All rights reserved.
+        </div>
+      </div>
+    </footer>
   );
 }
