@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { roomLimits } from "../game-types";
-import { getGameMeta } from "../games";
+import { getGameMeta, gameMetaRegistry, type GameType } from "../games";
 import { loadResultsDetail } from "../games/results";
 import { protectedProcedure, router } from "../index";
 import {
@@ -9,7 +9,11 @@ import {
   gamePlayerResults,
   activeGames,
 } from "@shaxsiy-oyin/db/schema";
-import { eq, desc, and, lt } from "@shaxsiy-oyin/db";
+import { eq, desc, and, or, lt, sql } from "@shaxsiy-oyin/db";
+
+const gameTypeSchema = z.enum(
+  Object.keys(gameMetaRegistry) as [GameType, ...GameType[]]
+);
 
 // Keyset pagination shared by the room/history lists. `cursor` is the
 // createdAt (epoch ms) of the last row a client has seen; passing it fetches the
@@ -18,6 +22,7 @@ const listPageInput = z
   .object({
     limit: z.number().int().min(1).max(100).default(50),
     cursor: z.number().int().optional(),
+    gameType: gameTypeSchema.optional(),
   })
   .optional();
 
@@ -80,16 +85,23 @@ export const gameRouter = router({
     .input(listPageInput)
     .query(async ({ ctx, input }) => {
       const limit = input?.limit ?? 50;
-      const where = input?.cursor
-        ? and(
-            eq(activeGames.isPublic, true),
-            lt(activeGames.createdAt, new Date(input.cursor))
-          )
-        : eq(activeGames.isPublic, true);
+      const conditions = [
+        eq(activeGames.isPublic, true),
+        or(
+          eq(activeGames.status, "waiting"),
+          eq(activeGames.status, "playing")
+        ),
+      ];
+      if (input?.cursor) {
+        conditions.push(lt(activeGames.createdAt, new Date(input.cursor)));
+      }
+      if (input?.gameType) {
+        conditions.push(eq(activeGames.gameType, input.gameType));
+      }
       return ctx.db
         .select()
         .from(activeGames)
-        .where(where)
+        .where(and(...conditions))
         .orderBy(desc(activeGames.createdAt))
         .limit(limit);
     }),
@@ -160,21 +172,42 @@ export const gameRouter = router({
       return room?.status || null;
     }),
 
-  getHistory: protectedProcedure
+  getMyRecentGames: protectedProcedure
     .input(listPageInput)
     .query(async ({ ctx, input }) => {
       const limit = input?.limit ?? 50;
-      const where = input?.cursor
-        ? and(
-            eq(activeGames.status, "finished"),
-            lt(activeGames.createdAt, new Date(input.cursor))
-          )
-        : eq(activeGames.status, "finished");
-      return ctx.db
-        .select()
-        .from(activeGames)
-        .where(where)
-        .orderBy(desc(activeGames.createdAt))
+      const conditions = [eq(gamePlayerResults.userId, ctx.session.user.id)];
+      if (input?.cursor) {
+        conditions.push(lt(gameHistory.createdAt, new Date(input.cursor)));
+      }
+      if (input?.gameType) {
+        conditions.push(eq(gameHistory.gameType, input.gameType));
+      }
+
+      const items = await ctx.db
+        .select({
+          historyId: gameHistory.id,
+          gameId: gameHistory.gameId,
+          gameType: gameHistory.gameType,
+          roomName: activeGames.name,
+          createdAt: gameHistory.createdAt,
+          score: gamePlayerResults.score,
+          playerCount: sql<number>`(select count(*) from ${gamePlayerResults} where ${gamePlayerResults.gameId} = ${gameHistory.id})`.mapWith(
+            Number
+          ),
+        })
+        .from(gamePlayerResults)
+        .innerJoin(gameHistory, eq(gamePlayerResults.gameId, gameHistory.id))
+        .leftJoin(activeGames, eq(activeGames.id, gameHistory.gameId))
+        .where(and(...conditions))
+        .orderBy(desc(gameHistory.createdAt))
         .limit(limit);
+
+      const last = items.at(-1);
+      return {
+        items,
+        nextCursor:
+          items.length === limit && last ? last.createdAt.getTime() : null,
+      };
     }),
 });

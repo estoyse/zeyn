@@ -1,9 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Gamepad2 } from "lucide-react";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
-import { QuickActions } from "@/features/dashboard/components/QuickActions";
-import { PublicArenas } from "@/features/dashboard/components/PublicArenas";
 import { Sidebar } from "@/features/dashboard/components/Sidebar";
+import { GameCatalog } from "@/features/games/components/GameCatalog";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -28,8 +28,13 @@ function DashboardPage() {
 
         <div className='grid gap-8 lg:grid-cols-[1fr_350px]'>
           <div className='space-y-10'>
-            <QuickActions />
-            <PublicArenas userId={session?.user?.id} />
+            <section className='space-y-6'>
+              <h3 className='text-xl font-bold flex items-center gap-3'>
+                <Gamepad2 className='size-5' />
+                Games
+              </h3>
+              <GameCatalog variant='play' />
+            </section>
           </div>
 
           <Sidebar />
