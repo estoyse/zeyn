@@ -206,7 +206,7 @@ export function PlayableRound() {
             <div className='flex items-center gap-4'>
               <span className='flex items-center gap-1.5'>
                 <Flame
-                  className={`size-3.5 ${streak > 0 ? "text-warning" : "text-muted-foreground"}`}
+                  className={`size-3.5 ${streak > 0 ? "text-buzzer" : "text-muted-foreground"}`}
                 />
                 {streak}x
               </span>

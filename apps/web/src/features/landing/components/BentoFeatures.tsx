@@ -44,7 +44,7 @@ export function BentoFeatures() {
               {[...Array(5)].map((_, i) => (
                 <motion.span
                   key={i}
-                  className='h-8 w-full bg-brand/15'
+                  className='h-8 w-full bg-buzzer/20'
                   animate={{ scaleY: [0.4, 1, 0.4] }}
                   transition={{
                     duration: 1.4,

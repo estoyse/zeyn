@@ -1,6 +1,6 @@
 import { Button } from "@zeyn/ui/components/button";
+import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Link } from "@tanstack/react-router";
-import { Gamepad2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ModeToggle } from "@/shared/components/mode-toggle";
@@ -36,13 +36,8 @@ export function Header() {
     >
       <div className='max-w-7xl mx-auto px-6 py-4'>
         <div className='flex items-center justify-between'>
-          <Link to='/' className='group flex items-center gap-2.5'>
-            <div className='w-8 h-8 bg-brand flex items-center justify-center transition-transform group-hover:-translate-y-0.5'>
-              <Gamepad2 className='w-5 h-5 text-brand-foreground' />
-            </div>
-            <span className='text-lg font-heading font-semibold tracking-tight'>
-              Zeyn
-            </span>
+          <Link to='/' className='transition-transform hover:-translate-y-0.5'>
+            <LogoLockup size='sm' />
           </Link>
 
           <nav className='hidden md:flex items-center gap-8'>

@@ -82,7 +82,13 @@ export function Hero() {
                   }
                 >
                   <span
-                    className={line.variant === "brand" ? "text-brand" : undefined}
+                    className={
+                      line.variant === "brand"
+                        ? "text-brand"
+                        : line.variant === "solid"
+                          ? "text-buzzer"
+                          : undefined
+                    }
                   >
                     {line.text}
                   </span>

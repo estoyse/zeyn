@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Gamepad2 } from "lucide-react";
+import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Hero } from "@/features/landing/components/Hero";
 import { Marquee } from "@/features/landing/components/Marquee";
 import { PlayableRound } from "@/features/landing/components/PlayableRound";
@@ -64,13 +64,8 @@ function Footer() {
       <div className='max-w-7xl mx-auto px-6 py-14'>
         <div className='grid gap-10 md:grid-cols-4'>
           <div className='space-y-3'>
-            <Link to='/' className='flex items-center gap-2.5'>
-              <div className='w-8 h-8 bg-brand flex items-center justify-center'>
-                <Gamepad2 className='w-5 h-5 text-brand-foreground' />
-              </div>
-              <span className='text-lg font-heading font-semibold tracking-tight'>
-                Zeyn
-              </span>
+            <Link to='/'>
+              <LogoLockup size='sm' />
             </Link>
             <p className='text-sm text-muted-foreground max-w-xs'>
               Real-time multiplayer trivia. Fast games, live scoring, endless

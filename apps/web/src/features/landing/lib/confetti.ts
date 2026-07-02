@@ -6,7 +6,7 @@ interface ConfettiOptions {
   power?: number;
 }
 
-const COLORS = ["#2b7fff", "#22c55e", "#f5b301", "#e11d48", "#0f172a"];
+const COLORS = ["#3A5BF0", "#22c55e", "#FFC24B", "#e11d48", "#0f172a"];
 
 interface Particle {
   x: number;

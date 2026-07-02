@@ -129,7 +129,7 @@ export function LiveMatch() {
           <div className='h-1 w-full bg-muted overflow-hidden'>
             <motion.div
               key={`bar-${round}`}
-              className='h-full bg-brand'
+              className='h-full bg-buzzer'
               initial={{ width: "100%" }}
               animate={{ width: "22%" }}
               transition={{ duration: phase === "asking" ? 2.6 : 0, ease: "linear" }}
@@ -202,7 +202,7 @@ export function LiveMatch() {
                       initial={{ opacity: 0, scale: 0.6 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.6 }}
-                      className='flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-brand'
+                      className='flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-buzzer'
                     >
                       <Zap className='size-3' />
                       Buzz

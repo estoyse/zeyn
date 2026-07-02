@@ -26,7 +26,7 @@ export function Marquee() {
             className='flex items-center gap-6 px-6 text-2xl md:text-3xl font-heading font-semibold uppercase tracking-tight'
           >
             {word}
-            <span className='text-brand'>✦</span>
+            <span className='text-buzzer'>✦</span>
           </span>
         ))}
       </motion.div>
