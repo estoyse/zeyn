@@ -255,9 +255,37 @@ speculative one-size-fits-all results table while keeping the common
     payload; abstracting the create-config panel and the play actions
     (`useGameRoom`'s buzz/answer) behind the module interface; a per-game lobby.
     Today `useGameRoom` and `GameLobby` are still buzzer-shaped and shared.
-- **Phase 5 — Second game (later).** Add one module across the three registries
-  + its content migration. This is where the interface gets validated for real;
-  expect minor reshaping of `GameEngine` then.
+- **Phase 5 — Second game: Music Quiz. ✅ DONE.** Added a genuinely different
+  game (simultaneous 3-option multiple-choice, audio clips, no buzz-in) to
+  validate the abstraction for real.
+  - **5a (seam generalization):** START dropped its `subjectIds`; `useGameState`
+    is generic (player-merge + `serverTimeOffset`, no buzzer timer-adjust);
+    `useGameRoom` exposes generic `send`/`start`/`state`/`serverTimeOffset` with
+    buzzer input/actions/timer-adjust moved into `BuzzerPlaying`; `GameHeader`/
+    `GameLobby` are meta-driven; results resolve per game via a client-registry
+    `Results` entry. Added a vitest config (tests now run from `src` only; a stale
+    `dist` copy had been inflating the count — real total is 26 buzzer tests).
+  - **5b–5d (the game):** `artists`/`songs` tables (migration 0009) seeded from
+    the iTunes Search API (real 30s previews); shared music meta/config/state/
+    public types + `musicActionSchema`; pure music engine (question building,
+    speed+streak scoring, reveal on timer-or-all-answered) with 12 tests; music
+    repository + serializer (hides `correctIndex` until reveal) + `MusicGame`
+    registered in the server registry; a shared `base.ts` for generic join/
+    hydrate/init; `music.getArtists` router; and the music client module
+    (artist-picker create form, audio + 3-option playing view, leaderboard).
+  - **What the abstraction needed (validation result):** the interface held up.
+    The only additions were a generic base helper (`base.ts`) and generalizing
+    three client hooks/components that were still buzzer-shaped — no change to the
+    `RoomGame` contract, `EngineDirectives`, the DO, or the registries' shape.
+  - **Verified:** full workspace typechecks; 38 engine tests (26 buzzer + 12
+    music); live smoke test — the catalog lists both games, and each game's
+    create page renders via the registry. Live gameplay (audio, scoring,
+    leaderboard) still needs the Worker + a seeded D1 (iTunes seed), which this
+    sandbox can't run.
+  - **Deferred:** buzzer state is still flat (not nested under a `game` key) —
+    unnecessary since each game's state independently extends `BaseGameState`;
+    and `base.ts` isn't yet adopted by the buzzer module (left as-is to avoid
+    touching tested code).
 
 ---
 
