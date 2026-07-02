@@ -5,6 +5,9 @@
     ".": {
       "default": "./src/index.ts"
     },
+    "./games": {
+      "default": "./src/games/index.ts"
+    },
     "./*": {
       "default": "./src/*.ts"
     }

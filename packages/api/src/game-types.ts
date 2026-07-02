@@ -39,8 +39,12 @@ export interface ActiveQuestionState {
   timerExpiresAt: number;
 }
 
-export interface GameState {
+// Fields every game's state carries, regardless of game type. The generic
+// platform machinery (the GameRoom durable object, the room lifecycle) only ever
+// touches these; each game type extends this with its own play state.
+export interface BaseGameState {
   status: "WAITING" | "PLAYING" | "FINISHED";
+  gameType: string;
   gameId: string | null;
   gameName: string | null;
   hostId: string | null;
@@ -48,6 +52,12 @@ export interface GameState {
   isPublic: boolean;
   hasPassword: boolean;
   players: Record<string, Player>;
+}
+
+// The buzzer game's full state. Buzzer-specific play fields (subjects, the
+// question cursor, the active-question buzzer state, per-question results) live
+// here, not on BaseGameState.
+export interface GameState extends BaseGameState {
   subjects: Subject[];
   currentSubjectIndex: number;
   currentQuestionIndex: number;
@@ -74,7 +84,10 @@ export interface PublicGameState
 // purely structural (shapes + generous size caps to reject abusive payloads);
 // semantic rules (host-only START, room full, password, empty name) live in the
 // game engine so it can return specific error messages.
-export const clientMessageSchema = z.discriminatedUnion("type", [
+// Platform-level messages, common to every game type: joining a room and the
+// host starting the match. (`subjectIds` on START is a buzzer-specific payload
+// that will move behind the game module once the create flow is generalized.)
+export const platformMessageSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("JOIN"),
     playerId: z.string().max(200),
@@ -87,6 +100,12 @@ export const clientMessageSchema = z.discriminatedUnion("type", [
     playerId: z.string().max(200),
     subjectIds: z.array(z.string().max(200)).max(100),
   }),
+]);
+
+// The buzzer game's own actions. Each game module owns a schema like this; the
+// durable object validates incoming messages against the union of the platform
+// schema and the room's game module schema.
+export const buzzerActionSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("BUZZ"),
     playerId: z.string().max(200),
@@ -98,11 +117,42 @@ export const clientMessageSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
+export const clientMessageSchema = z.union([
+  platformMessageSchema,
+  buzzerActionSchema,
+]);
+
+export type PlatformMessage = z.infer<typeof platformMessageSchema>;
+export type BuzzerAction = z.infer<typeof buzzerActionSchema>;
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 
 export type ServerMessage =
   | { type: "STATE_UPDATE"; state: PublicGameState; serverTime: number }
   | { type: "ERROR"; message: string; code?: string };
+
+/**
+ * Side effects produced by a game engine transition, executed by the GameRoom
+ * durable object. Game-agnostic: every game module's transitions return this, so
+ * the durable object never needs to know a game's rules to carry out its effects.
+ * Every field is optional; an empty object means "state may have changed, just
+ * save and broadcast" (the DO always saves + broadcasts after an action).
+ */
+export interface EngineDirectives {
+  /** Message to send back to the socket that triggered the action. */
+  reply?: ServerMessage;
+  /** Close the acting socket after sending `reply`. */
+  closeSocket?: boolean;
+  /** JOIN succeeded — the DO should attach player metadata to the socket. */
+  accepted?: boolean;
+  /** Schedule the next phase alarm at this absolute epoch-ms timestamp. */
+  alarmAt?: number;
+  /** Delete any pending alarm (the game reached a terminal state). */
+  cancelAlarm?: boolean;
+  /** Persist the room's `status` column. */
+  updateRoomStatus?: "playing" | "finished";
+  /** Flush the accumulated match results to history tables. */
+  persistResults?: boolean;
+}
 
 export const gameConfig = {
   questionTimeMs: 15000,

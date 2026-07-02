@@ -68,16 +68,6 @@ export class GameRepository {
     return mapSubjects(subjectsData, questionsData);
   }
 
-  async updateRoomStatus(
-    gameId: string,
-    status: "waiting" | "playing" | "finished"
-  ): Promise<void> {
-    await this.db
-      .update(schema.activeGames)
-      .set({ status })
-      .where(eq(schema.activeGames.id, gameId));
-  }
-
   /**
    * Persist a finished match: one history row, its per-question results, and the
    * final player scoreboard. Inserts are chunked to respect D1's parameter cap
@@ -90,6 +80,7 @@ export class GameRepository {
     await this.db.insert(schema.gameHistory).values({
       id: historyId,
       gameId: state.gameId || "unknown",
+      gameType: "buzzer",
       hostId: state.hostId,
       subjects: JSON.stringify(state.subjects.map(s => s.name)),
       createdAt: new Date(),

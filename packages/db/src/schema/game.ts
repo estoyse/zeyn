@@ -20,6 +20,7 @@ export const questions = sqliteTable("questions", {
 export const gameHistory = sqliteTable("game_history", {
   id: text("id").primaryKey(),
   gameId: text("game_id").notNull().default("unknown"),
+  gameType: text("game_type").notNull().default("buzzer"),
   hostId: text("host_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -78,6 +79,7 @@ export const gamePlayerResults = sqliteTable(
 export const activeGames = sqliteTable("active_games", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  gameType: text("game_type").notNull().default("buzzer"),
   hostId: text("host_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -87,6 +89,10 @@ export const activeGames = sqliteTable("active_games", {
   status: text("status", { enum: ["waiting", "playing", "finished"] })
     .notNull()
     .default("waiting"),
+  // Game-specific room configuration, shape owned by the game module. For the
+  // buzzer game this is `{ subjectIds: string[] }`. `subjectIds` below is the
+  // legacy column kept in parallel until the platform switch drops it.
+  config: text("config").notNull().default("{}"),
   subjectIds: text("subject_ids").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }),

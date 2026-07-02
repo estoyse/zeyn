@@ -51,11 +51,13 @@ export const gameRouter = router({
       await ctx.db.insert(activeGames).values({
         id: gameId,
         name: input.name,
+        gameType: "buzzer",
         hostId: ctx.session.user.id,
         maxPlayers: input.maxPlayers,
         isPublic: input.isPublic,
         password: input.password || null,
         status: "waiting",
+        config: JSON.stringify({ subjectIds: input.subjectIds }),
         subjectIds: JSON.stringify(input.subjectIds),
         createdAt: new Date(),
         updatedAt: new Date(),
