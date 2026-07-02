@@ -19,16 +19,22 @@ loadEnvs();
 
 const isProduction = process.env.NODE_ENV === "production";
 
+const hasRemoteState =
+  !!process.env.CLOUDFLARE_API_TOKEN && !!process.env.ALCHEMY_STATE_TOKEN;
+
 const app = await alchemy("shaxsiy-oyin", {
   // Alchemy derives the stage from $USER; pin it so CI and local deploys target
   // the same resources instead of separate per-user copies.
   stage: process.env.ALCHEMY_STAGE ?? (isProduction ? "production" : undefined),
-  // Remote state so local and CI deploys share one source of truth.
-  stateStore: (scope) =>
-    new CloudflareStateStore(scope, {
-      apiToken: alchemy.secret(process.env.CLOUDFLARE_API_TOKEN),
-      stateToken: alchemy.secret(process.env.ALCHEMY_STATE_TOKEN),
-    }),
+  // Remote state so local and CI deploys share one source of truth. Falls back
+  // to the local `.alchemy/` file store when the tokens are absent (local dev).
+  stateStore: hasRemoteState
+    ? (scope) =>
+        new CloudflareStateStore(scope, {
+          apiToken: alchemy.secret(process.env.CLOUDFLARE_API_TOKEN),
+          stateToken: alchemy.secret(process.env.ALCHEMY_STATE_TOKEN),
+        })
+    : undefined,
 });
 
 const db = await D1Database("database", {
