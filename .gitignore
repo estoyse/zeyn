@@ -52,3 +52,6 @@ temp
 
 # Claude Code local worktrees
 .claude/worktrees/
+
+# Generated prod seed SQL
+packages/db/seed.sql

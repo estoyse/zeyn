@@ -41,12 +41,32 @@ This project uses SQLite with Drizzle ORM.
 pnpm run db:push
 ```
 
-4. Seed the trivia content (subjects & questions). A fresh database is empty,
-   and creating a game room requires at least 5 subjects, so seed before playing.
-   This is idempotent and safe to re-run:
+4. Seed the game content. A fresh database is empty — the buzzer game needs at
+   least 5 subjects and the music quiz needs artists, so seed before playing.
+   `db:seed` loads the trivia subjects/questions and fetches real 30s song
+   previews from the iTunes Search API (needs outbound network). It targets the
+   **local** D1 file and is idempotent:
 
 ```bash
 pnpm run db:seed
+```
+
+### Seeding a remote / production D1
+
+`db:seed` only writes to the local D1 file. Deploys apply **migrations** to the
+remote D1 (via Alchemy) but not content, so a fresh prod database has the tables
+but no games' content. To load content into a remote D1, generate a SQL file and
+apply it with Wrangler:
+
+```bash
+# 1. Generate packages/db/seed.sql (fetches music previews from iTunes)
+pnpm run db:seed:sql
+
+# 2. Find your D1 database name/id
+pnpm --filter server exec wrangler d1 list
+
+# 3. Apply it to the remote D1 (idempotent: ON CONFLICT DO NOTHING)
+pnpm --filter server exec wrangler d1 execute <DB_NAME> --remote --file=../../packages/db/seed.sql
 ```
 
 Then, run the development server:

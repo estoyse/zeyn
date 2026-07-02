@@ -18,6 +18,7 @@
     "db:generate": "turbo -F @shaxsiy-oyin/db db:generate",
     "db:studio": "turbo -F @shaxsiy-oyin/db db:studio",
     "db:seed": "turbo -F @shaxsiy-oyin/db db:seed",
+    "db:seed:sql": "turbo -F @shaxsiy-oyin/db db:seed:sql",
     "deploy": "turbo -F @shaxsiy-oyin/infra deploy",
     "destroy": "turbo -F @shaxsiy-oyin/infra destroy"
   },
