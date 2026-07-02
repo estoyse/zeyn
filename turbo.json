@@ -28,6 +28,9 @@
     "db:seed": {
       "cache": false
     },
+    "db:seed:sql": {
+      "cache": false
+    },
     "db:studio": {
       "cache": false,
       "persistent": true

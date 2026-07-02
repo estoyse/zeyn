@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@shaxsiy-oyin/ui/components/button";
 import { LayoutGrid, Clock, UserCircle2 } from "lucide-react";
-import type { GameView } from "@/features/game/hooks/useGameState";
+import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
 interface GameHeaderProps {
   gameId: string;
-  state: GameView;
+  state: ClientRoomState;
   onLeave: () => void;
 }
 
@@ -29,11 +29,7 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
           <motion.div
             layout
             key={p.id}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${
-              p.id === state.activeQuestionState?.buzzedPlayerId
-                ? "bg-primary/10 border-primary"
-                : "bg-muted border-border"
-            }`}
+            className='flex items-center gap-2 px-3 py-2 rounded-lg border transition-all bg-muted border-border'
           >
             <div className='relative'>
               <UserCircle2

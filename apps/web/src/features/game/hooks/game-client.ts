@@ -24,13 +24,14 @@ export function useGame(
     setErrorCode(code || null);
   }, []);
 
-  const { state, handleMessage, createJoinMessage } = useGameState({
-    gameId,
-    playerId,
-    playerName,
-    password,
-    onError: handleGameStateError,
-  });
+  const { state, serverTimeOffset, handleMessage, createJoinMessage } =
+    useGameState({
+      gameId,
+      playerId,
+      playerName,
+      password,
+      onError: handleGameStateError,
+    });
 
   const handleSocketError = useCallback((err: string) => {
     setError(err);
@@ -63,6 +64,7 @@ export function useGame(
 
   return {
     state,
+    serverTimeOffset,
     error,
     errorCode,
     sendAction,

@@ -11,11 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GameCreateRouteImport } from './routes/game.create'
 import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
+import { Route as GameCreateIndexRouteImport } from './routes/game.create.index'
+import { Route as GameCreateGameTypeRouteImport } from './routes/game.create.$gameType'
 import { Route as AuthVerifyVerifyRouteImport } from './routes/auth.verify/verify'
 
 const DashboardRoute = DashboardRouteImport.update({
@@ -26,11 +27,6 @@ const DashboardRoute = DashboardRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GameCreateRoute = GameCreateRouteImport.update({
-  id: '/game/create',
-  path: '/game/create',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GameGameIdRoute = GameGameIdRouteImport.update({
@@ -53,6 +49,16 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GameCreateIndexRoute = GameCreateIndexRouteImport.update({
+  id: '/game/create/',
+  path: '/game/create/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameCreateGameTypeRoute = GameCreateGameTypeRouteImport.update({
+  id: '/game/create/$gameType',
+  path: '/game/create/$gameType',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthVerifyVerifyRoute = AuthVerifyVerifyRouteImport.update({
   id: '/auth/verify/verify',
   path: '/auth/verify/verify',
@@ -66,8 +72,9 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
-  '/game/create': typeof GameCreateRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
+  '/game/create/$gameType': typeof GameCreateGameTypeRoute
+  '/game/create/': typeof GameCreateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,8 +83,9 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
-  '/game/create': typeof GameCreateRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
+  '/game/create/$gameType': typeof GameCreateGameTypeRoute
+  '/game/create': typeof GameCreateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +95,9 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
-  '/game/create': typeof GameCreateRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
+  '/game/create/$gameType': typeof GameCreateGameTypeRoute
+  '/game/create/': typeof GameCreateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +108,9 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
-    | '/game/create'
     | '/auth/verify/verify'
+    | '/game/create/$gameType'
+    | '/game/create/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +119,9 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
-    | '/game/create'
     | '/auth/verify/verify'
+    | '/game/create/$gameType'
+    | '/game/create'
   id:
     | '__root__'
     | '/'
@@ -119,8 +130,9 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
-    | '/game/create'
     | '/auth/verify/verify'
+    | '/game/create/$gameType'
+    | '/game/create/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,8 +142,9 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   GameGameIdRoute: typeof GameGameIdRoute
-  GameCreateRoute: typeof GameCreateRoute
   AuthVerifyVerifyRoute: typeof AuthVerifyVerifyRoute
+  GameCreateGameTypeRoute: typeof GameCreateGameTypeRoute
+  GameCreateIndexRoute: typeof GameCreateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,13 +161,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/game/create': {
-      id: '/game/create'
-      path: '/game/create'
-      fullPath: '/game/create'
-      preLoaderRoute: typeof GameCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game/$gameId': {
@@ -185,6 +191,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/game/create/': {
+      id: '/game/create/'
+      path: '/game/create'
+      fullPath: '/game/create/'
+      preLoaderRoute: typeof GameCreateIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/create/$gameType': {
+      id: '/game/create/$gameType'
+      path: '/game/create/$gameType'
+      fullPath: '/game/create/$gameType'
+      preLoaderRoute: typeof GameCreateGameTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/verify/verify': {
       id: '/auth/verify/verify'
       path: '/auth/verify/verify'
@@ -202,8 +222,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   GameGameIdRoute: GameGameIdRoute,
-  GameCreateRoute: GameCreateRoute,
   AuthVerifyVerifyRoute: AuthVerifyVerifyRoute,
+  GameCreateGameTypeRoute: GameCreateGameTypeRoute,
+  GameCreateIndexRoute: GameCreateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

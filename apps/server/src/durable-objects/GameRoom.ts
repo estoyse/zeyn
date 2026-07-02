@@ -1,22 +1,19 @@
 import { DurableObject } from "cloudflare:workers";
 import type { Env } from "@shaxsiy-oyin/env/server";
 import {
-  clientMessageSchema,
-  type ClientMessage,
-  type GameState,
-} from "@shaxsiy-oyin/api/game-types";
-import {
-  buzz,
-  createInitialState,
-  hydrateRoom,
-  join,
-  start,
-  submitAnswer,
-  handleTimeout,
+  platformMessageSchema,
+  type BaseGameState,
   type EngineDirectives,
-} from "../game/engine";
-import { GameRepository } from "../game/repository";
-import { StateSerializer } from "../game/serializer";
+  type PlatformMessage,
+} from "@shaxsiy-oyin/api/game-types";
+import { getGameMeta } from "@shaxsiy-oyin/api/games";
+import type { RoomGame } from "../games/contract";
+import {
+  createRoomGame,
+  getRoomGameType,
+  updateRoomStatus,
+  DEFAULT_GAME_TYPE,
+} from "../games/registry";
 
 // Attachment stored on each accepted WebSocket so we can attribute close events.
 // Persisted via serializeAttachment so it survives DO hibernation (in-memory
@@ -30,22 +27,37 @@ function readMeta(ws: WebSocket): SocketMeta | null {
 }
 
 /**
- * Durable Object that owns one game room. It is a thin transport shell: it
- * accepts sockets, routes client messages to the pure `engine` transitions,
- * carries out the side effects those return via the `repository`, and broadcasts
- * the serialized public state. All game rules live in `../game/engine`.
+ * Durable Object that owns one game room, regardless of game type. It is a thin
+ * transport shell: it accepts sockets, validates client messages, routes them to
+ * the room's game engine (resolved from the registry by the room's `gameType`),
+ * carries out the side effects those return, and broadcasts the serialized public
+ * state. It knows no game's rules — those live behind the `RoomGame` interface.
  */
 export class GameRoom extends DurableObject<Env> {
-  private state: GameState = createInitialState();
+  private game: RoomGame;
+  private state: BaseGameState;
+  private gameType: string;
+  private gameTypeResolved = false;
   private gamePassword: string | null = null;
-  private readonly serializer = new StateSerializer();
-  private readonly repo: GameRepository;
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
-    this.repo = new GameRepository(env.DB);
+    // Start from the default game so `state`/`game` are always non-null; the
+    // real type is resolved from storage (on wake) or the room row (first join).
+    this.gameType = DEFAULT_GAME_TYPE;
+    this.game = createRoomGame(this.gameType, env.DB);
+    this.state = this.game.createInitialState();
+
     this.ctx.blockConcurrencyWhile(async () => {
-      const saved = await this.ctx.storage.get<GameState>("state");
+      const savedType = await this.ctx.storage.get<string>("gameType");
+      if (savedType) {
+        this.gameType = savedType;
+        this.gameTypeResolved = true;
+        if (savedType !== DEFAULT_GAME_TYPE) {
+          this.game = createRoomGame(savedType, env.DB);
+        }
+      }
+      const saved = await this.ctx.storage.get<BaseGameState>("state");
       if (saved) this.state = saved;
       // Persisted so a password-protected room stays protected if the DO is
       // evicted after hydration (empty string means "no password").
@@ -56,9 +68,31 @@ export class GameRoom extends DurableObject<Env> {
 
   async fetch(request: Request): Promise<Response> {
     if (request.headers.get("Upgrade") === "websocket") {
+      const gameId = new URL(request.url).pathname.match(
+        /\/game\/([^/]+)\/ws/
+      )?.[1];
+      if (gameId) await this.resolveGameType(gameId);
       return this.handleWebSocket();
     }
     return new Response("Not found", { status: 404 });
+  }
+
+  /**
+   * Pin this room to its real game type. Looked up from the room row once per DO
+   * lifetime, then persisted; a no-op after the first resolution or on wake from
+   * hibernation (where the type is restored from storage).
+   */
+  private async resolveGameType(gameId: string) {
+    if (this.gameTypeResolved) return;
+    const gameType = (await getRoomGameType(this.env.DB, gameId)) ?? this.gameType;
+    if (gameType !== this.gameType) {
+      this.gameType = gameType;
+      this.game = createRoomGame(gameType, this.env.DB);
+      // Safe: a fresh, unhydrated room hasn't started, so no state is lost.
+      if (!this.state.gameId) this.state = this.game.createInitialState();
+    }
+    this.gameTypeResolved = true;
+    await this.ctx.storage.put("gameType", this.gameType);
   }
 
   private handleWebSocket(): Response {
@@ -69,7 +103,7 @@ export class GameRoom extends DurableObject<Env> {
     server.send(
       JSON.stringify({
         type: "STATE_UPDATE",
-        state: this.serializer.toPublic(this.state, true),
+        state: this.game.toPublic(this.state, true),
         serverTime: Date.now(),
       })
     );
@@ -81,8 +115,8 @@ export class GameRoom extends DurableObject<Env> {
     if (typeof message !== "string") return;
 
     // Validate the untrusted client payload before it reaches any handler: parse
-    // JSON, then check the shape against the shared schema. Anything malformed is
-    // rejected here so handlers only ever see a well-formed ClientMessage.
+    // JSON, then check the shape against the platform schema first and, failing
+    // that, the room game's own action schema. Anything malformed is rejected.
     let raw: unknown;
     try {
       raw = JSON.parse(message);
@@ -93,59 +127,54 @@ export class GameRoom extends DurableObject<Env> {
       return;
     }
 
-    const parsed = clientMessageSchema.safeParse(raw);
-    if (!parsed.success) {
-      ws.send(
-        JSON.stringify({ type: "ERROR", message: "Invalid message format" })
-      );
-      return;
-    }
-    const action: ClientMessage = parsed.data;
-
     const now = Date.now();
+    let playerId: string;
     let directives: EngineDirectives;
-    switch (action.type) {
-      case "JOIN":
-        directives = await this.onJoin(action);
-        break;
-      case "START":
-        directives = await this.onStart(action, now);
-        break;
-      case "BUZZ":
-        directives = buzz(this.state, action.playerId, now);
-        break;
-      case "SUBMIT_ANSWER":
-        directives = submitAnswer(
-          this.state,
-          action.playerId,
-          action.answer,
-          now
+
+    const platform = platformMessageSchema.safeParse(raw);
+    if (platform.success) {
+      const action = platform.data;
+      playerId = action.playerId;
+      directives =
+        action.type === "JOIN"
+          ? await this.onJoin(action)
+          : await this.onStart(action, now);
+    } else {
+      const meta = getGameMeta(this.gameType);
+      const parsed = meta?.actionSchema.safeParse(raw);
+      if (!parsed?.success) {
+        ws.send(
+          JSON.stringify({ type: "ERROR", message: "Invalid message format" })
         );
-        break;
-      default:
         return;
+      }
+      const action = parsed.data as { playerId: string };
+      playerId = action.playerId;
+      directives = this.game.handleAction(this.state, action, now);
     }
 
-    await this.applyDirectives(directives, ws, action);
+    await this.applyDirectives(directives, ws, playerId);
     await this.saveState();
     this.broadcast();
   }
 
-  /** Hydrate the room from the DB on first join, then admit the player. */
+  /** Resolve the game type, then hand off to the room game's hydrate/join. */
   private async onJoin(
-    action: Extract<ClientMessage, { type: "JOIN" }>
+    action: Extract<PlatformMessage, { type: "JOIN" }>
   ): Promise<EngineDirectives> {
-    if (!this.state.gameId) {
-      const room = await this.repo.getRoom(action.gameId);
-      const hydrated = hydrateRoom(this.state, action.gameId, room);
-      if (hydrated.reply) return hydrated;
+    await this.resolveGameType(action.gameId);
 
-      this.gamePassword = room!.password;
-      await this.ctx.storage.put("gamePassword", room!.password ?? "");
-      this.state.subjects = await this.repo.loadSubjects(room!.subjectIds);
+    if (!this.state.gameId) {
+      const { directives, roomPassword } = await this.game.hydrate(
+        this.state,
+        action.gameId
+      );
+      if (directives.reply) return directives;
+      this.gamePassword = roomPassword;
+      await this.ctx.storage.put("gamePassword", roomPassword ?? "");
     }
 
-    return join(this.state, {
+    return this.game.join(this.state, {
       playerId: action.playerId,
       name: action.name,
       password: action.password,
@@ -153,27 +182,23 @@ export class GameRoom extends DurableObject<Env> {
     });
   }
 
-  /** Lazily load subjects if the host supplied ids, then start the match. */
   private async onStart(
-    action: Extract<ClientMessage, { type: "START" }>,
+    action: Extract<PlatformMessage, { type: "START" }>,
     now: number
   ): Promise<EngineDirectives> {
-    if (this.state.subjects.length === 0 && action.subjectIds?.length) {
-      this.state.subjects = await this.repo.loadSubjects(action.subjectIds);
-    }
-    return start(this.state, action.playerId, now);
+    return this.game.start(this.state, action.playerId, now);
   }
 
   /** Execute the side effects a transition asked for. */
   private async applyDirectives(
     d: EngineDirectives,
     ws?: WebSocket,
-    action?: ClientMessage
+    playerId?: string
   ) {
     if (ws && d.reply) ws.send(JSON.stringify(d.reply));
-    if (ws && action && d.accepted) {
+    if (ws && playerId && d.accepted) {
       ws.serializeAttachment({
-        playerId: action.playerId,
+        playerId,
         joinTime: Date.now(),
       } satisfies SocketMeta);
     }
@@ -182,13 +207,13 @@ export class GameRoom extends DurableObject<Env> {
       const gameId = this.state.gameId;
       const status = d.updateRoomStatus;
       await this.guard(
-        () => this.repo.updateRoomStatus(gameId, status),
+        () => updateRoomStatus(this.env.DB, gameId, status),
         "update room status"
       );
     }
     if (d.persistResults) {
       await this.guard(
-        () => this.repo.persistResults(this.state),
+        () => this.game.persistResults(this.state),
         "persist results"
       );
     }
@@ -206,7 +231,7 @@ export class GameRoom extends DurableObject<Env> {
   // alarms are persisted and survive hibernation/eviction, so a game can't stall
   // mid-question if the DO is evicted between events.
   async alarm() {
-    const directives = handleTimeout(this.state, Date.now());
+    const directives = this.game.handleTimeout(this.state, Date.now());
     await this.applyDirectives(directives);
     await this.saveState();
     this.broadcast();
@@ -242,7 +267,7 @@ export class GameRoom extends DurableObject<Env> {
   private broadcast() {
     const data = JSON.stringify({
       type: "STATE_UPDATE",
-      state: this.serializer.toPublic(this.state),
+      state: this.game.toPublic(this.state),
       serverTime: Date.now(),
     });
     for (const ws of this.ctx.getWebSockets()) {

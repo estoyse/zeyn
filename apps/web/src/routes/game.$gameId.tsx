@@ -6,10 +6,9 @@ import { LoadingView, ConnectingView } from "@/features/game/components/LoadingV
 import { LoginRequiredView } from "@/features/game/components/LoginRequiredView";
 import { PasswordPromptView } from "@/features/game/components/PasswordPromptView";
 import { ConnectionErrorView } from "@/features/game/components/ErrorViews";
-import { ArchiveView } from "@/features/game/components/ArchiveView";
 import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
-import { GamePlaying } from "@/features/game/components/GamePlaying";
+import { getClientGame } from "@/features/games/registry";
 
 export const Route = createFileRoute("/game/$gameId")({
   component: GamePage,
@@ -23,8 +22,13 @@ function GamePage() {
   const toDashboard = () => navigate({ to: "/dashboard" });
 
   switch (view.kind) {
-    case "archive":
-      return <ArchiveView data={room.results!} onBack={toDashboard} />;
+    case "archive": {
+      const results = room.results!;
+      const resultsGame = getClientGame(results.game.gameType);
+      if (!resultsGame) return null;
+      const Results = resultsGame.Results;
+      return <Results results={results} onBack={toDashboard} />;
+    }
 
     case "loading":
       return <LoadingView message={view.message} />;
@@ -72,8 +76,11 @@ function GameScreen({
   gameId: string;
   onLeave: () => void;
 }) {
-  const { state, userId, actions } = room;
+  const { state, userId } = room;
   if (!state) return null;
+
+  const game = getClientGame(state.gameType);
+  const Playing = game?.Playing;
 
   return (
     <div className='min-h-screen bg-background p-4 md:p-6'>
@@ -86,20 +93,14 @@ function GameScreen({
               key='lobby'
               state={state}
               playerId={userId}
-              onStart={actions.start}
+              onStart={room.start}
+              minPlayers={game?.meta.minPlayers ?? 2}
+              description={game?.meta.description ?? ""}
             />
           )}
 
-          {state.status === "PLAYING" && (
-            <GamePlaying
-              key='playing'
-              state={state}
-              playerId={userId}
-              answerInput={room.answerInput}
-              setAnswerInput={room.setAnswerInput}
-              onBuzz={actions.buzz}
-              onSubmitAnswer={actions.submitAnswer}
-            />
+          {state.status === "PLAYING" && Playing && (
+            <Playing key='playing' room={room} />
           )}
         </AnimatePresence>
       </div>

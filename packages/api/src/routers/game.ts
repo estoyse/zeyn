@@ -1,12 +1,13 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { roomLimits } from "../game-types";
+import { getGameMeta } from "../games";
+import { loadResultsDetail } from "../games/results";
 import { protectedProcedure, router } from "../index";
 import {
-  subjects,
   gameHistory,
   gamePlayerResults,
   activeGames,
-  gameQuestionResults,
 } from "@shaxsiy-oyin/db/schema";
 import { eq, desc, and, lt } from "@shaxsiy-oyin/db";
 
@@ -21,10 +22,6 @@ const listPageInput = z
   .optional();
 
 export const gameRouter = router({
-  getSubjects: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.select().from(subjects);
-  }),
-
   createRoom: protectedProcedure
     .input(
       z.object({
@@ -39,24 +36,39 @@ export const gameRouter = router({
           .default(roomLimits.defaultMaxPlayers),
         isPublic: z.boolean().default(true),
         password: z.string().optional(),
-        subjectIds: z
-          .array(z.string())
-          .min(roomLimits.minSubjects)
-          .max(roomLimits.maxSubjects),
+        gameType: z.string().default("buzzer"),
+        config: z.unknown(),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const meta = getGameMeta(input.gameType);
+      if (!meta) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Unknown game type: ${input.gameType}`,
+        });
+      }
+
+      const parsedConfig = meta.configSchema.safeParse(input.config);
+      if (!parsedConfig.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid game configuration",
+        });
+      }
+
       const gameId = crypto.randomUUID();
 
       await ctx.db.insert(activeGames).values({
         id: gameId,
         name: input.name,
+        gameType: input.gameType,
         hostId: ctx.session.user.id,
         maxPlayers: input.maxPlayers,
         isPublic: input.isPublic,
         password: input.password || null,
         status: "waiting",
-        subjectIds: JSON.stringify(input.subjectIds),
+        config: JSON.stringify(parsedConfig.data),
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -95,7 +107,7 @@ export const gameRouter = router({
 
       return {
         ...room,
-        subjectIds: JSON.parse(room.subjectIds) as string[],
+        config: JSON.parse(room.config) as Record<string, unknown>,
       };
     }),
 
@@ -116,35 +128,23 @@ export const gameRouter = router({
 
       if (!latestGame) return null;
 
-      // Results rows are keyed on the game_history primary key (latestGame.id),
-      // not the room's gameId. The player/question queries are independent, so
-      // run them concurrently. Player rows come back sorted highest score first.
-      const [playerResults, questionResults] = await Promise.all([
+      // Platform owns the universal scoreboard (player rows, highest score
+      // first); the game-specific detail (buzzer's subject/question grid) is
+      // loaded by that game type's own provider. Both are keyed on the
+      // game_history primary key and independent, so run them concurrently.
+      const [playerResults, detail] = await Promise.all([
         ctx.db
           .select()
           .from(gamePlayerResults)
           .where(eq(gamePlayerResults.gameId, latestGame.id))
           .orderBy(desc(gamePlayerResults.score)),
-        ctx.db
-          .select({
-            userId: gameQuestionResults.userId,
-            subjectName: gameQuestionResults.subjectName,
-            subjectPosition: gameQuestionResults.subjectPosition,
-            questionPosition: gameQuestionResults.questionPosition,
-            correct: gameQuestionResults.correct,
-            pointsAwarded: gameQuestionResults.pointsAwarded,
-          })
-          .from(gameQuestionResults)
-          .where(eq(gameQuestionResults.gameId, latestGame.id)),
+        loadResultsDetail(ctx.db, latestGame),
       ]);
-
-      const subjects = JSON.parse(latestGame.subjects) as string[];
 
       return {
         game: latestGame,
-        subjects,
         playerResults,
-        questionResults,
+        ...detail,
       };
     }),
 

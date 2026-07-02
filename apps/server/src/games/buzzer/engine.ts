@@ -13,11 +13,13 @@
 
 import {
   gameConfig,
+  type EngineDirectives,
   type GameState,
   type ServerMessage,
   type Subject,
 } from "@shaxsiy-oyin/api/game-types";
-import { isFuzzyMatch } from "../utils/fuzzy-match";
+import { isFuzzyMatch } from "./fuzzy-match";
+import type { JoinParams } from "../contract";
 
 /** The subset of the `active_games` row the engine reads during hydration. */
 export interface RoomRow {
@@ -42,28 +44,6 @@ export interface QuestionRow {
   points: number;
 }
 
-/**
- * Side effects produced by a transition, executed by the Durable Object. Every
- * field is optional; an empty object means "state may have changed, just save
- * and broadcast" (the DO always saves + broadcasts after an action).
- */
-export interface EngineDirectives {
-  /** Message to send back to the socket that triggered the action. */
-  reply?: ServerMessage;
-  /** Close the acting socket after sending `reply`. */
-  closeSocket?: boolean;
-  /** JOIN succeeded — the DO should attach player metadata to the socket. */
-  accepted?: boolean;
-  /** Schedule the next phase alarm at this absolute epoch-ms timestamp. */
-  alarmAt?: number;
-  /** Delete any pending alarm (the game reached a terminal state). */
-  cancelAlarm?: boolean;
-  /** Persist the room's `status` column. */
-  updateRoomStatus?: "playing" | "finished";
-  /** Flush the accumulated match results to history tables. */
-  persistResults?: boolean;
-}
-
 function error(message: string, code?: string): ServerMessage {
   return code ? { type: "ERROR", message, code } : { type: "ERROR", message };
 }
@@ -72,6 +52,7 @@ function error(message: string, code?: string): ServerMessage {
 export function createInitialState(): GameState {
   return {
     status: "WAITING",
+    gameType: "buzzer",
     gameId: null,
     gameName: null,
     hostId: null,
@@ -146,14 +127,6 @@ export function hydrateRoom(
   state.isPublic = room.isPublic;
   state.hasPassword = !!room.password;
   return {};
-}
-
-export interface JoinParams {
-  playerId: string;
-  name: string;
-  password?: string;
-  /** The room's real password (never part of broadcast state); null if open. */
-  roomPassword: string | null;
 }
 
 /** Validate and admit a player, or reconnect an existing one. */

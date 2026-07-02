@@ -17,9 +17,41 @@ export const questions = sqliteTable("questions", {
   points: integer("points").notNull(),
 });
 
+export const artists = sqliteTable("artists", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  artworkUrl: text("artwork_url"),
+});
+
+export const songs = sqliteTable(
+  "songs",
+  {
+    id: text("id").primaryKey(),
+    artistId: text("artist_id")
+      .notNull()
+      .references(() => artists.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    previewUrl: text("preview_url").notNull(),
+    artworkUrl: text("artwork_url"),
+  },
+  table => [index("songs_artistId_idx").on(table.artistId)]
+);
+
+export const artistsRelations = relations(artists, ({ many }) => ({
+  songs: many(songs),
+}));
+
+export const songsRelations = relations(songs, ({ one }) => ({
+  artist: one(artists, {
+    fields: [songs.artistId],
+    references: [artists.id],
+  }),
+}));
+
 export const gameHistory = sqliteTable("game_history", {
   id: text("id").primaryKey(),
   gameId: text("game_id").notNull().default("unknown"),
+  gameType: text("game_type").notNull().default("buzzer"),
   hostId: text("host_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -78,6 +110,7 @@ export const gamePlayerResults = sqliteTable(
 export const activeGames = sqliteTable("active_games", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  gameType: text("game_type").notNull().default("buzzer"),
   hostId: text("host_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -87,7 +120,9 @@ export const activeGames = sqliteTable("active_games", {
   status: text("status", { enum: ["waiting", "playing", "finished"] })
     .notNull()
     .default("waiting"),
-  subjectIds: text("subject_ids").notNull(),
+  // Game-specific room configuration, shape owned by the game module. For the
+  // buzzer game this is `{ subjectIds: string[] }`.
+  config: text("config").notNull().default("{}"),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
 });

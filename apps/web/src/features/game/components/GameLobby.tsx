@@ -9,16 +9,23 @@ import {
 } from "@shaxsiy-oyin/ui/components/card";
 import { toast } from "sonner";
 import { Users, Play, Info, Crown, UserCircle2, Copy } from "lucide-react";
-import { gameConfig } from "@shaxsiy-oyin/api/game-types";
-import type { GameView } from "@/features/game/hooks/useGameState";
+import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
 interface GameLobbyProps {
-  state: GameView;
+  state: ClientRoomState;
   playerId: string;
   onStart: () => void;
+  minPlayers: number;
+  description: string;
 }
 
-export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
+export function GameLobby({
+  state,
+  playerId,
+  onStart,
+  minPlayers,
+  description,
+}: GameLobbyProps) {
   const isHost = state.hostId === playerId;
 
   return (
@@ -78,8 +85,7 @@ export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
             <div>
               <p className="font-medium text-sm">Game Information</p>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Game consists of {state.subjectCount} categories.
-                Each category has 5 questions worth 10-50 points.
+                {description}
               </p>
             </div>
           </CardContent>
@@ -92,20 +98,6 @@ export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
             <CardTitle className="text-lg">Game Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground uppercase">Game Progress</p>
-              <div className="flex flex-wrap gap-1">
-                {Array.from({ length: state.subjectCount }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="px-2 py-1 bg-background border rounded text-xs"
-                  >
-                    Category {i + 1}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground uppercase">Share Entry Point</p>
               <div className="flex gap-1">
@@ -131,7 +123,7 @@ export function GameLobby({ state, playerId, onStart }: GameLobbyProps) {
               <Button
                 className="w-full"
                 onClick={onStart}
-                disabled={Object.keys(state.players).length < gameConfig.minPlayers}
+                disabled={Object.keys(state.players).length < minPlayers}
               >
                 <Play className="size-4 mr-2" />
                 Start Game

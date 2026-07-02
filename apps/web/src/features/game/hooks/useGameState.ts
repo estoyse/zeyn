@@ -1,15 +1,11 @@
 import { useState, useCallback } from "react";
 import type {
-  GameState,
+  BasePublicGameState,
   ClientMessage,
-  PublicGameState,
   Player,
 } from "@shaxsiy-oyin/api/game-types";
 
-// The client-side view of the game. Mirrors the server's PublicGameState, but
-// after useGameState has merged the per-message player deltas (so players are
-// complete, not Partial) and adjusted the question timer for clock skew.
-export type GameView = Omit<PublicGameState, "players"> & {
+export type ClientRoomState = Omit<BasePublicGameState, "players"> & {
   players: Record<string, Player>;
 };
 
@@ -18,7 +14,6 @@ interface UseGameStateOptions {
   playerId: string;
   playerName: string;
   password?: string;
-  onStateUpdate?: (state: GameState) => void;
   onError?: (error: string, code?: string) => void;
 }
 
@@ -27,17 +22,16 @@ export function useGameState({
   playerId,
   playerName,
   password,
-  onStateUpdate,
   onError,
 }: UseGameStateOptions) {
-  const [state, setState] = useState<PublicGameState | null>(null);
+  const [state, setState] = useState<ClientRoomState | null>(null);
   const [serverTimeOffset, setServerTimeOffset] = useState(0);
 
   const handleMessage = useCallback(
     (data: unknown) => {
       const message = data as {
         type: string;
-        state?: PublicGameState;
+        state?: ClientRoomState;
         serverTime?: number;
         message?: string;
         code?: string;
@@ -48,26 +42,23 @@ export function useGameState({
           setServerTimeOffset(message.serverTime - Date.now());
         }
         if (message.state) {
-          setState(prevState => {
-            const newState = prevState
+          setState(prev =>
+            prev
               ? {
                   ...message.state!,
                   players: {
-                    ...(prevState.players || {}),
-                    ...(message.state!.players || {}),
+                    ...prev.players,
+                    ...message.state!.players,
                   },
                 }
-              : message.state!;
-
-            onStateUpdate?.(newState as any);
-            return newState;
-          });
+              : message.state!
+          );
         }
       } else if (message.type === "ERROR") {
         onError?.(message.message || "Unknown error", message.code);
       }
     },
-    [onStateUpdate, onError]
+    [onError]
   );
 
   const createJoinMessage = useCallback(
@@ -81,23 +72,5 @@ export function useGameState({
     [playerId, playerName, gameId, password]
   );
 
-  const adjustedState: GameView | null = state
-    ? {
-        ...(state as GameView),
-        activeQuestionState: state.activeQuestionState
-          ? {
-              ...state.activeQuestionState,
-              timerExpiresAt:
-                state.activeQuestionState.timerExpiresAt - serverTimeOffset,
-            }
-          : null,
-      }
-    : null;
-
-  return {
-    state: adjustedState,
-    handleMessage,
-    createJoinMessage,
-    serverTimeOffset,
-  };
+  return { state, serverTimeOffset, handleMessage, createJoinMessage };
 }
