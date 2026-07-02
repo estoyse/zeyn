@@ -18,6 +18,11 @@ const loadEnvs = () => {
 loadEnvs();
 
 const isProduction = process.env.NODE_ENV === "production";
+const stage =
+  process.env.ALCHEMY_STAGE ?? (isProduction ? "production" : undefined);
+
+const workerName = (base: string) =>
+  stage === "production" ? base : stage ? `${base}-${stage}` : undefined;
 
 const hasRemoteState =
   !!process.env.CLOUDFLARE_API_TOKEN && !!process.env.ALCHEMY_STATE_TOKEN;
@@ -25,7 +30,7 @@ const hasRemoteState =
 const app = await alchemy("shaxsiy-oyin", {
   // Alchemy derives the stage from $USER; pin it so CI and local deploys target
   // the same resources instead of separate per-user copies.
-  stage: process.env.ALCHEMY_STAGE ?? (isProduction ? "production" : undefined),
+  stage,
   // Remote state so local and CI deploys share one source of truth. Falls back
   // to the local `.alchemy/` file store when the tokens are absent (local dev).
   stateStore: hasRemoteState
@@ -46,7 +51,7 @@ export const web = await Vite("web", {
   cwd: "../../apps/web",
   assets: "dist",
   // Fixed name so the production URL drops the stage suffix.
-  name: isProduction ? "shaxsiy-oyin-web" : undefined,
+  name: workerName("shaxsiy-oyin-web"),
   adopt: true,
   bindings: {
     VITE_SERVER_URL: alchemy.env.VITE_SERVER_URL!,
@@ -58,7 +63,7 @@ export const server = await Worker("server", {
   entrypoint: "src/index.ts",
   compatibility: "node",
   compatibilityDate: "2024-09-23",
-  name: isProduction ? "shaxsiy-oyin-server" : undefined,
+  name: workerName("shaxsiy-oyin-server"),
   adopt: true,
   // Sweeps abandoned "waiting" rooms; previously piggybacked on GET /.
   crons: ["*/15 * * * *"],
