@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@zeyn/ui/components/button";
-import { LayoutGrid, Clock, UserCircle2 } from "lucide-react";
+import { Logo, LogoMark } from "@zeyn/ui/components/logo";
+import { Clock, UserCircle2 } from "lucide-react";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
 interface GameHeaderProps {
@@ -13,11 +14,11 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
   return (
     <header className='flex flex-col md:flex-row justify-between items-center gap-4 pb-6 border-b'>
       <div className='flex items-center gap-3'>
-        <div className='flex size-10 items-center justify-center bg-brand text-brand-foreground'>
-          <LayoutGrid className='size-5' />
-        </div>
+        <span className='flex size-10 items-center justify-center bg-brand text-brand-foreground'>
+          <LogoMark className='size-5' />
+        </span>
         <div>
-          <h1 className='text-xl font-bold'>Zeyn</h1>
+          <Logo size='md' />
           <p className='text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-1'>
             <Clock className='size-3' /> Room: {gameId}
           </p>

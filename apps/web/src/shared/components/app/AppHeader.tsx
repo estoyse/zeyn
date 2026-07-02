@@ -1,4 +1,5 @@
 import { Button } from "@zeyn/ui/components/button";
+import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Bell } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
@@ -12,14 +13,9 @@ export function AppHeader() {
     <header className="border-b bg-background">
       <div className="max-w-7xl mx-auto p-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold">S</span>
-            </div>
-            <Link to="/dashboard">
-              <span className="text-lg font-medium">Zeyn</span>
-            </Link>
-          </div>
+          <Link to="/dashboard">
+            <LogoLockup size="sm" />
+          </Link>
 
           <div className="flex items-center gap-2">
             <ModeToggle />
