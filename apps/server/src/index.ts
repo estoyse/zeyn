@@ -2,6 +2,7 @@ import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@zeyn/api/context";
 import { appRouter } from "@zeyn/api/routers/index";
 import { createAuth } from "@zeyn/auth";
+import { parseOrigins } from "@zeyn/auth/origins";
 import { env, type Env } from "@zeyn/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -47,7 +48,7 @@ app.use(logger());
 app.use(
   "/*",
   cors({
-    origin: env.CORS_ORIGIN.replace(/\/+$/, ""),
+    origin: parseOrigins(env.CORS_ORIGIN),
     allowMethods: ["GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"],
     allowHeaders: ["Content-Type", "Authorization", "Upgrade"],
     credentials: true,

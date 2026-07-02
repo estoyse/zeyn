@@ -5,6 +5,7 @@ import { env } from "@zeyn/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "./password";
+import { parseOrigins } from "./origins";
 
 export function createAuth() {
   const db = createDb();
@@ -15,7 +16,7 @@ export function createAuth() {
       schema: schema,
     }),
     trustedOrigins: [
-      env.CORS_ORIGIN.replace(/\/+$/, ""),
+      ...parseOrigins(env.CORS_ORIGIN),
       "zeyn://",
       ...(env.NODE_ENV === "development"
         ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081", "http://localhost:3001"]
