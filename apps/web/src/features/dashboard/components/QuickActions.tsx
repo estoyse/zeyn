@@ -33,7 +33,7 @@ export function QuickActions() {
           </div>
           <CardTitle className='text-lg'>Create Game</CardTitle>
           <CardDescription>
-            Host a new game with your chosen subjects.
+            Pick a game and host a new room.
           </CardDescription>
         </CardHeader>
         <CardContent>

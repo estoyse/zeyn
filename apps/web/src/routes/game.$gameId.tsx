@@ -9,7 +9,7 @@ import { ConnectionErrorView } from "@/features/game/components/ErrorViews";
 import { ArchiveView } from "@/features/game/components/ArchiveView";
 import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
-import { GamePlaying } from "@/features/game/components/GamePlaying";
+import { getClientGame } from "@/features/games/registry";
 
 export const Route = createFileRoute("/game/$gameId")({
   component: GamePage,
@@ -75,6 +75,9 @@ function GameScreen({
   const { state, userId, actions } = room;
   if (!state) return null;
 
+  const game = getClientGame(state.gameType);
+  const Playing = game?.Playing;
+
   return (
     <div className='min-h-screen bg-background p-4 md:p-6'>
       <div className='mx-auto max-w-7xl space-y-6'>
@@ -90,16 +93,8 @@ function GameScreen({
             />
           )}
 
-          {state.status === "PLAYING" && (
-            <GamePlaying
-              key='playing'
-              state={state}
-              playerId={userId}
-              answerInput={room.answerInput}
-              setAnswerInput={room.setAnswerInput}
-              onBuzz={actions.buzz}
-              onSubmitAnswer={actions.submitAnswer}
-            />
+          {state.status === "PLAYING" && Playing && (
+            <Playing key='playing' room={room} />
           )}
         </AnimatePresence>
       </div>

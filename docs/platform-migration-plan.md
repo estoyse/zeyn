@@ -238,8 +238,23 @@ speculative one-size-fits-all results table while keeping the common
     `subjectIds`. It's currently a no-op (subjects are hydrated from `config` at
     join), so it's harmless; it gets removed when the create/lobby flow is fully
     per-game in Phase 4.
-- **Phase 4 — Web registry + catalog.** Game picker, game-type-aware create/play
-  routes, split `useCreateGameForm`/`useGameState`, module-rendered views.
+- **Phase 4 — Web registry + catalog. ✅ DONE.** Added a client game registry
+  (`apps/web/src/features/games/registry.tsx`) mapping `gameType → { meta, Icon,
+  Create, Playing }`, with the buzzer client module under
+  `features/games/buzzer/` (`BuzzerCreateForm`, `BuzzerPlaying`). Added a
+  `GameCatalog` and made the create flow game-type-aware: `/game/create` is now a
+  game picker (`game.create.index.tsx`) and `/game/create/$gameType` renders the
+  chosen game's create form (`game.create.$gameType.tsx`, unknown type → a
+  friendly not-found). The play route resolves the `Playing` view from the
+  registry by `state.gameType`. Dashboard "Create Game" now leads to the picker.
+  Web builds (route tree regenerated), full workspace typechecks, 78 tests pass.
+  - **Verified:** typecheck + `vite build` (route tree regeneration) + 78 engine
+    tests. A live click-through wasn't run (needs the Worker + a seeded D1).
+  - **Deferred to Phase 5 (needs a real second game to design against):**
+    physically nesting play-state under a `game` key + a generic public-state
+    payload; abstracting the create-config panel and the play actions
+    (`useGameRoom`'s buzz/answer) behind the module interface; a per-game lobby.
+    Today `useGameRoom` and `GameLobby` are still buzzer-shaped and shared.
 - **Phase 5 — Second game (later).** Add one module across the three registries
   + its content migration. This is where the interface gets validated for real;
   expect minor reshaping of `GameEngine` then.
