@@ -57,6 +57,13 @@
       "when": 1782972426730,
       "tag": "0007_flaky_slapstick",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1782973632803,
+      "tag": "0008_dark_supernaut",
+      "breakpoints": true
     }
   ]
 }

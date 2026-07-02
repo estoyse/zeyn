@@ -8,7 +8,7 @@ import { trpc } from "@/shared/lib/trpc";
 // page, so the route/components are purely presentational.
 export function useCreateGameForm() {
   const navigate = useNavigate();
-  const subjectsQuery = useQuery(trpc.game.getSubjects.queryOptions());
+  const subjectsQuery = useQuery(trpc.buzzer.getSubjects.queryOptions());
   const createRoom = useMutation(trpc.game.createRoom.mutationOptions());
 
   const [name, setName] = useState("");
@@ -39,7 +39,8 @@ export function useCreateGameForm() {
         maxPlayers,
         isPublic,
         password: password || undefined,
-        subjectIds: selectedSubjectIds,
+        gameType: "buzzer",
+        config: { subjectIds: selectedSubjectIds },
       });
       navigate({ to: "/game/$gameId", params: { gameId } });
     } catch (e) {

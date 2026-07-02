@@ -41,6 +41,7 @@ export class GameRepository {
       .get();
 
     if (!room) return undefined;
+    const config = JSON.parse(room.config) as { subjectIds?: string[] };
     return {
       id: room.id,
       name: room.name,
@@ -49,7 +50,7 @@ export class GameRepository {
       isPublic: room.isPublic,
       password: room.password,
       status: room.status,
-      subjectIds: JSON.parse(room.subjectIds) as string[],
+      subjectIds: config.subjectIds ?? [],
     };
   }
 

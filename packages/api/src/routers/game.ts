@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { roomLimits } from "../game-types";
+import { getGameMeta } from "../games";
 import { loadResultsDetail } from "../games/results";
 import { protectedProcedure, router } from "../index";
 import {
-  subjects,
   gameHistory,
   gamePlayerResults,
   activeGames,
@@ -21,10 +22,6 @@ const listPageInput = z
   .optional();
 
 export const gameRouter = router({
-  getSubjects: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.select().from(subjects);
-  }),
-
   createRoom: protectedProcedure
     .input(
       z.object({
@@ -39,26 +36,39 @@ export const gameRouter = router({
           .default(roomLimits.defaultMaxPlayers),
         isPublic: z.boolean().default(true),
         password: z.string().optional(),
-        subjectIds: z
-          .array(z.string())
-          .min(roomLimits.minSubjects)
-          .max(roomLimits.maxSubjects),
+        gameType: z.string().default("buzzer"),
+        config: z.unknown(),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const meta = getGameMeta(input.gameType);
+      if (!meta) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Unknown game type: ${input.gameType}`,
+        });
+      }
+
+      const parsedConfig = meta.configSchema.safeParse(input.config);
+      if (!parsedConfig.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid game configuration",
+        });
+      }
+
       const gameId = crypto.randomUUID();
 
       await ctx.db.insert(activeGames).values({
         id: gameId,
         name: input.name,
-        gameType: "buzzer",
+        gameType: input.gameType,
         hostId: ctx.session.user.id,
         maxPlayers: input.maxPlayers,
         isPublic: input.isPublic,
         password: input.password || null,
         status: "waiting",
-        config: JSON.stringify({ subjectIds: input.subjectIds }),
-        subjectIds: JSON.stringify(input.subjectIds),
+        config: JSON.stringify(parsedConfig.data),
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -97,7 +107,7 @@ export const gameRouter = router({
 
       return {
         ...room,
-        subjectIds: JSON.parse(room.subjectIds) as string[],
+        config: JSON.parse(room.config) as Record<string, unknown>,
       };
     }),
 

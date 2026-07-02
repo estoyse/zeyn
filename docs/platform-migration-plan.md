@@ -224,8 +224,20 @@ speculative one-size-fits-all results table while keeping the common
     (`GameResultsDetail` is a one-member union today). It splits into per-game
     endpoints in Phase 3 once a second game's detail shape diverges. Physical
     state nesting under a `game` key is still folded into Phase 4 (web).
-- **Phase 3 — Generalize tRPC.** `createRoom` takes `gameType`+`config`;
-  per-game sub-routers; list endpoints return `gameType`.
+- **Phase 3 — Generalize tRPC. ✅ DONE.** `createRoom` now takes `gameType` +
+  an opaque `config`, validated against that game type's `configSchema` from the
+  meta registry (rejects unknown types / bad config with a `BAD_REQUEST`).
+  `getRoomConfig` returns the parsed generic `config`. `getSubjects` moved to a
+  dedicated `buzzer` sub-router (`trpc.buzzer.getSubjects`). The buzzer repository
+  now reads `subjectIds` from the `config` column, so the legacy `subject_ids`
+  column was dropped (migration `0008`). List endpoints (`getPublicRooms`,
+  `getHistory`) already return the full row, so `gameType` flows to the client.
+  Web create form updated to send `gameType` + `config`. 78 tests pass; full
+  workspace typechecks.
+  - **Remaining buzzer leak (minor):** the `START` WebSocket message still carries
+    `subjectIds`. It's currently a no-op (subjects are hydrated from `config` at
+    join), so it's harmless; it gets removed when the create/lobby flow is fully
+    per-game in Phase 4.
 - **Phase 4 — Web registry + catalog.** Game picker, game-type-aware create/play
   routes, split `useCreateGameForm`/`useGameState`, module-rendered views.
 - **Phase 5 — Second game (later).** Add one module across the three registries

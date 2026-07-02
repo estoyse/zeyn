@@ -90,10 +90,8 @@ export const activeGames = sqliteTable("active_games", {
     .notNull()
     .default("waiting"),
   // Game-specific room configuration, shape owned by the game module. For the
-  // buzzer game this is `{ subjectIds: string[] }`. `subjectIds` below is the
-  // legacy column kept in parallel until the platform switch drops it.
+  // buzzer game this is `{ subjectIds: string[] }`.
   config: text("config").notNull().default("{}"),
-  subjectIds: text("subject_ids").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }),
 });

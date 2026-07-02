@@ -1,0 +1,1 @@
+ALTER TABLE `active_games` DROP COLUMN `subject_ids`;
