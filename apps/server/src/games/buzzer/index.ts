@@ -3,7 +3,7 @@ import type {
   EngineDirectives,
   GameState,
   PublicGameState,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 import type { HydrateResult, JoinParams, RoomGame } from "../contract";
 import {
   buzz,

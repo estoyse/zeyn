@@ -1,5 +1,5 @@
 {
-  "name": "@shaxsiy-oyin/api",
+  "name": "@zeyn/api",
   "type": "module",
   "exports": {
     ".": {
@@ -14,16 +14,16 @@
   },
   "scripts": {},
   "dependencies": {
-    "@shaxsiy-oyin/auth": "workspace:*",
-    "@shaxsiy-oyin/db": "workspace:*",
-    "@shaxsiy-oyin/env": "workspace:*",
+    "@zeyn/auth": "workspace:*",
+    "@zeyn/db": "workspace:*",
+    "@zeyn/env": "workspace:*",
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "hono": "catalog:",
     "typescript": "^6"
   }

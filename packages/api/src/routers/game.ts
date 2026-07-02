@@ -8,8 +8,8 @@ import {
   gameHistory,
   gamePlayerResults,
   activeGames,
-} from "@shaxsiy-oyin/db/schema";
-import { eq, desc, and, or, lt, sql } from "@shaxsiy-oyin/db";
+} from "@zeyn/db/schema";
+import { eq, desc, and, or, lt, sql } from "@zeyn/db";
 
 const gameTypeSchema = z.enum(
   Object.keys(gameMetaRegistry) as [GameType, ...GameType[]]

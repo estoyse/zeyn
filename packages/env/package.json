@@ -1,5 +1,5 @@
 {
-  "name": "@shaxsiy-oyin/env",
+  "name": "@zeyn/env",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,8 +14,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@shaxsiy-oyin/config": "workspace:*",
-    "@shaxsiy-oyin/infra": "workspace:*",
+    "@zeyn/config": "workspace:*",
+    "@zeyn/infra": "workspace:*",
     "@types/node": "^22.13.14",
     "typescript": "^6"
   }

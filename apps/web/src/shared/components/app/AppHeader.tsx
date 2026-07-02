@@ -1,4 +1,4 @@
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { Bell } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
@@ -17,7 +17,7 @@ export function AppHeader() {
               <span className="text-primary-foreground font-bold">S</span>
             </div>
             <Link to="/dashboard">
-              <span className="text-lg font-medium">Shaxsiy O'yin</span>
+              <span className="text-lg font-medium">Zeyn</span>
             </Link>
           </div>
 

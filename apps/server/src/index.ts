@@ -1,12 +1,12 @@
 import { trpcServer } from "@hono/trpc-server";
-import { createContext } from "@shaxsiy-oyin/api/context";
-import { appRouter } from "@shaxsiy-oyin/api/routers/index";
-import { createAuth } from "@shaxsiy-oyin/auth";
-import { env, type Env } from "@shaxsiy-oyin/env/server";
+import { createContext } from "@zeyn/api/context";
+import { appRouter } from "@zeyn/api/routers/index";
+import { createAuth } from "@zeyn/auth";
+import { env, type Env } from "@zeyn/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { createDb, and, eq, lt, schema } from "@shaxsiy-oyin/db";
+import { createDb, and, eq, lt, schema } from "@zeyn/db";
 
 import { GameRoom } from "./durable-objects/GameRoom";
 

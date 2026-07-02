@@ -1,4 +1,4 @@
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 
 interface LoadingViewProps {
   message?: string;

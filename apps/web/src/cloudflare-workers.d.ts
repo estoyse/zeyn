@@ -1,5 +1,5 @@
 // The web app imports only the AppRouter *type* from the server. That type
-// graph transitively references `@shaxsiy-oyin/env/server`, which imports the
+// graph transitively references `@zeyn/env/server`, which imports the
 // Worker-only `cloudflare:workers` module. The browser build never runs that
 // code, so instead of pulling all of @cloudflare/workers-types into the DOM
 // type scope (which conflicts with lib.dom's Response/WebSocket/etc.), we give

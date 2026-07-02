@@ -1,9 +1,9 @@
-import type { MusicQuizState } from "@shaxsiy-oyin/api/games";
+import type { MusicQuizState } from "@zeyn/api/games";
 import type {
   BaseGameState,
   BasePublicGameState,
   EngineDirectives,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 import type { HydrateResult, JoinParams, RoomGame } from "../contract";
 import { hydrateBase, joinPlayer } from "../base";
 import {

@@ -18,8 +18,8 @@
     "@gorhom/bottom-sheet": "^5.2.10",
     "@react-navigation/drawer": "^7.9.4",
     "@react-navigation/elements": "^2.9.14",
-    "@shaxsiy-oyin/api": "workspace:*",
-    "@shaxsiy-oyin/env": "workspace:*",
+    "@zeyn/api": "workspace:*",
+    "@zeyn/env": "workspace:*",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
@@ -56,7 +56,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@shaxsiy-oyin/config": "workspace:*",
+    "@zeyn/config": "workspace:*",
     "@types/node": "^24.10.0",
     "@types/react": "~19.2.10",
     "typescript": "~5.9.2"

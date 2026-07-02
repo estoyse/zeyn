@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { LayoutGrid, Clock, UserCircle2 } from "lucide-react";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
@@ -17,7 +17,7 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
           <LayoutGrid className='size-5' />
         </div>
         <div>
-          <h1 className='text-xl font-bold'>Shaxsiy O'yin</h1>
+          <h1 className='text-xl font-bold'>Zeyn</h1>
           <p className='text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-1'>
             <Clock className='size-3' /> Room: {gameId}
           </p>

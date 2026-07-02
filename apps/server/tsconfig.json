@@ -1,5 +1,5 @@
 {
-  "extends": "@shaxsiy-oyin/config/tsconfig.base.json",
+  "extends": "@zeyn/config/tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "outDir": "dist",

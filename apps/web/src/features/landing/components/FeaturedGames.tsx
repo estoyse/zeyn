@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@shaxsiy-oyin/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@zeyn/ui/components/card";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { Trophy, Users, Zap } from "lucide-react";
 
 export function FeaturedGames() {

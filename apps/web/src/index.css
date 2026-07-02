@@ -1,4 +1,4 @@
-@import "@shaxsiy-oyin/ui/globals.css";
+@import "@zeyn/ui/globals.css";
 
 body {
   @apply bg-background text-foreground;

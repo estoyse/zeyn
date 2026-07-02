@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Badge } from "@shaxsiy-oyin/ui/components/badge";
+import { Button } from "@zeyn/ui/components/button";
+import { Badge } from "@zeyn/ui/components/badge";
 
 export function Hero() {
   return (

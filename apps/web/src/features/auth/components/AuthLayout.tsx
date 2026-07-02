@@ -11,7 +11,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
             <div className="flex size-6 items-center justify-center bg-primary text-primary-foreground">
               <GalleryVerticalEnd className="size-4" />
             </div>
-            Shaxsiy O'yin
+            Zeyn
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">

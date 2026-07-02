@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Mail, Lock, User } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { useForm } from "@tanstack/react-form";
 import z from "zod";
-import { Field, FieldDescription } from "@shaxsiy-oyin/ui/components/field";
+import { Field, FieldDescription } from "@zeyn/ui/components/field";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { AuthField } from "./AuthField";
 import { emailSchema, passwordSchema, nameSchema } from "@/features/auth/lib/authSchemas";

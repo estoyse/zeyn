@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { env } from "@shaxsiy-oyin/env/web";
+import { env } from "@zeyn/env/web";
 import { useSocket } from "./useSocket";
 import { useGameState } from "./useGameState";
-import type { ClientMessage } from "@shaxsiy-oyin/api/game-types";
+import type { ClientMessage } from "@zeyn/api/game-types";
 
 export function useGame(
   gameId: string,

@@ -1,13 +1,13 @@
 {
   "expo": {
-    "scheme": "shaxsiy-oyin",
+    "scheme": "zeyn",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
     "web": {
       "bundler": "metro"
     },
-    "name": "shaxsiy-oyin",
-    "slug": "shaxsiy-oyin",
+    "name": "zeyn",
+    "slug": "zeyn",
     "plugins": ["expo-font"],
     "experiments": {
       "typedRoutes": true,

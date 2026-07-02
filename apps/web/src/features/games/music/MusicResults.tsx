@@ -1,11 +1,11 @@
 import { Trophy, Medal } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
+} from "@zeyn/ui/components/card";
 import type { GameResultsViewProps } from "@/features/games/types";
 
 const RANK_COLORS = ["text-brand", "text-muted-foreground", "text-muted-foreground"];

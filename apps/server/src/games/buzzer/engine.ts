@@ -17,7 +17,7 @@ import {
   type GameState,
   type ServerMessage,
   type Subject,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 import { isFuzzyMatch } from "./fuzzy-match";
 import type { JoinParams } from "../contract";
 

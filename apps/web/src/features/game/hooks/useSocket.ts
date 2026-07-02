@@ -1,5 +1,5 @@
 import { useRef, useCallback, useEffect, useState } from "react";
-import type { ServerMessage } from "@shaxsiy-oyin/api/game-types";
+import type { ServerMessage } from "@zeyn/api/game-types";
 
 interface UseSocketOptions {
   url: string;

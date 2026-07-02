@@ -3,11 +3,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@shaxsiy-oyin/ui/components/dropdown-menu";
+} from "@zeyn/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 
 import { useTheme } from "@/shared/components/theme-provider";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { musicGameConfig, type MusicQuizState } from "@shaxsiy-oyin/api/games";
+import { musicGameConfig, type MusicQuizState } from "@zeyn/api/games";
 import {
   answer,
   buildQuestions,

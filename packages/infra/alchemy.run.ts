@@ -27,7 +27,7 @@ const workerName = (base: string) =>
 const hasRemoteState =
   !!process.env.CLOUDFLARE_API_TOKEN && !!process.env.ALCHEMY_STATE_TOKEN;
 
-const app = await alchemy("shaxsiy-oyin", {
+const app = await alchemy("zeyn", {
   // Alchemy derives the stage from $USER; pin it so CI and local deploys target
   // the same resources instead of separate per-user copies.
   stage,
@@ -51,7 +51,7 @@ export const web = await Vite("web", {
   cwd: "../../apps/web",
   assets: "dist",
   // Fixed name so the production URL drops the stage suffix.
-  name: workerName("shaxsiy-oyin-web"),
+  name: workerName("zeyn-web"),
   adopt: true,
   bindings: {
     VITE_SERVER_URL: alchemy.env.VITE_SERVER_URL!,
@@ -63,7 +63,7 @@ export const server = await Worker("server", {
   entrypoint: "src/index.ts",
   compatibility: "node",
   compatibilityDate: "2024-09-23",
-  name: workerName("shaxsiy-oyin-server"),
+  name: workerName("zeyn-server"),
   adopt: true,
   // Sweeps abandoned "waiting" rooms; previously piggybacked on GET /.
   crons: ["*/15 * * * *"],

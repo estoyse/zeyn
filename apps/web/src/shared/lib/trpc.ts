@@ -1,5 +1,5 @@
-import type { AppRouter } from "@shaxsiy-oyin/api/routers/index";
-import { env } from "@shaxsiy-oyin/env/web";
+import type { AppRouter } from "@zeyn/api/routers/index";
+import { env } from "@zeyn/env/web";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";

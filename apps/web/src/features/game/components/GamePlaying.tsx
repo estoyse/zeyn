@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
-import { Badge } from "@shaxsiy-oyin/ui/components/badge";
-import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
+import { Button } from "@zeyn/ui/components/button";
+import { Input } from "@zeyn/ui/components/input";
+import { Badge } from "@zeyn/ui/components/badge";
+import { Card, CardContent } from "@zeyn/ui/components/card";
 import { Zap, Clock } from "lucide-react";
-import { gameConfig } from "@shaxsiy-oyin/api/game-types";
+import { gameConfig } from "@zeyn/api/game-types";
 import type { BuzzerView } from "@/features/games/buzzer/types";
 import { Timer } from "./Timer";
 

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { trpc } from "@/shared/lib/trpc";
-import type { GameType } from "@shaxsiy-oyin/api/games";
+import type { GameType } from "@zeyn/api/games";
 import { Globe, RefreshCw, Gamepad2 } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
-import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
+import { Button } from "@zeyn/ui/components/button";
+import { Skeleton } from "@zeyn/ui/components/skeleton";
 import { RoomCard } from "./RoomCard";
 
 interface PublicArenasProps {

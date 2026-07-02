@@ -6,10 +6,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
-import { Badge } from "@shaxsiy-oyin/ui/components/badge";
-import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
-import { roomLimits } from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/ui/components/card";
+import { Badge } from "@zeyn/ui/components/badge";
+import { Skeleton } from "@zeyn/ui/components/skeleton";
+import { roomLimits } from "@zeyn/api/game-types";
 
 interface Subject {
   id: string;

@@ -13,8 +13,8 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "utils": "@shaxsiy-oyin/ui/lib/utils",
-    "ui": "@shaxsiy-oyin/ui/components",
+    "utils": "@zeyn/ui/lib/utils",
+    "ui": "@zeyn/ui/components",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },

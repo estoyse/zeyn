@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Music2, Check, X } from "lucide-react";
-import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
-import { musicGameConfig } from "@shaxsiy-oyin/api/games";
+import { Card, CardContent } from "@zeyn/ui/components/card";
+import { musicGameConfig } from "@zeyn/api/games";
 import { Timer } from "@/features/game/components/Timer";
 import type { GamePlayViewProps } from "@/features/games/types";
 import type { MusicView } from "./types";

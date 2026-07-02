@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { FieldGroup } from "@shaxsiy-oyin/ui/components/field";
-import { cn } from "@shaxsiy-oyin/ui/lib/utils";
+import { FieldGroup } from "@zeyn/ui/components/field";
+import { cn } from "@zeyn/ui/lib/utils";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 

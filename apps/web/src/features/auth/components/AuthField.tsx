@@ -1,7 +1,7 @@
 import type { AnyFieldApi } from "@tanstack/react-form";
 import type { LucideIcon } from "lucide-react";
-import { Field, FieldLabel } from "@shaxsiy-oyin/ui/components/field";
-import { Input } from "@shaxsiy-oyin/ui/components/input";
+import { Field, FieldLabel } from "@zeyn/ui/components/field";
+import { Input } from "@zeyn/ui/components/input";
 
 interface AuthFieldProps {
   field: AnyFieldApi;

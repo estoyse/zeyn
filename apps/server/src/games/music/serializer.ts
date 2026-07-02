@@ -1,5 +1,5 @@
-import type { Player } from "@shaxsiy-oyin/api/game-types";
-import type { MusicPublicState, MusicQuizState } from "@shaxsiy-oyin/api/games";
+import type { Player } from "@zeyn/api/game-types";
+import type { MusicPublicState, MusicQuizState } from "@zeyn/api/games";
 
 export class MusicSerializer {
   private lastBroadcastPlayers: Record<string, string> = {};

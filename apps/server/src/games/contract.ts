@@ -2,7 +2,7 @@ import type {
   BaseGameState,
   BasePublicGameState,
   EngineDirectives,
-} from "@shaxsiy-oyin/api/game-types";
+} from "@zeyn/api/game-types";
 
 /** Parameters the platform passes to a game when admitting a player. */
 export interface JoinParams {

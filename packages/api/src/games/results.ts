@@ -1,5 +1,5 @@
-import { eq, schema } from "@shaxsiy-oyin/db";
-import type { createDb } from "@shaxsiy-oyin/db";
+import { eq, schema } from "@zeyn/db";
+import type { createDb } from "@zeyn/db";
 
 // Server-only: this file runs SQL, so it is NOT re-exported from `./index`
 // (which the web bundle imports). The `getResults` router dispatches here.

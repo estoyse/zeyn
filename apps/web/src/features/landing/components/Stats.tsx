@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@shaxsiy-oyin/ui/components/card";
+import { Card, CardContent } from "@zeyn/ui/components/card";
 
 export function Stats() {
   const stats = [

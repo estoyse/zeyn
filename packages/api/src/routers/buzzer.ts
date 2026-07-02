@@ -1,5 +1,5 @@
 import { protectedProcedure, router } from "../index";
-import { subjects } from "@shaxsiy-oyin/db/schema";
+import { subjects } from "@zeyn/db/schema";
 
 export const buzzerRouter = router({
   getSubjects: protectedProcedure.query(({ ctx }) => {

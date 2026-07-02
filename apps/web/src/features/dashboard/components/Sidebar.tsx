@@ -7,8 +7,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@shaxsiy-oyin/ui/components/card";
-import { Skeleton } from "@shaxsiy-oyin/ui/components/skeleton";
+} from "@zeyn/ui/components/card";
+import { Skeleton } from "@zeyn/ui/components/skeleton";
 import { getClientGame } from "@/features/games/registry";
 import { trpc } from "@/shared/lib/trpc";
 import { JoinByIdCard } from "./JoinByIdCard";
