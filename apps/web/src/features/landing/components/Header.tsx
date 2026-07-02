@@ -41,7 +41,7 @@ export function Header() {
               <Gamepad2 className='w-5 h-5 text-brand-foreground' />
             </div>
             <span className='text-lg font-heading font-semibold tracking-tight'>
-              Shaxsiy O'yin
+              Zeyn
             </span>
           </Link>
 

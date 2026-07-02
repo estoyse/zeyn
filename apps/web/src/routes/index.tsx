@@ -69,7 +69,7 @@ function Footer() {
                 <Gamepad2 className='w-5 h-5 text-brand-foreground' />
               </div>
               <span className='text-lg font-heading font-semibold tracking-tight'>
-                Shaxsiy O'yin
+                Zeyn
               </span>
             </Link>
             <p className='text-sm text-muted-foreground max-w-xs'>
@@ -122,7 +122,7 @@ function Footer() {
         </div>
 
         <div className='mt-12 pt-8 border-t text-center text-sm text-muted-foreground'>
-          © 2026 Shaxsiy O'yin. All rights reserved.
+          © 2026 Zeyn. All rights reserved.
         </div>
       </div>
     </footer>

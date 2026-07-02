@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Users } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { listClientGames } from "@/features/games/registry";
 import { fadeUp, staggerContainer, viewport } from "@/features/landing/lib/motion";
 

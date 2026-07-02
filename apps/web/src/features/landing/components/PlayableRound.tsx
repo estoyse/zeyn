@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Flame, Keyboard, RotateCcw, Timer, Trophy, Zap } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { fireConfetti } from "@/features/landing/lib/confetti";
 import { EASE, fadeUp, viewport } from "@/features/landing/lib/motion";
 

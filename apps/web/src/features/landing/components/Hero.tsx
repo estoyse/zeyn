@@ -7,7 +7,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@shaxsiy-oyin/ui/components/button";
+import { Button } from "@zeyn/ui/components/button";
 import { EASE, fadeUp, staggerContainer } from "@/features/landing/lib/motion";
 import { LiveMatch } from "@/features/landing/components/LiveMatch";
 
