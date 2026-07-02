@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
-import { subjects, questions } from "./schema";
+import { subjects, questions, artists, songs } from "./schema";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "../../..");
@@ -80,6 +80,95 @@ const QUESTIONS = [
   { id: "q6_50", subjectId: "s6", text: "What is the term for a musical composition for four voices or instruments?", answer: "Quartet", points: 50 },
 ];
 
+const MUSIC_ARTISTS = [
+  "Coldplay",
+  "Taylor Swift",
+  "Queen",
+  "The Beatles",
+  "Daft Punk",
+  "Ed Sheeran",
+  "Adele",
+  "Imagine Dragons",
+];
+
+const SONGS_PER_ARTIST = 15;
+
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+interface ITunesTrack {
+  artistId: number;
+  artistName: string;
+  trackId: number;
+  trackName: string;
+  previewUrl?: string;
+  artworkUrl100?: string;
+}
+
+async function fetchArtistTracks(name: string): Promise<ITunesTrack[]> {
+  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
+    name
+  )}&entity=song&limit=60`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`iTunes responded ${res.status}`);
+  const data = (await res.json()) as { results?: ITunesTrack[] };
+  return data.results ?? [];
+}
+
+async function seedMusic(db: ReturnType<typeof drizzle>) {
+  const artistRows: (typeof artists.$inferInsert)[] = [];
+  const songRows: (typeof songs.$inferInsert)[] = [];
+
+  for (const name of MUSIC_ARTISTS) {
+    try {
+      const tracks = await fetchArtistTracks(name);
+      const usable = tracks.filter(
+        t => t.previewUrl && t.trackName && t.artistId
+      );
+      if (usable.length === 0) {
+        console.warn(`  no preview tracks found for ${name}, skipping`);
+        continue;
+      }
+
+      const primary = usable[0]!;
+      const artistId = `a_${primary.artistId}`;
+      artistRows.push({
+        id: artistId,
+        name: primary.artistName,
+        artworkUrl: primary.artworkUrl100 ?? null,
+      });
+
+      const seen = new Set<string>();
+      let picked = 0;
+      for (const t of usable) {
+        if (t.artistId !== primary.artistId) continue;
+        const key = t.trackName.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        songRows.push({
+          id: `s_${t.trackId}`,
+          artistId,
+          title: t.trackName,
+          previewUrl: t.previewUrl!,
+          artworkUrl: t.artworkUrl100 ?? null,
+        });
+        if (++picked >= SONGS_PER_ARTIST) break;
+      }
+      console.log(`  ${primary.artistName}: ${picked} songs`);
+      await sleep(300);
+    } catch (e) {
+      console.warn(`  failed to fetch ${name}:`, (e as Error).message);
+    }
+  }
+
+  if (artistRows.length) {
+    await db.insert(artists).values(artistRows).onConflictDoNothing();
+  }
+  if (songRows.length) {
+    await db.insert(songs).values(songRows).onConflictDoNothing();
+  }
+  return { artists: artistRows.length, songs: songRows.length };
+}
+
 async function main() {
   const dbPath = resolveLocalD1Path();
   if (!fs.existsSync(dbPath)) {
@@ -100,8 +189,12 @@ async function main() {
   await db.insert(subjects).values(SUBJECTS).onConflictDoNothing();
   await db.insert(questions).values(QUESTIONS).onConflictDoNothing();
 
+  console.log("Seeding music (fetching previews from iTunes)...");
+  const music = await seedMusic(db);
+
   console.log(
-    `Seed complete: ${SUBJECTS.length} subjects, ${QUESTIONS.length} questions.`
+    `Seed complete: ${SUBJECTS.length} subjects, ${QUESTIONS.length} questions, ` +
+      `${music.artists} artists, ${music.songs} songs.`
   );
   client.close();
 }

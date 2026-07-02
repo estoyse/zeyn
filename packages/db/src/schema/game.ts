@@ -17,6 +17,37 @@ export const questions = sqliteTable("questions", {
   points: integer("points").notNull(),
 });
 
+export const artists = sqliteTable("artists", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  artworkUrl: text("artwork_url"),
+});
+
+export const songs = sqliteTable(
+  "songs",
+  {
+    id: text("id").primaryKey(),
+    artistId: text("artist_id")
+      .notNull()
+      .references(() => artists.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    previewUrl: text("preview_url").notNull(),
+    artworkUrl: text("artwork_url"),
+  },
+  table => [index("songs_artistId_idx").on(table.artistId)]
+);
+
+export const artistsRelations = relations(artists, ({ many }) => ({
+  songs: many(songs),
+}));
+
+export const songsRelations = relations(songs, ({ one }) => ({
+  artist: one(artists, {
+    fields: [songs.artistId],
+    references: [artists.id],
+  }),
+}));
+
 export const gameHistory = sqliteTable("game_history", {
   id: text("id").primaryKey(),
   gameId: text("game_id").notNull().default("unknown"),

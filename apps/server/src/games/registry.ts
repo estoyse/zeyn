@@ -2,6 +2,7 @@ import { getGameMeta } from "@shaxsiy-oyin/api/games";
 import { createDb, eq, schema } from "@shaxsiy-oyin/db";
 import type { RoomGame, RoomGameFactory } from "./contract";
 import { createBuzzerGame } from "./buzzer";
+import { createMusicGame } from "./music";
 
 // Maps a game type to the factory that builds its per-room engine instance. The
 // GameRoom durable object reads the room's `gameType` and resolves the engine
@@ -9,6 +10,7 @@ import { createBuzzerGame } from "./buzzer";
 // plus its meta in `@shaxsiy-oyin/api/games`.
 const factories: Record<string, RoomGameFactory> = {
   buzzer: createBuzzerGame,
+  music: createMusicGame,
 };
 
 export const DEFAULT_GAME_TYPE = "buzzer";
