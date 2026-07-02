@@ -5,19 +5,38 @@ import { D1Database } from "alchemy/cloudflare";
 import { CloudflareStateStore } from "alchemy/state";
 import { config } from "dotenv";
 
+const isProduction = process.env.NODE_ENV === "production";
+const isDevDeploy =
+  !isProduction &&
+  process.env.ALCHEMY_STAGE === "dev" &&
+  !process.argv.includes("destroy");
+
 const loadEnvs = () => {
   config({ path: "./.env" });
   // Production config comes from the environment (CI secrets); load dev .env
   // files only outside production.
-  if (process.env.NODE_ENV !== "production") {
-    config({ path: "../../apps/web/.env" });
-    config({ path: "../../apps/server/.env" });
+  if (isProduction) return;
+  config({ path: "../../apps/web/.env" });
+  config({ path: "../../apps/server/.env" });
+  if (process.env.ALCHEMY_STAGE === "dev") {
+    config({ path: "../../apps/web/.env.deploy", override: true });
+    config({ path: "../../apps/server/.env.deploy", override: true });
   }
 };
 
 loadEnvs();
 
-const isProduction = process.env.NODE_ENV === "production";
+if (isDevDeploy) {
+  const stillLocal = ["VITE_SERVER_URL", "CORS_ORIGIN", "BETTER_AUTH_URL"].filter(
+    (key) => !process.env[key] || process.env[key]!.includes("localhost"),
+  );
+  if (stillLocal.length) {
+    throw new Error(
+      `deploy:dev needs deployed URLs, but ${stillLocal.join(", ")} still point at localhost. ` +
+        `Set them in apps/web/.env.deploy and apps/server/.env.deploy (see the .env.deploy.example files).`,
+    );
+  }
+}
 
 const hasRemoteState =
   !!process.env.CLOUDFLARE_API_TOKEN && !!process.env.ALCHEMY_STATE_TOKEN;
@@ -46,7 +65,11 @@ export const web = await Vite("web", {
   cwd: "../../apps/web",
   assets: "dist",
   // Fixed name so the production URL drops the stage suffix.
-  name: isProduction ? "shaxsiy-oyin-web" : undefined,
+  name: isProduction
+    ? "shaxsiy-oyin-web"
+    : isDevDeploy
+      ? "shaxsiy-oyin-web-dev"
+      : undefined,
   adopt: true,
   bindings: {
     VITE_SERVER_URL: alchemy.env.VITE_SERVER_URL!,
@@ -58,7 +81,11 @@ export const server = await Worker("server", {
   entrypoint: "src/index.ts",
   compatibility: "node",
   compatibilityDate: "2024-09-23",
-  name: isProduction ? "shaxsiy-oyin-server" : undefined,
+  name: isProduction
+    ? "shaxsiy-oyin-server"
+    : isDevDeploy
+      ? "shaxsiy-oyin-server-dev"
+      : undefined,
   adopt: true,
   // Sweeps abandoned "waiting" rooms; previously piggybacked on GET /.
   crons: ["*/15 * * * *"],

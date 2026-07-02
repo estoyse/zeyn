@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
+import { env } from "@shaxsiy-oyin/env/web";
 import { useSocket } from "./useSocket";
 import { useGameState } from "./useGameState";
 import type { ClientMessage } from "@shaxsiy-oyin/api/game-types";
@@ -13,10 +14,8 @@ export function useGame(
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const wsUrl = useMemo(() => {
-    // Use relative path - Vite proxy will handle it
-    return `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
-      window.location.host
-    }/game/${gameId}/ws`;
+    const base = env.VITE_SERVER_URL.replace(/\/$/, "").replace(/^http/, "ws");
+    return `${base}/game/${gameId}/ws`;
   }, [gameId]);
 
   const handleGameStateError = useCallback((err: string, code?: string) => {

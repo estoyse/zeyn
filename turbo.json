@@ -39,9 +39,31 @@
       "cache": false,
       "passThroughEnv": ["NODE_ENV"]
     },
+    "deploy:dev": {
+      "cache": false,
+      "passThroughEnv": [
+        "NODE_ENV",
+        "ALCHEMY_STAGE",
+        "CLOUDFLARE_API_TOKEN",
+        "CLOUDFLARE_ACCOUNT_ID",
+        "ALCHEMY_PASSWORD",
+        "ALCHEMY_STATE_TOKEN"
+      ]
+    },
     "destroy": {
       "cache": false,
       "passThroughEnv": ["NODE_ENV"]
+    },
+    "destroy:dev": {
+      "cache": false,
+      "passThroughEnv": [
+        "NODE_ENV",
+        "ALCHEMY_STAGE",
+        "CLOUDFLARE_API_TOKEN",
+        "CLOUDFLARE_ACCOUNT_ID",
+        "ALCHEMY_PASSWORD",
+        "ALCHEMY_STATE_TOKEN"
+      ]
     }
   }
 }

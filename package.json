@@ -40,7 +40,9 @@
     "db:seed": "turbo -F @shaxsiy-oyin/db db:seed",
     "db:seed:sql": "turbo -F @shaxsiy-oyin/db db:seed:sql",
     "deploy": "turbo -F @shaxsiy-oyin/infra deploy",
-    "destroy": "turbo -F @shaxsiy-oyin/infra destroy"
+    "deploy:dev": "turbo -F @shaxsiy-oyin/infra deploy:dev",
+    "destroy": "turbo -F @shaxsiy-oyin/infra destroy",
+    "destroy:dev": "turbo -F @shaxsiy-oyin/infra destroy:dev"
   },
   "dependencies": {
     "@shaxsiy-oyin/env": "workspace:*",
