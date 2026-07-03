@@ -95,6 +95,7 @@ export const server = await Worker("server", {
     CORS_ORIGIN: corsOrigin!,
     BETTER_AUTH_SECRET: alchemy.secret.env.BETTER_AUTH_SECRET!,
     BETTER_AUTH_URL: betterAuthUrl!,
+    RESEND_API_KEY: alchemy.secret.env.RESEND_API_KEY!,
     NODE_ENV: process.env.NODE_ENV!,
   },
   dev: {

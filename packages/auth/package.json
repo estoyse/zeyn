@@ -17,6 +17,7 @@
     "argon2-wasm-edge": "^1.0.23",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
+    "resend": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
