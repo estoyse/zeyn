@@ -6,6 +6,27 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "./password";
 import { parseOrigins } from "./origins";
+import {
+  generateUniqueUsername,
+  isUsernameTaken,
+  validateUsername,
+} from "./username";
+
+type Db = ReturnType<typeof createDb>;
+
+async function resolveSignupUsername(
+  db: Db,
+  name: string,
+  submitted: unknown
+): Promise<string> {
+  if (typeof submitted === "string" && submitted.trim()) {
+    const result = validateUsername(submitted);
+    if (result.ok && !(await isUsernameTaken(db, result.value))) {
+      return result.value;
+    }
+  }
+  return generateUniqueUsername(db, name);
+}
 
 export function createAuth() {
   const db = createDb();
@@ -15,6 +36,25 @@ export function createAuth() {
       provider: "sqlite",
       schema: schema,
     }),
+    user: {
+      additionalFields: {
+        username: { type: "string", required: false, input: true },
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (userData) => {
+            const username = await resolveSignupUsername(
+              db,
+              userData.name,
+              (userData as { username?: unknown }).username
+            );
+            return { data: { ...userData, username } };
+          },
+        },
+      },
+    },
     trustedOrigins: [
       ...parseOrigins(env.CORS_ORIGIN),
       "zeyn://",

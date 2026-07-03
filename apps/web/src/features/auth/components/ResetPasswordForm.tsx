@@ -9,7 +9,7 @@ import { Field } from "@zeyn/ui/components/field";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { toast } from "sonner";
 import { AuthField } from "./AuthField";
-import { passwordSchema } from "@/features/auth/lib/authSchemas";
+import { newPasswordSchema } from "@/features/auth/lib/authSchemas";
 
 export function ResetPasswordForm() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export function ResetPasswordForm() {
     validators: {
       onSubmit: z
         .object({
-          password: passwordSchema,
+          password: newPasswordSchema,
           confirmPassword: z.string(),
         })
         .refine(d => d.password === d.confirmPassword, {

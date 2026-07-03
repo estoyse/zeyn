@@ -1,4 +1,5 @@
 import { argon2id, argon2Verify, setWASMModules } from "argon2-wasm-edge";
+import { APIError } from "better-auth/api";
 // @ts-ignore
 import argon2Wasm from "argon2-wasm-edge/wasm/argon2.wasm";
 // @ts-ignore
@@ -23,6 +24,16 @@ const opts = {
  * Compatible with Cloudflare Workers security policies.
  */
 export async function hashPassword(password: string) {
+  if (password.length < 8) {
+    throw new APIError("BAD_REQUEST", {
+      message: "Password must be at least 8 characters",
+    });
+  }
+  if (!/[0-9]/.test(password)) {
+    throw new APIError("BAD_REQUEST", {
+      message: "Password must contain at least 1 number",
+    });
+  }
   const salt = crypto.getRandomValues(new Uint8Array(16));
   return await argon2id({
     ...opts,
