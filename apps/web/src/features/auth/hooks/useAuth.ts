@@ -13,7 +13,13 @@ interface UseAuthReturn {
   user: User | null;
   isLoading: boolean;
   signIn: (email: string, password: string, returnTo?: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string, returnTo?: string) => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    name: string,
+    username?: string,
+    returnTo?: string
+  ) => Promise<void>;
   signInWithGoogle: (returnTo?: string) => void;
   signOut: () => Promise<void>;
 }
@@ -51,9 +57,15 @@ export function useAuth(): UseAuthReturn {
     );
   };
 
-  const signUp = async (email: string, password: string, name: string, returnTo?: string) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    name: string,
+    username?: string,
+    returnTo?: string
+  ) => {
     await authClient.signUp.email(
-      { email, password, name },
+      { email, password, name, ...(username ? { username } : {}) },
       {
         onSuccess: () => {
           toast.success("Ro'yxatdan o'tish muvaffaqiyatli");

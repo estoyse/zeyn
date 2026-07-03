@@ -9,8 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as GamesGameTypeRouteImport } from './routes/games.$gameType'
 import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
@@ -20,6 +22,11 @@ import { Route as GameCreateIndexRouteImport } from './routes/game.create.index'
 import { Route as GameCreateGameTypeRouteImport } from './routes/game.create.$gameType'
 import { Route as AuthVerifyVerifyRouteImport } from './routes/auth.verify/verify'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -28,6 +35,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesGameTypeRoute = GamesGameTypeRouteImport.update({
@@ -74,11 +86,13 @@ const AuthVerifyVerifyRoute = AuthVerifyVerifyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
   '/games/$gameType': typeof GamesGameTypeRoute
+  '/u/$username': typeof UUsernameRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof GameCreateGameTypeRoute
   '/game/create/': typeof GameCreateIndexRoute
@@ -86,11 +100,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
   '/games/$gameType': typeof GamesGameTypeRoute
+  '/u/$username': typeof UUsernameRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof GameCreateGameTypeRoute
   '/game/create': typeof GameCreateIndexRoute
@@ -99,11 +115,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/game/$gameId': typeof GameGameIdRoute
   '/games/$gameType': typeof GamesGameTypeRoute
+  '/u/$username': typeof UUsernameRoute
   '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof GameCreateGameTypeRoute
   '/game/create/': typeof GameCreateIndexRoute
@@ -113,11 +131,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/settings'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
     | '/games/$gameType'
+    | '/u/$username'
     | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create/'
@@ -125,11 +145,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/settings'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
     | '/games/$gameType'
+    | '/u/$username'
     | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create'
@@ -137,11 +159,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/settings'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
     | '/game/$gameId'
     | '/games/$gameType'
+    | '/u/$username'
     | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create/'
@@ -150,11 +174,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  SettingsRoute: typeof SettingsRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   GameGameIdRoute: typeof GameGameIdRoute
   GamesGameTypeRoute: typeof GamesGameTypeRoute
+  UUsernameRoute: typeof UUsernameRoute
   AuthVerifyVerifyRoute: typeof AuthVerifyVerifyRoute
   GameCreateGameTypeRoute: typeof GameCreateGameTypeRoute
   GameCreateIndexRoute: typeof GameCreateIndexRoute
@@ -162,6 +188,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -174,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/$gameType': {
@@ -238,11 +278,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  SettingsRoute: SettingsRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   GameGameIdRoute: GameGameIdRoute,
   GamesGameTypeRoute: GamesGameTypeRoute,
+  UUsernameRoute: UUsernameRoute,
   AuthVerifyVerifyRoute: AuthVerifyVerifyRoute,
   GameCreateGameTypeRoute: GameCreateGameTypeRoute,
   GameCreateIndexRoute: GameCreateIndexRoute,
