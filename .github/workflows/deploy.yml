@@ -1,8 +1,6 @@
 name: Deploy
 
 on:
-  push:
-    branches: [master]
   workflow_dispatch:
 
 # Never run two deploys against the same environment at once.
@@ -42,7 +40,4 @@ jobs:
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
           ALCHEMY_STATE_TOKEN: ${{ secrets.ALCHEMY_STATE_TOKEN }}
           # App config (production secrets)
-          VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
-          CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
-          BETTER_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
