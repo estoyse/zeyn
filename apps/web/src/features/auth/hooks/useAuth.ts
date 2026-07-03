@@ -48,7 +48,7 @@ export function useAuth(): UseAuthReturn {
       {
         onSuccess: () => {
           toast.success("Kirish muvaffaqiyatli");
-          navigate({ to: returnTo || "/dashboard" });
+          navigate({ to: returnTo || "/" });
         },
         onError: (error) => {
           toast.error(error.error.message || error.error.statusText);
@@ -69,7 +69,7 @@ export function useAuth(): UseAuthReturn {
       {
         onSuccess: () => {
           toast.success("Ro'yxatdan o'tish muvaffaqiyatli");
-          navigate({ to: returnTo || "/dashboard" });
+          navigate({ to: returnTo || "/" });
         },
         onError: (error) => {
           toast.error(error.error.message || error.error.statusText);

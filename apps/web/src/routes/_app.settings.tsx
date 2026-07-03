@@ -14,7 +14,7 @@ import { PasswordSettings } from "@/features/profile/settings/PasswordSettings";
 import { PrivacySettings } from "@/features/profile/settings/PrivacySettings";
 import { trpc } from "@/shared/lib/trpc";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
   beforeLoad: async () => {
     const session = await authClient.getSession();

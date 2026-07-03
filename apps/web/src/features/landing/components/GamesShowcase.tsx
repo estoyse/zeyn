@@ -73,7 +73,7 @@ export function GamesShowcase() {
         </div>
 
         <div className='mt-12 flex justify-center'>
-          <Link to='/dashboard'>
+          <Link to='/auth/login'>
             <Button variant='outline' size='lg'>
               Browse all games
               <ArrowRight className='size-4 ml-2' />

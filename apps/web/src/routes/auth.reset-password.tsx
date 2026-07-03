@@ -17,7 +17,7 @@ export const Route = createFileRoute("/auth/reset-password")({
   beforeLoad: async () => {
     const session = await authClient.getSession();
     if (session.data) {
-      throw redirect({ to: "/dashboard" });
+      throw redirect({ to: "/" });
     }
   },
 });

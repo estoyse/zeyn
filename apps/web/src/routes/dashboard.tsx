@@ -1,45 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Gamepad2 } from "lucide-react";
-import { authClient } from "@/features/auth/lib/auth-client";
-import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
-import { Sidebar } from "@/features/dashboard/components/Sidebar";
-import { GameCatalog } from "@/features/games/components/GameCatalog";
 
 export const Route = createFileRoute("/dashboard")({
-  component: DashboardPage,
-  beforeLoad: async () => {
-    const session = await authClient.getSession();
-    if (!session.data) {
-      throw redirect({
-        to: "/auth/login",
-      });
-    }
-    return { session: session.data };
+  beforeLoad: () => {
+    throw redirect({ to: "/" });
   },
 });
-
-function DashboardPage() {
-  const { session } = Route.useRouteContext();
-
-  return (
-    <div className='min-h-screen bg-background p-4 md:p-8 lg:p-12'>
-      <div className='mx-auto max-w-7xl space-y-12'>
-        <DashboardHeader userName={session?.user?.name} />
-
-        <div className='grid gap-8 lg:grid-cols-[1fr_350px]'>
-          <div className='space-y-10'>
-            <section className='space-y-6'>
-              <h3 className='text-xl font-bold flex items-center gap-3'>
-                <Gamepad2 className='size-5' />
-                Games
-              </h3>
-              <GameCatalog variant='play' />
-            </section>
-          </div>
-
-          <Sidebar />
-        </div>
-      </div>
-    </div>
-  );
-}

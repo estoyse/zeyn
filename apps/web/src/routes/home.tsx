@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LogoLockup } from "@zeyn/ui/components/logo";
+import { Header } from "@/features/landing/components/Header";
 import { Hero } from "@/features/landing/components/Hero";
 import { Marquee } from "@/features/landing/components/Marquee";
 import { PlayableRound } from "@/features/landing/components/PlayableRound";
@@ -10,7 +11,7 @@ import { Stats } from "@/features/landing/components/Stats";
 import { CTA } from "@/features/landing/components/CTA";
 import { ScrollProgress } from "@/features/landing/components/ScrollProgress";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/home")({
   component: HomeComponent,
 });
 
@@ -18,7 +19,7 @@ const FOOTER_SECTIONS = [
   {
     heading: "Games",
     links: [
-      { label: "Browse games", to: "/dashboard" as const },
+      { label: "Browse games", to: "/auth/login" as const },
       { label: "Tournaments", disabled: true },
       { label: "Leaderboard", disabled: true },
     ],
@@ -43,7 +44,8 @@ const FOOTER_SECTIONS = [
 
 function HomeComponent() {
   return (
-    <div>
+    <div className='min-h-svh'>
+      <Header />
       <ScrollProgress />
       <Hero />
       <Marquee />
@@ -64,7 +66,7 @@ function Footer() {
       <div className='max-w-7xl mx-auto px-6 py-14'>
         <div className='grid gap-10 md:grid-cols-4'>
           <div className='space-y-3'>
-            <Link to='/'>
+            <Link to='/home'>
               <LogoLockup size='sm' />
             </Link>
             <p className='text-sm text-muted-foreground max-w-xs'>

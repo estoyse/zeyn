@@ -13,16 +13,24 @@ export function AppHeader() {
     <header className="border-b bg-background">
       <div className="max-w-7xl mx-auto p-6">
         <div className="flex items-center justify-between">
-          <Link to="/dashboard">
+          <Link to="/">
             <LogoLockup size="sm" />
           </Link>
 
           <div className="flex items-center gap-2">
             <ModeToggle />
-            <Button variant="ghost" size="icon" title="Bildirishnomalar">
-              <Bell className="w-5 h-5" />
-            </Button>
-            <DropdownMenuAvatar />
+            {user ? (
+              <>
+                <Button variant="ghost" size="icon" title="Bildirishnomalar">
+                  <Bell className="w-5 h-5" />
+                </Button>
+                <DropdownMenuAvatar />
+              </>
+            ) : (
+              <Link to="/auth/login">
+                <Button variant="brand">Sign In</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
