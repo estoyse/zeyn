@@ -7,7 +7,7 @@ import { RecentGamesSection } from "@/features/dashboard/components/RecentGamesS
 import { LeaderboardPlaceholder } from "@/features/dashboard/components/LeaderboardPlaceholder";
 import { getClientGame } from "@/features/games/registry";
 
-export const Route = createFileRoute("/games/$gameType")({
+export const Route = createFileRoute("/_app/games/$gameType")({
   component: GameTypePage,
   beforeLoad: async () => {
     const session = await authClient.getSession();

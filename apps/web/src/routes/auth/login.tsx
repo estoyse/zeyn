@@ -17,14 +17,14 @@ export const Route = createFileRoute("/auth/login")({
   beforeLoad: async () => {
     const session = await authClient.getSession();
     if (session.data) {
-      throw redirect({ to: "/dashboard" });
+      throw redirect({ to: "/" });
     }
   },
 });
 
 function AuthPage() {
   const search = Route.useSearch();
-  const returnTo = search.redirectTo || "/dashboard";
+  const returnTo = search.redirectTo || "/";
   return (
     <AuthLayout>
       <AuthForm returnTo={returnTo} />

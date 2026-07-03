@@ -10,7 +10,7 @@ import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
 import { getClientGame } from "@/features/games/registry";
 
-export const Route = createFileRoute("/game/$gameId")({
+export const Route = createFileRoute("/_app/game/$gameId")({
   component: GamePage,
 });
 
@@ -19,7 +19,7 @@ function GamePage() {
   const navigate = useNavigate();
   const room = useGameRoom(gameId);
   const { view } = room;
-  const toDashboard = () => navigate({ to: "/dashboard" });
+  const toDashboard = () => navigate({ to: "/" });
 
   switch (view.kind) {
     case "archive": {

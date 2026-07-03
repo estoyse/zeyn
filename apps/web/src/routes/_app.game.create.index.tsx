@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Gamepad2 } from "lucide-react";
 import { GameCatalog } from "@/features/games/components/GameCatalog";
 
-export const Route = createFileRoute("/game/create/")({
+export const Route = createFileRoute("/_app/game/create/")({
   component: CreatePickerPage,
 });
 

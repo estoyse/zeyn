@@ -5,7 +5,6 @@ import {
   HeadContent,
   Outlet,
   createRootRouteWithContext,
-  useLocation,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -13,8 +12,6 @@ import { ThemeProvider } from "@/shared/components/theme-provider";
 import type { trpc } from "@/shared/lib/trpc";
 
 import "../index.css";
-import { Header } from "@/features/landing/components/Header";
-import { AppHeader } from "@/shared/components/app/AppHeader";
 
 export interface RouterAppContext {
   trpc: typeof trpc;
@@ -43,11 +40,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
-  const location = useLocation();
-  const isAppPage = /^\/(dashboard|games?|settings)(\/|$)/.test(location.pathname);
-  const isLoginPage = location.pathname.startsWith("/auth");
-  const isLandingPage = location.pathname === "/";
-
   return (
     <>
       <HeadContent />
@@ -57,16 +49,7 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey='vite-ui-theme'
       >
-        <div
-          className={
-            isAppPage || isLoginPage
-              ? "grid grid-rows-[auto_1fr] h-svh"
-              : "min-h-svh"
-          }
-        >
-          {!isLoginPage && (isAppPage ? <AppHeader /> : isLandingPage ? <Header /> : null)}
-          <Outlet />
-        </div>
+        <Outlet />
         <Toaster richColors />
       </ThemeProvider>
       <TanStackRouterDevtools position='bottom-left' />

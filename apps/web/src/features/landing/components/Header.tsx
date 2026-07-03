@@ -7,9 +7,9 @@ import { ModeToggle } from "@/shared/components/mode-toggle";
 import { authClient } from "@/features/auth/lib/auth-client";
 
 const LINKS = [
-  { name: "Games", to: "/#games" },
-  { name: "How it works", to: "/#how" },
-  { name: "Play", to: "/dashboard" },
+  { name: "Games", to: "#games" },
+  { name: "How it works", to: "#how" },
+  { name: "Play", to: "/auth/login" },
 ];
 
 export function Header() {
@@ -36,7 +36,7 @@ export function Header() {
     >
       <div className='max-w-7xl mx-auto px-6 py-4'>
         <div className='flex items-center justify-between'>
-          <Link to='/' className='transition-transform hover:-translate-y-0.5'>
+          <Link to='/home' className='transition-transform hover:-translate-y-0.5'>
             <LogoLockup size='sm' />
           </Link>
 
@@ -55,7 +55,7 @@ export function Header() {
           <div className='flex items-center gap-3'>
             <ModeToggle />
             {session ? (
-              <Link to='/dashboard'>
+              <Link to='/'>
                 <Button variant='brand'>Dashboard</Button>
               </Link>
             ) : (

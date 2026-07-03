@@ -41,7 +41,7 @@ export function CTA() {
               <ArrowRight className='size-4 ml-2 transition-transform group-hover:translate-x-1' />
             </Button>
           </Link>
-          <Link to='/dashboard'>
+          <Link to='/auth/login'>
             <Button variant='outline' size='lg' className='w-full sm:w-auto'>
               Explore games
             </Button>

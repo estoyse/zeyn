@@ -3,11 +3,10 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { UserX } from "lucide-react";
 import { Button } from "@zeyn/ui/components/button";
 import { Skeleton } from "@zeyn/ui/components/skeleton";
-import { Header } from "@/features/landing/components/Header";
 import { ProfileView } from "@/features/profile/components/ProfileView";
 import { trpc } from "@/shared/lib/trpc";
 
-export const Route = createFileRoute("/u/$username")({
+export const Route = createFileRoute("/_app/u/$username")({
   component: ProfilePage,
 });
 
@@ -18,8 +17,7 @@ function ProfilePage() {
   );
 
   return (
-    <div className='min-h-svh'>
-      <Header />
+    <div className='overflow-y-auto'>
       {profileQuery.isLoading ? (
         <div className='mx-auto max-w-4xl space-y-8 px-4 py-14'>
           <div className='flex gap-6'>

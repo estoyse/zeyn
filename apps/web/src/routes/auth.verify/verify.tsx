@@ -20,7 +20,7 @@ async function VerifyPage() {
 
   const session = await authClient.getSession();
   if (session.data) {
-    throw redirect({ to: returnTo || "/dashboard" });
+    throw redirect({ to: returnTo || "/" });
   }
 
   throw redirect({ to: "/auth/login", search: { redirectTo: returnTo } });
