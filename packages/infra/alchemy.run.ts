@@ -24,6 +24,23 @@ const stage =
 const workerName = (base: string) =>
   stage === "production" ? base : stage ? `${base}-${stage}` : undefined;
 
+const domainsByStage = {
+  production: { web: "zeyn.uz", server: "api.zeyn.uz" },
+  dev: { web: "dev.zeyn.uz", server: "dev-api.zeyn.uz" },
+} as const;
+
+const domains =
+  stage && stage in domainsByStage
+    ? domainsByStage[stage as keyof typeof domainsByStage]
+    : undefined;
+
+const webUrl = domains ? `https://${domains.web}` : undefined;
+const serverUrl = domains ? `https://${domains.server}` : undefined;
+
+const viteServerUrl = serverUrl ?? process.env.VITE_SERVER_URL;
+const corsOrigin = webUrl ?? process.env.CORS_ORIGIN;
+const betterAuthUrl = serverUrl ?? process.env.BETTER_AUTH_URL;
+
 const hasRemoteState =
   !!process.env.CLOUDFLARE_API_TOKEN && !!process.env.ALCHEMY_STATE_TOKEN;
 
@@ -53,8 +70,9 @@ export const web = await Vite("web", {
   // Fixed name so the production URL drops the stage suffix.
   name: workerName("zeyn-web"),
   adopt: true,
+  domains: domains ? [domains.web] : undefined,
   bindings: {
-    VITE_SERVER_URL: alchemy.env.VITE_SERVER_URL!,
+    VITE_SERVER_URL: viteServerUrl!,
   },
 });
 
@@ -65,6 +83,7 @@ export const server = await Worker("server", {
   compatibilityDate: "2024-09-23",
   name: workerName("zeyn-server"),
   adopt: true,
+  domains: domains ? [domains.server] : undefined,
   // Sweeps abandoned "waiting" rooms; previously piggybacked on GET /.
   crons: ["*/15 * * * *"],
   bindings: {
@@ -73,9 +92,9 @@ export const server = await Worker("server", {
       sqlite: true,
     }),
     DB: db,
-    CORS_ORIGIN: alchemy.env.CORS_ORIGIN!,
+    CORS_ORIGIN: corsOrigin!,
     BETTER_AUTH_SECRET: alchemy.secret.env.BETTER_AUTH_SECRET!,
-    BETTER_AUTH_URL: alchemy.env.BETTER_AUTH_URL!,
+    BETTER_AUTH_URL: betterAuthUrl!,
     NODE_ENV: process.env.NODE_ENV!,
   },
   dev: {
