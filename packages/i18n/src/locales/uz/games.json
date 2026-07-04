@@ -23,6 +23,16 @@
   "catalog": {
     "playersRange": "{{min}}-{{max}} o'yinchi",
     "play": "O'ynash",
-    "create": "Yaratish"
+    "create": "Yaratish",
+    "game": {
+      "buzzer": {
+        "title": "Buzzer viktorina",
+        "description": "Tezkor viktorina. Birinchi bo'lib buzzer bosing, vaqtga qarshi javob bering va ochkolarni yutib oling."
+      },
+      "music": {
+        "title": "Musiqa viktorinasi",
+        "description": "Klipni tinglang va uchta variantdan to'g'ri qo'shiqni tanlang. Tez javob bering va ketma-ketlikni saqlab ko'proq ochko to'plang."
+      }
+    }
   }
 }

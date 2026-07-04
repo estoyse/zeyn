@@ -23,6 +23,16 @@
   "catalog": {
     "playersRange": "{{min}}-{{max}} players",
     "play": "Play",
-    "create": "Create"
+    "create": "Create",
+    "game": {
+      "buzzer": {
+        "title": "Buzzer Trivia",
+        "description": "Fast-paced trivia. Buzz in first, answer against the clock, win the points."
+      },
+      "music": {
+        "title": "Music Quiz",
+        "description": "Listen to a clip and pick the right song from three options. Answer fast and keep a streak to score big."
+      }
+    }
   }
 }

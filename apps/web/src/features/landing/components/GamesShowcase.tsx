@@ -56,10 +56,13 @@ export function GamesShowcase() {
                     </span>
                   </div>
                   <h3 className='text-3xl md:text-4xl font-heading font-semibold tracking-tight'>
-                    {game.meta.title}
+                    {t(`games:catalog.game.${game.type}.title`, game.meta.title)}
                   </h3>
                   <p className='mt-3 text-muted-foreground leading-relaxed max-w-xl'>
-                    {game.meta.description}
+                    {t(
+                      `games:catalog.game.${game.type}.description`,
+                      game.meta.description
+                    )}
                   </p>
                 </motion.div>
 
