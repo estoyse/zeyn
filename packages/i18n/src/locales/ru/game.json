@@ -108,5 +108,12 @@
       "chooseRange": "Выберите {{min}}-{{max}} категорий для игры.",
       "category": "Категория"
     }
+  },
+  "typePage": {
+    "unknownTitle": "Неизвестная игра",
+    "unknownDescription": "Игрового режима «{{gameType}}» не существует.",
+    "backToDashboard": "Назад к панели",
+    "createGame": "Создать игру",
+    "activeGames": "Активные игры"
   }
 }

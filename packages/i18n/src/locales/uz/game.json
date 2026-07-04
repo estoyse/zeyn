@@ -108,5 +108,12 @@
       "chooseRange": "O'yin uchun {{min}}-{{max}} ta toifani tanlang.",
       "category": "Toifa"
     }
+  },
+  "typePage": {
+    "unknownTitle": "Nomaʼlum oʻyin",
+    "unknownDescription": "\"{{gameType}}\" nomli oʻyin turi mavjud emas.",
+    "backToDashboard": "Boshqaruv paneliga qaytish",
+    "createGame": "Oʻyin yaratish",
+    "activeGames": "Faol oʻyinlar"
   }
 }

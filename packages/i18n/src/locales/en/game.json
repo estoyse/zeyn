@@ -108,5 +108,12 @@
       "chooseRange": "Choose {{min}}-{{max}} categories for the match.",
       "category": "Category"
     }
+  },
+  "typePage": {
+    "unknownTitle": "Unknown game",
+    "unknownDescription": "There is no game type called \"{{gameType}}\".",
+    "backToDashboard": "Back to dashboard",
+    "createGame": "Create Game",
+    "activeGames": "Active Games"
   }
 }
