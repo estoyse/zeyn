@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import type { GameType } from "@zeyn/api/games";
 import { History, Trophy, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Skeleton } from "@zeyn/ui/components/skeleton";
 import { getClientGame } from "@/features/games/registry";
 import { trpc } from "@/shared/lib/trpc";
@@ -11,6 +12,7 @@ interface RecentGamesSectionProps {
 }
 
 export function RecentGamesSection({ gameType }: RecentGamesSectionProps) {
+  const { t } = useTranslation();
   const recentGamesQuery = useQuery(
     trpc.game.getMyRecentGames.queryOptions({
       gameType: gameType as GameType | undefined,
@@ -22,7 +24,7 @@ export function RecentGamesSection({ gameType }: RecentGamesSectionProps) {
     <section className='space-y-6'>
       <h3 className='text-xl font-bold flex items-center gap-3'>
         <History className='size-5' />
-        Recent Games
+        {t("dashboard:recentGames.title")}
       </h3>
 
       {recentGamesQuery.isLoading ? (
@@ -34,7 +36,9 @@ export function RecentGamesSection({ gameType }: RecentGamesSectionProps) {
       ) : items?.length === 0 ? (
         <div className='p-12 text-center border-2 border-dashed bg-muted/50'>
           <History className='size-10 text-muted-foreground mx-auto mb-3' />
-          <p className='text-muted-foreground'>No games played yet.</p>
+          <p className='text-muted-foreground'>
+            {t("dashboard:recentGames.empty")}
+          </p>
         </div>
       ) : (
         <div className='border divide-y'>

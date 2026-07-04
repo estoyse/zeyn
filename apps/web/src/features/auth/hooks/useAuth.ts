@@ -1,5 +1,8 @@
+import i18n from "@/shared/i18n/config";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 interface User {
@@ -7,6 +10,7 @@ interface User {
   name: string | null | undefined;
   email: string | null | undefined;
   image: string | null | undefined;
+  locale: string | null | undefined;
 }
 
 interface UseAuthReturn {
@@ -26,6 +30,7 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Subscribe to better-auth's shared session store. Every component that calls
   // useAuth reads the same store, so the session is fetched once and reused —
@@ -39,15 +44,23 @@ export function useAuth(): UseAuthReturn {
         name: session.user.name,
         email: session.user.email,
         image: session.user.image,
+        locale: session.user.locale,
       }
     : null;
+
+  useEffect(() => {
+    const locale = session?.user?.locale;
+    if (locale && locale !== i18n.language) {
+      i18n.changeLanguage(locale);
+    }
+  }, [session?.user?.locale]);
 
   const signIn = async (email: string, password: string, returnTo?: string) => {
     await authClient.signIn.email(
       { email, password },
       {
         onSuccess: () => {
-          toast.success("Kirish muvaffaqiyatli");
+          toast.success(t("auth:toast.signInSuccess"));
           navigate({ to: returnTo || "/" });
         },
         onError: (error) => {
@@ -68,7 +81,7 @@ export function useAuth(): UseAuthReturn {
       { email, password, name, ...(username ? { username } : {}) },
       {
         onSuccess: () => {
-          toast.success("Ro'yxatdan o'tish muvaffaqiyatli");
+          toast.success(t("auth:toast.signUpSuccess"));
           navigate({ to: returnTo || "/" });
         },
         onError: (error) => {
@@ -88,10 +101,10 @@ export function useAuth(): UseAuthReturn {
   const signOut = async () => {
     try {
       await authClient.signOut();
-      toast.success("Muvaffaqiyatli chiqildi");
+      toast.success(t("auth:toast.signOutSuccess"));
       navigate({ to: "/" });
     } catch (error) {
-      toast.error("Chiqishda xatolik");
+      toast.error(t("auth:toast.signOutError"));
     }
   };
 

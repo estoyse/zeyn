@@ -10,6 +10,7 @@ import {
   useToast,
 } from "heroui-native";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Text, TextInput, View } from "react-native";
 import z from "zod";
 
@@ -51,6 +52,7 @@ function getErrorMessage(error: unknown): string | null {
 function SignIn() {
   const passwordInputRef = useRef<TextInput>(null);
   const { toast } = useToast();
+  const { t } = useTranslation("auth");
 
   const form = useForm({
     defaultValues: {
@@ -77,7 +79,7 @@ function SignIn() {
             formApi.reset();
             toast.show({
               variant: "success",
-              label: "Signed in successfully",
+              label: t("toast.signInSuccess"),
             });
             queryClient.refetchQueries();
           },
@@ -109,12 +111,12 @@ function SignIn() {
                 <form.Field name="email">
                   {(field) => (
                     <TextField>
-                      <Label>Email</Label>
+                      <Label>{t("field.emailLabel")}</Label>
                       <Input
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChangeText={field.handleChange}
-                        placeholder="email@example.com"
+                        placeholder={t("field.emailPlaceholder")}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoComplete="email"
@@ -132,13 +134,13 @@ function SignIn() {
                 <form.Field name="password">
                   {(field) => (
                     <TextField>
-                      <Label>Password</Label>
+                      <Label>{t("field.passwordLabel")}</Label>
                       <Input
                         ref={passwordInputRef}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChangeText={field.handleChange}
-                        placeholder="••••••••"
+                        placeholder={t("field.passwordPlaceholder")}
                         secureTextEntry
                         autoComplete="password"
                         textContentType="password"
@@ -153,7 +155,7 @@ function SignIn() {
                   {isSubmitting ? (
                     <Spinner size="sm" color="default" />
                   ) : (
-                    <Button.Label>Sign In</Button.Label>
+                    <Button.Label>{t("login.submitButton")}</Button.Label>
                   )}
                 </Button>
               </View>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Loader2, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { Input } from "@zeyn/ui/components/input";
 import { Label } from "@zeyn/ui/components/label";
@@ -19,6 +20,7 @@ interface AccountSettingsProps {
 }
 
 export function AccountSettings({ me }: AccountSettingsProps) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [name, setName] = useState(me.name);
   const [username, setUsername] = useState(me.username);
@@ -39,7 +41,7 @@ export function AccountSettings({ me }: AccountSettingsProps) {
   const updateMutation = useMutation(
     trpc.profile.updateProfile.mutationOptions({
       onSuccess: () => {
-        toast.success("Profile updated");
+        toast.success(t("settings:account.updated"));
         queryClient.invalidateQueries({
           queryKey: trpc.profile.getMe.queryKey(),
         });
@@ -85,7 +87,7 @@ export function AccountSettings({ me }: AccountSettingsProps) {
   return (
     <div className='space-y-6'>
       <div className='space-y-2'>
-        <Label htmlFor='name'>Display name</Label>
+        <Label htmlFor='name'>{t("settings:account.displayName")}</Label>
         <Input
           id='name'
           value={name}
@@ -95,7 +97,7 @@ export function AccountSettings({ me }: AccountSettingsProps) {
       </div>
 
       <div className='space-y-2'>
-        <Label htmlFor='username'>Username</Label>
+        <Label htmlFor='username'>{t("settings:account.username")}</Label>
         <div className='flex items-center gap-2'>
           <span className='text-muted-foreground'>@</span>
           <Input
@@ -122,19 +124,21 @@ export function AccountSettings({ me }: AccountSettingsProps) {
           {usernameStatus === "unavailable"
             ? (checkQuery.data && "reason" in checkQuery.data
                 ? checkQuery.data.reason
-                : "Not available.")
-            : "Your public profile lives at /u/" + (username || "…")}
+                : t("settings:account.usernameUnavailable"))
+            : t("settings:account.usernameProfileUrl", {
+                username: username || "…",
+              })}
         </p>
       </div>
 
       <div className='space-y-2'>
-        <Label htmlFor='bio'>Bio</Label>
+        <Label htmlFor='bio'>{t("settings:account.bio")}</Label>
         <Textarea
           id='bio'
           value={bio}
           onChange={e => setBio(e.target.value)}
           rows={4}
-          placeholder='Tell people a little about yourself.'
+          placeholder={t("settings:account.bioPlaceholder")}
         />
         <p className='text-right text-xs text-muted-foreground'>
           {bio.length}/{BIO_MAX}
@@ -142,7 +146,9 @@ export function AccountSettings({ me }: AccountSettingsProps) {
       </div>
 
       <Button variant='brand' disabled={!canSave} onClick={handleSave}>
-        {updateMutation.isPending ? "Saving…" : "Save changes"}
+        {updateMutation.isPending
+          ? t("settings:account.saving")
+          : t("settings:account.save")}
       </Button>
     </div>
   );

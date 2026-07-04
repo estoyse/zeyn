@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@zeyn/ui/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface TimerProps {
   expiresAt: number;
@@ -9,6 +10,7 @@ interface TimerProps {
 }
 
 export function Timer({ expiresAt, duration = 15000, onTimeout }: TimerProps) {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState(Math.max(0, expiresAt - Date.now()));
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export function Timer({ expiresAt, duration = 15000, onTimeout }: TimerProps) {
     <div className='w-full space-y-2'>
       <div className='flex justify-between text-xs text-muted-foreground'>
         <span className={cn(isUrgent && "text-destructive animate-pulse")}>
-          {isUrgent ? "HURRY UP!" : "TIME REMAINING"}
+          {isUrgent ? t("game:timer.hurryUp") : t("game:timer.timeRemaining")}
         </span>
         <span>{(timeLeft / 1000).toFixed(1)}s</span>
       </div>

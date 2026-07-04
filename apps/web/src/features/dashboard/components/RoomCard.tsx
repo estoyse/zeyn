@@ -1,4 +1,5 @@
 import { Lock, Unlock, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
@@ -25,6 +26,7 @@ interface RoomCardProps {
 }
 
 export function RoomCard({ room, isHost, onJoin }: RoomCardProps) {
+  const { t } = useTranslation();
   const locked = !!room.password;
 
   return (
@@ -41,14 +43,20 @@ export function RoomCard({ room, isHost, onJoin }: RoomCardProps) {
           {room.name}
         </CardTitle>
         <CardDescription className='text-xs flex items-center gap-1'>
-          Host: {isHost ? "You" : "Host"}
+          {t("dashboard:roomCard.hostPrefix", {
+            name: isHost
+              ? t("dashboard:roomCard.you")
+              : t("dashboard:roomCard.hostFallback"),
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent className='p-4 pt-0 space-y-4'>
         <div className='flex items-center justify-between text-xs'>
           <div className='flex items-center gap-1'>
             <Users className='size-3' />
-            <span>{room.maxPlayers} players</span>
+            <span>
+              {t("dashboard:roomCard.players", { count: room.maxPlayers })}
+            </span>
           </div>
           <StatusBadge>{room.status}</StatusBadge>
         </div>
@@ -58,7 +66,7 @@ export function RoomCard({ room, isHost, onJoin }: RoomCardProps) {
           size='sm'
           onClick={onJoin}
         >
-          Join Game
+          {t("dashboard:roomCard.join")}
         </Button>
       </CardContent>
     </Card>

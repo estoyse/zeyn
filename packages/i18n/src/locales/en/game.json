@@ -1,0 +1,112 @@
+{
+  "archive": {
+    "title": "Game Results",
+    "subtitle": "Fetched from Archive",
+    "detailedResults": "Detailed Results",
+    "rank": "Rank",
+    "participant": "Participant",
+    "subjectFallback": "Subject {{index}}",
+    "total": "Total",
+    "backToDashboard": "Back to Dashboard"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Room Not Found",
+      "description": "This room doesn't exist or has been removed.",
+      "backToDashboard": "Back to Dashboard"
+    },
+    "connection": {
+      "title": "Connection Failed",
+      "retry": "Retry Connection"
+    }
+  },
+  "header": {
+    "room": "Room: {{gameId}}",
+    "leave": "Leave"
+  },
+  "lobby": {
+    "playersInLobby": "Players in Lobby",
+    "joined": "{{count}} / {{max}} joined",
+    "host": "Host",
+    "gameInformation": "Game Information",
+    "gameDetails": "Game Details",
+    "shareEntryPoint": "Share Entry Point",
+    "linkCopied": "Link copied!",
+    "startGame": "Start Game",
+    "waitingForHost": "Waiting for host to start..."
+  },
+  "playing": {
+    "loadingQuestion": "Loading question...",
+    "currentCategory": "Current Category",
+    "questionWorth": "Question worth {{points}}",
+    "buzz": "BUZZ!",
+    "awaitingAnswer": "Awaiting Answer",
+    "answerPlaceholder": "Type your answer...",
+    "submit": "Submit",
+    "isThinking": "Is thinking...",
+    "correctAnswer": "Correct Answer",
+    "nextQuestionShortly": "Next question starts shortly"
+  },
+  "loading": {
+    "checkingSession": "Checking session...",
+    "connectingToRoom": "Connecting to room..."
+  },
+  "auth": {
+    "loginRequired": {
+      "title": "Login Required",
+      "description": "You must be logged in to participate in the game.",
+      "signIn": "Sign In to Play"
+    },
+    "passwordPrompt": {
+      "title": "Private Room",
+      "description": "This room requires a password to join.",
+      "placeholder": "Enter room password",
+      "error": "Please enter the room password.",
+      "back": "Back",
+      "join": "Join Room"
+    }
+  },
+  "timer": {
+    "hurryUp": "HURRY UP!",
+    "timeRemaining": "TIME REMAINING"
+  },
+  "create": {
+    "summary": {
+      "roomNameSet": "Room name set",
+      "subjectsSelected": "Subjects selected ({{count}}/{{min}} min)",
+      "publicRoom": "Public room",
+      "privateRoom": "Private room",
+      "note": "Rooms are automatically archived after 1 hour of inactivity. Public rooms appear on the global dashboard and are searchable by all players."
+    },
+    "deploy": {
+      "deployment": "Deployment",
+      "readyToCreate": "Ready to Create?",
+      "checklist": "Checklist",
+      "createGame": "Create Game",
+      "creating": "Creating...",
+      "completeChecklist": "Complete the checklist to deploy."
+    },
+    "general": {
+      "title": "General Configuration",
+      "roomName": "Room Name",
+      "roomNamePlaceholder": "Enter a glorious name...",
+      "roomNameHint": "Minimum {{count}} characters. Visible to players.",
+      "maxPlayers": "Max Players",
+      "visibility": "Visibility",
+      "public": "Public",
+      "private": "Private",
+      "visibilityPublicHint": "Visible on the public dashboard.",
+      "visibilityPrivateHint": "Invite-only via direct link.",
+      "roomPassword": "Room Password (Optional)",
+      "roomPasswordPlaceholder": "Secure your borders...",
+      "decreaseMaxPlayers": "Decrease max players",
+      "increaseMaxPlayers": "Increase max players"
+    },
+    "subject": {
+      "selectSubjects": "Select Subjects",
+      "selected": "{{count}} / {{max}} Selected",
+      "chooseRange": "Choose {{min}}-{{max}} categories for the match.",
+      "category": "Category"
+    }
+  }
+}

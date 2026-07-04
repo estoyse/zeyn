@@ -3,6 +3,7 @@ import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Bell } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
+import { LanguageToggle } from "../language-toggle";
 import { ModeToggle } from "../mode-toggle";
 import { Link } from "@tanstack/react-router";
 
@@ -19,6 +20,7 @@ export function AppHeader() {
 
           <div className="flex items-center gap-2">
             <ModeToggle />
+            <LanguageToggle />
             {user ? (
               <>
                 <Button variant="ghost" size="icon" title="Bildirishnomalar">

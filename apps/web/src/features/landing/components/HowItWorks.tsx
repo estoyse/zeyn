@@ -1,31 +1,27 @@
 import { useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { DoorOpen, Gamepad2, Trophy } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { SectionHeader } from "@/features/landing/components/GamesShowcase";
 import { fadeUp, viewport } from "@/features/landing/lib/motion";
 
 const STEPS = [
   {
+    id: "createRoom",
     icon: DoorOpen,
-    title: "Create or join a room",
-    description:
-      "Spin up a private arena in seconds or drop into a live game with a room code. Host up to a full lobby.",
   },
   {
+    id: "playRealTime",
     icon: Gamepad2,
-    title: "Play in real time",
-    description:
-      "Buzz in, answer against the clock, and watch scores update instantly for every player at once.",
   },
   {
+    id: "climbLeaderboard",
     icon: Trophy,
-    title: "Climb the leaderboard",
-    description:
-      "Keep your streak alive, rack up bonus points, and claim the top spot round after round.",
   },
-];
+] as const;
 
 export function HowItWorks() {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -41,8 +37,8 @@ export function HowItWorks() {
     <section id='how' className='scroll-mt-24'>
       <div className='max-w-7xl mx-auto px-6 py-24 md:py-32'>
         <SectionHeader
-          eyebrow='How it works'
-          title='Zero to game in three steps'
+          eyebrow={t("landing:howItWorks.eyebrow")}
+          title={t("landing:howItWorks.title")}
         />
 
         <div ref={ref} className='mt-16 relative max-w-3xl'>
@@ -55,7 +51,7 @@ export function HowItWorks() {
           <div className='space-y-12'>
             {STEPS.map((step, i) => (
               <motion.div
-                key={step.title}
+                key={step.id}
                 variants={fadeUp}
                 initial='hidden'
                 whileInView='show'
@@ -70,11 +66,11 @@ export function HowItWorks() {
                     0{i + 1}
                   </span>
                   <h3 className='text-xl md:text-2xl font-heading font-semibold tracking-tight'>
-                    {step.title}
+                    {t(`landing:howItWorks.steps.${step.id}.title`)}
                   </h3>
                 </div>
                 <p className='mt-2 text-muted-foreground leading-relaxed'>
-                  {step.description}
+                  {t(`landing:howItWorks.steps.${step.id}.description`)}
                 </p>
               </motion.div>
             ))}

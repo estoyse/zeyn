@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Switch } from "@zeyn/ui/components/switch";
 import { trpc } from "@/shared/lib/trpc";
 import { toast } from "sonner";
@@ -17,26 +18,27 @@ interface PrivacySettingsProps {
 
 type PrivacyKey = keyof PrivacyState;
 
-const SECTION_TOGGLES: { key: PrivacyKey; label: string; description: string }[] =
+const SECTION_TOGGLES: { key: PrivacyKey; labelKey: string; descriptionKey: string }[] =
   [
     {
       key: "showStats",
-      label: "Show stats",
-      description: "Games played, hosted, best and total score.",
+      labelKey: "settings:privacy.showStats.label",
+      descriptionKey: "settings:privacy.showStats.description",
     },
     {
       key: "showHistory",
-      label: "Show recent games",
-      description: "Your recently played games and results.",
+      labelKey: "settings:privacy.showHistory.label",
+      descriptionKey: "settings:privacy.showHistory.description",
     },
     {
       key: "showHostedGames",
-      label: "Show hosted games",
-      description: "Games you created and hosted.",
+      labelKey: "settings:privacy.showHostedGames.label",
+      descriptionKey: "settings:privacy.showHostedGames.description",
     },
   ];
 
 export function PrivacySettings({ me }: PrivacySettingsProps) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [state, setState] = useState<PrivacyState>(me);
 
@@ -62,16 +64,16 @@ export function PrivacySettings({ me }: PrivacySettingsProps) {
   return (
     <div className='divide-y border'>
       <ToggleRow
-        label='Public profile'
-        description='When off, only you can see your profile page.'
+        label={t("settings:privacy.publicProfile.label")}
+        description={t("settings:privacy.publicProfile.description")}
         checked={state.isProfilePublic}
         onChange={value => update("isProfilePublic", value)}
       />
       {SECTION_TOGGLES.map(section => (
         <ToggleRow
           key={section.key}
-          label={section.label}
-          description={section.description}
+          label={t(section.labelKey)}
+          description={t(section.descriptionKey)}
           checked={state[section.key]}
           disabled={!state.isProfilePublic}
           onChange={value => update(section.key, value)}

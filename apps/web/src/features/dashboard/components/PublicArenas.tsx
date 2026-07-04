@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { trpc } from "@/shared/lib/trpc";
 import type { GameType } from "@zeyn/api/games";
 import { Globe, RefreshCw, Gamepad2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { Skeleton } from "@zeyn/ui/components/skeleton";
 import { RoomCard } from "./RoomCard";
@@ -13,8 +14,10 @@ interface PublicArenasProps {
   title?: string;
 }
 
-export function PublicArenas({ userId, gameType, title = "Public Rooms" }: PublicArenasProps) {
+export function PublicArenas({ userId, gameType, title }: PublicArenasProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const displayTitle = title ?? t("dashboard:publicArenas.defaultTitle");
   const publicRoomsQuery = useQuery(
     trpc.game.getPublicRooms.queryOptions({
       gameType: gameType as GameType | undefined,
@@ -27,7 +30,7 @@ export function PublicArenas({ userId, gameType, title = "Public Rooms" }: Publi
       <div className='flex items-center justify-between'>
         <h3 className='text-xl font-bold flex items-center gap-3'>
           <Globe className='size-5' />
-          {title}
+          {displayTitle}
         </h3>
         <Button
           variant='ghost'
@@ -40,7 +43,7 @@ export function PublicArenas({ userId, gameType, title = "Public Rooms" }: Publi
               publicRoomsQuery.isFetching ? "animate-spin" : ""
             }`}
           />
-          Refresh
+          {t("dashboard:publicArenas.refresh")}
         </Button>
       </div>
 
@@ -53,7 +56,9 @@ export function PublicArenas({ userId, gameType, title = "Public Rooms" }: Publi
       ) : rooms?.length === 0 ? (
         <div className='p-12 text-center border-2 border-dashed bg-muted/50'>
           <Gamepad2 className='size-10 text-muted-foreground mx-auto mb-3' />
-          <p className='text-muted-foreground'>No public rooms available.</p>
+          <p className='text-muted-foreground'>
+            {t("dashboard:publicArenas.emptyTitle")}
+          </p>
           <Button
             variant='link'
             onClick={() =>
@@ -63,7 +68,7 @@ export function PublicArenas({ userId, gameType, title = "Public Rooms" }: Publi
             }
             className='mt-2'
           >
-            Create a Game
+            {t("dashboard:publicArenas.createGame")}
           </Button>
         </div>
       ) : (

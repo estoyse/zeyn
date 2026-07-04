@@ -1,4 +1,5 @@
 import { roomLimits } from "@zeyn/api/game-types";
+import { useTranslation } from "react-i18next";
 import { DeployPanel } from "./DeployPanel";
 
 interface CreateSummaryProps {
@@ -20,20 +21,30 @@ export function CreateSummary({
   isCreating,
   onCreate,
 }: CreateSummaryProps) {
+  const { t } = useTranslation();
+
   return (
     <DeployPanel
       checks={[
-        { label: "Room name set", done: hasName },
+        { label: t("game:create.summary.roomNameSet"), done: hasName },
         {
-          label: `Subjects selected (${selectedCount}/${roomLimits.minSubjects} min)`,
+          label: t("game:create.summary.subjectsSelected", {
+            count: selectedCount,
+            min: roomLimits.minSubjects,
+          }),
           done: hasEnoughSubjects,
         },
-        { label: isPublic ? "Public room" : "Private room", done: true },
+        {
+          label: isPublic
+            ? t("game:create.summary.publicRoom")
+            : t("game:create.summary.privateRoom"),
+          done: true,
+        },
       ]}
       canCreate={canCreate}
       isCreating={isCreating}
       onCreate={onCreate}
-      note="Rooms are automatically archived after 1 hour of inactivity. Public rooms appear on the global dashboard and are searchable by all players."
+      note={t("game:create.summary.note")}
     />
   );
 }

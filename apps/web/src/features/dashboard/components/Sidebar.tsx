@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { History } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import { JoinByIdCard } from "./JoinByIdCard";
 import { LeaderboardPlaceholder } from "./LeaderboardPlaceholder";
 
 export function Sidebar() {
+  const { t } = useTranslation();
   const recentGamesQuery = useQuery(
     trpc.game.getMyRecentGames.queryOptions({ limit: 5 })
   );
@@ -28,10 +30,10 @@ export function Sidebar() {
         <CardHeader className='pb-2'>
           <CardTitle className='text-base flex items-center gap-2'>
             <History className='size-4' />
-            Recent Games
+            {t("dashboard:sidebar.recentGames.title")}
           </CardTitle>
           <CardDescription className='text-xs'>
-            View your game history and results.
+            {t("dashboard:sidebar.recentGames.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className='p-4 space-y-2'>
@@ -43,7 +45,7 @@ export function Sidebar() {
             </div>
           ) : items?.length === 0 ? (
             <div className='text-xs text-muted-foreground text-center py-4'>
-              No games played yet.
+              {t("dashboard:sidebar.recentGames.empty")}
             </div>
           ) : (
             items?.map(item => {

@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@zeyn/ui/components/card";
 import { Trophy, LayoutGrid } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { buildScoreboard, type ScoreboardResults } from "@/features/game/lib/scoreboard";
 
 interface ArchiveViewProps {
@@ -14,6 +15,7 @@ interface ArchiveViewProps {
 }
 
 export function ArchiveView({ data, onBack }: ArchiveViewProps) {
+  const { t } = useTranslation();
   const { subjects, questionsPerSubject, rows } = buildScoreboard(data);
   const questionSlots = Array.from(
     { length: questionsPerSubject },
@@ -27,9 +29,9 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
           <div className="mx-auto inline-block bg-brand/10 p-4 text-brand">
             <Trophy className="size-12" />
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold">Game Results</h1>
+          <h1 className="text-4xl md:text-6xl font-bold">{t("game:archive.title")}</h1>
           <p className="text-muted-foreground text-sm uppercase tracking-widest">
-            Fetched from Archive
+            {t("game:archive.subtitle")}
           </p>
         </div>
 
@@ -37,7 +39,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <LayoutGrid className="size-5" />
-              Detailed Results
+              {t("game:archive.detailedResults")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -49,13 +51,13 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                       rowSpan={2}
                       className="px-2 py-2 text-center text-xs text-muted-foreground uppercase border-r"
                     >
-                      T/r
+                      {t("game:archive.rank")}
                     </th>
                     <th
                       rowSpan={2}
                       className="px-3 py-2 text-left text-xs text-muted-foreground uppercase border-r"
                     >
-                      Ishtirokchi
+                      {t("game:archive.participant")}
                     </th>
                     {subjects.map((name, si) => (
                       <th
@@ -64,14 +66,14 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
                         className="px-2 py-2 text-center text-xs font-semibold uppercase border-r"
                         title={name}
                       >
-                        {name || `${si + 1}-mavzu`}
+                        {name || t("game:archive.subjectFallback", { index: si + 1 })}
                       </th>
                     ))}
                     <th
                       rowSpan={2}
                       className="px-3 py-2 text-center text-xs text-muted-foreground uppercase"
                     >
-                      Jami
+                      {t("game:archive.total")}
                     </th>
                   </tr>
                   <tr className="border-b">
@@ -146,7 +148,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
 
         <div className="text-center">
           <Button variant="brand" onClick={onBack}>
-            Back to Dashboard
+            {t("game:archive.backToDashboard")}
           </Button>
         </div>
       </div>

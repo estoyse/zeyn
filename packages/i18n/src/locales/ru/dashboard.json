@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "Панель управления",
+    "welcome": "С возвращением, {{name}}. Готовы играть?",
+    "points": "{{count}} ОЧК"
+  },
+  "joinById": {
+    "title": "Присоединиться по ID",
+    "description": "Есть ID комнаты? Введите его ниже, чтобы присоединиться.",
+    "placeholder": "Введите ID комнаты...",
+    "submit": "Войти"
+  },
+  "publicArenas": {
+    "defaultTitle": "Публичные комнаты",
+    "refresh": "Обновить",
+    "emptyTitle": "Нет доступных публичных комнат.",
+    "createGame": "Создать игру"
+  },
+  "recentGames": {
+    "title": "Последние игры",
+    "empty": "Игр пока не было."
+  },
+  "leaderboard": {
+    "title": "Таблица лидеров",
+    "description": "Глобальный рейтинг скоро появится.",
+    "comingSoon": "Скоро."
+  },
+  "roomCard": {
+    "hostPrefix": "Хост: {{name}}",
+    "you": "Вы",
+    "hostFallback": "Хост",
+    "players": "{{count}} игроков",
+    "join": "Присоединиться к игре"
+  },
+  "sidebar": {
+    "recentGames": {
+      "title": "Последние игры",
+      "description": "Просмотрите историю игр и результаты.",
+      "empty": "Игр пока не было."
+    }
+  },
+  "page": {
+    "gamesHeading": "Игры"
+  }
+}

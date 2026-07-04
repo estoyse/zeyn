@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Check, Info, Rocket } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { Card } from "@zeyn/ui/components/card";
 
@@ -23,6 +24,7 @@ export function DeployPanel({
   onCreate,
   note,
 }: DeployPanelProps) {
+  const { t } = useTranslation();
   const doneCount = checks.filter(c => c.done).length;
 
   return (
@@ -32,10 +34,10 @@ export function DeployPanel({
         <div className="space-y-5 p-6">
           <div className="space-y-1">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
-              Deployment
+              {t("game:create.deploy.deployment")}
             </p>
             <h3 className="font-heading text-xl font-semibold uppercase tracking-wide">
-              Ready to Create?
+              {t("game:create.deploy.readyToCreate")}
             </h3>
           </div>
 
@@ -60,7 +62,7 @@ export function DeployPanel({
 
           <div className="flex items-center justify-between border-t pt-4">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">
-              Checklist
+              {t("game:create.deploy.checklist")}
             </span>
             <span className="font-heading text-sm tabular-nums">
               {doneCount}/{checks.length}
@@ -76,11 +78,11 @@ export function DeployPanel({
               onClick={onCreate}
             >
               <Rocket className="mr-2 size-4" />
-              {isCreating ? "Creating..." : "Create Game"}
+              {isCreating ? t("game:create.deploy.creating") : t("game:create.deploy.createGame")}
             </Button>
             {!canCreate && !isCreating && (
               <p className="text-center text-xs text-muted-foreground">
-                Complete the checklist to deploy.
+                {t("game:create.deploy.completeChecklist")}
               </p>
             )}
           </div>

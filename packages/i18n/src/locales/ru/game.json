@@ -1,0 +1,112 @@
+{
+  "archive": {
+    "title": "Результаты игры",
+    "subtitle": "Загружено из архива",
+    "detailedResults": "Подробные результаты",
+    "rank": "№",
+    "participant": "Участник",
+    "subjectFallback": "Тема {{index}}",
+    "total": "Итого",
+    "backToDashboard": "Вернуться на панель управления"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Комната не найдена",
+      "description": "Эта комната не существует или была удалена.",
+      "backToDashboard": "Вернуться на панель управления"
+    },
+    "connection": {
+      "title": "Не удалось подключиться",
+      "retry": "Повторить подключение"
+    }
+  },
+  "header": {
+    "room": "Комната: {{gameId}}",
+    "leave": "Выйти"
+  },
+  "lobby": {
+    "playersInLobby": "Игроки в лобби",
+    "joined": "{{count}} / {{max}} присоединились",
+    "host": "Хост",
+    "gameInformation": "Информация об игре",
+    "gameDetails": "Детали игры",
+    "shareEntryPoint": "Ссылка для входа",
+    "linkCopied": "Ссылка скопирована!",
+    "startGame": "Начать игру",
+    "waitingForHost": "Ожидание, пока хост начнёт игру..."
+  },
+  "playing": {
+    "loadingQuestion": "Загрузка вопроса...",
+    "currentCategory": "Текущая категория",
+    "questionWorth": "Вопрос стоит {{points}}",
+    "buzz": "ЖМИ!",
+    "awaitingAnswer": "Ожидание ответа",
+    "answerPlaceholder": "Введите ваш ответ...",
+    "submit": "Отправить",
+    "isThinking": "Думает...",
+    "correctAnswer": "Правильный ответ",
+    "nextQuestionShortly": "Следующий вопрос начнётся скоро"
+  },
+  "loading": {
+    "checkingSession": "Проверка сессии...",
+    "connectingToRoom": "Подключение к комнате..."
+  },
+  "auth": {
+    "loginRequired": {
+      "title": "Требуется вход",
+      "description": "Вы должны войти в систему, чтобы участвовать в игре.",
+      "signIn": "Войти, чтобы играть"
+    },
+    "passwordPrompt": {
+      "title": "Приватная комната",
+      "description": "Для входа в эту комнату требуется пароль.",
+      "placeholder": "Введите пароль комнаты",
+      "error": "Пожалуйста, введите пароль комнаты.",
+      "back": "Назад",
+      "join": "Войти в комнату"
+    }
+  },
+  "timer": {
+    "hurryUp": "СКОРЕЕ!",
+    "timeRemaining": "ОСТАВШЕЕСЯ ВРЕМЯ"
+  },
+  "create": {
+    "summary": {
+      "roomNameSet": "Название комнаты задано",
+      "subjectsSelected": "Выбрано предметов ({{count}}/{{min}} мин.)",
+      "publicRoom": "Публичная комната",
+      "privateRoom": "Приватная комната",
+      "note": "Комнаты автоматически архивируются после 1 часа бездействия. Публичные комнаты отображаются на общей панели управления и доступны для поиска всем игрокам."
+    },
+    "deploy": {
+      "deployment": "Развёртывание",
+      "readyToCreate": "Готовы создать?",
+      "checklist": "Чек-лист",
+      "createGame": "Создать игру",
+      "creating": "Создание...",
+      "completeChecklist": "Заполните чек-лист, чтобы развернуть игру."
+    },
+    "general": {
+      "title": "Общие настройки",
+      "roomName": "Название комнаты",
+      "roomNamePlaceholder": "Введите великолепное название...",
+      "roomNameHint": "Минимум {{count}} символов. Видно игрокам.",
+      "maxPlayers": "Макс. игроков",
+      "visibility": "Видимость",
+      "public": "Публичная",
+      "private": "Приватная",
+      "visibilityPublicHint": "Видна на публичной панели управления.",
+      "visibilityPrivateHint": "Доступна только по прямой ссылке.",
+      "roomPassword": "Пароль комнаты (необязательно)",
+      "roomPasswordPlaceholder": "Защитите свои границы...",
+      "decreaseMaxPlayers": "Уменьшить макс. число игроков",
+      "increaseMaxPlayers": "Увеличить макс. число игроков"
+    },
+    "subject": {
+      "selectSubjects": "Выберите предметы",
+      "selected": "{{count}} / {{max}} выбрано",
+      "chooseRange": "Выберите {{min}}-{{max}} категорий для игры.",
+      "category": "Категория"
+    }
+  }
+}

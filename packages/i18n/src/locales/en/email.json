@@ -1,0 +1,17 @@
+{
+  "resetPassword": {
+    "subject": "Reset your Zeyn password",
+    "heading": "Reset your password",
+    "intro": "We received a request to reset the password for your Zeyn account. Click the button below to choose a new one.",
+    "button": "Reset password",
+    "linkFallback": "If the button doesn't work, copy and paste this link into your browser:",
+    "ignore": "If you didn't request this, you can safely ignore this email."
+  },
+  "verify": {
+    "subject": "Verify your Zeyn email",
+    "heading": "Verify your email",
+    "intro": "Click the button below to verify your Zeyn account email address.",
+    "button": "Verify email",
+    "ignore": "If you didn't request this, you can safely ignore this email."
+  }
+}

@@ -2,6 +2,7 @@ import { expo } from "@better-auth/expo";
 import { createDb } from "@zeyn/db";
 import * as schema from "@zeyn/db/schema/auth";
 import { env } from "@zeyn/env/server";
+import { t, type Locale } from "@zeyn/i18n/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "./password";
@@ -40,6 +41,7 @@ export function createAuth() {
     user: {
       additionalFields: {
         username: { type: "string", required: false, input: true },
+        locale: { type: "string", required: false, input: true },
       },
     },
     databaseHooks: {
@@ -80,24 +82,32 @@ export function createAuth() {
         const token = parsed.pathname.split("/").pop();
         const callbackUrl = parsed.searchParams.get("callbackURL");
         const resetUrl = callbackUrl ? `${callbackUrl}?token=${token}` : url;
+        const locale = ((user as { locale?: string }).locale ?? "uz") as Locale;
+
+        const subject = t(locale, "email", "resetPassword.subject");
+        const heading = t(locale, "email", "resetPassword.heading");
+        const intro = t(locale, "email", "resetPassword.intro");
+        const button = t(locale, "email", "resetPassword.button");
+        const linkFallback = t(locale, "email", "resetPassword.linkFallback");
+        const ignore = t(locale, "email", "resetPassword.ignore");
 
         await sendEmail({
           to: user.email,
-          subject: "Reset your Zeyn password",
-          text: `Reset your Zeyn password by opening this link: ${resetUrl}\n\nIf you didn't request this, you can safely ignore this email.`,
+          subject,
+          text: `${subject}: ${resetUrl}\n\n${ignore}`,
           html: `
             <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #1a1a1a;">
-              <h1 style="font-size: 20px; margin: 0 0 16px;">Reset your password</h1>
+              <h1 style="font-size: 20px; margin: 0 0 16px;">${heading}</h1>
               <p style="font-size: 15px; line-height: 1.5; margin: 0 0 24px;">
-                We received a request to reset the password for your Zeyn account. Click the button below to choose a new one.
+                ${intro}
               </p>
-              <a href="${resetUrl}" style="display: inline-block; background: #1e3a8a; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600;">Reset password</a>
+              <a href="${resetUrl}" style="display: inline-block; background: #1e3a8a; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600;">${button}</a>
               <p style="font-size: 13px; line-height: 1.5; color: #666; margin: 24px 0 0;">
-                If the button doesn't work, copy and paste this link into your browser:<br />
+                ${linkFallback}<br />
                 <a href="${resetUrl}" style="color: #1e3a8a; word-break: break-all;">${resetUrl}</a>
               </p>
               <p style="font-size: 13px; line-height: 1.5; color: #666; margin: 16px 0 0;">
-                If you didn't request this, you can safely ignore this email.
+                ${ignore}
               </p>
             </div>
           `,

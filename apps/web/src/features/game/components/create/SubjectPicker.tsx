@@ -9,6 +9,7 @@ import {
 } from "@zeyn/ui/components/card";
 import { Badge } from "@zeyn/ui/components/badge";
 import { Skeleton } from "@zeyn/ui/components/skeleton";
+import { useTranslation } from "react-i18next";
 import { roomLimits } from "@zeyn/api/game-types";
 
 interface Subject {
@@ -29,6 +30,7 @@ export function SubjectPicker({
   selectedIds,
   onToggle,
 }: SubjectPickerProps) {
+  const { t } = useTranslation();
   const belowMin = selectedIds.length < roomLimits.minSubjects;
 
   return (
@@ -37,15 +39,14 @@ export function SubjectPicker({
         <CardTitle className='text-lg flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <Zap className='size-5 text-brand' />
-            Select Subjects
+            {t("game:create.subject.selectSubjects")}
           </div>
           <Badge tone={belowMin ? "destructive" : "brand"}>
-            {selectedIds.length} / {roomLimits.maxSubjects} Selected
+            {t("game:create.subject.selected", { count: selectedIds.length, max: roomLimits.maxSubjects })}
           </Badge>
         </CardTitle>
         <CardDescription>
-          Choose {roomLimits.minSubjects}-{roomLimits.maxSubjects} categories for
-          the match.
+          {t("game:create.subject.chooseRange", { min: roomLimits.minSubjects, max: roomLimits.maxSubjects })}
         </CardDescription>
       </CardHeader>
       <CardContent className='p-6'>
@@ -72,7 +73,7 @@ export function SubjectPicker({
                   <div className='relative z-10 space-y-1'>
                     <p className='font-bold truncate'>{s.name}</p>
                     <p className='text-[10px] text-muted-foreground uppercase tracking-widest'>
-                      Category
+                      {t("game:create.subject.category")}
                     </p>
                   </div>
                   {selected && (

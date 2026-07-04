@@ -1,0 +1,21 @@
+{
+  "onlyYou": "Faqat siz",
+  "editProfile": "Profilni tahrirlash",
+  "memberSince": "A'zo bo'lgan sana: {{date}}",
+  "privateProfile": "Yopiq profil",
+  "stats": {
+    "title": "Statistika",
+    "played": "O'ynalgan",
+    "hosted": "Tashkil etilgan",
+    "best": "Eng yaxshi",
+    "total": "Umumiy"
+  },
+  "recentGames": {
+    "title": "So'nggi o'yinlar",
+    "empty": "Hali o'yin o'ynalmagan."
+  },
+  "hostedGames": {
+    "title": "Tashkil etilgan o'yinlar",
+    "empty": "Hali o'yin tashkil etilmagan."
+  }
+}

@@ -2,6 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@zeyn/ui/components/button";
 import { Card, CardContent } from "@zeyn/ui/components/card";
 import { UserCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface LoginRequiredViewProps {
   gameId: string;
@@ -9,6 +10,7 @@ interface LoginRequiredViewProps {
 
 export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className='min-h-screen bg-background flex items-center justify-center p-4'>
@@ -18,9 +20,9 @@ export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
             <UserCircle2 className='size-10' />
           </div>
           <div className='space-y-2'>
-            <h1 className='text-2xl font-bold'>Login Required</h1>
+            <h1 className='text-2xl font-bold'>{t("game:auth.loginRequired.title")}</h1>
             <p className='text-muted-foreground'>
-              You must be logged in to participate in the game.
+              {t("game:auth.loginRequired.description")}
             </p>
           </div>
           <Button
@@ -30,7 +32,7 @@ export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
               (window.location.href = `/auth/login?redirectTo=/game/${gameId}`)
             }
           >
-            Sign In to Play
+            {t("game:auth.loginRequired.signIn")}
           </Button>
         </CardContent>
       </Card>

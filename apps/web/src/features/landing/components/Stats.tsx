@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { CountUp } from "@/features/landing/components/CountUp";
 import { fadeUp, staggerContainer, viewport } from "@/features/landing/lib/motion";
 
 const STATS = [
-  { to: 257, suffix: "+", label: "Active games" },
-  { to: 50, suffix: "K+", label: "Players" },
-  { to: 500, suffix: "+", label: "Tournaments" },
-  { to: 99, suffix: "%", label: "Uptime" },
-];
+  { to: 257, suffix: "+", labelKey: "activeGamesLabel" },
+  { to: 50, suffix: "K+", labelKey: "playersLabel" },
+  { to: 500, suffix: "+", labelKey: "tournamentsLabel" },
+  { to: 99, suffix: "%", labelKey: "uptimeLabel" },
+] as const;
 
 export function Stats() {
+  const { t } = useTranslation();
   return (
     <section className='bg-foreground text-background relative overflow-hidden'>
       <div
@@ -25,7 +27,7 @@ export function Stats() {
       >
         {STATS.map((stat, i) => (
           <motion.div
-            key={stat.label}
+            key={stat.labelKey}
             variants={fadeUp}
             className={`text-center px-4 ${
               i > 0 ? "md:border-l md:border-background/15" : ""
@@ -35,7 +37,7 @@ export function Stats() {
               <CountUp to={stat.to} suffix={stat.suffix} />
             </div>
             <div className='mt-2 text-xs uppercase tracking-widest text-background/60'>
-              {stat.label}
+              {t(`landing:stats.${stat.labelKey}`)}
             </div>
           </motion.div>
         ))}

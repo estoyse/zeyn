@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}. Ready to play?",
+    "points": "{{count}} PTS"
+  },
+  "joinById": {
+    "title": "Join by ID",
+    "description": "Have a room ID? Enter it below to join.",
+    "placeholder": "Enter Room ID...",
+    "submit": "Join"
+  },
+  "publicArenas": {
+    "defaultTitle": "Public Rooms",
+    "refresh": "Refresh",
+    "emptyTitle": "No public rooms available.",
+    "createGame": "Create a Game"
+  },
+  "recentGames": {
+    "title": "Recent Games",
+    "empty": "No games played yet."
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "description": "Global rankings are coming soon.",
+    "comingSoon": "Coming soon."
+  },
+  "roomCard": {
+    "hostPrefix": "Host: {{name}}",
+    "you": "You",
+    "hostFallback": "Host",
+    "players": "{{count}} players",
+    "join": "Join Game"
+  },
+  "sidebar": {
+    "recentGames": {
+      "title": "Recent Games",
+      "description": "View your game history and results.",
+      "empty": "No games played yet."
+    }
+  },
+  "page": {
+    "gamesHeading": "Games"
+  }
+}

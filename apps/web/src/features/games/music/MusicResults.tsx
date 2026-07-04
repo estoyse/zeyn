@@ -1,4 +1,5 @@
 import { Trophy, Medal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
@@ -11,6 +12,7 @@ import type { GameResultsViewProps } from "@/features/games/types";
 const RANK_COLORS = ["text-brand", "text-muted-foreground", "text-muted-foreground"];
 
 export function MusicResults({ results, onBack }: GameResultsViewProps) {
+  const { t } = useTranslation();
   const rows = [...results.playerResults].sort((a, b) => b.score - a.score);
 
   return (
@@ -20,15 +22,15 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
           <div className='mx-auto inline-block bg-brand/10 p-4 text-brand'>
             <Trophy className='size-12' />
           </div>
-          <h1 className='text-4xl md:text-6xl font-bold'>Final Leaderboard</h1>
+          <h1 className='text-4xl md:text-6xl font-bold'>{t("games:music.results.title")}</h1>
           <p className='text-muted-foreground text-sm uppercase tracking-widest'>
-            Music Quiz
+            {t("games:music.results.subtitle")}
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Standings</CardTitle>
+            <CardTitle>{t("games:music.results.standings")}</CardTitle>
           </CardHeader>
           <CardContent className='space-y-2'>
             {rows.map((p, i) => (
@@ -53,7 +55,7 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
             ))}
             {rows.length === 0 && (
               <p className='text-center text-sm text-muted-foreground'>
-                No scores recorded.
+                {t("games:music.results.noScores")}
               </p>
             )}
           </CardContent>
@@ -61,7 +63,7 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
 
         <div className='flex justify-center'>
           <Button variant='brand' onClick={onBack}>
-            Back to Dashboard
+            {t("games:music.results.backToDashboard")}
           </Button>
         </div>
       </div>

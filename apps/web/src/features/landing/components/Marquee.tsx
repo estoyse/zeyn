@@ -1,18 +1,21 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const WORDS = [
-  "Buzzer Trivia",
-  "Music Quiz",
-  "Real-time",
-  "Live Leaderboards",
-  "Streak Bonuses",
-  "Private Rooms",
-  "Instant Scoring",
-  "Multiplayer",
-];
+const WORD_KEYS = [
+  "buzzerTrivia",
+  "musicQuiz",
+  "realtime",
+  "liveLeaderboards",
+  "streakBonuses",
+  "privateRooms",
+  "instantScoring",
+  "multiplayer",
+] as const;
 
 export function Marquee() {
-  const items = [...WORDS, ...WORDS];
+  const { t } = useTranslation();
+  const words = WORD_KEYS.map(key => t(`landing:marquee.words.${key}`));
+  const items = [...words, ...words];
   return (
     <div className='border-y bg-foreground text-background overflow-hidden py-4'>
       <motion.div

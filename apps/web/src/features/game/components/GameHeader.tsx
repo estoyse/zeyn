@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@zeyn/ui/components/button";
 import { Logo, LogoMark } from "@zeyn/ui/components/logo";
 import { Clock, UserCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
 interface GameHeaderProps {
@@ -11,6 +12,8 @@ interface GameHeaderProps {
 }
 
 export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <header className='flex flex-col md:flex-row justify-between items-center gap-4 pb-6 border-b'>
       <div className='flex items-center gap-3'>
@@ -20,7 +23,7 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
         <div>
           <Logo size='md' />
           <p className='text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-1'>
-            <Clock className='size-3' /> Room: {gameId}
+            <Clock className='size-3' /> {t("game:header.room", { gameId })}
           </p>
         </div>
       </div>
@@ -53,7 +56,7 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
       </div>
 
       <Button variant='ghost' size='sm' onClick={onLeave}>
-        Leave
+        {t("game:header.leave")}
       </Button>
     </header>
   );

@@ -1,0 +1,45 @@
+{
+  "header": {
+    "title": "Boshqaruv paneli",
+    "welcome": "Xush kelibsiz, {{name}}. O'ynashga tayyormisiz?",
+    "points": "{{count}} BALL"
+  },
+  "joinById": {
+    "title": "ID orqali qo'shilish",
+    "description": "Xona ID raqami bormi? Qo'shilish uchun quyiga kiriting.",
+    "placeholder": "Xona ID sini kiriting...",
+    "submit": "Qo'shilish"
+  },
+  "publicArenas": {
+    "defaultTitle": "Ochiq xonalar",
+    "refresh": "Yangilash",
+    "emptyTitle": "Hozircha ochiq xonalar mavjud emas.",
+    "createGame": "O'yin yaratish"
+  },
+  "recentGames": {
+    "title": "So'nggi o'yinlar",
+    "empty": "Hali o'yin o'ynalmagan."
+  },
+  "leaderboard": {
+    "title": "Reyting",
+    "description": "Global reyting tez orada qo'shiladi.",
+    "comingSoon": "Tez orada."
+  },
+  "roomCard": {
+    "hostPrefix": "Mezbon: {{name}}",
+    "you": "Siz",
+    "hostFallback": "Mezbon",
+    "players": "{{count}} o'yinchi",
+    "join": "O'yinga qo'shilish"
+  },
+  "sidebar": {
+    "recentGames": {
+      "title": "So'nggi o'yinlar",
+      "description": "O'yinlar tarixi va natijalaringizni ko'ring.",
+      "empty": "Hali o'yin o'ynalmagan."
+    }
+  },
+  "page": {
+    "gamesHeading": "O'yinlar"
+  }
+}

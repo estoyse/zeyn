@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@zeyn/ui/components/button";
 import { useForm } from "@tanstack/react-form";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import {
   Field,
@@ -11,7 +12,7 @@ import {
 } from "@zeyn/ui/components/field";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { AuthField } from "./AuthField";
-import { emailSchema, passwordSchema } from "@/features/auth/lib/authSchemas";
+import { createAuthSchemas } from "@/features/auth/lib/authSchemas";
 
 interface LoginFormProps {
   onSwitch: () => void;
@@ -21,6 +22,8 @@ interface LoginFormProps {
 export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
   const navigate = useNavigate();
   const { signIn, signInWithGoogle } = useAuth();
+  const { t } = useTranslation();
+  const { emailSchema, passwordSchema } = createAuthSchemas(t);
 
   const form = useForm({
     defaultValues: {
@@ -47,9 +50,9 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
         {field => (
           <AuthField
             field={field}
-            label='Email'
+            label={t("auth:field.emailLabel")}
             type='email'
-            placeholder='sizning@email.com'
+            placeholder={t("auth:field.emailPlaceholder")}
             icon={Mail}
           />
         )}
@@ -58,9 +61,9 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
         {field => (
           <AuthField
             field={field}
-            label='Parol'
+            label={t("auth:field.passwordLabel")}
             type='password'
-            placeholder='••••••••'
+            placeholder={t("auth:field.passwordPlaceholder")}
             icon={Lock}
           />
         )}
@@ -71,7 +74,7 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
           onClick={() => navigate({ to: "/auth/forgot-password" })}
           className='text-sm text-muted-foreground hover:text-foreground underline-offset-4 hover:underline'
         >
-          Parolni unutdingizmi?
+          {t("auth:login.forgotPasswordLink")}
         </button>
       </div>
       <form.Subscribe selector={state => state.canSubmit}>
@@ -91,13 +94,13 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
                 );
               }}
             >
-              Kirish
+              {t("auth:login.submitButton")}
             </Button>
           </Field>
         )}
       </form.Subscribe>
       <div className='my-2'>
-        <FieldSeparator>Yoki</FieldSeparator>
+        <FieldSeparator>{t("auth:login.divider")}</FieldSeparator>
       </div>
       <Field>
         <Button
@@ -130,16 +133,16 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
             />
             <path d='M1 1h22v22H1z' fill='none' />
           </svg>
-          Google bilan davom etish
+          {t("auth:login.googleButton")}
         </Button>
         <FieldDescription className='text-center'>
-          Hisobingiz yo&apos;qmi?{" "}
+          {t("auth:login.noAccountText")}{" "}
           <button
             type='button'
             onClick={onSwitch}
             className='underline underline-offset-4'
           >
-            Ro&apos;yxatdan o&apos;ting
+            {t("auth:login.switchToRegister")}
           </button>
         </FieldDescription>
       </Field>

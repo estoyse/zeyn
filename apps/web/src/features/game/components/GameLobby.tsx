@@ -10,6 +10,7 @@ import {
 } from "@zeyn/ui/components/card";
 import { toast } from "sonner";
 import { Users, Play, Info, Crown, UserCircle2, Copy } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
 interface GameLobbyProps {
@@ -27,6 +28,7 @@ export function GameLobby({
   minPlayers,
   description,
 }: GameLobbyProps) {
+  const { t } = useTranslation();
   const isHost = state.hostId === playerId;
 
   return (
@@ -43,10 +45,10 @@ export function GameLobby({
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Users className="size-5" />
-                Players in Lobby
+                {t("game:lobby.playersInLobby")}
               </CardTitle>
               <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                {Object.keys(state.players).length} / {state.maxPlayers} joined
+                {t("game:lobby.joined", { count: Object.keys(state.players).length, max: state.maxPlayers })}
               </span>
             </div>
           </CardHeader>
@@ -69,7 +71,7 @@ export function GameLobby({
                   {p.id === state.hostId && (
                     <Badge tone="brand">
                       <Crown className="size-2" />
-                      Host
+                      {t("game:lobby.host")}
                     </Badge>
                   )}
                 </motion.div>
@@ -84,7 +86,7 @@ export function GameLobby({
               <Info className="size-5" />
             </div>
             <div>
-              <p className="font-medium text-sm">Game Information</p>
+              <p className="font-medium text-sm">{t("game:lobby.gameInformation")}</p>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {description}
               </p>
@@ -96,11 +98,11 @@ export function GameLobby({
       <aside className="space-y-4">
         <Card className="h-fit sticky top-4">
           <CardHeader>
-            <CardTitle className="text-lg">Game Details</CardTitle>
+            <CardTitle className="text-lg">{t("game:lobby.gameDetails")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">Share Entry Point</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">{t("game:lobby.shareEntryPoint")}</p>
               <div className="flex gap-1">
                 <Input
                   readOnly
@@ -112,7 +114,7 @@ export function GameLobby({
                   variant="secondary"
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href);
-                    toast.success("Link copied!");
+                    toast.success(t("game:lobby.linkCopied"));
                   }}
                 >
                   <Copy className="size-3" />
@@ -128,12 +130,12 @@ export function GameLobby({
                 disabled={Object.keys(state.players).length < minPlayers}
               >
                 <Play className="size-4 mr-2" />
-                Start Game
+                {t("game:lobby.startGame")}
               </Button>
             ) : (
               <div className="flex flex-col items-center gap-2 p-4 text-center bg-muted/50 border border-dashed">
                 <div className="size-2 bg-brand rounded-full animate-ping" />
-                <p className="text-xs text-muted-foreground">Waiting for host to start...</p>
+                <p className="text-xs text-muted-foreground">{t("game:lobby.waitingForHost")}</p>
               </div>
             )}
           </CardContent>

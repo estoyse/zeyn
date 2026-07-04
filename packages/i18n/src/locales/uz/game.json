@@ -1,0 +1,112 @@
+{
+  "archive": {
+    "title": "O'yin natijalari",
+    "subtitle": "Arxivdan olindi",
+    "detailedResults": "Batafsil natijalar",
+    "rank": "T/r",
+    "participant": "Ishtirokchi",
+    "subjectFallback": "{{index}}-mavzu",
+    "total": "Jami",
+    "backToDashboard": "Boshqaruv paneliga qaytish"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Xona topilmadi",
+      "description": "Bu xona mavjud emas yoki o'chirilgan.",
+      "backToDashboard": "Boshqaruv paneliga qaytish"
+    },
+    "connection": {
+      "title": "Ulanish amalga oshmadi",
+      "retry": "Qayta urinish"
+    }
+  },
+  "header": {
+    "room": "Xona: {{gameId}}",
+    "leave": "Chiqish"
+  },
+  "lobby": {
+    "playersInLobby": "Kutish xonasidagi o'yinchilar",
+    "joined": "{{count}} / {{max}} qo'shildi",
+    "host": "Xost",
+    "gameInformation": "O'yin haqida ma'lumot",
+    "gameDetails": "O'yin tafsilotlari",
+    "shareEntryPoint": "Kirish havolasini ulashish",
+    "linkCopied": "Havola nusxalandi!",
+    "startGame": "O'yinni boshlash",
+    "waitingForHost": "Xost o'yinni boshlashini kutmoqda..."
+  },
+  "playing": {
+    "loadingQuestion": "Savol yuklanmoqda...",
+    "currentCategory": "Joriy kategoriya",
+    "questionWorth": "Savol narxi {{points}}",
+    "buzz": "BOSING!",
+    "awaitingAnswer": "Javob kutilmoqda",
+    "answerPlaceholder": "Javobingizni yozing...",
+    "submit": "Yuborish",
+    "isThinking": "O'ylamoqda...",
+    "correctAnswer": "To'g'ri javob",
+    "nextQuestionShortly": "Keyingi savol tez orada boshlanadi"
+  },
+  "loading": {
+    "checkingSession": "Sessiya tekshirilmoqda...",
+    "connectingToRoom": "Xonaga ulanmoqda..."
+  },
+  "auth": {
+    "loginRequired": {
+      "title": "Tizimga kirish talab qilinadi",
+      "description": "O'yinda ishtirok etish uchun tizimga kirgan bo'lishingiz kerak.",
+      "signIn": "O'ynash uchun tizimga kirish"
+    },
+    "passwordPrompt": {
+      "title": "Yopiq xona",
+      "description": "Ushbu xonaga qo'shilish uchun parol talab qilinadi.",
+      "placeholder": "Xona parolini kiriting",
+      "error": "Iltimos, xona parolini kiriting.",
+      "back": "Orqaga",
+      "join": "Xonaga qo'shilish"
+    }
+  },
+  "timer": {
+    "hurryUp": "SHOSHILING!",
+    "timeRemaining": "QOLGAN VAQT"
+  },
+  "create": {
+    "summary": {
+      "roomNameSet": "Xona nomi kiritildi",
+      "subjectsSelected": "Mavzular tanlandi ({{count}}/{{min}} min)",
+      "publicRoom": "Ochiq xona",
+      "privateRoom": "Yopiq xona",
+      "note": "Xonalar 1 soat harakatsizlikdan so'ng avtomatik ravishda arxivlanadi. Ochiq xonalar umumiy boshqaruv panelida ko'rinadi va barcha o'yinchilar tomonidan qidirilishi mumkin."
+    },
+    "deploy": {
+      "deployment": "Joylashtirish",
+      "readyToCreate": "Yaratishga tayyormisiz?",
+      "checklist": "Tekshiruv ro'yxati",
+      "createGame": "O'yin yaratish",
+      "creating": "Yaratilmoqda...",
+      "completeChecklist": "Joylashtirish uchun tekshiruv ro'yxatini to'ldiring."
+    },
+    "general": {
+      "title": "Umumiy sozlamalar",
+      "roomName": "Xona nomi",
+      "roomNamePlaceholder": "Ajoyib nom kiriting...",
+      "roomNameHint": "Kamida {{count}} ta belgi. O'yinchilarga ko'rinadi.",
+      "maxPlayers": "Maksimal o'yinchilar",
+      "visibility": "Ko'rinish",
+      "public": "Ochiq",
+      "private": "Yopiq",
+      "visibilityPublicHint": "Ochiq boshqaruv panelida ko'rinadi.",
+      "visibilityPrivateHint": "Faqat to'g'ridan-to'g'ri havola orqali taklif qilinadi.",
+      "roomPassword": "Xona paroli (ixtiyoriy)",
+      "roomPasswordPlaceholder": "Chegaralaringizni himoya qiling...",
+      "decreaseMaxPlayers": "Maksimal o'yinchilar sonini kamaytirish",
+      "increaseMaxPlayers": "Maksimal o'yinchilar sonini oshirish"
+    },
+    "subject": {
+      "selectSubjects": "Mavzularni tanlang",
+      "selected": "{{count}} / {{max}} tanlandi",
+      "chooseRange": "O'yin uchun {{min}}-{{max}} ta toifani tanlang.",
+      "category": "Toifa"
+    }
+  }
+}
