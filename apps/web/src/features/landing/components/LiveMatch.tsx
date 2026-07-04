@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Zap } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type Accent = "brand" | "success" | "warning" | "foreground";
 type Phase = "asking" | "buzzed" | "correct";
 
 interface Player {
   id: string;
-  name: string;
+  nameKey?: "youLabel";
+  name?: string;
   initials: string;
   accent: Accent;
 }
 
 interface Round {
-  question: string;
-  options: string[];
+  key: string;
   correct: number;
   winner: number;
   points: number;
@@ -24,34 +25,30 @@ const PLAYERS: Player[] = [
   { id: "aziz", name: "Aziz", initials: "AZ", accent: "brand" },
   { id: "malika", name: "Malika", initials: "ML", accent: "success" },
   { id: "timur", name: "Timur", initials: "TM", accent: "warning" },
-  { id: "you", name: "You", initials: "★", accent: "foreground" },
+  { id: "you", nameKey: "youLabel", initials: "★", accent: "foreground" },
 ];
 
 const ROUNDS: Round[] = [
   {
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter"],
+    key: "planet",
     correct: 1,
     winner: 3,
     points: 100,
   },
   {
-    question: "Who painted the Mona Lisa?",
-    options: ["Da Vinci", "Picasso", "Van Gogh"],
+    key: "monaLisa",
     correct: 0,
     winner: 0,
     points: 150,
   },
   {
-    question: "What is the capital of Japan?",
-    options: ["Seoul", "Beijing", "Tokyo"],
+    key: "japanCapital",
     correct: 2,
     winner: 3,
     points: 120,
   },
   {
-    question: "How many strings on a guitar?",
-    options: ["Six", "Four", "Eight"],
+    key: "guitarStrings",
     correct: 0,
     winner: 1,
     points: 90,
@@ -75,6 +72,7 @@ const ACCENT_RING: Record<Accent, string> = {
 const INITIAL_SCORES = [420, 380, 300, 260];
 
 export function LiveMatch() {
+  const { t } = useTranslation();
   const [round, setRound] = useState(0);
   const [phase, setPhase] = useState<Phase>("asking");
   const [scores, setScores] = useState<number[]>(INITIAL_SCORES);
@@ -104,6 +102,9 @@ export function LiveMatch() {
   const current = ROUNDS[round];
   const winnerId = PLAYERS[current.winner].id;
   const revealed = phase === "buzzed" || phase === "correct";
+  const currentOptions = t(`landing:liveMatch.rounds.${current.key}.options`, {
+    returnObjects: true,
+  }) as string[];
 
   const ranked = PLAYERS.map((p, i) => ({ player: p, score: scores[i] })).sort(
     (a, b) => b.score - a.score,
@@ -117,10 +118,13 @@ export function LiveMatch() {
             <span className='absolute inline-flex h-full w-full animate-ping bg-destructive opacity-75' />
             <span className='relative inline-flex size-2 bg-destructive' />
           </span>
-          Live · Buzzer Trivia
+          {t("landing:liveMatch.liveLabel")}
         </div>
         <span className='text-xs font-mono text-muted-foreground'>
-          Round {round + 1}/{ROUNDS.length}
+          {t("landing:liveMatch.roundLabel", {
+            current: round + 1,
+            total: ROUNDS.length,
+          })}
         </span>
       </div>
 
@@ -146,16 +150,16 @@ export function LiveMatch() {
               className='min-h-[3.5rem]'
             >
               <p className='text-xs font-mono uppercase tracking-widest text-muted-foreground mb-1'>
-                Question
+                {t("landing:liveMatch.questionLabel")}
               </p>
               <p className='text-base font-medium leading-snug'>
-                {current.question}
+                {t(`landing:liveMatch.rounds.${current.key}.question`)}
               </p>
             </motion.div>
           </AnimatePresence>
 
           <div className='grid grid-cols-3 gap-2'>
-            {current.options.map((option, i) => {
+            {currentOptions.map((option, i) => {
               const isCorrect = phase === "correct" && i === current.correct;
               return (
                 <div
@@ -195,7 +199,9 @@ export function LiveMatch() {
                 >
                   {player.initials}
                 </div>
-                <span className='flex-1 text-sm font-medium'>{player.name}</span>
+                <span className='flex-1 text-sm font-medium'>
+                  {player.nameKey ? t(`landing:liveMatch.${player.nameKey}`) : player.name}
+                </span>
                 <AnimatePresence>
                   {isWinner && (
                     <motion.span
@@ -205,7 +211,7 @@ export function LiveMatch() {
                       className='flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-buzzer'
                     >
                       <Zap className='size-3' />
-                      Buzz
+                      {t("landing:liveMatch.buzzLabel")}
                     </motion.span>
                   )}
                 </AnimatePresence>

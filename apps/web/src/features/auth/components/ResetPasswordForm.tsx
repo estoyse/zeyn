@@ -4,18 +4,21 @@ import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
 import { Button } from "@zeyn/ui/components/button";
 import { useForm } from "@tanstack/react-form";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import { Field } from "@zeyn/ui/components/field";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { toast } from "sonner";
 import { AuthField } from "./AuthField";
-import { newPasswordSchema } from "@/features/auth/lib/authSchemas";
+import { createAuthSchemas } from "@/features/auth/lib/authSchemas";
 
 export function ResetPasswordForm() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/auth/reset-password" });
   const token = search.token;
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
+  const { newPasswordSchema } = createAuthSchemas(t);
 
   const form = useForm({
     defaultValues: {
@@ -29,7 +32,7 @@ export function ResetPasswordForm() {
           confirmPassword: z.string(),
         })
         .refine(d => d.password === d.confirmPassword, {
-          message: "Passwords do not match",
+          message: t("auth:validation.passwordMismatch"),
           path: ["confirmPassword"],
         }),
     },
@@ -41,12 +44,10 @@ export function ResetPasswordForm() {
           newPassword: value.password,
           token: token as string,
         });
-        toast.success("Password reset successfully");
+        toast.success(t("auth:toast.resetPasswordSuccess"));
         navigate({ to: "/auth/login" });
       } catch (error) {
-        toast.error(
-          "Failed to reset password. The link may be invalid or expired."
-        );
+        toast.error(t("auth:toast.resetPasswordError"));
       } finally {
         setIsLoading(false);
       }
@@ -57,16 +58,16 @@ export function ResetPasswordForm() {
     return (
       <div className="text-center space-y-4">
         <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
-          Invalid Link
+          {t("auth:resetPassword.invalidLinkTitle")}
         </h2>
         <p className="text-muted-foreground text-sm">
-          This password reset link is invalid or has expired.
+          {t("auth:resetPassword.invalidLinkDescription")}
         </p>
         <Button
           variant="brand"
           onClick={() => navigate({ to: "/auth/forgot-password" })}
         >
-          Request New Link
+          {t("auth:resetPassword.requestNewLinkButton")}
         </Button>
       </div>
     );
@@ -81,10 +82,10 @@ export function ResetPasswordForm() {
     >
       <div className="text-center mb-6">
         <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
-          Reset your password
+          {t("auth:resetPassword.title")}
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Enter your new password below.
+          {t("auth:resetPassword.description")}
         </p>
       </div>
 
@@ -92,9 +93,9 @@ export function ResetPasswordForm() {
         {field => (
           <AuthField
             field={field}
-            label="New Password"
+            label={t("auth:field.newPasswordLabel")}
             type="password"
-            placeholder="••••••••"
+            placeholder={t("auth:field.passwordPlaceholder")}
             icon={Lock}
           />
         )}
@@ -104,9 +105,9 @@ export function ResetPasswordForm() {
         {field => (
           <AuthField
             field={field}
-            label="Confirm Password"
+            label={t("auth:field.confirmPasswordLabel")}
             type="password"
-            placeholder="••••••••"
+            placeholder={t("auth:field.passwordPlaceholder")}
             icon={Lock}
           />
         )}
@@ -125,7 +126,9 @@ export function ResetPasswordForm() {
                 form.handleSubmit();
               }}
             >
-              {isLoading ? "Resetting..." : "Reset Password"}
+              {isLoading
+                ? t("auth:resetPassword.resettingButton")
+                : t("auth:resetPassword.submitButton")}
             </Button>
           </Field>
         )}

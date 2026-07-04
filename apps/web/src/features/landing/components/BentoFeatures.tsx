@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
 import { Radio, Trophy, Users, Zap } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { SectionHeader } from "@/features/landing/components/GamesShowcase";
 import { fadeUp, staggerContainer, viewport } from "@/features/landing/lib/motion";
 
 export function BentoFeatures() {
+  const { t } = useTranslation();
   return (
     <section className='border-t bg-muted/30'>
       <div className='max-w-7xl mx-auto px-6 py-24 md:py-32'>
         <SectionHeader
-          eyebrow='Why play here'
-          title='Built for competitive fun'
+          eyebrow={t("landing:bento.eyebrow")}
+          title={t("landing:bento.title")}
         />
 
         <motion.div
@@ -32,12 +34,10 @@ export function BentoFeatures() {
                 <Radio className='size-6' />
               </div>
               <h3 className='text-2xl md:text-3xl font-heading font-semibold tracking-tight max-w-md'>
-                True real-time, zero lag
+                {t("landing:bento.realtime.title")}
               </h3>
               <p className='mt-3 text-muted-foreground leading-relaxed max-w-md'>
-                WebSocket-powered rooms keep every buzz, answer, and score in
-                perfect sync across every player. No refreshes, no waiting —
-                just instant, live competition.
+                {t("landing:bento.realtime.description")}
               </p>
             </div>
             <div className='relative mt-6 flex gap-2'>
@@ -60,13 +60,13 @@ export function BentoFeatures() {
 
           <BentoCard
             icon={Users}
-            title='Play with anyone'
-            description='Private rooms for your crew, or match with players online.'
+            title={t("landing:bento.playWithAnyone.title")}
+            description={t("landing:bento.playWithAnyone.description")}
           />
           <BentoCard
             icon={Zap}
-            title='Instant scoring'
-            description='Buzzers, timers, and streak bonuses resolve the moment you answer.'
+            title={t("landing:bento.instantScoring.title")}
+            description={t("landing:bento.instantScoring.description")}
           />
           <motion.div
             variants={fadeUp}
@@ -78,18 +78,17 @@ export function BentoFeatures() {
               </div>
               <div>
                 <h3 className='text-xl font-heading font-semibold tracking-tight'>
-                  Compete to win
+                  {t("landing:bento.competeToWin.title")}
                 </h3>
                 <p className='mt-1.5 text-muted-foreground leading-relaxed max-w-xl'>
-                  Live leaderboards and streaks turn every round into a race to
-                  the top. Keep the momentum, claim the crown.
+                  {t("landing:bento.competeToWin.description")}
                 </p>
               </div>
             </div>
             <div className='flex gap-8 shrink-0'>
-              <Metric value='<50ms' label='Sync latency' />
-              <Metric value='2' label='Game modes' />
-              <Metric value='∞' label='Rematches' />
+              <Metric value='<50ms' label={t("landing:bento.syncLatencyLabel")} />
+              <Metric value='2' label={t("landing:bento.gameModesLabel")} />
+              <Metric value='∞' label={t("landing:bento.rematchesLabel")} />
             </div>
           </motion.div>
         </motion.div>

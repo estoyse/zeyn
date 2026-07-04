@@ -6,15 +6,12 @@ import { Input } from "@zeyn/ui/components/input";
 import { Field, FieldDescription, FieldLabel } from "@zeyn/ui/components/field";
 import { useForm, useStore } from "@tanstack/react-form";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { trpc } from "@/shared/lib/trpc";
 import { AuthField } from "./AuthField";
-import {
-  emailSchema,
-  newPasswordSchema,
-  nameSchema,
-} from "@/features/auth/lib/authSchemas";
+import { createAuthSchemas } from "@/features/auth/lib/authSchemas";
 
 interface RegisterFormProps {
   onSwitch: () => void;
@@ -31,6 +28,8 @@ function slugifyUsername(name: string): string {
 
 export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
   const { signUp } = useAuth();
+  const { t } = useTranslation();
+  const { emailSchema, newPasswordSchema, nameSchema } = createAuthSchemas(t);
 
   const form = useForm({
     defaultValues: {
@@ -98,9 +97,9 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
         {field => (
           <AuthField
             field={field}
-            label='Ism'
+            label={t("auth:field.nameLabel")}
             type='text'
-            placeholder='Ali Valiyev'
+            placeholder={t("auth:field.namePlaceholder")}
             icon={User}
           />
         )}
@@ -111,14 +110,14 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
           htmlFor='username'
           className='text-xs uppercase tracking-widest text-muted-foreground'
         >
-          Foydalanuvchi nomi
+          {t("auth:register.usernameLabel")}
         </FieldLabel>
         <div className='relative'>
           <AtSign className='absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground' />
           <Input
             id='username'
             type='text'
-            placeholder='ali_valiyev'
+            placeholder={t("auth:register.usernamePlaceholder")}
             className='pl-11 pr-10'
             autoCapitalize='none'
             spellCheck={false}
@@ -142,8 +141,8 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
           {status === "unavailable"
             ? (checkQuery.data && "reason" in checkQuery.data
                 ? checkQuery.data.reason
-                : "Band qilingan.")
-            : "Ixtiyoriy — bo‘sh qoldirsangiz, biz taklif qilamiz."}
+                : t("auth:register.usernameTakenFallback"))
+            : t("auth:register.usernameHelperText")}
         </FieldDescription>
       </Field>
 
@@ -151,9 +150,9 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
         {field => (
           <AuthField
             field={field}
-            label='Email'
+            label={t("auth:field.emailLabel")}
             type='email'
-            placeholder='sizning@email.com'
+            placeholder={t("auth:field.emailPlaceholder")}
             icon={Mail}
           />
         )}
@@ -162,9 +161,9 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
         {field => (
           <AuthField
             field={field}
-            label='Parol'
+            label={t("auth:field.passwordLabel")}
             type='password'
-            placeholder='••••••••'
+            placeholder={t("auth:field.passwordPlaceholder")}
             icon={Lock}
           />
         )}
@@ -182,20 +181,20 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
                 handleRegister();
               }}
             >
-              Ro&apos;yxatdan o&apos;tish
+              {t("auth:register.submitButton")}
             </Button>
           </Field>
         )}
       </form.Subscribe>
       <Field>
         <FieldDescription className='text-center'>
-          Hisobingiz bormi?{" "}
+          {t("auth:register.haveAccountText")}{" "}
           <button
             type='button'
             onClick={onSwitch}
             className='underline underline-offset-4'
           >
-            Kirish
+            {t("auth:register.switchToLogin")}
           </button>
         </FieldDescription>
       </Field>

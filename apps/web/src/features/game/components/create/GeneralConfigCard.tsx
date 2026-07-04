@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { LayoutGrid, Users, Lock, Globe, Shield, Minus, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@zeyn/ui/components/input";
 import { Label } from "@zeyn/ui/components/label";
 import {
@@ -34,13 +35,15 @@ function Stepper({
   max: number;
   onChange: (value: number) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex w-fit items-stretch border">
       <button
         type="button"
         onClick={() => onChange(Math.max(min, value - 1))}
         disabled={value <= min}
-        aria-label="Decrease max players"
+        aria-label={t("game:create.general.decreaseMaxPlayers")}
         className="grid size-11 place-content-center border-r text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
       >
         <Minus className="size-4" />
@@ -52,7 +55,7 @@ function Stepper({
         type="button"
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={value >= max}
-        aria-label="Increase max players"
+        aria-label={t("game:create.general.increaseMaxPlayers")}
         className="grid size-11 place-content-center border-l text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
       >
         <Plus className="size-4" />
@@ -68,6 +71,7 @@ function VisibilityToggle({
   isPublic: boolean;
   onChange: (value: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const base =
     "flex items-center justify-center gap-2 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors";
   const active = "bg-brand text-brand-foreground";
@@ -80,14 +84,14 @@ function VisibilityToggle({
         onClick={() => onChange(true)}
         className={`${base} ${isPublic ? active : idle}`}
       >
-        <Globe className="size-4" /> Public
+        <Globe className="size-4" /> {t("game:create.general.public")}
       </button>
       <button
         type="button"
         onClick={() => onChange(false)}
         className={`${base} border-l ${!isPublic ? active : idle}`}
       >
-        <Lock className="size-4" /> Private
+        <Lock className="size-4" /> {t("game:create.general.private")}
       </button>
     </div>
   );
@@ -103,35 +107,37 @@ export function GeneralConfigCard({
   password,
   onPasswordChange,
 }: GeneralConfigCardProps) {
+  const { t } = useTranslation();
+
   return (
     <Card>
       <CardHeader className="bg-muted/50">
         <CardTitle className="flex items-center gap-2 text-lg">
           <LayoutGrid className="size-5 text-brand" />
-          General Configuration
+          {t("game:create.general.title")}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6 p-6">
         <div className="space-y-2">
           <Label htmlFor="room-name" className={metaLabel}>
-            Room Name
+            {t("game:create.general.roomName")}
           </Label>
           <Input
             id="room-name"
-            placeholder="Enter a glorious name..."
+            placeholder={t("game:create.general.roomNamePlaceholder")}
             value={name}
             onChange={e => onNameChange(e.target.value)}
             className="h-12 text-lg"
           />
           <p className="text-xs text-muted-foreground">
-            Minimum {roomLimits.nameMinLength} characters. Visible to players.
+            {t("game:create.general.roomNameHint", { count: roomLimits.nameMinLength })}
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="space-y-2">
             <Label className={`flex items-center gap-2 ${metaLabel}`}>
-              <Users className="size-3.5" /> Max Players
+              <Users className="size-3.5" /> {t("game:create.general.maxPlayers")}
             </Label>
             <Stepper
               value={maxPlayers}
@@ -142,12 +148,12 @@ export function GeneralConfigCard({
           </div>
 
           <div className="space-y-2">
-            <Label className={metaLabel}>Visibility</Label>
+            <Label className={metaLabel}>{t("game:create.general.visibility")}</Label>
             <VisibilityToggle isPublic={isPublic} onChange={onIsPublicChange} />
             <p className="text-[11px] text-muted-foreground">
               {isPublic
-                ? "Visible on the public dashboard."
-                : "Invite-only via direct link."}
+                ? t("game:create.general.visibilityPublicHint")
+                : t("game:create.general.visibilityPrivateHint")}
             </p>
           </div>
         </div>
@@ -161,12 +167,11 @@ export function GeneralConfigCard({
               className="space-y-2 overflow-hidden"
             >
               <Label className={`flex items-center gap-2 ${metaLabel}`}>
-                <Shield className="size-3.5 text-brand" /> Room Password
-                (Optional)
+                <Shield className="size-3.5 text-brand" /> {t("game:create.general.roomPassword")}
               </Label>
               <Input
                 type="password"
-                placeholder="Secure your borders..."
+                placeholder={t("game:create.general.roomPasswordPlaceholder")}
                 value={password}
                 onChange={e => onPasswordChange(e.target.value)}
               />

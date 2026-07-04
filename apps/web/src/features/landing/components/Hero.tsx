@@ -7,17 +7,22 @@ import {
   useTransform,
 } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { EASE, fadeUp, staggerContainer } from "@/features/landing/lib/motion";
 import { LiveMatch } from "@/features/landing/components/LiveMatch";
 
-const LINES: { text: string; variant: "solid" | "brand" | "outline" }[] = [
-  { text: "Buzz in.", variant: "solid" },
-  { text: "Outplay.", variant: "brand" },
-  { text: "Win.", variant: "outline" },
+const LINES: {
+  id: "titleLine1" | "titleLine2" | "titleLine3";
+  variant: "solid" | "brand" | "outline";
+}[] = [
+  { id: "titleLine1", variant: "solid" },
+  { id: "titleLine2", variant: "brand" },
+  { id: "titleLine3", variant: "outline" },
 ];
 
 export function Hero() {
+  const { t } = useTranslation();
   const mx = useMotionValue(50);
   const my = useMotionValue(20);
   const glow = useMotionTemplate`radial-gradient(600px circle at ${mx}% ${my}%, color-mix(in oklch, var(--brand) 22%, transparent), transparent 70%)`;
@@ -62,14 +67,14 @@ export function Hero() {
             <motion.div variants={fadeUp}>
               <span className='inline-flex items-center gap-2 border border-brand/30 bg-brand/5 px-3 py-1.5 text-xs font-mono uppercase tracking-widest text-brand'>
                 <Sparkles className='size-3' />
-                Real-time multiplayer trivia
+                {t("landing:hero.eyebrow")}
               </span>
             </motion.div>
 
             <h1 className='mt-6 font-heading font-semibold uppercase tracking-tight leading-[0.9] text-6xl sm:text-7xl lg:text-8xl'>
               {LINES.map(line => (
                 <motion.span
-                  key={line.text}
+                  key={line.id}
                   variants={fadeUp}
                   className='block'
                   style={
@@ -90,7 +95,7 @@ export function Hero() {
                           : undefined
                     }
                   >
-                    {line.text}
+                    {t(`landing:hero.${line.id}`)}
                   </span>
                 </motion.span>
               ))}
@@ -100,8 +105,7 @@ export function Hero() {
               variants={fadeUp}
               className='mt-6 max-w-md text-lg text-muted-foreground leading-relaxed'
             >
-              Live quiz showdowns where the fastest mind wins. Create a room,
-              invite your crew, and race to the top of the board — in real time.
+              {t("landing:hero.subtitle")}
             </motion.p>
 
             <motion.div
@@ -110,13 +114,13 @@ export function Hero() {
             >
               <Link to='/auth/login'>
                 <Button variant='brand' size='lg' className='group w-full sm:w-auto'>
-                  Start Playing
+                  {t("landing:hero.startPlayingButton")}
                   <ArrowRight className='size-4 ml-2 transition-transform group-hover:translate-x-1' />
                 </Button>
               </Link>
               <a href='#how'>
                 <Button variant='outline' size='lg' className='w-full sm:w-auto'>
-                  How it works
+                  {t("landing:hero.howItWorksButton")}
                 </Button>
               </a>
             </motion.div>
@@ -130,10 +134,10 @@ export function Hero() {
                   <span className='absolute inline-flex h-full w-full animate-ping bg-success opacity-75' />
                   <span className='relative inline-flex size-2 bg-success' />
                 </span>
-                23 games live now
+                {t("landing:hero.liveGamesLabel")}
               </span>
-              <span>50K+ players</span>
-              <span>Free to play</span>
+              <span>{t("landing:hero.playersLabel")}</span>
+              <span>{t("landing:hero.freeToPlayLabel")}</span>
             </motion.div>
           </motion.div>
 

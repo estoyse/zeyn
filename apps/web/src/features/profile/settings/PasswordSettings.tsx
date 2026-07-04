@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { Input } from "@zeyn/ui/components/input";
 import { Label } from "@zeyn/ui/components/label";
 import { authClient } from "@/features/auth/lib/auth-client";
-import { newPasswordSchema } from "@/features/auth/lib/authSchemas";
+import { createAuthSchemas } from "@/features/auth/lib/authSchemas";
 import { toast } from "sonner";
 
 export function PasswordSettings() {
+  const { t } = useTranslation();
+  const { newPasswordSchema } = createAuthSchemas(t);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [pending, setPending] = useState(false);
@@ -22,12 +25,12 @@ export function PasswordSettings() {
       { currentPassword, newPassword, revokeOtherSessions: true },
       {
         onSuccess: () => {
-          toast.success("Password changed");
+          toast.success(t("settings:password.updated"));
           setCurrentPassword("");
           setNewPassword("");
         },
         onError: error => {
-          toast.error(error.error.message || "Could not change password");
+          toast.error(error.error.message || t("settings:password.error"));
         },
       }
     );
@@ -37,7 +40,7 @@ export function PasswordSettings() {
   return (
     <div className='space-y-6'>
       <div className='space-y-2'>
-        <Label htmlFor='current-password'>Current password</Label>
+        <Label htmlFor='current-password'>{t("settings:password.current")}</Label>
         <Input
           id='current-password'
           type='password'
@@ -47,7 +50,7 @@ export function PasswordSettings() {
         />
       </div>
       <div className='space-y-2'>
-        <Label htmlFor='new-password'>New password</Label>
+        <Label htmlFor='new-password'>{t("settings:password.new")}</Label>
         <Input
           id='new-password'
           type='password'
@@ -56,11 +59,11 @@ export function PasswordSettings() {
           autoComplete='new-password'
         />
         <p className='text-xs text-muted-foreground'>
-          At least 8 characters and 1 number.
+          {t("settings:password.hint")}
         </p>
       </div>
       <Button variant='outline' disabled={!canSave} onClick={handleSave}>
-        {pending ? "Saving…" : "Change password"}
+        {pending ? t("settings:password.saving") : t("settings:password.save")}
       </Button>
     </div>
   );

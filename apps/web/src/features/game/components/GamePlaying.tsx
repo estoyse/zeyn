@@ -5,6 +5,7 @@ import { Badge } from "@zeyn/ui/components/badge";
 import { Card, CardContent } from "@zeyn/ui/components/card";
 import { Zap, Clock } from "lucide-react";
 import { gameConfig } from "@zeyn/api/game-types";
+import { useTranslation } from "react-i18next";
 import type { BuzzerView } from "@/features/games/buzzer/types";
 import { Timer } from "./Timer";
 
@@ -25,12 +26,13 @@ export function GamePlaying({
   onBuzz,
   onSubmitAnswer,
 }: GamePlayingProps) {
+  const { t } = useTranslation();
   const isMyTurn = state.activeQuestionState?.buzzedPlayerId === playerId;
 
   if (!state.currentQuestion) {
     return (
       <div className='flex items-center justify-center p-8'>
-        <p className='text-muted-foreground'>Loading question...</p>
+        <p className='text-muted-foreground'>{t("game:playing.loadingQuestion")}</p>
       </div>
     );
   }
@@ -47,7 +49,7 @@ export function GamePlaying({
         <div className='flex items-center gap-2 border bg-muted px-4 py-2'>
           <div className='size-2 bg-brand animate-pulse rounded-full' />
           <span className='text-xs uppercase tracking-widest text-muted-foreground'>
-            Current Category
+            {t("game:playing.currentCategory")}
           </span>
           <span className='font-semibold text-brand'>
             {state.currentSubjectName}
@@ -84,7 +86,7 @@ export function GamePlaying({
             >
               <div className='space-y-2'>
                 <Badge tone='primary'>
-                  Question worth {state.currentQuestion?.points}
+                  {t("game:playing.questionWorth", { points: state.currentQuestion?.points })}
                 </Badge>
                 <h2 className='text-xl md:text-2xl font-bold'>
                   {state.currentQuestion?.text}
@@ -111,7 +113,7 @@ export function GamePlaying({
               >
                 <div className='flex flex-col items-center'>
                   <Zap className='size-10 mb-1' />
-                  <span className='text-xl font-bold'>BUZZ!</span>
+                  <span className='text-xl font-bold'>{t("game:playing.buzz")}</span>
                 </div>
               </Button>
             </motion.div>
@@ -126,7 +128,7 @@ export function GamePlaying({
               <div className='flex justify-center'>
                 <Badge tone='warning'>
                   <Zap className='size-3' />
-                  Awaiting Answer
+                  {t("game:playing.awaitingAnswer")}
                 </Badge>
               </div>
 
@@ -137,7 +139,7 @@ export function GamePlaying({
                       <Input
                         value={answerInput}
                         onChange={e => setAnswerInput(e.target.value)}
-                        placeholder='Type your answer...'
+                        placeholder={t("game:playing.answerPlaceholder")}
                         className='text-center'
                         autoFocus
                       />
@@ -148,7 +150,7 @@ export function GamePlaying({
                             duration={gameConfig.answerTimeMs}
                           />
                         )}
-                        <Button type='submit'>Submit</Button>
+                        <Button type='submit'>{t("game:playing.submit")}</Button>
                       </div>
                     </form>
                   </CardContent>
@@ -166,7 +168,7 @@ export function GamePlaying({
                         }
                       </p>
                       <p className='text-xs uppercase tracking-widest text-muted-foreground'>
-                        Is thinking...
+                        {t("game:playing.isThinking")}
                       </p>
                     </div>
                     {state.activeQuestionState && (
@@ -189,7 +191,7 @@ export function GamePlaying({
             >
               <div className='space-y-1'>
                 <p className='text-xs uppercase tracking-widest text-muted-foreground'>
-                  Correct Answer
+                  {t("game:playing.correctAnswer")}
                 </p>
                 <motion.h2
                   animate={{ y: [0, -5, 0] }}
@@ -210,7 +212,7 @@ export function GamePlaying({
                   />
                 </div>
                 <p className='text-xs text-muted-foreground'>
-                  Next question starts shortly
+                  {t("game:playing.nextQuestionShortly")}
                 </p>
               </div>
             </motion.div>

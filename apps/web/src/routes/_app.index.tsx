@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Gamepad2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { LogoMark } from "@zeyn/ui/components/logo";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
@@ -29,6 +30,7 @@ function RootSplash() {
 }
 
 function DashboardPage() {
+  const { t } = useTranslation();
   const { session } = Route.useRouteContext();
 
   return (
@@ -41,7 +43,7 @@ function DashboardPage() {
             <section className='space-y-6'>
               <h3 className='text-xl font-bold flex items-center gap-3'>
                 <Gamepad2 className='size-5' />
-                Games
+                {t("dashboard:page.gamesHeading")}
               </h3>
               <GameCatalog variant='play' />
             </section>

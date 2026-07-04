@@ -10,6 +10,7 @@ import {
   CardDescription,
 } from "@zeyn/ui/components/card";
 import { LockKeyhole } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PasswordPromptViewProps {
   onJoin: (password: string) => void;
@@ -17,13 +18,14 @@ interface PasswordPromptViewProps {
 }
 
 export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) {
+  const { t } = useTranslation();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!password.trim()) {
-      setError("Please enter the room password.");
+      setError(t("game:auth.passwordPrompt.error"));
       return;
     }
     onJoin(password);
@@ -36,9 +38,9 @@ export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) 
           <div className="mx-auto flex size-16 items-center justify-center bg-brand/10 text-brand">
             <LockKeyhole className="size-10" />
           </div>
-          <CardTitle>Private Room</CardTitle>
+          <CardTitle>{t("game:auth.passwordPrompt.title")}</CardTitle>
           <CardDescription>
-            This room requires a password to join.
+            {t("game:auth.passwordPrompt.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -46,7 +48,7 @@ export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) 
             <div className="space-y-2">
               <Input
                 type="password"
-                placeholder="Enter room password"
+                placeholder={t("game:auth.passwordPrompt.placeholder")}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -59,10 +61,10 @@ export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) 
             </div>
             <div className="flex gap-2">
               <Button type="button" variant="outline" onClick={onBack} className="flex-1">
-                Back
+                {t("game:auth.passwordPrompt.back")}
               </Button>
               <Button type="submit" variant="brand" className="flex-1">
-                Join Room
+                {t("game:auth.passwordPrompt.join")}
               </Button>
             </div>
           </form>

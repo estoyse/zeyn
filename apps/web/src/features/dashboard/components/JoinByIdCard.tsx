@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { PlusCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { Input } from "@zeyn/ui/components/input";
 import {
@@ -12,6 +13,7 @@ import {
 } from "@zeyn/ui/components/card";
 
 export function JoinByIdCard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [gameToJoin, setGameToJoin] = useState("");
 
@@ -26,22 +28,22 @@ export function JoinByIdCard() {
       <CardHeader className='pb-2'>
         <CardTitle className='text-base flex items-center gap-2'>
           <PlusCircle className='size-4' />
-          Join by ID
+          {t("dashboard:joinById.title")}
         </CardTitle>
         <CardDescription className='text-xs'>
-          Have a room ID? Enter it below to join.
+          {t("dashboard:joinById.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className='p-4 pt-0'>
         <form onSubmit={handleJoinRoom} className='flex gap-2'>
           <Input
-            placeholder='Enter Room ID...'
+            placeholder={t("dashboard:joinById.placeholder")}
             value={gameToJoin}
             onChange={e => setGameToJoin(e.target.value)}
             className='h-9'
           />
           <Button type='submit' size='sm' disabled={!gameToJoin}>
-            Join
+            {t("dashboard:joinById.submit")}
           </Button>
         </form>
       </CardContent>

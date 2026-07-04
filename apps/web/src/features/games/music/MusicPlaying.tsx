@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Music2, Check, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@zeyn/ui/components/card";
 import { musicGameConfig } from "@zeyn/api/games";
 import { Timer } from "@/features/game/components/Timer";
@@ -8,6 +9,7 @@ import type { GamePlayViewProps } from "@/features/games/types";
 import type { MusicView } from "./types";
 
 export function MusicPlaying({ room }: GamePlayViewProps) {
+  const { t } = useTranslation();
   const state = room.state as MusicView | null;
   const [picked, setPicked] = useState<number | null>(null);
 
@@ -19,7 +21,7 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
   if (!state || !state.question) {
     return (
       <div className='flex items-center justify-center p-8'>
-        <p className='text-muted-foreground'>Loading question...</p>
+        <p className='text-muted-foreground'>{t("games:music.playing.loading")}</p>
       </div>
     );
   }
@@ -49,7 +51,7 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
         <div className='flex items-center gap-2 border bg-muted px-4 py-2'>
           <Music2 className='size-4 text-brand' />
           <span className='text-xs uppercase tracking-widest text-muted-foreground'>
-            Question
+            {t("games:music.playing.questionLabel")}
           </span>
           <span className='font-semibold text-brand'>
             {state.currentQuestionIndex + 1} / {state.totalQuestions}
@@ -102,7 +104,7 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
           {isReveal && state.reveal && (
             <div className='text-center space-y-1'>
               <p className='text-xs uppercase tracking-widest text-muted-foreground'>
-                Correct Answer
+                {t("games:music.playing.correctAnswer")}
               </p>
               <p className='text-lg font-bold text-success'>
                 {state.reveal.correctTitle}
@@ -115,7 +117,7 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
 
           {!isReveal && alreadyAnswered && (
             <p className='text-center text-sm text-muted-foreground'>
-              Answer locked in — waiting for others...
+              {t("games:music.playing.answerLocked")}
             </p>
           )}
         </CardContent>

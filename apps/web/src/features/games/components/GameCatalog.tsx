@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import {
   Card,
@@ -15,6 +16,7 @@ interface GameCatalogProps {
 }
 
 export function GameCatalog({ variant = "create" }: GameCatalogProps) {
+  const { t } = useTranslation();
   const games = listClientGames();
 
   return (
@@ -35,7 +37,10 @@ export function GameCatalog({ variant = "create" }: GameCatalogProps) {
             <div className='flex items-center gap-1 text-xs text-muted-foreground'>
               <Users className='size-3' />
               <span>
-                {game.meta.minPlayers}-{game.meta.maxPlayers} players
+                {t("games:catalog.playersRange", {
+                  min: game.meta.minPlayers,
+                  max: game.meta.maxPlayers,
+                })}
               </span>
             </div>
             {variant === "play" ? (
@@ -45,7 +50,7 @@ export function GameCatalog({ variant = "create" }: GameCatalogProps) {
                 className='block'
               >
                 <Button variant='outline' className='w-full'>
-                  Play
+                  {t("games:catalog.play")}
                   <ArrowRight className='size-4 ml-2' />
                 </Button>
               </Link>
@@ -56,7 +61,7 @@ export function GameCatalog({ variant = "create" }: GameCatalogProps) {
                 className='block'
               >
                 <Button variant='outline' className='w-full'>
-                  Create
+                  {t("games:catalog.create")}
                   <ArrowRight className='size-4 ml-2' />
                 </Button>
               </Link>

@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { Button } from "@zeyn/ui/components/button";
 import { useForm } from "@tanstack/react-form";
+import { useTranslation } from "react-i18next";
 import z from "zod";
 import { Field } from "@zeyn/ui/components/field";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { toast } from "sonner";
 import { AuthField } from "./AuthField";
-import { emailSchema } from "@/features/auth/lib/authSchemas";
+import { createAuthSchemas } from "@/features/auth/lib/authSchemas";
 
 interface ForgotPasswordFormProps {
   onBack: () => void;
@@ -17,6 +18,8 @@ interface ForgotPasswordFormProps {
 export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { t } = useTranslation();
+  const { emailSchema } = createAuthSchemas(t);
 
   const form = useForm({
     defaultValues: {
@@ -36,7 +39,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
         });
         setIsSubmitted(true);
       } catch (error) {
-        toast.error("Failed to send reset email. Please try again.");
+        toast.error(t("auth:toast.forgotPasswordError"));
       } finally {
         setIsLoading(false);
       }
@@ -54,13 +57,13 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
           <Mail className="size-6" />
         </div>
         <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
-          Check your email
+          {t("auth:forgotPassword.successTitle")}
         </h2>
         <p className="text-muted-foreground text-sm">
-          We sent a password reset link to your email address.
+          {t("auth:forgotPassword.successDescription")}
         </p>
         <Button variant="outline" onClick={onBack} className="w-full mt-4">
-          Back to login
+          {t("auth:forgotPassword.backToLoginButton")}
         </Button>
       </motion.div>
     );
@@ -76,10 +79,10 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
     >
       <div className="text-center mb-6">
         <h2 className="font-heading text-xl font-semibold uppercase tracking-wider">
-          Forgot password?
+          {t("auth:forgotPassword.title")}
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Enter your email and we'll send you a reset link.
+          {t("auth:forgotPassword.description")}
         </p>
       </div>
 
@@ -87,9 +90,9 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
         {field => (
           <AuthField
             field={field}
-            label="Email"
+            label={t("auth:field.emailLabel")}
             type="email"
-            placeholder="sizning@email.com"
+            placeholder={t("auth:field.emailPlaceholder")}
             icon={Mail}
           />
         )}
@@ -108,7 +111,9 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
                 form.handleSubmit();
               }}
             >
-              {isLoading ? "Sending..." : "Send Reset Link"}
+              {isLoading
+                ? t("auth:forgotPassword.sendingButton")
+                : t("auth:forgotPassword.submitButton")}
             </Button>
           </Field>
         )}
@@ -120,7 +125,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
           onClick={onBack}
           className="text-sm text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
         >
-          Back to login
+          {t("auth:forgotPassword.backToLoginButton")}
         </button>
       </div>
     </motion.div>

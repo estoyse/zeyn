@@ -1,20 +1,22 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { listClientGames } from "@/features/games/registry";
 import { fadeUp, staggerContainer, viewport } from "@/features/landing/lib/motion";
 
 export function GamesShowcase() {
+  const { t } = useTranslation();
   const games = listClientGames();
 
   return (
     <section id='games' className='scroll-mt-24'>
       <div className='max-w-7xl mx-auto px-6 py-24 md:py-32'>
         <SectionHeader
-          eyebrow='Game modes'
-          title='Pick your battlefield'
-          subtitle='Every mode is engineered for fast, competitive play. More arriving soon.'
+          eyebrow={t("landing:gamesShowcase.eyebrow")}
+          title={t("landing:gamesShowcase.title")}
+          subtitle={t("landing:gamesShowcase.subtitle")}
         />
 
         <div className='mt-16 space-y-6'>
@@ -47,7 +49,10 @@ export function GamesShowcase() {
                     </div>
                     <span className='flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-muted-foreground'>
                       <Users className='size-3.5' />
-                      {game.meta.minPlayers}–{game.meta.maxPlayers} players
+                      {t("landing:gamesShowcase.playersRange", {
+                        min: game.meta.minPlayers,
+                        max: game.meta.maxPlayers,
+                      })}
                     </span>
                   </div>
                   <h3 className='text-3xl md:text-4xl font-heading font-semibold tracking-tight'>
@@ -62,7 +67,7 @@ export function GamesShowcase() {
                   variants={fadeUp}
                   className='hidden md:flex items-center gap-2 text-sm font-medium text-brand'
                 >
-                  Play now
+                  {t("landing:gamesShowcase.playNowLabel")}
                   <span className='flex size-10 items-center justify-center border border-brand/40 transition-all group-hover:bg-brand group-hover:text-brand-foreground'>
                     <ArrowRight className='size-4 transition-transform group-hover:translate-x-0.5' />
                   </span>
@@ -75,7 +80,7 @@ export function GamesShowcase() {
         <div className='mt-12 flex justify-center'>
           <Link to='/auth/login'>
             <Button variant='outline' size='lg'>
-              Browse all games
+              {t("landing:gamesShowcase.browseAllGamesButton")}
               <ArrowRight className='size-4 ml-2' />
             </Button>
           </Link>

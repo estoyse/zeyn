@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { Trans, useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,7 @@ interface DangerZoneProps {
 }
 
 export function DangerZone({ username }: DangerZoneProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState("");
 
@@ -30,7 +32,7 @@ export function DangerZone({ username }: DangerZoneProps) {
     trpc.profile.deleteAccount.mutationOptions({
       onSuccess: async () => {
         await authClient.signOut();
-        toast.success("Your account has been deleted");
+        toast.success(t("settings:danger.deleted"));
         navigate({ to: "/" });
       },
       onError: error => toast.error(error.message),
@@ -40,24 +42,29 @@ export function DangerZone({ username }: DangerZoneProps) {
   return (
     <div className='space-y-4 border border-destructive/40 bg-destructive/5 p-6'>
       <div className='space-y-1'>
-        <h3 className='font-semibold text-destructive'>Delete account</h3>
+        <h3 className='font-semibold text-destructive'>
+          {t("settings:danger.title")}
+        </h3>
         <p className='text-sm text-muted-foreground'>
-          Permanently delete your account and all of your game history. This
-          cannot be undone.
+          {t("settings:danger.description")}
         </p>
       </div>
 
       <AlertDialog>
         <AlertDialogTrigger
-          render={<Button variant='destructive'>Delete account</Button>}
+          render={
+            <Button variant='destructive'>{t("settings:danger.trigger")}</Button>
+          }
         />
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+            <AlertDialogTitle>{t("settings:danger.confirmTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes your profile, stats, and game history.
-              Type <span className='font-semibold'>@{username}</span> to
-              confirm.
+              <Trans
+                i18nKey='settings:danger.confirmDescription'
+                values={{ username }}
+                components={{ bold: <span className='font-semibold' /> }}
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <Input
@@ -68,7 +75,7 @@ export function DangerZone({ username }: DangerZoneProps) {
             spellCheck={false}
           />
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("settings:danger.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant='destructive'
               disabled={
@@ -77,7 +84,9 @@ export function DangerZone({ username }: DangerZoneProps) {
               }
               onClick={() => deleteMutation.mutate()}
             >
-              {deleteMutation.isPending ? "Deleting…" : "Delete forever"}
+              {deleteMutation.isPending
+                ? t("settings:danger.deleting")
+                : t("settings:danger.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

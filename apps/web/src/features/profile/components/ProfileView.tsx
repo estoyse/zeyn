@@ -7,6 +7,7 @@ import {
   Sparkles,
   Trophy,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@zeyn/ui/components/avatar";
 import { Badge } from "@zeyn/ui/components/badge";
 import { Button } from "@zeyn/ui/components/button";
@@ -50,10 +51,11 @@ export interface ProfileData {
 }
 
 function OwnerOnlyBadge() {
+  const { t } = useTranslation();
   return (
     <Badge tone='outline' className='gap-1 text-muted-foreground'>
       <Lock className='size-3' />
-      Only you
+      {t("profile:onlyYou")}
     </Badge>
   );
 }
@@ -81,6 +83,7 @@ function StatTile({
 }
 
 export function ProfileView({ data }: { data: ProfileData }) {
+  const { t } = useTranslation();
   const { user, isOwner, stats, history, hostedGames } = data;
 
   return (
@@ -107,7 +110,7 @@ export function ProfileView({ data }: { data: ProfileData }) {
               <Link to='/settings'>
                 <Button variant='outline' size='sm'>
                   <Pencil />
-                  Edit profile
+                  {t("profile:editProfile")}
                 </Button>
               </Link>
             )}
@@ -121,11 +124,13 @@ export function ProfileView({ data }: { data: ProfileData }) {
 
           <div className='flex flex-wrap items-center gap-2 text-xs text-muted-foreground'>
             <Sparkles className='size-3.5' />
-            <span>Member since {memberSince(user.createdAt)}</span>
+            <span>
+              {t("profile:memberSince", { date: memberSince(user.createdAt) })}
+            </span>
             {isOwner && !user.isProfilePublic && (
               <Badge tone='outline' className='gap-1'>
                 <Lock className='size-3' />
-                Private profile
+                {t("profile:privateProfile")}
               </Badge>
             )}
           </div>
@@ -135,14 +140,30 @@ export function ProfileView({ data }: { data: ProfileData }) {
       {stats && (
         <section className='space-y-4'>
           <div className='flex items-center gap-3'>
-            <h2 className='text-lg font-bold'>Stats</h2>
+            <h2 className='text-lg font-bold'>{t("profile:stats.title")}</h2>
             {isOwner && !user.showStats && <OwnerOnlyBadge />}
           </div>
           <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
-            <StatTile label='Played' value={stats.gamesPlayed} icon={Gamepad2} />
-            <StatTile label='Hosted' value={stats.gamesHosted} icon={History} />
-            <StatTile label='Best' value={stats.bestScore} icon={Trophy} />
-            <StatTile label='Total' value={stats.totalScore} icon={Sparkles} />
+            <StatTile
+              label={t("profile:stats.played")}
+              value={stats.gamesPlayed}
+              icon={Gamepad2}
+            />
+            <StatTile
+              label={t("profile:stats.hosted")}
+              value={stats.gamesHosted}
+              icon={History}
+            />
+            <StatTile
+              label={t("profile:stats.best")}
+              value={stats.bestScore}
+              icon={Trophy}
+            />
+            <StatTile
+              label={t("profile:stats.total")}
+              value={stats.totalScore}
+              icon={Sparkles}
+            />
           </div>
         </section>
       )}
@@ -152,11 +173,14 @@ export function ProfileView({ data }: { data: ProfileData }) {
           <div className='flex items-center gap-3'>
             <h2 className='flex items-center gap-2 text-lg font-bold'>
               <History className='size-5' />
-              Recent games
+              {t("profile:recentGames.title")}
             </h2>
             {isOwner && !user.showHistory && <OwnerOnlyBadge />}
           </div>
-          <ProfileGamesList items={history} emptyLabel='No games played yet.' />
+          <ProfileGamesList
+            items={history}
+            emptyLabel={t("profile:recentGames.empty")}
+          />
         </section>
       )}
 
@@ -165,13 +189,13 @@ export function ProfileView({ data }: { data: ProfileData }) {
           <div className='flex items-center gap-3'>
             <h2 className='flex items-center gap-2 text-lg font-bold'>
               <Gamepad2 className='size-5' />
-              Hosted games
+              {t("profile:hostedGames.title")}
             </h2>
             {isOwner && !user.showHostedGames && <OwnerOnlyBadge />}
           </div>
           <ProfileGamesList
             items={hostedGames}
-            emptyLabel='No hosted games yet.'
+            emptyLabel={t("profile:hostedGames.empty")}
           />
         </section>
       )}

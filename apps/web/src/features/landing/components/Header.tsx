@@ -3,16 +3,18 @@ import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { ModeToggle } from "@/shared/components/mode-toggle";
 import { authClient } from "@/features/auth/lib/auth-client";
 
 const LINKS = [
-  { name: "Games", to: "#games" },
-  { name: "How it works", to: "#how" },
-  { name: "Play", to: "/auth/login" },
-];
+  { labelKey: "navGames", to: "#games" },
+  { labelKey: "navHowItWorks", to: "#how" },
+  { labelKey: "navPlay", to: "/auth/login" },
+] as const;
 
 export function Header() {
+  const { t } = useTranslation();
   const { data: session } = authClient.useSession();
   const [scrolled, setScrolled] = useState(false);
 
@@ -43,11 +45,11 @@ export function Header() {
           <nav className='hidden md:flex items-center gap-8'>
             {LINKS.map(link => (
               <a
-                key={link.name}
+                key={link.labelKey}
                 href={link.to}
                 className='relative text-sm text-muted-foreground hover:text-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand after:transition-all hover:after:w-full'
               >
-                {link.name}
+                {t(`landing:header.${link.labelKey}`)}
               </a>
             ))}
           </nav>
@@ -56,11 +58,11 @@ export function Header() {
             <ModeToggle />
             {session ? (
               <Link to='/'>
-                <Button variant='brand'>Dashboard</Button>
+                <Button variant='brand'>{t("landing:header.dashboardButton")}</Button>
               </Link>
             ) : (
               <Link to='/auth/login'>
-                <Button variant='brand'>Sign In</Button>
+                <Button variant='brand'>{t("landing:header.signInButton")}</Button>
               </Link>
             )}
           </div>

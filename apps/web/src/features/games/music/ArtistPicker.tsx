@@ -1,4 +1,5 @@
 import { Music2, Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -28,20 +29,21 @@ export function ArtistPicker({
   selectedIds,
   onToggle,
 }: ArtistPickerProps) {
+  const { t } = useTranslation();
   return (
     <Card>
       <CardHeader className='bg-muted/50'>
         <CardTitle className='text-lg flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <Music2 className='size-5 text-brand' />
-            Select Artists
+            {t("games:music.artistPicker.title")}
           </div>
           <Badge tone={selectedIds.length === 0 ? "destructive" : "brand"}>
-            {selectedIds.length} Selected
+            {t("games:music.artistPicker.selectedCount", { count: selectedIds.length })}
           </Badge>
         </CardTitle>
         <CardDescription>
-          Pick one or more artists. Songs are drawn from your selection.
+          {t("games:music.artistPicker.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className='p-6'>
@@ -53,7 +55,7 @@ export function ArtistPicker({
           </div>
         ) : artists.length === 0 ? (
           <p className='text-sm text-muted-foreground'>
-            No artists available yet. Run the seed to load music.
+            {t("games:music.artistPicker.empty")}
           </p>
         ) : (
           <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>

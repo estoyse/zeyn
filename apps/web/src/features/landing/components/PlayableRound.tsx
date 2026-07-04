@@ -2,40 +2,35 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Flame, Keyboard, RotateCcw, Timer, Trophy, Zap } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { fireConfetti } from "@/features/landing/lib/confetti";
 import { EASE, fadeUp, viewport } from "@/features/landing/lib/motion";
 
 interface Question {
-  q: string;
-  options: string[];
+  key: string;
   correct: number;
 }
 
 const QUESTIONS: Question[] = [
   {
-    q: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter"],
+    key: "redPlanet",
     correct: 1,
   },
   {
-    q: "Who wrote 'Romeo and Juliet'?",
-    options: ["Dickens", "Shakespeare", "Tolstoy"],
+    key: "shakespeare",
     correct: 1,
   },
   {
-    q: "What is the largest ocean on Earth?",
-    options: ["Atlantic", "Indian", "Pacific"],
+    key: "ocean",
     correct: 2,
   },
   {
-    q: "How many bits are in a byte?",
-    options: ["8", "16", "4"],
+    key: "byte",
     correct: 0,
   },
   {
-    q: "Which element has the symbol 'Au'?",
-    options: ["Silver", "Gold", "Iron"],
+    key: "goldSymbol",
     correct: 1,
   },
 ];
@@ -48,13 +43,14 @@ type Status = "idle" | "playing" | "feedback" | "done";
 function rankFor(score: number, total: number) {
   const max = total * 180;
   const ratio = score / max;
-  if (ratio >= 0.8) return { label: "Trivia Legend", tone: "text-brand" };
-  if (ratio >= 0.55) return { label: "Sharp Shooter", tone: "text-success" };
-  if (ratio >= 0.3) return { label: "Rising Star", tone: "text-warning" };
-  return { label: "Warming Up", tone: "text-muted-foreground" };
+  if (ratio >= 0.8) return { id: "legend", tone: "text-brand" } as const;
+  if (ratio >= 0.55) return { id: "sharpShooter", tone: "text-success" } as const;
+  if (ratio >= 0.3) return { id: "risingStar", tone: "text-warning" } as const;
+  return { id: "warmingUp", tone: "text-muted-foreground" } as const;
 }
 
 export function PlayableRound() {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<Status>("idle");
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -67,6 +63,10 @@ export function PlayableRound() {
 
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const question = QUESTIONS[index];
+  const questionOptions = t(
+    `landing:playableRound.questions.${question.key}.options`,
+    { returnObjects: true },
+  ) as string[];
 
   const start = useCallback(() => {
     setStatus("playing");
@@ -158,13 +158,13 @@ export function PlayableRound() {
         "1": 0, "2": 1, "3": 2, a: 0, b: 1, c: 2,
       };
       const choice = map[e.key.toLowerCase()];
-      if (choice !== undefined && choice < question.options.length) {
+      if (choice !== undefined && choice < questionOptions.length) {
         answer(choice);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [status, question, answer]);
+  }, [status, question, questionOptions, answer]);
 
   const timePct = (timeLeft / QUESTION_MS) * 100;
   const isLow = timePct < 30;
@@ -184,10 +184,10 @@ export function PlayableRound() {
           className='text-center mb-10'
         >
           <p className='text-xs font-mono uppercase tracking-widest text-brand mb-3'>
-            Try it now · no signup
+            {t("landing:playableRound.eyebrow")}
           </p>
           <h2 className='text-4xl md:text-6xl font-heading font-semibold tracking-tight leading-[0.95]'>
-            Play a live round
+            {t("landing:playableRound.title")}
           </h2>
         </motion.div>
 
@@ -201,7 +201,7 @@ export function PlayableRound() {
           <div className='flex items-center justify-between px-5 py-3 border-b bg-muted text-xs font-mono uppercase tracking-widest'>
             <span className='flex items-center gap-2'>
               <Zap className='size-3.5 text-brand' />
-              Buzzer Trivia
+              {t("landing:playableRound.headerLabel")}
             </span>
             <div className='flex items-center gap-4'>
               <span className='flex items-center gap-1.5'>
@@ -210,7 +210,9 @@ export function PlayableRound() {
                 />
                 {streak}x
               </span>
-              <span className='tabular-nums'>{score} pts</span>
+              <span className='tabular-nums'>
+                {t("landing:playableRound.pointsLabel", { score })}
+              </span>
             </div>
           </div>
 
@@ -247,7 +249,10 @@ export function PlayableRound() {
 
                   <div className='flex items-center justify-between text-xs font-mono text-muted-foreground mb-4'>
                     <span>
-                      Question {index + 1}/{QUESTIONS.length}
+                      {t("landing:playableRound.questionCounter", {
+                        current: index + 1,
+                        total: QUESTIONS.length,
+                      })}
                     </span>
                     <span
                       className={`flex items-center gap-1.5 tabular-nums ${
@@ -270,11 +275,11 @@ export function PlayableRound() {
                   </div>
 
                   <h3 className='text-2xl md:text-3xl font-heading font-semibold tracking-tight leading-snug mb-6 min-h-[3.5rem]'>
-                    {question.q}
+                    {t(`landing:playableRound.questions.${question.key}.question`)}
                   </h3>
 
                   <div className='space-y-3'>
-                    {question.options.map((option, i) => {
+                    {questionOptions.map((option, i) => {
                       const isSelected = selected === i;
                       const isAnswer = i === question.correct;
                       const showResult = status === "feedback";
@@ -315,7 +320,7 @@ export function PlayableRound() {
 
                   <div className='mt-5 flex items-center justify-center gap-2 text-xs text-muted-foreground'>
                     <Keyboard className='size-3.5' />
-                    Press 1 · 2 · 3 to answer fast
+                    {t("landing:playableRound.answerHint")}
                   </div>
                 </motion.div>
               )}
@@ -339,6 +344,7 @@ export function PlayableRound() {
 }
 
 function IdleScreen({ onStart }: { onStart: () => void }) {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -354,16 +360,15 @@ function IdleScreen({ onStart }: { onStart: () => void }) {
         <Zap className='size-8' />
       </motion.div>
       <h3 className='text-2xl font-heading font-semibold tracking-tight'>
-        5 questions. Beat the clock.
+        {t("landing:playableRound.idle.title")}
       </h3>
       <p className='mt-2 text-muted-foreground max-w-sm mx-auto'>
-        Answer fast to earn speed bonuses, keep your streak alive, and rack up
-        the highest score.
+        {t("landing:playableRound.idle.description")}
       </p>
       <div className='mt-7'>
         <Button variant='brand' size='lg' onClick={onStart} className='group'>
           <Zap className='size-4 mr-2 transition-transform group-hover:scale-125' />
-          Start round
+          {t("landing:playableRound.idle.startButton")}
         </Button>
       </div>
     </motion.div>
@@ -383,6 +388,7 @@ function DoneScreen({
   bestStreak: number;
   onRestart: () => void;
 }) {
+  const { t } = useTranslation();
   const rank = rankFor(score, total);
   return (
     <motion.div
@@ -396,29 +402,29 @@ function DoneScreen({
         <Trophy className='size-8' />
       </div>
       <p className='text-xs font-mono uppercase tracking-widest text-muted-foreground'>
-        Round complete
+        {t("landing:playableRound.done.title")}
       </p>
       <div className='mt-2 text-6xl md:text-7xl font-heading font-semibold tracking-tight tabular-nums'>
         {score}
       </div>
       <p className={`mt-1 font-heading font-semibold text-lg ${rank.tone}`}>
-        {rank.label}
+        {t(`landing:playableRound.ranks.${rank.id}`)}
       </p>
 
       <div className='mt-7 grid grid-cols-3 divide-x divide-border border-y'>
-        <Stat label='Correct' value={`${correctCount}/${total}`} />
-        <Stat label='Accuracy' value={`${Math.round((correctCount / total) * 100)}%`} />
-        <Stat label='Best streak' value={`${bestStreak}x`} />
+        <Stat label={t("landing:playableRound.done.correctLabel")} value={`${correctCount}/${total}`} />
+        <Stat label={t("landing:playableRound.done.accuracyLabel")} value={`${Math.round((correctCount / total) * 100)}%`} />
+        <Stat label={t("landing:playableRound.done.bestStreakLabel")} value={`${bestStreak}x`} />
       </div>
 
       <div className='mt-7 flex flex-col sm:flex-row items-center justify-center gap-3'>
         <Button variant='outline' size='lg' onClick={onRestart} className='group'>
           <RotateCcw className='size-4 mr-2 transition-transform group-hover:-rotate-180' />
-          Play again
+          {t("landing:playableRound.done.playAgainButton")}
         </Button>
         <Link to='/auth/login'>
           <Button variant='brand' size='lg'>
-            Play with friends
+            {t("landing:playableRound.done.playWithFriendsButton")}
           </Button>
         </Link>
       </div>
