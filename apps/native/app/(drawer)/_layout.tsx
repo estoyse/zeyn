@@ -3,15 +3,24 @@ import { Link } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { useThemeColor } from "heroui-native";
 import React, { useCallback } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 function DrawerLayout() {
   const themeColorForeground = useThemeColor("foreground");
   const themeColorBackground = useThemeColor("background");
 
-  const renderThemeToggle = useCallback(() => <ThemeToggle />, []);
+  const renderThemeToggle = useCallback(
+    () => (
+      <View className="flex-row items-center">
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </View>
+    ),
+    [],
+  );
 
   return (
     <Drawer

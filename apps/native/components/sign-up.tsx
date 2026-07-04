@@ -10,6 +10,7 @@ import {
   useToast,
 } from "heroui-native";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Text, TextInput, View } from "react-native";
 import z from "zod";
 
@@ -53,6 +54,7 @@ export function SignUp() {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const { toast } = useToast();
+  const { t } = useTranslation("auth");
 
   const form = useForm({
     defaultValues: {
@@ -81,7 +83,7 @@ export function SignUp() {
             formApi.reset();
             toast.show({
               variant: "success",
-              label: "Account created successfully",
+              label: t("toast.signUpSuccess"),
             });
             queryClient.refetchQueries();
           },
@@ -113,12 +115,12 @@ export function SignUp() {
                 <form.Field name="name">
                   {(field) => (
                     <TextField>
-                      <Label>Name</Label>
+                      <Label>{t("field.nameLabel")}</Label>
                       <Input
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChangeText={field.handleChange}
-                        placeholder="John Doe"
+                        placeholder={t("field.namePlaceholder")}
                         autoComplete="name"
                         textContentType="name"
                         returnKeyType="next"
@@ -134,13 +136,13 @@ export function SignUp() {
                 <form.Field name="email">
                   {(field) => (
                     <TextField>
-                      <Label>Email</Label>
+                      <Label>{t("field.emailLabel")}</Label>
                       <Input
                         ref={emailInputRef}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChangeText={field.handleChange}
-                        placeholder="email@example.com"
+                        placeholder={t("field.emailPlaceholder")}
                         keyboardType="email-address"
                         autoCapitalize="none"
                         autoComplete="email"
@@ -158,13 +160,13 @@ export function SignUp() {
                 <form.Field name="password">
                   {(field) => (
                     <TextField>
-                      <Label>Password</Label>
+                      <Label>{t("field.passwordLabel")}</Label>
                       <Input
                         ref={passwordInputRef}
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChangeText={field.handleChange}
-                        placeholder="••••••••"
+                        placeholder={t("field.passwordPlaceholder")}
                         secureTextEntry
                         autoComplete="new-password"
                         textContentType="newPassword"
@@ -179,7 +181,7 @@ export function SignUp() {
                   {isSubmitting ? (
                     <Spinner size="sm" color="default" />
                   ) : (
-                    <Button.Label>Create Account</Button.Label>
+                    <Button.Label>{t("register.submitButton")}</Button.Label>
                   )}
                 </Button>
               </View>
