@@ -107,6 +107,22 @@
       "selected": "{{count}} / {{max}} выбрано",
       "chooseRange": "Выберите {{min}}-{{max}} категорий для игры.",
       "category": "Категория"
+    },
+    "picker": {
+      "title": "Выберите игру",
+      "subtitle": "Выберите игру для хостинга, затем настройте комнату."
+    },
+    "configure": {
+      "subtitle": "Настройте поле боя перед запуском.",
+      "backButton": "Игры"
     }
+  },
+  "typePage": {
+    "unknownTitle": "Неизвестная игра",
+    "unknownDescription": "Игрового режима «{{gameType}}» не существует.",
+    "backToDashboard": "Назад к панели",
+    "backToGames": "Назад к играм",
+    "createGame": "Создать игру",
+    "activeGames": "Активные игры"
   }
 }

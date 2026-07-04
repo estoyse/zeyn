@@ -1,5 +1,6 @@
 import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { ArrowLeft, Zap } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { authClient } from "@/features/auth/lib/auth-client";
 import { PublicArenas } from "@/features/dashboard/components/PublicArenas";
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/_app/games/$gameType")({
 });
 
 function GameTypePage() {
+  const { t } = useTranslation();
   const { gameType } = Route.useParams();
   const { session } = Route.useRouteContext();
   const game = getClientGame(gameType);
@@ -28,14 +30,14 @@ function GameTypePage() {
   if (!game) {
     return (
       <div className='min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-6 text-center'>
-        <h1 className='text-2xl font-bold'>Unknown game</h1>
+        <h1 className='text-2xl font-bold'>{t("game:typePage.unknownTitle")}</h1>
         <p className='text-muted-foreground'>
-          There is no game type called "{gameType}".
+          {t("game:typePage.unknownDescription", { gameType })}
         </p>
         <Link to='/dashboard'>
           <Button variant='outline'>
             <ArrowLeft className='size-4 mr-2' />
-            Back to dashboard
+            {t("game:typePage.backToDashboard")}
           </Button>
         </Link>
       </div>
@@ -52,17 +54,20 @@ function GameTypePage() {
             </div>
             <div>
               <h1 className='text-3xl font-bold tracking-tight'>
-                {game.meta.title}
+                {t(`games:catalog.game.${game.type}.title`, game.meta.title)}
               </h1>
               <p className='text-muted-foreground italic'>
-                {game.meta.description}
+                {t(
+                  `games:catalog.game.${game.type}.description`,
+                  game.meta.description
+                )}
               </p>
             </div>
           </div>
           <Link to='/game/create/$gameType' params={{ gameType: game.type }}>
             <Button variant='brand' size='lg'>
               <Zap className='size-4 mr-2' />
-              Create Game
+              {t("game:typePage.createGame")}
             </Button>
           </Link>
         </header>
@@ -72,7 +77,7 @@ function GameTypePage() {
             <PublicArenas
               userId={session?.user?.id}
               gameType={game.type}
-              title='Active Games'
+              title={t("game:typePage.activeGames")}
             />
             <RecentGamesSection gameType={game.type} />
           </div>

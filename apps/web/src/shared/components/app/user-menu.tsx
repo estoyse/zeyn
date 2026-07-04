@@ -14,10 +14,12 @@ import {
   DropdownMenuTrigger,
 } from "@zeyn/ui/components/dropdown-menu";
 import { BellIcon, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { trpc } from "@/shared/lib/trpc";
 
 export function DropdownMenuAvatar() {
+  const { t } = useTranslation();
   const { user, signOut } = useAuth();
   const meQuery = useQuery({
     ...trpc.profile.getMe.queryOptions(),
@@ -30,7 +32,10 @@ export function DropdownMenuAvatar() {
       <DropdownMenuTrigger>
         <Avatar className="cursor-pointer hover:opacity-80 transition-opacity">
           {user?.image ? (
-            <AvatarImage src={user.image} alt={user.name ?? "User profile"} />
+            <AvatarImage
+              src={user.image}
+              alt={user.name ?? t("common:userMenu.avatarAlt")}
+            />
           ) : null}
           <AvatarFallback>
             {user?.name?.slice(0, 2).toUpperCase()}
@@ -49,21 +54,21 @@ export function DropdownMenuAvatar() {
             }
           >
             <UserIcon />
-            Profile
+            {t("common:userMenu.profile")}
           </DropdownMenuItem>
           <DropdownMenuItem render={<Link to="/settings" />}>
             <SettingsIcon />
-            Settings
+            {t("common:userMenu.settings")}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <BellIcon />
-            Notifications
+            {t("common:userMenu.notifications")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>
           <LogOutIcon />
-          Sign Out
+          {t("common:userMenu.signOut")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

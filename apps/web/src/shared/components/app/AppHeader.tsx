@@ -1,6 +1,7 @@
 import { Button } from "@zeyn/ui/components/button";
 import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Bell } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DropdownMenuAvatar } from "./user-menu";
 import { LanguageToggle } from "../language-toggle";
@@ -8,6 +9,7 @@ import { ModeToggle } from "../mode-toggle";
 import { Link } from "@tanstack/react-router";
 
 export function AppHeader() {
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   return (
@@ -23,14 +25,14 @@ export function AppHeader() {
             <LanguageToggle />
             {user ? (
               <>
-                <Button variant="ghost" size="icon" title="Bildirishnomalar">
+                <Button variant="ghost" size="icon" title={t("common:userMenu.notifications")}>
                   <Bell className="w-5 h-5" />
                 </Button>
                 <DropdownMenuAvatar />
               </>
             ) : (
               <Link to="/auth/login">
-                <Button variant="brand">Sign In</Button>
+                <Button variant="brand">{t("common:signIn")}</Button>
               </Link>
             )}
           </div>

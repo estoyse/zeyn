@@ -2,5 +2,23 @@
   "appName": "Zeyn",
   "save": "Сохранить",
   "cancel": "Отмена",
-  "language": "Язык"
+  "language": "Язык",
+  "signIn": "Войти",
+  "backHome": "На главную",
+  "toggleTheme": "Переключить тему",
+  "toggleLanguage": "Переключить язык",
+  "retry": "Повторить",
+  "syncingData": "Синхронизация данных...",
+  "theme": {
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная"
+  },
+  "userMenu": {
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "notifications": "Уведомления",
+    "signOut": "Выйти",
+    "avatarAlt": "Профиль пользователя"
+  }
 }

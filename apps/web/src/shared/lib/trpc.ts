@@ -4,13 +4,14 @@ import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { toast } from "sonner";
+import i18n from "@/shared/i18n/config";
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error, query) => {
       toast.error(error.message, {
         action: {
-          label: "retry",
+          label: i18n.t("common:retry"),
           onClick: query.invalidate,
         },
       });

@@ -30,8 +30,15 @@ export function GameCatalog({ variant = "create" }: GameCatalogProps) {
             <div className='size-10 bg-brand/10 text-brand flex items-center justify-center mb-2'>
               <game.Icon className='size-5' />
             </div>
-            <CardTitle className='text-lg'>{game.meta.title}</CardTitle>
-            <CardDescription>{game.meta.description}</CardDescription>
+            <CardTitle className='text-lg'>
+              {t(`games:catalog.game.${game.type}.title`, game.meta.title)}
+            </CardTitle>
+            <CardDescription>
+              {t(
+                `games:catalog.game.${game.type}.description`,
+                game.meta.description
+              )}
+            </CardDescription>
           </CardHeader>
           <CardContent className='mt-auto space-y-3'>
             <div className='flex items-center gap-1 text-xs text-muted-foreground'>

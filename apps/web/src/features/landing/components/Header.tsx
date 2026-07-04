@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ModeToggle } from "@/shared/components/mode-toggle";
+import { LanguageToggle } from "@/shared/components/language-toggle";
 import { authClient } from "@/features/auth/lib/auth-client";
 
 const LINKS = [
@@ -55,6 +56,7 @@ export function Header() {
           </nav>
 
           <div className='flex items-center gap-3'>
+            <LanguageToggle />
             <ModeToggle />
             {session ? (
               <Link to='/'>

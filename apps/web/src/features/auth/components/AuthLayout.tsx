@@ -1,8 +1,11 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { LogoLockup } from "@zeyn/ui/components/logo";
 
 export function AuthLayout({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -18,7 +21,7 @@ export function AuthLayout({ children }: { children: ReactNode }) {
       <div className="relative hidden bg-muted lg:block">
         <img
           src="/login.jpg"
-          alt="Image"
+          alt={t("auth:layout.imageAlt")}
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5] dark:grayscale"
         />
       </div>

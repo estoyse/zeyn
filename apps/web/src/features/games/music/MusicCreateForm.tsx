@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { GeneralConfigCard } from "@/features/game/components/create/GeneralConfigCard";
 import { DeployPanel } from "@/features/game/components/create/DeployPanel";
 import { ArtistPicker } from "./ArtistPicker";
 import { useMusicCreateForm } from "./useMusicCreateForm";
 
 export function MusicCreateForm() {
+  const { t } = useTranslation();
   const form = useMusicCreateForm();
   const { values } = form;
 
@@ -30,20 +32,24 @@ export function MusicCreateForm() {
 
       <DeployPanel
         checks={[
-          { label: "Room name set", done: form.checks.hasName },
+          { label: t("game:create.summary.roomNameSet"), done: form.checks.hasName },
           {
-            label: `Artists selected (${values.selectedArtistIds.length})`,
+            label: t("games:music.create.artistsSelected", {
+              count: values.selectedArtistIds.length,
+            }),
             done: form.checks.hasArtists,
           },
           {
-            label: values.isPublic ? "Public room" : "Private room",
+            label: values.isPublic
+              ? t("game:create.summary.publicRoom")
+              : t("game:create.summary.privateRoom"),
             done: true,
           },
         ]}
         canCreate={form.canCreate}
         isCreating={form.isCreating}
         onCreate={form.create}
-        note="Rooms are automatically archived after 1 hour of inactivity. Public rooms appear on the global dashboard and are searchable by all players."
+        note={t("game:create.summary.note")}
       />
     </div>
   );

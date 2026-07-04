@@ -2,5 +2,23 @@
   "appName": "Zeyn",
   "save": "Save",
   "cancel": "Cancel",
-  "language": "Language"
+  "language": "Language",
+  "signIn": "Sign In",
+  "backHome": "Back home",
+  "toggleTheme": "Toggle theme",
+  "toggleLanguage": "Toggle language",
+  "retry": "Retry",
+  "syncingData": "Syncing Data...",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "signOut": "Sign Out",
+    "avatarAlt": "User profile"
+  }
 }

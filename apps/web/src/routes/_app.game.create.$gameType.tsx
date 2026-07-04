@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Settings2, ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@zeyn/ui/components/button";
 import { getClientGame } from "@/features/games/registry";
 
@@ -8,20 +9,21 @@ export const Route = createFileRoute("/_app/game/create/$gameType")({
 });
 
 function CreateGamePage() {
+  const { t } = useTranslation();
   const { gameType } = Route.useParams();
   const game = getClientGame(gameType);
 
   if (!game) {
     return (
       <div className='min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-6 text-center'>
-        <h1 className='text-2xl font-bold'>Unknown game</h1>
+        <h1 className='text-2xl font-bold'>{t("game:typePage.unknownTitle")}</h1>
         <p className='text-muted-foreground'>
-          There is no game type called "{gameType}".
+          {t("game:typePage.unknownDescription", { gameType })}
         </p>
         <Link to='/game/create'>
           <Button variant='outline'>
             <ArrowLeft className='size-4 mr-2' />
-            Back to games
+            {t("game:typePage.backToGames")}
           </Button>
         </Link>
       </div>
@@ -40,17 +42,17 @@ function CreateGamePage() {
             </div>
             <div>
               <h1 className='text-3xl font-bold tracking-tight'>
-                {game.meta.title}
+                {t(`games:catalog.game.${game.type}.title`, game.meta.title)}
               </h1>
               <p className='text-muted-foreground italic'>
-                Configure the battlefield before deploying.
+                {t("game:create.configure.subtitle")}
               </p>
             </div>
           </div>
           <Link to='/game/create'>
             <Button variant='ghost' size='sm'>
               <ArrowLeft className='size-4 mr-2' />
-              Games
+              {t("game:create.configure.backButton")}
             </Button>
           </Link>
         </header>

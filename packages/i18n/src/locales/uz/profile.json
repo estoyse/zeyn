@@ -17,5 +17,9 @@
   "hostedGames": {
     "title": "Tashkil etilgan o'yinlar",
     "empty": "Hali o'yin tashkil etilmagan."
+  },
+  "notFound": {
+    "title": "Profil topilmadi",
+    "description": "@{{username}} mavjud emas yoki bu profil yopiq."
   }
 }

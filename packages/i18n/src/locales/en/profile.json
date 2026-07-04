@@ -17,5 +17,9 @@
   "hostedGames": {
     "title": "Hosted games",
     "empty": "No hosted games yet."
+  },
+  "notFound": {
+    "title": "Profile not found",
+    "description": "@{{username}} doesn't exist or this profile is private."
   }
 }
