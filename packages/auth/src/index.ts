@@ -45,7 +45,7 @@ export function createAuth() {
     databaseHooks: {
       user: {
         create: {
-          before: async (userData) => {
+          before: async userData => {
             const username = await resolveSignupUsername(
               db,
               userData.name,
@@ -60,7 +60,13 @@ export function createAuth() {
       ...parseOrigins(env.CORS_ORIGIN),
       "zeyn://",
       ...(env.NODE_ENV === "development"
-        ? ["exp://", "exp://**", "exp://192.168.*.*:*/**", "http://localhost:8081", "http://localhost:3001"]
+        ? [
+            "exp://",
+            "exp://**",
+            "exp://192.168.*.*:*/**",
+            "http://localhost:8081",
+            "http://localhost:3001",
+          ]
         : []),
     ],
     emailAndPassword: {
@@ -70,20 +76,25 @@ export function createAuth() {
         verify: verifyPassword,
       },
       sendResetPassword: async ({ user, url }) => {
+        const parsed = new URL(url);
+        const token = parsed.pathname.split("/").pop();
+        const callbackUrl = parsed.searchParams.get("callbackURL");
+        const resetUrl = callbackUrl ? `${callbackUrl}?token=${token}` : url;
+
         await sendEmail({
           to: user.email,
           subject: "Reset your Zeyn password",
-          text: `Reset your Zeyn password by opening this link: ${url}\n\nIf you didn't request this, you can safely ignore this email.`,
+          text: `Reset your Zeyn password by opening this link: ${resetUrl}\n\nIf you didn't request this, you can safely ignore this email.`,
           html: `
             <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #1a1a1a;">
               <h1 style="font-size: 20px; margin: 0 0 16px;">Reset your password</h1>
               <p style="font-size: 15px; line-height: 1.5; margin: 0 0 24px;">
                 We received a request to reset the password for your Zeyn account. Click the button below to choose a new one.
               </p>
-              <a href="${url}" style="display: inline-block; background: #1e3a8a; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600;">Reset password</a>
+              <a href="${resetUrl}" style="display: inline-block; background: #1e3a8a; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600;">Reset password</a>
               <p style="font-size: 13px; line-height: 1.5; color: #666; margin: 24px 0 0;">
                 If the button doesn't work, copy and paste this link into your browser:<br />
-                <a href="${url}" style="color: #1e3a8a; word-break: break-all;">${url}</a>
+                <a href="${resetUrl}" style="color: #1e3a8a; word-break: break-all;">${resetUrl}</a>
               </p>
               <p style="font-size: 13px; line-height: 1.5; color: #666; margin: 16px 0 0;">
                 If you didn't request this, you can safely ignore this email.
