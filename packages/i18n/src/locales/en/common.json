@@ -2,5 +2,12 @@
   "appName": "Zeyn",
   "save": "Save",
   "cancel": "Cancel",
-  "language": "Language"
+  "language": "Language",
+  "userMenu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "signOut": "Sign Out",
+    "avatarAlt": "User profile"
+  }
 }
