@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@zeyn/ui/components/button";
@@ -18,6 +19,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
+  const navigate = useNavigate();
   const { signIn, signInWithGoogle } = useAuth();
 
   const form = useForm({
@@ -63,6 +65,15 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
           />
         )}
       </form.Field>
+      <div className='-mt-2 text-right'>
+        <button
+          type='button'
+          onClick={() => navigate({ to: "/auth/forgot-password" })}
+          className='text-sm text-muted-foreground hover:text-foreground underline-offset-4 hover:underline'
+        >
+          Parolni unutdingizmi?
+        </button>
+      </div>
       <form.Subscribe selector={state => state.canSubmit}>
         {() => (
           <Field>
