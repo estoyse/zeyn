@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `locale` text DEFAULT 'uz' NOT NULL;

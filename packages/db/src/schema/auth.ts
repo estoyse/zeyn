@@ -15,6 +15,7 @@ export const user = sqliteTable(
     showStats: integer("show_stats", { mode: "boolean" }).default(true).notNull(),
     showHistory: integer("show_history", { mode: "boolean" }).default(true).notNull(),
     showHostedGames: integer("show_hosted_games", { mode: "boolean" }).default(true).notNull(),
+    locale: text("locale").default("uz").notNull(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
