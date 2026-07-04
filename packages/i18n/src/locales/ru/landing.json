@@ -166,5 +166,29 @@
       "instantScoring": "Мгновенный счёт",
       "multiplayer": "Мультиплеер"
     }
+  },
+  "footer": {
+    "description": "Многопользовательская викторина в реальном времени. Быстрые игры, live-очки, бесконечные матчи-реванши.",
+    "sections": {
+      "games": {
+        "heading": "Игры",
+        "browseGames": "Смотреть игры",
+        "tournaments": "Турниры",
+        "leaderboard": "Таблица лидеров"
+      },
+      "company": {
+        "heading": "Компания",
+        "aboutUs": "О нас",
+        "blog": "Блог",
+        "contact": "Контакты"
+      },
+      "social": {
+        "heading": "Соцсети",
+        "twitter": "Twitter",
+        "discord": "Discord",
+        "github": "GitHub"
+      }
+    },
+    "copyright": "© {{year}} Zeyn. Все права защищены."
   }
 }

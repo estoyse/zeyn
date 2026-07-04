@@ -166,5 +166,29 @@
       "instantScoring": "Instant Scoring",
       "multiplayer": "Multiplayer"
     }
+  },
+  "footer": {
+    "description": "Real-time multiplayer trivia. Fast games, live scoring, endless rematches.",
+    "sections": {
+      "games": {
+        "heading": "Games",
+        "browseGames": "Browse games",
+        "tournaments": "Tournaments",
+        "leaderboard": "Leaderboard"
+      },
+      "company": {
+        "heading": "Company",
+        "aboutUs": "About us",
+        "blog": "Blog",
+        "contact": "Contact"
+      },
+      "social": {
+        "heading": "Social",
+        "twitter": "Twitter",
+        "discord": "Discord",
+        "github": "GitHub"
+      }
+    },
+    "copyright": "© {{year}} Zeyn. All rights reserved."
   }
 }

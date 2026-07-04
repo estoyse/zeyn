@@ -107,12 +107,21 @@
       "selected": "{{count}} / {{max}} Selected",
       "chooseRange": "Choose {{min}}-{{max}} categories for the match.",
       "category": "Category"
+    },
+    "picker": {
+      "title": "Choose a Game",
+      "subtitle": "Pick a game to host, then configure your room."
+    },
+    "configure": {
+      "subtitle": "Configure the battlefield before deploying.",
+      "backButton": "Games"
     }
   },
   "typePage": {
     "unknownTitle": "Unknown game",
     "unknownDescription": "There is no game type called \"{{gameType}}\".",
     "backToDashboard": "Back to dashboard",
+    "backToGames": "Back to games",
     "createGame": "Create Game",
     "activeGames": "Active Games"
   }

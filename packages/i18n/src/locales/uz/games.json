@@ -18,6 +18,9 @@
       "selectedCount": "{{count}} ta tanlandi",
       "description": "Bir yoki bir nechta ijrochini tanlang. Qo'shiqlar sizning tanlovingizdan olinadi.",
       "empty": "Hozircha ijrochilar mavjud emas. Musiqa yuklash uchun seedni ishga tushiring."
+    },
+    "create": {
+      "artistsSelected": "Ijrochilar tanlandi ({{count}})"
     }
   },
   "catalog": {

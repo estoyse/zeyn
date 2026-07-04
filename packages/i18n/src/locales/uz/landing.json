@@ -166,5 +166,29 @@
       "instantScoring": "Zumdagi ballash",
       "multiplayer": "Ko'p o'yinchili"
     }
+  },
+  "footer": {
+    "description": "Real vaqtda ko'p o'yinchili viktorina. Tezkor o'yinlar, jonli hisob, cheksiz qayta o'yinlar.",
+    "sections": {
+      "games": {
+        "heading": "O'yinlar",
+        "browseGames": "O'yinlarni ko'rish",
+        "tournaments": "Turnirlar",
+        "leaderboard": "Reyting jadvali"
+      },
+      "company": {
+        "heading": "Kompaniya",
+        "aboutUs": "Biz haqimizda",
+        "blog": "Blog",
+        "contact": "Aloqa"
+      },
+      "social": {
+        "heading": "Ijtimoiy tarmoqlar",
+        "twitter": "Twitter",
+        "discord": "Discord",
+        "github": "GitHub"
+      }
+    },
+    "copyright": "© {{year}} Zeyn. Barcha huquqlar himoyalangan."
   }
 }

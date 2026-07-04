@@ -107,12 +107,21 @@
       "selected": "{{count}} / {{max}} tanlandi",
       "chooseRange": "O'yin uchun {{min}}-{{max}} ta toifani tanlang.",
       "category": "Toifa"
+    },
+    "picker": {
+      "title": "O'yin tanlang",
+      "subtitle": "Mezbonlik qilish uchun o'yin tanlang, so'ng xonangizni sozlang."
+    },
+    "configure": {
+      "subtitle": "Joylashtirishdan oldin jangovar maydonni sozlang.",
+      "backButton": "O'yinlar"
     }
   },
   "typePage": {
     "unknownTitle": "Nomaʼlum oʻyin",
     "unknownDescription": "\"{{gameType}}\" nomli oʻyin turi mavjud emas.",
     "backToDashboard": "Boshqaruv paneliga qaytish",
+    "backToGames": "O'yinlarga qaytish",
     "createGame": "Oʻyin yaratish",
     "activeGames": "Faol oʻyinlar"
   }

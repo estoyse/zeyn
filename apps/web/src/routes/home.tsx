@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { LogoLockup } from "@zeyn/ui/components/logo";
 import { Header } from "@/features/landing/components/Header";
 import { Hero } from "@/features/landing/components/Hero";
@@ -15,32 +16,35 @@ export const Route = createFileRoute("/home")({
   component: HomeComponent,
 });
 
-const FOOTER_SECTIONS = [
-  {
-    heading: "Games",
-    links: [
-      { label: "Browse games", to: "/auth/login" as const },
-      { label: "Tournaments", disabled: true },
-      { label: "Leaderboard", disabled: true },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About us", disabled: true },
-      { label: "Blog", disabled: true },
-      { label: "Contact", disabled: true },
-    ],
-  },
-  {
-    heading: "Social",
-    links: [
-      { label: "Twitter", href: "#" },
-      { label: "Discord", href: "#" },
-      { label: "GitHub", href: "#" },
-    ],
-  },
-];
+function useFooterSections() {
+  const { t } = useTranslation();
+  return [
+    {
+      heading: t("landing:footer.sections.games.heading"),
+      links: [
+        { label: t("landing:footer.sections.games.browseGames"), to: "/auth/login" as const },
+        { label: t("landing:footer.sections.games.tournaments"), disabled: true },
+        { label: t("landing:footer.sections.games.leaderboard"), disabled: true },
+      ],
+    },
+    {
+      heading: t("landing:footer.sections.company.heading"),
+      links: [
+        { label: t("landing:footer.sections.company.aboutUs"), disabled: true },
+        { label: t("landing:footer.sections.company.blog"), disabled: true },
+        { label: t("landing:footer.sections.company.contact"), disabled: true },
+      ],
+    },
+    {
+      heading: t("landing:footer.sections.social.heading"),
+      links: [
+        { label: t("landing:footer.sections.social.twitter"), href: "#" },
+        { label: t("landing:footer.sections.social.discord"), href: "#" },
+        { label: t("landing:footer.sections.social.github"), href: "#" },
+      ],
+    },
+  ];
+}
 
 function HomeComponent() {
   return (
@@ -61,6 +65,9 @@ function HomeComponent() {
 }
 
 function Footer() {
+  const { t } = useTranslation();
+  const footerSections = useFooterSections();
+
   return (
     <footer className='border-t'>
       <div className='max-w-7xl mx-auto px-6 py-14'>
@@ -70,12 +77,11 @@ function Footer() {
               <LogoLockup size='sm' />
             </Link>
             <p className='text-sm text-muted-foreground max-w-xs'>
-              Real-time multiplayer trivia. Fast games, live scoring, endless
-              rematches.
+              {t("landing:footer.description")}
             </p>
           </div>
 
-          {FOOTER_SECTIONS.map(section => (
+          {footerSections.map(section => (
             <div key={section.heading} className='space-y-3'>
               <h4 className='text-xs font-mono uppercase tracking-widest text-muted-foreground'>
                 {section.heading}
@@ -119,7 +125,7 @@ function Footer() {
         </div>
 
         <div className='mt-12 pt-8 border-t text-center text-sm text-muted-foreground'>
-          © 2026 Zeyn. All rights reserved.
+          {t("landing:footer.copyright", { year: new Date().getFullYear() })}
         </div>
       </div>
     </footer>

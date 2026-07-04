@@ -3,6 +3,17 @@
   "save": "Saqlash",
   "cancel": "Bekor qilish",
   "language": "Til",
+  "signIn": "Kirish",
+  "backHome": "Bosh sahifaga",
+  "toggleTheme": "Mavzuni almashtirish",
+  "toggleLanguage": "Tilni almashtirish",
+  "retry": "Qayta urinish",
+  "syncingData": "Ma'lumotlar sinxronlanmoqda...",
+  "theme": {
+    "light": "Yorug'",
+    "dark": "Qorong'i",
+    "system": "Tizim"
+  },
   "userMenu": {
     "profile": "Profil",
     "settings": "Sozlamalar",

@@ -18,6 +18,9 @@
       "selectedCount": "{{count}} Selected",
       "description": "Pick one or more artists. Songs are drawn from your selection.",
       "empty": "No artists available yet. Run the seed to load music."
+    },
+    "create": {
+      "artistsSelected": "Artists selected ({{count}})"
     }
   },
   "catalog": {
