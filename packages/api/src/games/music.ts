@@ -23,6 +23,7 @@ export const musicGameConfig = {
   streakBonusPerLevel: 25,
   maxStreakBonus: 100,
   minPlayers: 2,
+  finishedCleanupGraceMs: 60000,
 } as const;
 
 export interface MusicQuestion {

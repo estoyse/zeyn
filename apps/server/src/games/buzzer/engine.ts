@@ -147,6 +147,19 @@ export function join(state: GameState, params: JoinParams): EngineDirectives {
     };
   }
 
+  const isNewPlayer = !state.players[playerId];
+  if (isNewPlayer && state.status !== "WAITING") {
+    return {
+      reply: error(
+        state.status === "FINISHED"
+          ? "Game already ended"
+          : "Game already started",
+        state.status === "FINISHED" ? "ALREADY_FINISHED" : "ALREADY_STARTED"
+      ),
+      closeSocket: true,
+    };
+  }
+
   if (roomPassword && roomPassword !== password) {
     return {
       reply: error(
@@ -156,7 +169,6 @@ export function join(state: GameState, params: JoinParams): EngineDirectives {
     };
   }
 
-  const isNewPlayer = !state.players[playerId];
   if (isNewPlayer && Object.keys(state.players).length >= state.maxPlayers) {
     return { reply: error("Room is full") };
   }
@@ -223,12 +235,12 @@ export function buzz(
   playerId: string,
   now: number
 ): EngineDirectives {
-  if (!state.players[playerId]?.connected) return {};
-  if (state.phase !== "ACTIVE") return {};
+  if (!state.players[playerId]?.connected) return { noChange: true };
+  if (state.phase !== "ACTIVE") return { noChange: true };
 
   const q = state.activeQuestionState;
-  if (!q || q.buzzedPlayerId) return {};
-  if (q.playersWhoAttempted.includes(playerId)) return {};
+  if (!q || q.buzzedPlayerId) return { noChange: true };
+  if (q.playersWhoAttempted.includes(playerId)) return { noChange: true };
 
   state.phase = "ANSWERING";
   q.buzzedPlayerId = playerId;
@@ -243,15 +255,15 @@ export function submitAnswer(
   answer: string,
   now: number
 ): EngineDirectives {
-  if (!state.players[playerId]?.connected) return {};
-  if (state.phase !== "ANSWERING") return {};
+  if (!state.players[playerId]?.connected) return { noChange: true };
+  if (state.phase !== "ANSWERING") return { noChange: true };
 
   const q = state.activeQuestionState;
-  if (!q || q.buzzedPlayerId !== playerId) return {};
+  if (!q || q.buzzedPlayerId !== playerId) return { noChange: true };
 
   const subject = state.subjects[state.currentSubjectIndex];
   const question = subject?.questions[state.currentQuestionIndex];
-  if (!subject || !question) return {};
+  if (!subject || !question) return { noChange: true };
 
   const player = state.players[playerId];
   const correct = isFuzzyMatch(answer, question.answer);
@@ -309,7 +321,7 @@ function nextQuestion(state: GameState, now: number): EngineDirectives {
     return {
       updateRoomStatus: "finished",
       persistResults: true,
-      cancelAlarm: true,
+      alarmAt: now + gameConfig.finishedCleanupGraceMs,
     };
   }
 
@@ -323,19 +335,19 @@ function nextQuestion(state: GameState, now: number): EngineDirectives {
  * reveal ends → advance.
  */
 export function handleTimeout(state: GameState, now: number): EngineDirectives {
-  if (state.status !== "PLAYING") return {};
+  if (state.status !== "PLAYING") return { noChange: true };
 
   switch (state.phase) {
     case "ACTIVE":
       return reveal(state, now);
     case "ANSWERING": {
       const playerId = state.activeQuestionState?.buzzedPlayerId;
-      if (!playerId) return {};
+      if (!playerId) return { noChange: true };
       return submitAnswer(state, playerId, "", now);
     }
     case "REVEALED":
       return nextQuestion(state, now);
     default:
-      return {};
+      return { noChange: true };
   }
 }

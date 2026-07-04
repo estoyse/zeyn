@@ -76,19 +76,43 @@ export class GameRepository {
    */
   async persistResults(state: GameState): Promise<void> {
     if (!state.hostId) return;
-    const historyId = crypto.randomUUID();
+    const historyId = state.gameId ?? crypto.randomUUID();
 
-    await this.db.insert(schema.gameHistory).values({
-      id: historyId,
-      gameId: state.gameId || "unknown",
-      gameType: "buzzer",
-      hostId: state.hostId,
-      subjects: JSON.stringify(state.subjects.map(s => s.name)),
-      createdAt: new Date(),
-    });
+    const existing = await this.db
+      .select({ id: schema.gameHistory.id })
+      .from(schema.gameHistory)
+      .where(eq(schema.gameHistory.id, historyId))
+      .get();
+    if (existing) return;
 
-    if (state.questionResults.length > 0) {
-      const rows = state.questionResults.map(r => ({
+    const playerIds = Object.keys(state.players);
+    const validUserIds = new Set(
+      playerIds.length > 0
+        ? (
+            await this.db
+              .select({ id: schema.user.id })
+              .from(schema.user)
+              .where(inArray(schema.user.id, playerIds))
+          ).map(u => u.id)
+        : []
+    );
+
+    const statements: Parameters<typeof this.db.batch>[0][number][] = [
+      this.db.insert(schema.gameHistory).values({
+        id: historyId,
+        gameId: state.gameId || "unknown",
+        gameType: "buzzer",
+        hostId: state.hostId,
+        subjects: JSON.stringify(state.subjects.map(s => s.name)),
+        createdAt: new Date(),
+      }),
+    ];
+
+    const questionResults = state.questionResults.filter(r =>
+      validUserIds.has(r.userId)
+    );
+    if (questionResults.length > 0) {
+      const rows = questionResults.map(r => ({
         id: crypto.randomUUID(),
         gameId: historyId,
         userId: r.userId,
@@ -100,11 +124,13 @@ export class GameRepository {
         pointsAwarded: r.pointsAwarded,
       }));
       for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 9)) {
-        await this.db.insert(schema.gameQuestionResults).values(part);
+        statements.push(this.db.insert(schema.gameQuestionResults).values(part));
       }
     }
 
-    const players = Object.values(state.players);
+    const players = Object.values(state.players).filter(p =>
+      validUserIds.has(p.id)
+    );
     if (players.length > 0) {
       const rows = players.map(p => ({
         id: crypto.randomUUID(),
@@ -114,8 +140,12 @@ export class GameRepository {
         score: p.score,
       }));
       for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 5)) {
-        await this.db.insert(schema.gamePlayerResults).values(part);
+        statements.push(this.db.insert(schema.gamePlayerResults).values(part));
       }
     }
+
+    await this.db.batch(
+      statements as unknown as Parameters<typeof this.db.batch>[0]
+    );
   }
 }

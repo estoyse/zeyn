@@ -64,18 +64,41 @@ export class MusicRepository {
 
   async persistResults(state: MusicQuizState): Promise<void> {
     if (!state.hostId) return;
-    const historyId = crypto.randomUUID();
+    const historyId = state.gameId ?? crypto.randomUUID();
 
-    await this.db.insert(schema.gameHistory).values({
-      id: historyId,
-      gameId: state.gameId || "unknown",
-      gameType: "music",
-      hostId: state.hostId,
-      subjects: "[]",
-      createdAt: new Date(),
-    });
+    const existing = await this.db
+      .select({ id: schema.gameHistory.id })
+      .from(schema.gameHistory)
+      .where(eq(schema.gameHistory.id, historyId))
+      .get();
+    if (existing) return;
 
-    const players = Object.values(state.players);
+    const playerIds = Object.keys(state.players);
+    const validUserIds = new Set(
+      playerIds.length > 0
+        ? (
+            await this.db
+              .select({ id: schema.user.id })
+              .from(schema.user)
+              .where(inArray(schema.user.id, playerIds))
+          ).map(u => u.id)
+        : []
+    );
+
+    const statements: Parameters<typeof this.db.batch>[0][number][] = [
+      this.db.insert(schema.gameHistory).values({
+        id: historyId,
+        gameId: state.gameId || "unknown",
+        gameType: "music",
+        hostId: state.hostId,
+        subjects: "[]",
+        createdAt: new Date(),
+      }),
+    ];
+
+    const players = Object.values(state.players).filter(p =>
+      validUserIds.has(p.id)
+    );
     if (players.length > 0) {
       const rows = players.map(p => ({
         id: crypto.randomUUID(),
@@ -85,8 +108,12 @@ export class MusicRepository {
         score: p.score,
       }));
       for (const part of chunk(rows, D1_MAX_PARAMS_PER_QUERY / 5)) {
-        await this.db.insert(schema.gamePlayerResults).values(part);
+        statements.push(this.db.insert(schema.gamePlayerResults).values(part));
       }
     }
+
+    await this.db.batch(
+      statements as unknown as Parameters<typeof this.db.batch>[0]
+    );
   }
 }

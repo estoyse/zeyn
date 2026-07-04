@@ -130,13 +130,14 @@ export function answer(
   optionIndex: number,
   now: number
 ): EngineDirectives {
-  if (state.status !== "PLAYING" || state.phase !== "QUESTION") return {};
+  if (state.status !== "PLAYING" || state.phase !== "QUESTION")
+    return { noChange: true };
   const player = state.players[playerId];
-  if (!player?.connected) return {};
-  if (state.answers[playerId]) return {};
+  if (!player?.connected) return { noChange: true };
+  if (state.answers[playerId]) return { noChange: true };
 
   const question = state.questions[state.currentQuestionIndex];
-  if (!question) return {};
+  if (!question) return { noChange: true };
 
   const correct = optionIndex === question.correctIndex;
   const pointsAwarded = correct ? scoreCorrect(state, playerId, now) : 0;
@@ -173,7 +174,7 @@ function nextQuestion(state: MusicQuizState, now: number): EngineDirectives {
     return {
       updateRoomStatus: "finished",
       persistResults: true,
-      cancelAlarm: true,
+      alarmAt: now + musicGameConfig.finishedCleanupGraceMs,
     };
   }
   const alarmAt = beginQuestion(state, now);
@@ -184,13 +185,13 @@ export function handleTimeout(
   state: MusicQuizState,
   now: number
 ): EngineDirectives {
-  if (state.status !== "PLAYING") return {};
+  if (state.status !== "PLAYING") return { noChange: true };
   switch (state.phase) {
     case "QUESTION":
       return reveal(state, now);
     case "REVEAL":
       return nextQuestion(state, now);
     default:
-      return {};
+      return { noChange: true };
   }
 }
