@@ -15,6 +15,7 @@ interface ForgotPasswordFormProps {
 }
 
 export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const form = useForm({
@@ -26,22 +27,21 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
         email: emailSchema,
       }),
     },
+    onSubmit: async () => {
+      setIsLoading(true);
+      try {
+        await authClient.requestPasswordReset({
+          email: form.getFieldValue("email"),
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        });
+        setIsSubmitted(true);
+      } catch (error) {
+        toast.error("Failed to send reset email. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    },
   });
-
-  const handleSubmit = form.handleSubmit;
-
-  const handleResetRequest = async () => {
-    const email = form.getFieldValue("email");
-    try {
-      await authClient.requestPasswordReset({
-        email,
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-      });
-      setIsSubmitted(true);
-    } catch (error) {
-      toast.error("Failed to send reset email. Please try again.");
-    }
-  };
 
   if (isSubmitted) {
     return (
@@ -102,13 +102,13 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
               type="submit"
               variant="brand"
               className="w-full"
+              disabled={isLoading}
               onClick={e => {
                 e.preventDefault();
-                handleSubmit();
-                handleResetRequest();
+                form.handleSubmit();
               }}
             >
-              Send Reset Link
+              {isLoading ? "Sending..." : "Send Reset Link"}
             </Button>
           </Field>
         )}

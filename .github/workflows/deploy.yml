@@ -41,3 +41,4 @@ jobs:
           ALCHEMY_STATE_TOKEN: ${{ secrets.ALCHEMY_STATE_TOKEN }}
           # App config (production secrets)
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
