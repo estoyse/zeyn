@@ -86,6 +86,19 @@ export function joinPlayer(
     };
   }
 
+  const isNewPlayer = !state.players[playerId];
+  if (isNewPlayer && state.status !== "WAITING") {
+    return {
+      reply: gameError(
+        state.status === "FINISHED"
+          ? "Game already ended"
+          : "Game already started",
+        state.status === "FINISHED" ? "ALREADY_FINISHED" : "ALREADY_STARTED"
+      ),
+      closeSocket: true,
+    };
+  }
+
   if (roomPassword && roomPassword !== password) {
     return {
       reply: gameError(
@@ -95,7 +108,6 @@ export function joinPlayer(
     };
   }
 
-  const isNewPlayer = !state.players[playerId];
   if (isNewPlayer && Object.keys(state.players).length >= state.maxPlayers) {
     return { reply: gameError("Room is full") };
   }

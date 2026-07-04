@@ -68,11 +68,12 @@ export class GameRoom extends DurableObject<Env> {
 
   async fetch(request: Request): Promise<Response> {
     if (request.headers.get("Upgrade") === "websocket") {
+      const userId = request.headers.get("x-user-id");
       const gameId = new URL(request.url).pathname.match(
         /\/game\/([^/]+)\/ws/
       )?.[1];
       if (gameId) await this.resolveGameType(gameId);
-      return this.handleWebSocket();
+      return this.handleWebSocket(userId);
     }
     return new Response("Not found", { status: 404 });
   }
@@ -95,24 +96,46 @@ export class GameRoom extends DurableObject<Env> {
     await this.ctx.storage.put("gameType", this.gameType);
   }
 
-  private handleWebSocket(): Response {
+  private handleWebSocket(userId: string | null): Response {
     const pair = new WebSocketPair();
     const [client, server] = [pair[0], pair[1]];
     this.ctx.acceptWebSocket(server);
+    if (!userId) {
+      server.send(
+        JSON.stringify({
+          type: "ERROR",
+          message: "You must be signed in to join a game",
+          code: "UNAUTHORIZED",
+        })
+      );
+      server.close(1008, "Unauthorized");
+      return new Response(null, { status: 101, webSocket: client });
+    }
+    server.serializeAttachment({
+      playerId: userId,
+      joinTime: Date.now(),
+    } satisfies SocketMeta);
+    return new Response(null, { status: 101, webSocket: client });
+  }
 
-    server.send(
+  private sendSnapshot(ws: WebSocket) {
+    ws.send(
       JSON.stringify({
         type: "STATE_UPDATE",
         state: this.game.toPublic(this.state, true),
         serverTime: Date.now(),
       })
     );
-
-    return new Response(null, { status: 101, webSocket: client });
   }
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     if (typeof message !== "string") return;
+
+    const auth = readMeta(ws);
+    if (!auth) {
+      ws.send(JSON.stringify({ type: "ERROR", message: "Unauthorized" }));
+      return;
+    }
 
     // Validate the untrusted client payload before it reaches any handler: parse
     // JSON, then check the shape against the platform schema first and, failing
@@ -128,13 +151,12 @@ export class GameRoom extends DurableObject<Env> {
     }
 
     const now = Date.now();
-    let playerId: string;
+    const playerId = auth.playerId;
     let directives: EngineDirectives;
 
     const platform = platformMessageSchema.safeParse(raw);
     if (platform.success) {
-      const action = platform.data;
-      playerId = action.playerId;
+      const action = { ...platform.data, playerId };
       directives =
         action.type === "JOIN"
           ? await this.onJoin(action)
@@ -148,14 +170,18 @@ export class GameRoom extends DurableObject<Env> {
         );
         return;
       }
-      const action = parsed.data as { playerId: string };
-      playerId = action.playerId;
+      const action = { ...(parsed.data as object), playerId };
       directives = this.game.handleAction(this.state, action, now);
     }
 
     await this.applyDirectives(directives, ws, playerId);
-    await this.saveState();
-    this.broadcast();
+    if (!directives.noChange) {
+      await this.saveState();
+      this.broadcast();
+    }
+    if (directives.accepted) {
+      this.sendSnapshot(ws);
+    }
   }
 
   /** Resolve the game type, then hand off to the room game's hydrate/join. */
@@ -231,10 +257,17 @@ export class GameRoom extends DurableObject<Env> {
   // alarms are persisted and survive hibernation/eviction, so a game can't stall
   // mid-question if the DO is evicted between events.
   async alarm() {
+    if (this.state.status === "FINISHED") {
+      await this.game.persistResults(this.state);
+      await this.ctx.storage.deleteAll();
+      return;
+    }
     const directives = this.game.handleTimeout(this.state, Date.now());
     await this.applyDirectives(directives);
-    await this.saveState();
-    this.broadcast();
+    if (!directives.noChange) {
+      await this.saveState();
+      this.broadcast();
+    }
   }
 
   async webSocketClose(

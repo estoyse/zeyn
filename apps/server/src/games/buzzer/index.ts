@@ -72,7 +72,7 @@ class BuzzerGame implements RoomGame {
       case "SUBMIT_ANSWER":
         return submitAnswer(state, msg.playerId, msg.answer ?? "", now);
       default:
-        return {};
+        return { noChange: true };
     }
   }
 

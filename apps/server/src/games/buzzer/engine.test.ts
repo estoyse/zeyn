@@ -250,14 +250,14 @@ describe("buzz", () => {
     const s = startedState();
     buzz(s, "p1", NOW);
     const d = buzz(s, "host", NOW);
-    expect(d).toEqual({});
+    expect(d).toEqual({ noChange: true });
     expect(s.activeQuestionState?.buzzedPlayerId).toBe("p1");
   });
 
   it("ignores disconnected players and players who already attempted", () => {
     const s = startedState();
     player(s, "p1").connected = false;
-    expect(buzz(s, "p1", NOW)).toEqual({});
+    expect(buzz(s, "p1", NOW)).toEqual({ noChange: true });
     expect(s.phase).toBe("ACTIVE");
   });
 });
@@ -302,7 +302,7 @@ describe("submitAnswer", () => {
   it("ignores answers from anyone but the buzzed-in player", () => {
     const s = startedState();
     buzz(s, "p1", NOW);
-    expect(submitAnswer(s, "host", "answer0", NOW)).toEqual({});
+    expect(submitAnswer(s, "host", "answer0", NOW)).toEqual({ noChange: true });
     expect(s.phase).toBe("ANSWERING");
   });
 });
@@ -349,12 +349,12 @@ describe("handleTimeout", () => {
     expect(s.status).toBe("FINISHED");
     expect(d.updateRoomStatus).toBe("finished");
     expect(d.persistResults).toBe(true);
-    expect(d.cancelAlarm).toBe(true);
+    expect(d.alarmAt).toBe(NOW + gameConfig.finishedCleanupGraceMs);
   });
 
   it("does nothing once the game is finished", () => {
     const s = startedState();
     s.status = "FINISHED";
-    expect(handleTimeout(s, NOW)).toEqual({});
+    expect(handleTimeout(s, NOW)).toEqual({ noChange: true });
   });
 });

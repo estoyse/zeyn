@@ -36,11 +36,18 @@ export function useGame(
     setError(err);
   }, []);
 
+  const terminal =
+    state?.status === "FINISHED" ||
+    errorCode === "NOT_FOUND" ||
+    errorCode === "ALREADY_STARTED" ||
+    errorCode === "ALREADY_FINISHED" ||
+    errorCode === "UNAUTHORIZED";
+
   const { send, close, isConnecting, isConnected } = useSocket({
     url: wsUrl,
     onMessage: handleMessage,
     onError: handleSocketError,
-    enabled: !!playerId,
+    enabled: !!playerId && !terminal,
   });
 
   const join = useCallback(() => {

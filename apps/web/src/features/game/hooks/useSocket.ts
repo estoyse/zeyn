@@ -25,6 +25,7 @@ export function useSocket({
   const [isReconnecting, setIsReconnecting] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<number | null>(null);
+  const stableTimerRef = useRef<number | null>(null);
   const retryCountRef = useRef(0);
   const onMessageRef = useRef(onMessage);
   const onOpenRef = useRef(onOpen);
@@ -44,9 +45,11 @@ export function useSocket({
     setIsReconnecting(false);
 
     ws.onopen = () => {
-      retryCountRef.current = 0;
       setIsConnecting(false);
       setIsConnected(true);
+      stableTimerRef.current = window.setTimeout(() => {
+        retryCountRef.current = 0;
+      }, 5000);
       onOpenRef.current?.();
     };
 
@@ -58,6 +61,10 @@ export function useSocket({
     ws.onerror = e => {};
 
     ws.onclose = e => {
+      if (stableTimerRef.current) {
+        clearTimeout(stableTimerRef.current);
+        stableTimerRef.current = null;
+      }
       setIsConnecting(false);
       setIsConnected(false);
 
@@ -84,6 +91,10 @@ export function useSocket({
   const close = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
+    }
+    if (stableTimerRef.current) {
+      clearTimeout(stableTimerRef.current);
+      stableTimerRef.current = null;
     }
     retryCountRef.current = maxRetries;
     wsRef.current?.close();

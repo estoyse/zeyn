@@ -182,6 +182,7 @@ export interface EngineDirectives {
   updateRoomStatus?: "playing" | "finished";
   /** Flush the accumulated match results to history tables. */
   persistResults?: boolean;
+  noChange?: boolean;
 }
 
 export const gameConfig = {
@@ -193,6 +194,7 @@ export const gameConfig = {
   questionsPerSubject: 5,
   maxPlayers: 20,
   minPlayers: 2,
+  finishedCleanupGraceMs: 60000,
 } as const;
 
 export type GameConfig = typeof gameConfig;

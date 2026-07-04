@@ -64,7 +64,7 @@ class MusicGame implements RoomGame {
     if (msg.type === "ANSWER") {
       return answer(base as MusicQuizState, msg.playerId, msg.optionIndex ?? -1, now);
     }
-    return {};
+    return { noChange: true };
   }
 
   handleTimeout(base: BaseGameState, now: number): EngineDirectives {
