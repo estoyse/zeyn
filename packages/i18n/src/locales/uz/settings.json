@@ -1,0 +1,70 @@
+{
+  "title": "Sozlamalar",
+  "subtitle": "Hisobingiz va sozlamalaringizni boshqaring",
+  "tabs": {
+    "account": "Hisob",
+    "privacy": "Maxfiylik",
+    "security": "Xavfsizlik",
+    "danger": "Xavfli hudud"
+  },
+  "preferences": {
+    "title": "Sozlamalar",
+    "theme": {
+      "label": "Mavzu",
+      "description": "Yorug' va qorong'i o'rtasida almashish"
+    },
+    "language": {
+      "label": "Til",
+      "description": "O'zingizga qulay tilni tanlang"
+    }
+  },
+  "account": {
+    "displayName": "Ko'rinadigan ism",
+    "username": "Foydalanuvchi nomi",
+    "bio": "Bio",
+    "bioPlaceholder": "O'zingiz haqingizda qisqacha yozing.",
+    "usernameUnavailable": "Band.",
+    "usernameProfileUrl": "Ochiq profilingiz /u/{{username}} manzilida joylashgan",
+    "save": "O'zgarishlarni saqlash",
+    "saving": "Saqlanmoqda…",
+    "updated": "Profil yangilandi"
+  },
+  "privacy": {
+    "publicProfile": {
+      "label": "Ochiq profil",
+      "description": "O'chirilgan bo'lsa, profil sahifangizni faqat siz ko'ra olasiz."
+    },
+    "showStats": {
+      "label": "Statistikani ko'rsatish",
+      "description": "O'ynalgan, tashkil etilgan o'yinlar, eng yaxshi va umumiy ball."
+    },
+    "showHistory": {
+      "label": "So'nggi o'yinlarni ko'rsatish",
+      "description": "So'nggi o'ynagan o'yinlaringiz va natijalaringiz."
+    },
+    "showHostedGames": {
+      "label": "Tashkil etilgan o'yinlarni ko'rsatish",
+      "description": "Siz yaratgan va tashkil etgan o'yinlar."
+    }
+  },
+  "password": {
+    "current": "Joriy parol",
+    "new": "Yangi parol",
+    "hint": "Kamida 8 ta belgi va 1 ta raqam bo'lishi kerak.",
+    "save": "Parolni o'zgartirish",
+    "saving": "Saqlanmoqda…",
+    "updated": "Parol o'zgartirildi",
+    "error": "Parolni o'zgartirib bo'lmadi"
+  },
+  "danger": {
+    "title": "Hisobni o'chirish",
+    "description": "Hisobingiz va barcha o'yin tarixingizni butunlay o'chiring. Bu amalni bekor qilib bo'lmaydi.",
+    "trigger": "Hisobni o'chirish",
+    "confirmTitle": "Hisobingizni o'chirasizmi?",
+    "confirmDescription": "Bu profilingiz, statistikangiz va o'yin tarixingizni butunlay o'chiradi. Tasdiqlash uchun <bold>@{{username}}</bold> deb yozing.",
+    "cancel": "Bekor qilish",
+    "confirm": "Butunlay o'chirish",
+    "deleting": "O'chirilmoqda…",
+    "deleted": "Hisobingiz o'chirildi"
+  }
+}

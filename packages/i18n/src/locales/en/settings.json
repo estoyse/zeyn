@@ -1,0 +1,70 @@
+{
+  "title": "Settings",
+  "subtitle": "Manage your account and preferences",
+  "tabs": {
+    "account": "Account",
+    "privacy": "Privacy",
+    "security": "Security",
+    "danger": "Danger"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "theme": {
+      "label": "Theme",
+      "description": "Switch between light and dark"
+    },
+    "language": {
+      "label": "Language",
+      "description": "Choose your preferred language"
+    }
+  },
+  "account": {
+    "displayName": "Display name",
+    "username": "Username",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell people a little about yourself.",
+    "usernameUnavailable": "Not available.",
+    "usernameProfileUrl": "Your public profile lives at /u/{{username}}",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "updated": "Profile updated"
+  },
+  "privacy": {
+    "publicProfile": {
+      "label": "Public profile",
+      "description": "When off, only you can see your profile page."
+    },
+    "showStats": {
+      "label": "Show stats",
+      "description": "Games played, hosted, best and total score."
+    },
+    "showHistory": {
+      "label": "Show recent games",
+      "description": "Your recently played games and results."
+    },
+    "showHostedGames": {
+      "label": "Show hosted games",
+      "description": "Games you created and hosted."
+    }
+  },
+  "password": {
+    "current": "Current password",
+    "new": "New password",
+    "hint": "At least 8 characters and 1 number.",
+    "save": "Change password",
+    "saving": "Saving…",
+    "updated": "Password changed",
+    "error": "Could not change password"
+  },
+  "danger": {
+    "title": "Delete account",
+    "description": "Permanently delete your account and all of your game history. This cannot be undone.",
+    "trigger": "Delete account",
+    "confirmTitle": "Delete your account?",
+    "confirmDescription": "This permanently removes your profile, stats, and game history. Type <bold>@{{username}}</bold> to confirm.",
+    "cancel": "Cancel",
+    "confirm": "Delete forever",
+    "deleting": "Deleting…",
+    "deleted": "Your account has been deleted"
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "header": {
+    "navGames": "O'yinlar",
+    "navHowItWorks": "Qanday ishlaydi",
+    "navPlay": "O'ynash",
+    "dashboardButton": "Boshqaruv paneli",
+    "signInButton": "Kirish"
+  },
+  "hero": {
+    "eyebrow": "Real vaqtda ko'p o'yinchili viktorina",
+    "titleLine1": "Bosing.",
+    "titleLine2": "Ustun keling.",
+    "titleLine3": "Yuting.",
+    "subtitle": "Eng tez fikrlovchi g'olib chiqadigan jonli viktorina jangi. Xona oching, do'stlaringizni taklif qiling va reyting cho'qqisiga real vaqtda intiling.",
+    "startPlayingButton": "O'ynashni boshlash",
+    "howItWorksButton": "Qanday ishlaydi",
+    "liveGamesLabel": "Hozir 23 ta o'yin jonli",
+    "playersLabel": "50K+ o'yinchi",
+    "freeToPlayLabel": "Bepul o'ynang"
+  },
+  "liveMatch": {
+    "liveLabel": "Jonli · Buzzer Trivia",
+    "roundLabel": "{{current}}/{{total}}-raund",
+    "questionLabel": "Savol",
+    "buzzLabel": "Bosdi",
+    "youLabel": "Siz",
+    "rounds": {
+      "planet": {
+        "question": "Qaysi sayyora Qizil sayyora deb ataladi?",
+        "options": ["Venera", "Mars", "Yupiter"]
+      },
+      "monaLisa": {
+        "question": "Mona Lizani kim chizgan?",
+        "options": ["Da Vinchi", "Pikasso", "Van Gog"]
+      },
+      "japanCapital": {
+        "question": "Yaponiya poytaxti qaysi shahar?",
+        "options": ["Seul", "Pekin", "Tokio"]
+      },
+      "guitarStrings": {
+        "question": "Gitarada nechta sim bo'ladi?",
+        "options": ["Olti", "To'rt", "Sakkiz"]
+      }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "Qanday ishlaydi",
+    "title": "Uch qadamda o'yin boshlanadi",
+    "steps": {
+      "createRoom": {
+        "title": "Xona oching yoki qo'shiling",
+        "description": "Bir necha soniyada shaxsiy arena tashkil eting yoki xona kodi orqali jonli o'yinga qo'shiling. To'liq lobbi hajmida mehmon kutib oling."
+      },
+      "playRealTime": {
+        "title": "Real vaqtda o'ynang",
+        "description": "Bosing, vaqt bilan poyga qiling va barcha o'yinchilarning ballari zumda yangilanishini kuzating."
+      },
+      "climbLeaderboard": {
+        "title": "Reytingda ko'tariling",
+        "description": "G'alaba seriyangizni davom ettiring, bonus ballar to'plang va har bir raundda yetakchilikni qo'lga kiriting."
+      }
+    }
+  },
+  "gamesShowcase": {
+    "eyebrow": "O'yin turlari",
+    "title": "O'z jang maydoningizni tanlang",
+    "subtitle": "Har bir rejim tez va musobaqabop o'yin uchun yaratilgan. Tez orada yangilari qo'shiladi.",
+    "playersRange": "{{min}}-{{max}} o'yinchi",
+    "playNowLabel": "Hozir o'ynash",
+    "browseAllGamesButton": "Barcha o'yinlarni ko'rish"
+  },
+  "bento": {
+    "eyebrow": "Nega aynan shu yerda o'ynash kerak",
+    "title": "Musobaqabop zavq uchun yaratilgan",
+    "realtime": {
+      "title": "Haqiqiy real vaqt, kechikishsiz",
+      "description": "WebSocket orqali ishlaydigan xonalar har bir bosish, javob va ballni barcha o'yinchilar uchun mukammal sinxronda saqlaydi. Yangilash yo'q, kutish yo'q — faqat zumdagi jonli musobaqa."
+    },
+    "playWithAnyone": {
+      "title": "Istalgan kishi bilan o'ynang",
+      "description": "Do'stlaringiz uchun shaxsiy xonalar yoki onlayn o'yinchilar bilan tasodifiy moslashtirish."
+    },
+    "instantScoring": {
+      "title": "Zumdagi ballash",
+      "description": "Buzzerlar, taymerlar va seriya bonuslari javob berilgan zahoti hisoblanadi."
+    },
+    "competeToWin": {
+      "title": "G'alaba uchun kurashing",
+      "description": "Jonli reytinglar va g'alaba seriyalari har bir raundni cho'qqiga poygaga aylantiradi. Zarbani yo'qotmang, tojni qo'lga kiriting."
+    },
+    "syncLatencyLabel": "Sinxronlash kechikishi",
+    "gameModesLabel": "O'yin rejimlari",
+    "rematchesLabel": "Qayta o'yinlar"
+  },
+  "playableRound": {
+    "eyebrow": "Hozir sinab ko'ring · ro'yxatdan o'tish shart emas",
+    "title": "Jonli raund o'ynang",
+    "headerLabel": "Buzzer Trivia",
+    "pointsLabel": "{{score}} ball",
+    "answerHint": "Tez javob berish uchun 1 · 2 · 3 tugmasini bosing",
+    "questionCounter": "{{current}}/{{total}}-savol",
+    "idle": {
+      "title": "5 ta savol. Vaqtni yutib oling.",
+      "description": "Tez javob berib tezlik bonusini qo'lga kiriting, seriyangizni davom ettiring va eng yuqori ballni to'plang.",
+      "startButton": "Raundni boshlash"
+    },
+    "done": {
+      "title": "Raund yakunlandi",
+      "correctLabel": "To'g'ri",
+      "accuracyLabel": "Aniqlik",
+      "bestStreakLabel": "Eng yaxshi seriya",
+      "playAgainButton": "Yana o'ynash",
+      "playWithFriendsButton": "Do'stlar bilan o'ynash"
+    },
+    "ranks": {
+      "legend": "Viktorina afsonasi",
+      "sharpShooter": "Snayper",
+      "risingStar": "Yulduz nomzodi",
+      "warmingUp": "Isinib olmoqda"
+    },
+    "questions": {
+      "redPlanet": {
+        "question": "Qaysi sayyora Qizil sayyora deb ataladi?",
+        "options": ["Venera", "Mars", "Yupiter"]
+      },
+      "shakespeare": {
+        "question": "\"Romeo va Julietta\"ni kim yozgan?",
+        "options": ["Dikkens", "Shekspir", "Tolstoy"]
+      },
+      "ocean": {
+        "question": "Yer sayyorasidagi eng katta okean qaysi?",
+        "options": ["Atlantika", "Hind", "Tinch"]
+      },
+      "byte": {
+        "question": "Bir baytda nechta bit bor?",
+        "options": ["8", "16", "4"]
+      },
+      "goldSymbol": {
+        "question": "\"Au\" belgisi qaysi elementga tegishli?",
+        "options": ["Kumush", "Oltin", "Temir"]
+      }
+    }
+  },
+  "stats": {
+    "activeGamesLabel": "Faol o'yinlar",
+    "playersLabel": "O'yinchilar",
+    "tournamentsLabel": "Turnirlar",
+    "uptimeLabel": "Barqarorlik"
+  },
+  "cta": {
+    "eyebrow": "Tayyormisiz?",
+    "titleLine1": "Navbat sizda.",
+    "titleLine2": "Hozir harakat qiling.",
+    "subtitle": "Minglab o'yinchilar bilan jonli viktorina jangiga qo'shiling. Bir daqiqadan kamroq vaqtda birinchi xonangizni yarating — yuklab olish shart emas, pullik emas.",
+    "startPlayingButton": "O'ynashni boshlash",
+    "exploreGamesButton": "O'yinlarni ko'rish"
+  },
+  "marquee": {
+    "words": {
+      "buzzerTrivia": "Buzzer Trivia",
+      "musicQuiz": "Musiqa viktorinasi",
+      "realtime": "Real vaqt",
+      "liveLeaderboards": "Jonli reytinglar",
+      "streakBonuses": "Seriya bonuslari",
+      "privateRooms": "Shaxsiy xonalar",
+      "instantScoring": "Zumdagi ballash",
+      "multiplayer": "Ko'p o'yinchili"
+    }
+  }
+}

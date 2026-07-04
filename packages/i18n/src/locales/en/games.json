@@ -1,0 +1,28 @@
+{
+  "music": {
+    "playing": {
+      "loading": "Loading question...",
+      "questionLabel": "Question",
+      "correctAnswer": "Correct Answer",
+      "answerLocked": "Answer locked in — waiting for others..."
+    },
+    "results": {
+      "title": "Final Leaderboard",
+      "subtitle": "Music Quiz",
+      "standings": "Standings",
+      "noScores": "No scores recorded.",
+      "backToDashboard": "Back to Dashboard"
+    },
+    "artistPicker": {
+      "title": "Select Artists",
+      "selectedCount": "{{count}} Selected",
+      "description": "Pick one or more artists. Songs are drawn from your selection.",
+      "empty": "No artists available yet. Run the seed to load music."
+    }
+  },
+  "catalog": {
+    "playersRange": "{{min}}-{{max}} players",
+    "play": "Play",
+    "create": "Create"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "onlyYou": "Only you",
+  "editProfile": "Edit profile",
+  "memberSince": "Member since {{date}}",
+  "privateProfile": "Private profile",
+  "stats": {
+    "title": "Stats",
+    "played": "Played",
+    "hosted": "Hosted",
+    "best": "Best",
+    "total": "Total"
+  },
+  "recentGames": {
+    "title": "Recent games",
+    "empty": "No games played yet."
+  },
+  "hostedGames": {
+    "title": "Hosted games",
+    "empty": "No hosted games yet."
+  }
+}

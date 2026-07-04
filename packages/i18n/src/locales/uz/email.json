@@ -1,0 +1,17 @@
+{
+  "resetPassword": {
+    "subject": "Zeyn parolingizni tiklang",
+    "heading": "Parolingizni tiklang",
+    "intro": "Zeyn hisobingiz uchun parolni tiklash so'rovini oldik. Yangisini tanlash uchun quyidagi tugmani bosing.",
+    "button": "Parolni tiklash",
+    "linkFallback": "Agar tugma ishlamasa, quyidagi havolani nusxalab brauzeringizga joylashtiring:",
+    "ignore": "Agar buni siz so'ramagan bo'lsangiz, ushbu emailni e'tiborsiz qoldiring."
+  },
+  "verify": {
+    "subject": "Zeyn emailingizni tasdiqlang",
+    "heading": "Emailingizni tasdiqlang",
+    "intro": "Zeyn hisobingiz email manzilini tasdiqlash uchun quyidagi tugmani bosing.",
+    "button": "Emailni tasdiqlash",
+    "ignore": "Agar buni siz so'ramagan bo'lsangiz, ushbu emailni e'tiborsiz qoldiring."
+  }
+}

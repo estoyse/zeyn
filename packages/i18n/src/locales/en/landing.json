@@ -1,0 +1,170 @@
+{
+  "header": {
+    "navGames": "Games",
+    "navHowItWorks": "How it works",
+    "navPlay": "Play",
+    "dashboardButton": "Dashboard",
+    "signInButton": "Sign In"
+  },
+  "hero": {
+    "eyebrow": "Real-time multiplayer trivia",
+    "titleLine1": "Buzz in.",
+    "titleLine2": "Outplay.",
+    "titleLine3": "Win.",
+    "subtitle": "Live quiz showdowns where the fastest mind wins. Create a room, invite your crew, and race to the top of the board — in real time.",
+    "startPlayingButton": "Start Playing",
+    "howItWorksButton": "How it works",
+    "liveGamesLabel": "23 games live now",
+    "playersLabel": "50K+ players",
+    "freeToPlayLabel": "Free to play"
+  },
+  "liveMatch": {
+    "liveLabel": "Live · Buzzer Trivia",
+    "roundLabel": "Round {{current}}/{{total}}",
+    "questionLabel": "Question",
+    "buzzLabel": "Buzz",
+    "youLabel": "You",
+    "rounds": {
+      "planet": {
+        "question": "Which planet is known as the Red Planet?",
+        "options": ["Venus", "Mars", "Jupiter"]
+      },
+      "monaLisa": {
+        "question": "Who painted the Mona Lisa?",
+        "options": ["Da Vinci", "Picasso", "Van Gogh"]
+      },
+      "japanCapital": {
+        "question": "What is the capital of Japan?",
+        "options": ["Seoul", "Beijing", "Tokyo"]
+      },
+      "guitarStrings": {
+        "question": "How many strings on a guitar?",
+        "options": ["Six", "Four", "Eight"]
+      }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "Zero to game in three steps",
+    "steps": {
+      "createRoom": {
+        "title": "Create or join a room",
+        "description": "Spin up a private arena in seconds or drop into a live game with a room code. Host up to a full lobby."
+      },
+      "playRealTime": {
+        "title": "Play in real time",
+        "description": "Buzz in, answer against the clock, and watch scores update instantly for every player at once."
+      },
+      "climbLeaderboard": {
+        "title": "Climb the leaderboard",
+        "description": "Keep your streak alive, rack up bonus points, and claim the top spot round after round."
+      }
+    }
+  },
+  "gamesShowcase": {
+    "eyebrow": "Game modes",
+    "title": "Pick your battlefield",
+    "subtitle": "Every mode is engineered for fast, competitive play. More arriving soon.",
+    "playersRange": "{{min}}–{{max}} players",
+    "playNowLabel": "Play now",
+    "browseAllGamesButton": "Browse all games"
+  },
+  "bento": {
+    "eyebrow": "Why play here",
+    "title": "Built for competitive fun",
+    "realtime": {
+      "title": "True real-time, zero lag",
+      "description": "WebSocket-powered rooms keep every buzz, answer, and score in perfect sync across every player. No refreshes, no waiting — just instant, live competition."
+    },
+    "playWithAnyone": {
+      "title": "Play with anyone",
+      "description": "Private rooms for your crew, or match with players online."
+    },
+    "instantScoring": {
+      "title": "Instant scoring",
+      "description": "Buzzers, timers, and streak bonuses resolve the moment you answer."
+    },
+    "competeToWin": {
+      "title": "Compete to win",
+      "description": "Live leaderboards and streaks turn every round into a race to the top. Keep the momentum, claim the crown."
+    },
+    "syncLatencyLabel": "Sync latency",
+    "gameModesLabel": "Game modes",
+    "rematchesLabel": "Rematches"
+  },
+  "playableRound": {
+    "eyebrow": "Try it now · no signup",
+    "title": "Play a live round",
+    "headerLabel": "Buzzer Trivia",
+    "pointsLabel": "{{score}} pts",
+    "answerHint": "Press 1 · 2 · 3 to answer fast",
+    "questionCounter": "Question {{current}}/{{total}}",
+    "idle": {
+      "title": "5 questions. Beat the clock.",
+      "description": "Answer fast to earn speed bonuses, keep your streak alive, and rack up the highest score.",
+      "startButton": "Start round"
+    },
+    "done": {
+      "title": "Round complete",
+      "correctLabel": "Correct",
+      "accuracyLabel": "Accuracy",
+      "bestStreakLabel": "Best streak",
+      "playAgainButton": "Play again",
+      "playWithFriendsButton": "Play with friends"
+    },
+    "ranks": {
+      "legend": "Trivia Legend",
+      "sharpShooter": "Sharp Shooter",
+      "risingStar": "Rising Star",
+      "warmingUp": "Warming Up"
+    },
+    "questions": {
+      "redPlanet": {
+        "question": "Which planet is known as the Red Planet?",
+        "options": ["Venus", "Mars", "Jupiter"]
+      },
+      "shakespeare": {
+        "question": "Who wrote 'Romeo and Juliet'?",
+        "options": ["Dickens", "Shakespeare", "Tolstoy"]
+      },
+      "ocean": {
+        "question": "What is the largest ocean on Earth?",
+        "options": ["Atlantic", "Indian", "Pacific"]
+      },
+      "byte": {
+        "question": "How many bits are in a byte?",
+        "options": ["8", "16", "4"]
+      },
+      "goldSymbol": {
+        "question": "Which element has the symbol 'Au'?",
+        "options": ["Silver", "Gold", "Iron"]
+      }
+    }
+  },
+  "stats": {
+    "activeGamesLabel": "Active games",
+    "playersLabel": "Players",
+    "tournamentsLabel": "Tournaments",
+    "uptimeLabel": "Uptime"
+  },
+  "cta": {
+    "eyebrow": "Ready?",
+    "titleLine1": "Your move.",
+    "titleLine2": "Make it now.",
+    "subtitle": "Join thousands of players in live quiz battles. Create your first room in under a minute — no download, no cost.",
+    "startPlayingButton": "Start Playing",
+    "exploreGamesButton": "Explore games"
+  },
+  "marquee": {
+    "words": {
+      "buzzerTrivia": "Buzzer Trivia",
+      "musicQuiz": "Music Quiz",
+      "realtime": "Real-time",
+      "liveLeaderboards": "Live Leaderboards",
+      "streakBonuses": "Streak Bonuses",
+      "privateRooms": "Private Rooms",
+      "instantScoring": "Instant Scoring",
+      "multiplayer": "Multiplayer"
+    }
+  }
+}

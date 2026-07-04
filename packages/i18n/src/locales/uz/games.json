@@ -1,0 +1,28 @@
+{
+  "music": {
+    "playing": {
+      "loading": "Savol yuklanmoqda...",
+      "questionLabel": "Savol",
+      "correctAnswer": "To'g'ri javob",
+      "answerLocked": "Javob qabul qilindi — boshqalar kutilmoqda..."
+    },
+    "results": {
+      "title": "Yakuniy reyting",
+      "subtitle": "Musiqa viktorinasi",
+      "standings": "Natijalar",
+      "noScores": "Hech qanday natija qayd etilmagan.",
+      "backToDashboard": "Boshqaruv paneliga qaytish"
+    },
+    "artistPicker": {
+      "title": "Ijrochilarni tanlang",
+      "selectedCount": "{{count}} ta tanlandi",
+      "description": "Bir yoki bir nechta ijrochini tanlang. Qo'shiqlar sizning tanlovingizdan olinadi.",
+      "empty": "Hozircha ijrochilar mavjud emas. Musiqa yuklash uchun seedni ishga tushiring."
+    }
+  },
+  "catalog": {
+    "playersRange": "{{min}}-{{max}} o'yinchi",
+    "play": "O'ynash",
+    "create": "Yaratish"
+  }
+}
