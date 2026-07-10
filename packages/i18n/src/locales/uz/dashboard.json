@@ -5,9 +5,9 @@
     "points": "{{count}} BALL"
   },
   "joinById": {
-    "title": "ID orqali qo'shilish",
-    "description": "Xona ID raqami bormi? Qo'shilish uchun quyiga kiriting.",
-    "placeholder": "Xona ID sini kiriting...",
+    "title": "Kod orqali qo'shilish",
+    "description": "Xona kodi bormi? Qo'shilish uchun quyiga kiriting.",
+    "placeholder": "K7M2XQ4B",
     "submit": "Qo'shilish"
   },
   "publicArenas": {

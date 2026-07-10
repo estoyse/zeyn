@@ -1,5 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
+import { canonicalizeGameId } from "@zeyn/api/game-code";
 import type { ReactNode } from "react";
 import { useGameRoom } from "@/features/game/hooks/useGameRoom";
 
@@ -16,6 +17,16 @@ import { Scoreboard } from "@/features/game/components/Scoreboard";
 import { getClientGame } from "@/features/games/registry";
 
 export const Route = createFileRoute("/game/$gameId")({
+  beforeLoad: ({ params }) => {
+    const canonical = canonicalizeGameId(params.gameId);
+    if (canonical !== params.gameId) {
+      throw redirect({
+        to: "/game/$gameId",
+        params: { gameId: canonical },
+        replace: true,
+      });
+    }
+  },
   component: GamePage,
 });
 

@@ -5,9 +5,9 @@
     "points": "{{count}} PTS"
   },
   "joinById": {
-    "title": "Join by ID",
-    "description": "Have a room ID? Enter it below to join.",
-    "placeholder": "Enter Room ID...",
+    "title": "Join by code",
+    "description": "Have a room code? Enter it below to join.",
+    "placeholder": "K7M2XQ4B",
     "submit": "Join"
   },
   "publicArenas": {

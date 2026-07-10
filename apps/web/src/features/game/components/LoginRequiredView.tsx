@@ -29,7 +29,7 @@ export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
             variant='brand'
             className='w-full mt-6'
             onClick={() =>
-              (window.location.href = `/auth/login?redirectTo=/game/${gameId}`)
+              (window.location.href = `/auth/login?redirectTo=/game/${encodeURIComponent(gameId)}`)
             }
           >
             {t("game:auth.loginRequired.signIn")}

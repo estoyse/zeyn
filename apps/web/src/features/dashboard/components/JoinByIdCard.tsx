@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { PlusCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { canonicalizeGameId } from "@zeyn/api/game-code";
 import { Button } from "@zeyn/ui/components/button";
 import { Input } from "@zeyn/ui/components/input";
 import {
@@ -20,7 +21,7 @@ export function JoinByIdCard() {
   const handleJoinRoom = (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!gameToJoin.trim()) return;
-    navigate({ to: "/game/$gameId", params: { gameId: gameToJoin.trim() } });
+    navigate({ to: "/game/$gameId", params: { gameId: canonicalizeGameId(gameToJoin) } });
   };
 
   return (
@@ -40,7 +41,10 @@ export function JoinByIdCard() {
             placeholder={t("dashboard:joinById.placeholder")}
             value={gameToJoin}
             onChange={e => setGameToJoin(e.target.value)}
-            className='h-9'
+            className='h-9 font-mono'
+            spellCheck={false}
+            autoCapitalize='characters'
+            autoComplete='off'
           />
           <Button type='submit' size='sm' disabled={!gameToJoin}>
             {t("dashboard:joinById.submit")}

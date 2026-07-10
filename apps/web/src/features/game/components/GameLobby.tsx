@@ -23,6 +23,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { formatGameCode } from "@zeyn/api/game-code";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
 interface GameLobbyProps {
@@ -160,9 +161,9 @@ export function GameLobby({
                   type="button"
                   onClick={handleCopyCode}
                   aria-label={t("game:lobby.copyCode")}
-                  className="flex items-center gap-2 font-mono text-3xl md:text-4xl font-bold tracking-[0.2em] select-all"
+                  className="flex items-center gap-2 font-mono text-2xl font-bold tracking-widest select-all"
                 >
-                  {state.gameId}
+                  {formatGameCode(state.gameId)}
                   {codeCopied ? <Check className="size-5" /> : <Copy className="size-5" />}
                 </button>
               </div>
