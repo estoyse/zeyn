@@ -35,7 +35,6 @@
     "host": "Host",
     "gameInformation": "Game Information",
     "gameDetails": "Game Details",
-    "shareEntryPoint": "Share Entry Point",
     "linkCopied": "Link copied!",
     "startGame": "Start Game",
     "waitingForHost": "Waiting for host to start...",
@@ -49,7 +48,6 @@
   },
   "playing": {
     "loadingQuestion": "Loading question...",
-    "currentCategory": "Current Category",
     "questionWorth": "Question worth {{points}}",
     "buzz": "BUZZ!",
     "awaitingAnswer": "Awaiting Answer",
@@ -61,7 +59,8 @@
     "attemptsLeft_one": "{{count}} attempt left",
     "attemptsLeft_other": "{{count}} attempts left",
     "buzzedOut": "You are out for this question",
-    "subjectProgress": "Subject {{current}} of {{total}}"
+    "subjectProgress": "Subject {{current}} of {{total}}",
+    "questionProgress": "Question {{current}} of {{total}}"
   },
   "loading": {
     "checkingSession": "Checking session...",
@@ -144,9 +143,7 @@
     "title": "Standings",
     "you": "You",
     "host": "Host",
-    "empty": "No players yet",
-    "show": "Show standings",
-    "hide": "Hide standings"
+    "empty": "No players yet"
   },
   "connection": {
     "reconnecting": "Reconnecting… your actions are paused until the connection returns."

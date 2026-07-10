@@ -35,7 +35,6 @@
     "host": "Xost",
     "gameInformation": "O'yin haqida ma'lumot",
     "gameDetails": "O'yin tafsilotlari",
-    "shareEntryPoint": "Kirish havolasini ulashish",
     "linkCopied": "Havola nusxalandi!",
     "startGame": "O'yinni boshlash",
     "waitingForHost": "Xost o'yinni boshlashini kutmoqda...",
@@ -49,7 +48,6 @@
   },
   "playing": {
     "loadingQuestion": "Savol yuklanmoqda...",
-    "currentCategory": "Joriy kategoriya",
     "questionWorth": "Savol narxi {{points}}",
     "buzz": "BOSING!",
     "awaitingAnswer": "Javob kutilmoqda",
@@ -61,7 +59,8 @@
     "attemptsLeft_one": "{{count}} urinish qoldi",
     "attemptsLeft_other": "{{count}} urinish qoldi",
     "buzzedOut": "Bu savol uchun imkoningiz tugadi",
-    "subjectProgress": "{{total}} mavzudan {{current}}-si"
+    "subjectProgress": "{{total}} mavzudan {{current}}-si",
+    "questionProgress": "{{total}} savoldan {{current}}-si"
   },
   "loading": {
     "checkingSession": "Sessiya tekshirilmoqda...",
@@ -144,9 +143,7 @@
     "title": "Natijalar",
     "you": "Siz",
     "host": "Mezbon",
-    "empty": "Hali o'yinchilar yo'q",
-    "show": "Natijalarni ko'rsatish",
-    "hide": "Natijalarni yashirish"
+    "empty": "Hali o'yinchilar yo'q"
   },
   "connection": {
     "reconnecting": "Qayta ulanmoqda… ulanish tiklanmaguncha amallaringiz to'xtatiladi."
