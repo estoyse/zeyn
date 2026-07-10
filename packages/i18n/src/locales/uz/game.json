@@ -22,7 +22,12 @@
   },
   "header": {
     "room": "Xona: {{gameId}}",
-    "leave": "Chiqish"
+    "leave": "Chiqish",
+    "leaveConfirm": {
+      "title": "O'yindan chiqasizmi?",
+      "description": "Siz xonadan chiqarilasiz va bu o'yindagi ochkolaringiz yo'qoladi.",
+      "confirm": "O'yindan chiqish"
+    }
   },
   "lobby": {
     "playersInLobby": "Kutish xonasidagi o'yinchilar",

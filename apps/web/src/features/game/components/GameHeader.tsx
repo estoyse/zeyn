@@ -1,8 +1,18 @@
-import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@zeyn/ui/components/alert-dialog";
 import { Button } from "@zeyn/ui/components/button";
 import { Logo, LogoMark } from "@zeyn/ui/components/logo";
-import { Clock, UserCircle2 } from "lucide-react";
+import { Clock, LogOut, UserCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
@@ -16,8 +26,8 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
   const { t } = useTranslation();
 
   return (
-    <header className='flex flex-col md:flex-row justify-between items-center gap-4 border-b bg-background px-4 py-3 md:px-6'>
-      <Link to='/' className='flex items-center gap-3 self-start md:self-auto'>
+    <header className='flex flex-wrap items-center gap-x-4 gap-y-3 border-b bg-background px-4 py-3 md:flex-nowrap md:px-6'>
+      <div className='order-1 flex items-center gap-3'>
         <span className='flex size-10 shrink-0 items-center justify-center bg-brand text-brand-foreground'>
           <LogoMark className='size-5' />
         </span>
@@ -27,9 +37,40 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
             <Clock className='size-3' /> {t("game:header.room", { gameId })}
           </p>
         </div>
-      </Link>
+      </div>
 
-      <div className='flex w-full gap-2 overflow-x-auto flex-nowrap md:w-auto md:flex-wrap md:justify-center'>
+      <AlertDialog>
+        <AlertDialogTrigger
+          render={
+            <Button
+              variant='destructive'
+              size='sm'
+              className='order-2 ml-auto md:order-3 md:ml-0'
+            >
+              <LogOut className='size-4 mr-2' />
+              {t("game:header.leave")}
+            </Button>
+          }
+        />
+        <AlertDialogContent size='sm'>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t("game:header.leaveConfirm.title")}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("game:header.leaveConfirm.description")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common:cancel")}</AlertDialogCancel>
+            <AlertDialogAction variant='destructive' onClick={onLeave}>
+              {t("game:header.leaveConfirm.confirm")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <div className='order-3 flex w-full gap-2 overflow-x-auto md:order-2 md:w-auto md:flex-1 md:flex-wrap md:justify-center'>
         {Object.values(state.players).map(p => (
           <motion.div
             layout
@@ -55,10 +96,6 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
           </motion.div>
         ))}
       </div>
-
-      <Button variant='ghost' size='sm' onClick={onLeave}>
-        {t("game:header.leave")}
-      </Button>
     </header>
   );
 }
