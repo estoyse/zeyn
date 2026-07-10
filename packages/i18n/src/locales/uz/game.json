@@ -49,7 +49,6 @@
   },
   "playing": {
     "loadingQuestion": "Savol yuklanmoqda...",
-    "currentCategory": "Joriy kategoriya",
     "questionWorth": "Savol narxi {{points}}",
     "buzz": "BOSING!",
     "awaitingAnswer": "Javob kutilmoqda",
@@ -61,7 +60,8 @@
     "attemptsLeft_one": "{{count}} urinish qoldi",
     "attemptsLeft_other": "{{count}} urinish qoldi",
     "buzzedOut": "Bu savol uchun imkoningiz tugadi",
-    "subjectProgress": "{{total}} mavzudan {{current}}-si"
+    "subjectProgress": "{{total}} mavzudan {{current}}-si",
+    "questionProgress": "{{total}} savoldan {{current}}-si"
   },
   "loading": {
     "checkingSession": "Sessiya tekshirilmoqda...",

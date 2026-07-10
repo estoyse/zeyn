@@ -50,43 +50,7 @@ export function GamePlaying({
       exit={{ opacity: 0 }}
       className='space-y-6'
     >
-      <div className='flex flex-col items-center gap-3 text-center'>
-        <div className='flex items-center gap-2 border bg-muted px-4 py-2'>
-          <div className='size-2 bg-brand animate-pulse rounded-full' />
-          <span className='text-xs uppercase tracking-widest text-muted-foreground'>
-            {t("game:playing.currentCategory")}
-          </span>
-          <span className='font-semibold text-brand'>
-            {state.currentSubjectName}
-          </span>
-        </div>
-
-        <span className='text-xs uppercase tracking-widest text-muted-foreground'>
-          {t("game:playing.subjectProgress", {
-            current: state.currentSubjectIndex + 1,
-            total: state.subjectCount,
-          })}
-        </span>
-
-        <div className='flex gap-2'>
-          {[0, 1, 2, 3, 4].map(idx => (
-            <motion.div
-              key={idx}
-              initial={false}
-              animate={{
-                width: idx === state.currentQuestionIndex ? 16 : 8,
-              }}
-              className={
-                idx < state.currentQuestionIndex
-                  ? "h-2 border bg-muted-foreground/30"
-                  : idx === state.currentQuestionIndex
-                  ? "h-2 border border-brand bg-brand"
-                  : "h-2 border bg-muted"
-              }
-            />
-          ))}
-        </div>
-      </div>
+      <MatchProgress state={state} />
 
       <Card className='mx-auto w-full max-w-2xl xl:max-w-3xl'>
         <CardContent className='p-6 flex flex-col items-center gap-4'>
@@ -244,5 +208,84 @@ export function GamePlaying({
         </CardContent>
       </Card>
     </motion.div>
+  );
+}
+
+function MatchProgress({ state }: { state: BuzzerView }) {
+  const { t } = useTranslation();
+  const perSubject = gameConfig.questionsPerSubject;
+  const subjects = Array.from({ length: state.subjectCount }, (_, i) => i);
+  const questions = Array.from({ length: perSubject }, (_, i) => i);
+
+  const totalQuestions = state.subjectCount * perSubject;
+  const answered = state.currentSubjectIndex * perSubject + state.currentQuestionIndex;
+
+  return (
+    <div className='flex flex-col items-center gap-3'>
+      <div className='flex items-center gap-2'>
+        <span className='size-2 shrink-0 animate-pulse rounded-full bg-brand' />
+        <h2 className='text-lg font-bold uppercase tracking-widest text-brand'>
+          {state.currentSubjectName}
+        </h2>
+      </div>
+
+      <div
+        role='progressbar'
+        aria-valuemin={0}
+        aria-valuemax={totalQuestions}
+        aria-valuenow={answered + 1}
+        className='flex w-full max-w-2xl items-center gap-1.5'
+      >
+        {subjects.map(subject => {
+          if (subject < state.currentSubjectIndex) {
+            return (
+              <div
+                key={subject}
+                className='h-2 flex-1 border bg-muted-foreground/30'
+              />
+            );
+          }
+
+          if (subject > state.currentSubjectIndex) {
+            return <div key={subject} className='h-2 flex-1 border bg-muted' />;
+          }
+
+          return (
+            <motion.div
+              key={subject}
+              layout
+              className='flex flex-[2.5] gap-0.5 border border-brand p-0.5'
+            >
+              {questions.map(question => (
+                <div
+                  key={question}
+                  className={
+                    question < state.currentQuestionIndex
+                      ? "h-1.5 flex-1 bg-brand/40"
+                      : question === state.currentQuestionIndex
+                        ? "h-1.5 flex-1 bg-brand"
+                        : "h-1.5 flex-1 bg-muted"
+                  }
+                />
+              ))}
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <p className='text-xs uppercase tracking-widest text-muted-foreground'>
+        {t("game:playing.subjectProgress", {
+          current: state.currentSubjectIndex + 1,
+          total: state.subjectCount,
+        })}
+        <span aria-hidden className='mx-2 text-muted-foreground/50'>
+          ·
+        </span>
+        {t("game:playing.questionProgress", {
+          current: state.currentQuestionIndex + 1,
+          total: perSubject,
+        })}
+      </p>
+    </div>
   );
 }

@@ -49,7 +49,6 @@
   },
   "playing": {
     "loadingQuestion": "Загрузка вопроса...",
-    "currentCategory": "Текущая категория",
     "questionWorth": "Вопрос стоит {{points}}",
     "buzz": "ЖМИ!",
     "awaitingAnswer": "Ожидание ответа",
@@ -63,7 +62,8 @@
     "attemptsLeft_many": "Осталось {{count}} попыток",
     "attemptsLeft_other": "Осталось {{count}} попыток",
     "buzzedOut": "Вы выбыли из этого вопроса",
-    "subjectProgress": "Тема {{current}} из {{total}}"
+    "subjectProgress": "Тема {{current}} из {{total}}",
+    "questionProgress": "Вопрос {{current}} из {{total}}"
   },
   "loading": {
     "checkingSession": "Проверка сессии...",
