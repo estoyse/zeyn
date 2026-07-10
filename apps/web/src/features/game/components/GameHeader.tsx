@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Button } from "@zeyn/ui/components/button";
 import { Logo, LogoMark } from "@zeyn/ui/components/logo";
@@ -15,9 +16,9 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
   const { t } = useTranslation();
 
   return (
-    <header className='flex flex-col md:flex-row justify-between items-center gap-4 pb-6 border-b'>
-      <div className='flex items-center gap-3'>
-        <span className='flex size-10 items-center justify-center bg-brand text-brand-foreground'>
+    <header className='flex flex-col md:flex-row justify-between items-center gap-4 border-b bg-background px-4 py-3 md:px-6'>
+      <Link to='/' className='flex items-center gap-3 self-start md:self-auto'>
+        <span className='flex size-10 shrink-0 items-center justify-center bg-brand text-brand-foreground'>
           <LogoMark className='size-5' />
         </span>
         <div>
@@ -26,14 +27,14 @@ export function GameHeader({ gameId, state, onLeave }: GameHeaderProps) {
             <Clock className='size-3' /> {t("game:header.room", { gameId })}
           </p>
         </div>
-      </div>
+      </Link>
 
-      <div className='flex flex-wrap justify-center gap-2'>
+      <div className='flex w-full gap-2 overflow-x-auto flex-nowrap md:w-auto md:flex-wrap md:justify-center'>
         {Object.values(state.players).map(p => (
           <motion.div
             layout
             key={p.id}
-            className='flex items-center gap-2 px-3 py-2 border transition-all bg-muted border-border'
+            className='flex shrink-0 items-center gap-2 px-3 py-2 border transition-all bg-muted border-border'
           >
             <div className='relative'>
               <UserCircle2

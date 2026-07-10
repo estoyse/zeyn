@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@zeyn/ui/components/avatar";
 import { Badge } from "@zeyn/ui/components/badge";
 import { Button } from "@zeyn/ui/components/button";
+import { BackButton } from "@/shared/components/app/BackButton";
 import { initials, memberSince } from "../lib/format";
 import { ProfileGamesList } from "./ProfileGamesList";
 
@@ -88,6 +89,10 @@ export function ProfileView({ data }: { data: ProfileData }) {
 
   return (
     <div className='mx-auto max-w-4xl space-y-12 px-4 py-10 md:py-14'>
+      <div className='-ml-4'>
+        <BackButton target='auto' />
+      </div>
+
       <header className='flex flex-col gap-6 sm:flex-row sm:items-start'>
         <Avatar className='size-24 border text-2xl'>
           {user.image ? (

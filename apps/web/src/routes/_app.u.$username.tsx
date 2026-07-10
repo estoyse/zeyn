@@ -19,7 +19,7 @@ function ProfilePage() {
   );
 
   return (
-    <div className='overflow-y-auto'>
+    <>
       {profileQuery.isLoading ? (
         <div className='mx-auto max-w-4xl space-y-8 px-4 py-14'>
           <div className='flex gap-6'>
@@ -49,6 +49,6 @@ function ProfilePage() {
           </Link>
         </div>
       )}
-    </div>
+    </>
   );
 }

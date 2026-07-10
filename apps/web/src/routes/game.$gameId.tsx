@@ -1,16 +1,19 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence } from "framer-motion";
+import type { ReactNode } from "react";
 import { useGameRoom } from "@/features/game/hooks/useGameRoom";
 
 import { LoadingView, ConnectingView } from "@/features/game/components/LoadingView";
 import { LoginRequiredView } from "@/features/game/components/LoginRequiredView";
 import { PasswordPromptView } from "@/features/game/components/PasswordPromptView";
 import { ConnectionErrorView } from "@/features/game/components/ErrorViews";
+import { FocusLayout } from "@/features/game/components/FocusLayout";
+import { FocusTopBar } from "@/features/game/components/FocusTopBar";
 import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
 import { getClientGame } from "@/features/games/registry";
 
-export const Route = createFileRoute("/_app/game/$gameId")({
+export const Route = createFileRoute("/game/$gameId")({
   component: GamePage,
 });
 
@@ -21,20 +24,26 @@ function GamePage() {
   const { view } = room;
   const toDashboard = () => navigate({ to: "/" });
 
+  const secondary = (content: ReactNode) => (
+    <FocusLayout header={<FocusTopBar onLeave={toDashboard} />}>
+      {content}
+    </FocusLayout>
+  );
+
   switch (view.kind) {
     case "archive": {
       const results = room.results!;
       const resultsGame = getClientGame(results.game.gameType);
       if (!resultsGame) return null;
       const Results = resultsGame.Results;
-      return <Results results={results} onBack={toDashboard} />;
+      return secondary(<Results results={results} onBack={toDashboard} />);
     }
 
     case "loading":
-      return <LoadingView message={view.message} />;
+      return secondary(<LoadingView message={view.message} />);
 
     case "passwordPrompt":
-      return (
+      return secondary(
         <PasswordPromptView
           onJoin={pwd => {
             room.setPassword(pwd);
@@ -45,13 +54,13 @@ function GamePage() {
       );
 
     case "loginRequired":
-      return <LoginRequiredView gameId={gameId} />;
+      return secondary(<LoginRequiredView gameId={gameId} />);
 
     case "connecting":
-      return <ConnectingView />;
+      return secondary(<ConnectingView />);
 
     case "connectionError":
-      return (
+      return secondary(
         <ConnectionErrorView
           error={view.message}
           onRetry={
@@ -83,27 +92,29 @@ function GameScreen({
   const Playing = game?.Playing;
 
   return (
-    <div className='min-h-screen bg-background p-4 md:p-6'>
-      <div className='mx-auto max-w-7xl space-y-6'>
-        <GameHeader gameId={gameId} state={state} onLeave={onLeave} />
+    <FocusLayout
+      header={<GameHeader gameId={gameId} state={state} onLeave={onLeave} />}
+    >
+      <div className='min-h-full p-4 md:p-6'>
+        <div className='mx-auto max-w-7xl space-y-6'>
+          <AnimatePresence mode='wait'>
+            {state.status === "WAITING" && (
+              <GameLobby
+                key='lobby'
+                state={state}
+                playerId={userId}
+                onStart={room.start}
+                minPlayers={game?.meta.minPlayers ?? 2}
+                description={game?.meta.description ?? ""}
+              />
+            )}
 
-        <AnimatePresence mode='wait'>
-          {state.status === "WAITING" && (
-            <GameLobby
-              key='lobby'
-              state={state}
-              playerId={userId}
-              onStart={room.start}
-              minPlayers={game?.meta.minPlayers ?? 2}
-              description={game?.meta.description ?? ""}
-            />
-          )}
-
-          {state.status === "PLAYING" && Playing && (
-            <Playing key='playing' room={room} />
-          )}
-        </AnimatePresence>
+            {state.status === "PLAYING" && Playing && (
+              <Playing key='playing' room={room} />
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </FocusLayout>
   );
 }

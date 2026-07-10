@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Settings2, ArrowLeft } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Settings2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@zeyn/ui/components/button";
 import { getClientGame } from "@/features/games/registry";
+import { BackButton } from "@/shared/components/app/BackButton";
+import { PageHeader } from "@/shared/components/app/PageHeader";
+import { PageShell } from "@/shared/components/app/PageShell";
 
 export const Route = createFileRoute("/_app/game/create/$gameType")({
   component: CreateGamePage,
@@ -15,17 +17,15 @@ function CreateGamePage() {
 
   if (!game) {
     return (
-      <div className='min-h-screen bg-background flex flex-col items-center justify-center gap-4 p-6 text-center'>
+      <div className='min-h-full bg-background flex flex-col items-center justify-center gap-4 p-6 text-center'>
         <h1 className='text-2xl font-bold'>{t("game:typePage.unknownTitle")}</h1>
         <p className='text-muted-foreground'>
           {t("game:typePage.unknownDescription", { gameType })}
         </p>
-        <Link to='/game/create'>
-          <Button variant='outline'>
-            <ArrowLeft className='size-4 mr-2' />
-            {t("game:typePage.backToGames")}
-          </Button>
-        </Link>
+        <BackButton
+          target={{ to: "/game/create" }}
+          label={t("game:typePage.backToGames")}
+        />
       </div>
     );
   }
@@ -33,32 +33,15 @@ function CreateGamePage() {
   const { Create } = game;
 
   return (
-    <div className='min-h-screen bg-background p-4 md:p-8 lg:p-12'>
-      <div className='mx-auto max-w-6xl space-y-8'>
-        <header className='flex items-start justify-between gap-4'>
-          <div className='flex items-center gap-3'>
-            <div className='flex size-12 items-center justify-center bg-brand text-brand-foreground'>
-              <Settings2 className='size-6' />
-            </div>
-            <div>
-              <h1 className='text-3xl font-bold tracking-tight'>
-                {t(`games:catalog.game.${game.type}.title`, game.meta.title)}
-              </h1>
-              <p className='text-muted-foreground italic'>
-                {t("game:create.configure.subtitle")}
-              </p>
-            </div>
-          </div>
-          <Link to='/game/create'>
-            <Button variant='ghost' size='sm'>
-              <ArrowLeft className='size-4 mr-2' />
-              {t("game:create.configure.backButton")}
-            </Button>
-          </Link>
-        </header>
+    <PageShell width='lg' gap='md'>
+      <PageHeader
+        back={{ to: "/game/create" }}
+        icon={Settings2}
+        title={t(`games:catalog.game.${game.type}.title`, game.meta.title)}
+        subtitle={t("game:create.configure.subtitle")}
+      />
 
-        <Create />
-      </div>
-    </div>
+      <Create />
+    </PageShell>
   );
 }

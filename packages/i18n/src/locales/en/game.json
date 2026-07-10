@@ -113,8 +113,7 @@
       "subtitle": "Pick a game to host, then configure your room."
     },
     "configure": {
-      "subtitle": "Configure the battlefield before deploying.",
-      "backButton": "Games"
+      "subtitle": "Configure the battlefield before deploying."
     }
   },
   "typePage": {

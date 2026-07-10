@@ -32,7 +32,7 @@ export function PasswordPromptView({ onJoin, onBack }: PasswordPromptViewProps) 
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-full bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex size-16 items-center justify-center bg-brand/10 text-brand">

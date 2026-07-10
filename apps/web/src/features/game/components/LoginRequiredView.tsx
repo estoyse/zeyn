@@ -13,7 +13,7 @@ export function LoginRequiredView({ gameId }: LoginRequiredViewProps) {
   const { t } = useTranslation();
 
   return (
-    <div className='min-h-screen bg-background flex items-center justify-center p-4'>
+    <div className='min-h-full bg-background flex items-center justify-center p-4'>
       <Card className='max-w-md w-full text-center'>
         <CardContent className='p-8'>
           <div className='mx-auto mb-6 flex size-16 items-center justify-center bg-brand/10 text-brand'>
