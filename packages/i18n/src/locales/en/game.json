@@ -35,7 +35,6 @@
     "host": "Host",
     "gameInformation": "Game Information",
     "gameDetails": "Game Details",
-    "shareEntryPoint": "Share Entry Point",
     "linkCopied": "Link copied!",
     "startGame": "Start Game",
     "waitingForHost": "Waiting for host to start...",
@@ -144,9 +143,7 @@
     "title": "Standings",
     "you": "You",
     "host": "Host",
-    "empty": "No players yet",
-    "show": "Show standings",
-    "hide": "Hide standings"
+    "empty": "No players yet"
   },
   "connection": {
     "reconnecting": "Reconnecting… your actions are paused until the connection returns."

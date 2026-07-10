@@ -35,7 +35,6 @@
     "host": "Xost",
     "gameInformation": "O'yin haqida ma'lumot",
     "gameDetails": "O'yin tafsilotlari",
-    "shareEntryPoint": "Kirish havolasini ulashish",
     "linkCopied": "Havola nusxalandi!",
     "startGame": "O'yinni boshlash",
     "waitingForHost": "Xost o'yinni boshlashini kutmoqda...",
@@ -144,9 +143,7 @@
     "title": "Natijalar",
     "you": "Siz",
     "host": "Mezbon",
-    "empty": "Hali o'yinchilar yo'q",
-    "show": "Natijalarni ko'rsatish",
-    "hide": "Natijalarni yashirish"
+    "empty": "Hali o'yinchilar yo'q"
   },
   "connection": {
     "reconnecting": "Qayta ulanmoqda… ulanish tiklanmaguncha amallaringiz to'xtatiladi."
