@@ -241,7 +241,7 @@ function MatchProgress({ state }: { state: BuzzerView }) {
             return (
               <div
                 key={subject}
-                className='h-2 flex-1 border bg-muted-foreground/30'
+                className='h-2 flex-1 border border-brand/50 bg-brand/70'
               />
             );
           }
