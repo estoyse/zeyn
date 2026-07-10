@@ -4,7 +4,13 @@
       "loading": "Savol yuklanmoqda...",
       "questionLabel": "Savol",
       "correctAnswer": "To'g'ri javob",
-      "answerLocked": "Javob qabul qilindi — boshqalar kutilmoqda..."
+      "answerLocked": "Javob qabul qilindi — boshqalar kutilmoqda...",
+      "answeredCount": "{{total}} dan {{answered}} javob berdi",
+      "yourAnswer": "Sizning javobingiz",
+      "correct": "To'g'ri",
+      "wrong": "Noto'g'ri",
+      "noAnswer": "Javob yo'q",
+      "results": "Raund natijalari"
     },
     "results": {
       "title": "Yakuniy reyting",

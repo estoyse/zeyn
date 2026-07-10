@@ -23,7 +23,7 @@ export function ArchiveView({ data, onBack }: ArchiveViewProps) {
   );
 
   return (
-    <div className="min-h-screen bg-background p-6 md:p-12">
+    <div className="min-h-full bg-background p-6 md:p-12">
       <div className="mx-auto max-w-6xl space-y-8 py-12">
         <div className="text-center space-y-4">
           <div className="mx-auto inline-block bg-brand/10 p-4 text-brand">

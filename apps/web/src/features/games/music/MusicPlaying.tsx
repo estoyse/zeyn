@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Music2, Check, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@zeyn/ui/components/card";
+import { Badge } from "@zeyn/ui/components/badge";
 import { musicGameConfig } from "@zeyn/api/games";
 import { Timer } from "@/features/game/components/Timer";
 import type { GamePlayViewProps } from "@/features/games/types";
@@ -57,12 +58,20 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
             {state.currentQuestionIndex + 1} / {state.totalQuestions}
           </span>
         </div>
+        {!isReveal && (
+          <p className='text-xs text-muted-foreground'>
+            {t("games:music.playing.answeredCount", {
+              answered: state.answeredPlayerIds.length,
+              total: Object.keys(state.players).length,
+            })}
+          </p>
+        )}
         <div className='w-full max-w-md'>
           <Timer expiresAt={expiresAt} duration={duration} />
         </div>
       </div>
 
-      <Card className='mx-auto max-w-2xl'>
+      <Card className='mx-auto w-full max-w-2xl xl:max-w-3xl'>
         <CardContent className='p-6 space-y-6'>
           {!isReveal && (
             <audio
@@ -78,12 +87,13 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
             {options.map((label, index) => {
               const correct = isReveal && index === state.reveal?.correctIndex;
               const wrongPick = isReveal && picked === index && !correct;
+              const isYourAnswer = isReveal && picked === index;
               return (
                 <button
                   key={index}
                   onClick={() => onAnswer(index)}
                   disabled={isReveal || alreadyAnswered}
-                  className={`flex items-center justify-between gap-2 border p-4 text-left font-medium transition-all ${
+                  className={`flex items-center justify-between gap-2 border p-4 xl:py-5 text-left font-medium transition-all ${
                     correct
                       ? "border-success bg-success/10 text-success"
                       : wrongPick
@@ -93,7 +103,12 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
                       : "border-border hover:border-brand/50 disabled:opacity-50"
                   }`}
                 >
-                  <span>{label}</span>
+                  <span className='flex items-center gap-2'>
+                    {label}
+                    {isYourAnswer && (
+                      <Badge tone='brand'>{t("games:music.playing.yourAnswer")}</Badge>
+                    )}
+                  </span>
                   {correct && <Check className='size-5 text-success' />}
                   {wrongPick && <X className='size-5 text-destructive' />}
                 </button>
@@ -106,12 +121,67 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
               <p className='text-xs uppercase tracking-widest text-muted-foreground'>
                 {t("games:music.playing.correctAnswer")}
               </p>
-              <p className='text-lg font-bold text-success'>
+              <p className='text-lg xl:text-2xl font-bold text-success'>
                 {state.reveal.correctTitle}
               </p>
               <p className='text-sm text-muted-foreground'>
                 {state.reveal.artistName}
               </p>
+            </div>
+          )}
+
+          {isReveal && state.reveal && (
+            <div className='space-y-2'>
+              <p className='text-xs uppercase tracking-widest text-muted-foreground'>
+                {t("games:music.playing.results")}
+              </p>
+              <div className='divide-y border'>
+                {Object.values(state.players)
+                  .slice()
+                  .sort((a, b) => {
+                    const aPoints = state.reveal?.answers[a.id]?.pointsAwarded ?? 0;
+                    const bPoints = state.reveal?.answers[b.id]?.pointsAwarded ?? 0;
+                    if (bPoints !== aPoints) return bPoints - aPoints;
+                    return a.name.localeCompare(b.name);
+                  })
+                  .map((p) => {
+                    const answer = state.reveal?.answers[p.id];
+                    return (
+                      <div
+                        key={p.id}
+                        className={`flex items-center justify-between gap-2 p-3 text-sm ${
+                          p.id === room.userId ? "bg-brand/5" : ""
+                        }`}
+                      >
+                        <span className='font-medium'>{p.name}</span>
+                        <div className='flex items-center gap-3'>
+                          {!answer && (
+                            <span className='text-muted-foreground'>
+                              {t("games:music.playing.noAnswer")}
+                            </span>
+                          )}
+                          {answer?.correct && (
+                            <span className='flex items-center gap-1 text-success'>
+                              <Check className='size-4' />
+                              {t("games:music.playing.correct")}
+                            </span>
+                          )}
+                          {answer && !answer.correct && (
+                            <span className='flex items-center gap-1 text-destructive'>
+                              <X className='size-4' />
+                              {t("games:music.playing.wrong")}
+                            </span>
+                          )}
+                          {answer && answer.pointsAwarded > 0 && (
+                            <span className='font-bold tabular-nums'>
+                              +{answer.pointsAwarded}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           )}
 

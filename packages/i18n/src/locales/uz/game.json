@@ -22,7 +22,12 @@
   },
   "header": {
     "room": "Xona: {{gameId}}",
-    "leave": "Chiqish"
+    "leave": "Chiqish",
+    "leaveConfirm": {
+      "title": "O'yindan chiqasizmi?",
+      "description": "Siz xonadan chiqarilasiz va bu o'yindagi ochkolaringiz yo'qoladi.",
+      "confirm": "O'yindan chiqish"
+    }
   },
   "lobby": {
     "playersInLobby": "Kutish xonasidagi o'yinchilar",
@@ -33,7 +38,14 @@
     "shareEntryPoint": "Kirish havolasini ulashish",
     "linkCopied": "Havola nusxalandi!",
     "startGame": "O'yinni boshlash",
-    "waitingForHost": "Xost o'yinni boshlashini kutmoqda..."
+    "waitingForHost": "Xost o'yinni boshlashini kutmoqda...",
+    "joinCode": "Qo'shilish kodi",
+    "copyCode": "Kodni nusxalash",
+    "codeCopied": "Kod nusxalandi!",
+    "shareLink": "Yoki havolani ulashing",
+    "public": "Ochiq xona",
+    "private": "Faqat taklif bilan",
+    "locked": "Parol bilan himoyalangan"
   },
   "playing": {
     "loadingQuestion": "Savol yuklanmoqda...",
@@ -45,7 +57,11 @@
     "submit": "Yuborish",
     "isThinking": "O'ylamoqda...",
     "correctAnswer": "To'g'ri javob",
-    "nextQuestionShortly": "Keyingi savol tez orada boshlanadi"
+    "nextQuestionShortly": "Keyingi savol tez orada boshlanadi",
+    "attemptsLeft_one": "{{count}} urinish qoldi",
+    "attemptsLeft_other": "{{count}} urinish qoldi",
+    "buzzedOut": "Bu savol uchun imkoningiz tugadi",
+    "subjectProgress": "{{total}} mavzudan {{current}}-si"
   },
   "loading": {
     "checkingSession": "Sessiya tekshirilmoqda...",
@@ -113,8 +129,7 @@
       "subtitle": "Mezbonlik qilish uchun o'yin tanlang, so'ng xonangizni sozlang."
     },
     "configure": {
-      "subtitle": "Joylashtirishdan oldin jangovar maydonni sozlang.",
-      "backButton": "O'yinlar"
+      "subtitle": "Joylashtirishdan oldin jangovar maydonni sozlang."
     }
   },
   "typePage": {
@@ -124,5 +139,16 @@
     "backToGames": "O'yinlarga qaytish",
     "createGame": "Oʻyin yaratish",
     "activeGames": "Faol oʻyinlar"
+  },
+  "scoreboard": {
+    "title": "Natijalar",
+    "you": "Siz",
+    "host": "Mezbon",
+    "empty": "Hali o'yinchilar yo'q",
+    "show": "Natijalarni ko'rsatish",
+    "hide": "Natijalarni yashirish"
+  },
+  "connection": {
+    "reconnecting": "Qayta ulanmoqda… ulanish tiklanmaguncha amallaringiz to'xtatiladi."
   }
 }

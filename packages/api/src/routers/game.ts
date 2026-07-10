@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { generateGameCode } from "../game-code";
 import { roomLimits } from "../game-types";
 import { getGameMeta, gameMetaRegistry, type GameType } from "../games";
 import { loadResultsDetail } from "../games/results";
@@ -62,21 +63,40 @@ export const gameRouter = router({
         });
       }
 
-      const gameId = crypto.randomUUID();
+      let gameId: string | undefined;
 
-      await ctx.db.insert(activeGames).values({
-        id: gameId,
-        name: input.name,
-        gameType: input.gameType,
-        hostId: ctx.session.user.id,
-        maxPlayers: input.maxPlayers,
-        isPublic: input.isPublic,
-        password: input.password || null,
-        status: "waiting",
-        config: JSON.stringify(parsedConfig.data),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const candidate = generateGameCode();
+        const inserted = await ctx.db
+          .insert(activeGames)
+          .values({
+            id: candidate,
+            name: input.name,
+            gameType: input.gameType,
+            hostId: ctx.session.user.id,
+            maxPlayers: input.maxPlayers,
+            isPublic: input.isPublic,
+            password: input.password || null,
+            status: "waiting",
+            config: JSON.stringify(parsedConfig.data),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .onConflictDoNothing()
+          .returning({ id: activeGames.id });
+
+        if (inserted.length > 0) {
+          gameId = inserted[0]!.id;
+          break;
+        }
+      }
+
+      if (!gameId) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not allocate a unique game code",
+        });
+      }
 
       return { gameId };
     }),

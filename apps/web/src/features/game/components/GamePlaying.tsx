@@ -28,6 +28,11 @@ export function GamePlaying({
 }: GamePlayingProps) {
   const { t } = useTranslation();
   const isMyTurn = state.activeQuestionState?.buzzedPlayerId === playerId;
+  const isBuzzedOut = state.activeQuestionState?.playersWhoAttempted.includes(playerId) ?? false;
+  const attemptsLeft = Math.max(
+    0,
+    gameConfig.maxWrongAttempts - (state.activeQuestionState?.wrongAttempts ?? 0)
+  );
 
   if (!state.currentQuestion) {
     return (
@@ -56,6 +61,13 @@ export function GamePlaying({
           </span>
         </div>
 
+        <span className='text-xs uppercase tracking-widest text-muted-foreground'>
+          {t("game:playing.subjectProgress", {
+            current: state.currentSubjectIndex + 1,
+            total: state.subjectCount,
+          })}
+        </span>
+
         <div className='flex gap-2'>
           {[0, 1, 2, 3, 4].map(idx => (
             <motion.div
@@ -76,7 +88,7 @@ export function GamePlaying({
         </div>
       </div>
 
-      <Card className='mx-auto max-w-2xl'>
+      <Card className='mx-auto w-full max-w-2xl xl:max-w-3xl'>
         <CardContent className='p-6 flex flex-col items-center gap-4'>
           {state.phase === "ACTIVE" && (
             <motion.div
@@ -85,10 +97,17 @@ export function GamePlaying({
               className='w-full text-center space-y-4'
             >
               <div className='space-y-2'>
-                <Badge tone='primary'>
-                  {t("game:playing.questionWorth", { points: state.currentQuestion?.points })}
-                </Badge>
-                <h2 className='text-xl md:text-2xl font-bold'>
+                <div className='flex flex-wrap items-center justify-center gap-2'>
+                  <Badge tone='primary'>
+                    {t("game:playing.questionWorth", { points: state.currentQuestion?.points })}
+                  </Badge>
+                  {state.activeQuestionState && (
+                    <Badge tone={attemptsLeft <= 1 ? "warning" : "default"}>
+                      {t("game:playing.attemptsLeft", { count: attemptsLeft })}
+                    </Badge>
+                  )}
+                </div>
+                <h2 className='text-xl md:text-2xl xl:text-3xl font-bold'>
                   {state.currentQuestion?.text}
                 </h2>
               </div>
@@ -105,17 +124,22 @@ export function GamePlaying({
               <Button
                 size='lg'
                 variant='brand'
-                className='size-28 rounded-full'
+                className='size-28 xl:size-36 rounded-full'
                 onClick={onBuzz}
                 disabled={state.activeQuestionState?.playersWhoAttempted.includes(
                   playerId
                 )}
+                title={isBuzzedOut ? t("game:playing.buzzedOut") : undefined}
+                aria-label={isBuzzedOut ? t("game:playing.buzzedOut") : undefined}
               >
                 <div className='flex flex-col items-center'>
-                  <Zap className='size-10 mb-1' />
-                  <span className='text-xl font-bold'>{t("game:playing.buzz")}</span>
+                  <Zap className='size-10 xl:size-14 xl:mb-2 mb-1' />
+                  <span className='text-xl xl:text-2xl font-bold'>{t("game:playing.buzz")}</span>
                 </div>
               </Button>
+              {isBuzzedOut && (
+                <p className='text-sm text-destructive/80'>{t("game:playing.buzzedOut")}</p>
+              )}
             </motion.div>
           )}
 
@@ -196,7 +220,7 @@ export function GamePlaying({
                 <motion.h2
                   animate={{ y: [0, -5, 0] }}
                   transition={{ repeat: Infinity, duration: 2 }}
-                  className='text-3xl md:text-4xl font-bold text-success'
+                  className='text-3xl md:text-4xl xl:text-5xl font-bold text-success'
                 >
                   {state.currentQuestion?.answer}
                 </motion.h2>

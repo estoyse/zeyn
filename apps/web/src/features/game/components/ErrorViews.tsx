@@ -17,7 +17,7 @@ export function NotFoundView({ onBack }: NotFoundViewProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-full bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full text-center">
         <CardHeader className="space-y-4">
           <div className="mx-auto flex size-16 items-center justify-center bg-destructive/10 text-destructive">
@@ -47,7 +47,7 @@ export function ConnectionErrorView({ error, onRetry }: ConnectionErrorViewProps
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-full bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full text-center">
         <CardHeader className="space-y-4">
           <div className="mx-auto flex size-16 items-center justify-center bg-destructive/10 text-destructive">

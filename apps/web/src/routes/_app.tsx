@@ -9,7 +9,9 @@ function AppLayout() {
   return (
     <div className='grid grid-rows-[auto_1fr] h-svh'>
       <AppHeader />
-      <Outlet />
+      <div className='min-h-0 overflow-y-auto'>
+        <Outlet />
+      </div>
     </div>
   );
 }

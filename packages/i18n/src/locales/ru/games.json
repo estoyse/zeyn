@@ -4,7 +4,13 @@
       "loading": "Загрузка вопроса...",
       "questionLabel": "Вопрос",
       "correctAnswer": "Правильный ответ",
-      "answerLocked": "Ответ принят — ожидаем остальных..."
+      "answerLocked": "Ответ принят — ожидаем остальных...",
+      "answeredCount": "Ответили {{answered}} из {{total}}",
+      "yourAnswer": "Ваш ответ",
+      "correct": "Верно",
+      "wrong": "Неверно",
+      "noAnswer": "Нет ответа",
+      "results": "Итоги раунда"
     },
     "results": {
       "title": "Итоговая таблица лидеров",

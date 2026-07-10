@@ -22,7 +22,12 @@
   },
   "header": {
     "room": "Room: {{gameId}}",
-    "leave": "Leave"
+    "leave": "Leave",
+    "leaveConfirm": {
+      "title": "Leave this game?",
+      "description": "You will be removed from the room and your score for this game will be lost.",
+      "confirm": "Leave game"
+    }
   },
   "lobby": {
     "playersInLobby": "Players in Lobby",
@@ -33,7 +38,14 @@
     "shareEntryPoint": "Share Entry Point",
     "linkCopied": "Link copied!",
     "startGame": "Start Game",
-    "waitingForHost": "Waiting for host to start..."
+    "waitingForHost": "Waiting for host to start...",
+    "joinCode": "Join code",
+    "copyCode": "Copy join code",
+    "codeCopied": "Join code copied!",
+    "shareLink": "Or share the link",
+    "public": "Public room",
+    "private": "Invite only",
+    "locked": "Password protected"
   },
   "playing": {
     "loadingQuestion": "Loading question...",
@@ -45,7 +57,11 @@
     "submit": "Submit",
     "isThinking": "Is thinking...",
     "correctAnswer": "Correct Answer",
-    "nextQuestionShortly": "Next question starts shortly"
+    "nextQuestionShortly": "Next question starts shortly",
+    "attemptsLeft_one": "{{count}} attempt left",
+    "attemptsLeft_other": "{{count}} attempts left",
+    "buzzedOut": "You are out for this question",
+    "subjectProgress": "Subject {{current}} of {{total}}"
   },
   "loading": {
     "checkingSession": "Checking session...",
@@ -113,8 +129,7 @@
       "subtitle": "Pick a game to host, then configure your room."
     },
     "configure": {
-      "subtitle": "Configure the battlefield before deploying.",
-      "backButton": "Games"
+      "subtitle": "Configure the battlefield before deploying."
     }
   },
   "typePage": {
@@ -124,5 +139,16 @@
     "backToGames": "Back to games",
     "createGame": "Create Game",
     "activeGames": "Active Games"
+  },
+  "scoreboard": {
+    "title": "Standings",
+    "you": "You",
+    "host": "Host",
+    "empty": "No players yet",
+    "show": "Show standings",
+    "hide": "Hide standings"
+  },
+  "connection": {
+    "reconnecting": "Reconnecting… your actions are paused until the connection returns."
   }
 }
