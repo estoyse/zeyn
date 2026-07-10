@@ -4,7 +4,13 @@
       "loading": "Loading question...",
       "questionLabel": "Question",
       "correctAnswer": "Correct Answer",
-      "answerLocked": "Answer locked in — waiting for others..."
+      "answerLocked": "Answer locked in — waiting for others...",
+      "answeredCount": "{{answered}} / {{total}} answered",
+      "yourAnswer": "Your answer",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "noAnswer": "No answer",
+      "results": "Round results"
     },
     "results": {
       "title": "Final Leaderboard",

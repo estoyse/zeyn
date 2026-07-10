@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@zeyn/ui/components/button";
 import { Input } from "@zeyn/ui/components/input";
@@ -9,7 +10,18 @@ import {
   CardTitle,
 } from "@zeyn/ui/components/card";
 import { toast } from "sonner";
-import { Users, Play, Info, Crown, UserCircle2, Copy } from "lucide-react";
+import {
+  Users,
+  Play,
+  Info,
+  Crown,
+  UserCircle2,
+  Copy,
+  Check,
+  Lock,
+  Globe,
+  EyeOff,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
@@ -30,6 +42,26 @@ export function GameLobby({
 }: GameLobbyProps) {
   const { t } = useTranslation();
   const isHost = state.hostId === playerId;
+  const [codeCopied, setCodeCopied] = useState(false);
+  const codeCopyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (codeCopyTimeoutRef.current) {
+        clearTimeout(codeCopyTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(state.gameId ?? "");
+    toast.success(t("game:lobby.codeCopied"));
+    setCodeCopied(true);
+    if (codeCopyTimeoutRef.current) {
+      clearTimeout(codeCopyTimeoutRef.current);
+    }
+    codeCopyTimeoutRef.current = setTimeout(() => setCodeCopied(false), 2000);
+  };
 
   return (
     <motion.div
@@ -40,6 +72,10 @@ export function GameLobby({
       className="grid gap-6 lg:grid-cols-[1fr_350px]"
     >
       <div className="space-y-6">
+        {state.gameName && (
+          <h2 className="text-2xl font-bold">{state.gameName}</h2>
+        )}
+
         <Card>
           <CardHeader className="space-y-4">
             <div className="flex items-center justify-between">
@@ -99,15 +135,46 @@ export function GameLobby({
         <Card className="h-fit sticky top-4">
           <CardHeader>
             <CardTitle className="text-lg">{t("game:lobby.gameDetails")}</CardTitle>
+            {state.hasPassword ? (
+              <Badge tone="warning">
+                <Lock className="size-3" />
+                {t("game:lobby.locked")}
+              </Badge>
+            ) : state.isPublic ? (
+              <Badge tone="success">
+                <Globe className="size-3" />
+                {t("game:lobby.public")}
+              </Badge>
+            ) : (
+              <Badge tone="default">
+                <EyeOff className="size-3" />
+                {t("game:lobby.private")}
+              </Badge>
+            )}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">{t("game:lobby.shareEntryPoint")}</p>
+            {state.gameId && (
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">{t("game:lobby.joinCode")}</p>
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  aria-label={t("game:lobby.copyCode")}
+                  className="flex items-center gap-2 font-mono text-3xl md:text-4xl font-bold tracking-[0.2em] select-all"
+                >
+                  {state.gameId}
+                  {codeCopied ? <Check className="size-5" /> : <Copy className="size-5" />}
+                </button>
+              </div>
+            )}
+
+            <div className="space-y-1">
+              <p className="text-[11px] uppercase tracking-widest text-muted-foreground/70">{t("game:lobby.shareLink")}</p>
               <div className="flex gap-1">
                 <Input
                   readOnly
                   value={window.location.href}
-                  className="text-xs h-8 bg-muted/50 font-mono"
+                  className="text-xs h-7 bg-muted/50 font-mono text-muted-foreground"
                 />
                 <Button
                   size="sm"

@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { useGameRoom } from "@/features/game/hooks/useGameRoom";
 
@@ -11,6 +11,8 @@ import { FocusLayout } from "@/features/game/components/FocusLayout";
 import { FocusTopBar } from "@/features/game/components/FocusTopBar";
 import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
+import { ReconnectingBanner } from "@/features/game/components/ReconnectingBanner";
+import { Scoreboard } from "@/features/game/components/Scoreboard";
 import { getClientGame } from "@/features/games/registry";
 
 export const Route = createFileRoute("/game/$gameId")({
@@ -85,18 +87,19 @@ function GameScreen({
   gameId: string;
   onLeave: () => void;
 }) {
-  const { state, userId } = room;
+  const { state, userId, isConnected } = room;
   if (!state) return null;
 
   const game = getClientGame(state.gameType);
   const Playing = game?.Playing;
+  const isPlaying = state.status === "PLAYING";
 
   return (
-    <FocusLayout
-      header={<GameHeader gameId={gameId} state={state} onLeave={onLeave} />}
-    >
+    <FocusLayout header={<GameHeader gameId={gameId} onLeave={onLeave} />}>
+      {!isConnected && <ReconnectingBanner />}
+
       <div className='min-h-full p-4 md:p-6'>
-        <div className='mx-auto max-w-7xl space-y-6'>
+        <div className='mx-auto max-w-7xl'>
           <AnimatePresence mode='wait'>
             {state.status === "WAITING" && (
               <GameLobby
@@ -109,8 +112,27 @@ function GameScreen({
               />
             )}
 
-            {state.status === "PLAYING" && Playing && (
-              <Playing key='playing' room={room} />
+            {isPlaying && Playing && (
+              <motion.div
+                key='playing'
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className='grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]'
+              >
+                <div className='min-w-0 space-y-6'>
+                  <div className='lg:hidden'>
+                    <Scoreboard state={state} playerId={userId} variant='strip' />
+                  </div>
+                  <Playing room={room} />
+                </div>
+
+                <aside className='hidden lg:block'>
+                  <div className='sticky top-4'>
+                    <Scoreboard state={state} playerId={userId} variant='rail' />
+                  </div>
+                </aside>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

@@ -66,5 +66,7 @@ export function useGameRoom(gameId: string) {
     setPassword,
     showPasswordPrompt,
     setShowPasswordPrompt,
+    isConnected,
+    isConnecting,
   };
 }

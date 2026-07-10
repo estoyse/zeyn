@@ -38,7 +38,14 @@
     "shareEntryPoint": "Ссылка для входа",
     "linkCopied": "Ссылка скопирована!",
     "startGame": "Начать игру",
-    "waitingForHost": "Ожидание, пока хост начнёт игру..."
+    "waitingForHost": "Ожидание, пока хост начнёт игру...",
+    "joinCode": "Код комнаты",
+    "copyCode": "Скопировать код",
+    "codeCopied": "Код скопирован!",
+    "shareLink": "Или поделитесь ссылкой",
+    "public": "Открытая комната",
+    "private": "Только по приглашению",
+    "locked": "Защищено паролем"
   },
   "playing": {
     "loadingQuestion": "Загрузка вопроса...",
@@ -50,7 +57,13 @@
     "submit": "Отправить",
     "isThinking": "Думает...",
     "correctAnswer": "Правильный ответ",
-    "nextQuestionShortly": "Следующий вопрос начнётся скоро"
+    "nextQuestionShortly": "Следующий вопрос начнётся скоро",
+    "attemptsLeft_one": "Осталась {{count}} попытка",
+    "attemptsLeft_few": "Осталось {{count}} попытки",
+    "attemptsLeft_many": "Осталось {{count}} попыток",
+    "attemptsLeft_other": "Осталось {{count}} попыток",
+    "buzzedOut": "Вы выбыли из этого вопроса",
+    "subjectProgress": "Тема {{current}} из {{total}}"
   },
   "loading": {
     "checkingSession": "Проверка сессии...",
@@ -128,5 +141,16 @@
     "backToGames": "Назад к играм",
     "createGame": "Создать игру",
     "activeGames": "Активные игры"
+  },
+  "scoreboard": {
+    "title": "Турнирная таблица",
+    "you": "Вы",
+    "host": "Ведущий",
+    "empty": "Пока нет игроков",
+    "show": "Показать таблицу",
+    "hide": "Скрыть таблицу"
+  },
+  "connection": {
+    "reconnecting": "Переподключение… действия приостановлены до восстановления связи."
   }
 }
