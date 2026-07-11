@@ -74,20 +74,33 @@ function StackLayout() {
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: background },
+        animation: "ios_from_right",
+        freezeOnBlur: true,
       }}
     >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="(onboarding)" />
+      <Stack.Screen name="index" options={{ animation: "none" }} />
+      <Stack.Screen
+        name="(onboarding)"
+        options={{ animation: "fade", gestureEnabled: false }}
+      />
       <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-      <Stack.Screen name="(tabs)" />
+      <Stack.Screen
+        name="(tabs)"
+        options={{ animation: "fade", gestureEnabled: false }}
+      />
       <Stack.Screen
         name="game/[gameId]"
-        options={{ presentation: "fullScreenModal", animation: "slide_from_bottom" }}
+        options={{
+          presentation: "fullScreenModal",
+          animation: "slide_from_bottom",
+          animationDuration: 420,
+          gestureEnabled: false,
+        }}
       />
-      <Stack.Screen name="game/create/[gameType]" />
+      <Stack.Screen name="game/create/[gameType]" options={{ presentation: "modal" }} />
       <Stack.Screen name="u/[username]" />
       <Stack.Screen name="settings/index" />
-      <Stack.Screen name="+not-found" />
+      <Stack.Screen name="+not-found" options={{ animation: "fade" }} />
     </Stack>
   );
 }
