@@ -20,6 +20,7 @@
     "@gorhom/bottom-sheet": "^5.2.10",
     "@react-navigation/drawer": "^7.9.4",
     "@react-navigation/elements": "^2.9.14",
+    "@shopify/react-native-skia": "2.4.18",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",

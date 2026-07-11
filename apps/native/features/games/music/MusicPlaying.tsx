@@ -3,7 +3,7 @@ import { musicGameConfig } from "@zeyn/api/games";
 import { useAudioPlayer } from "expo-audio";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import Animated, { FadeIn, LinearTransition } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
@@ -77,8 +77,9 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
     : [];
 
   return (
-    <Animated.View entering={FadeIn} className="gap-6">
-      <View className="items-center gap-3">
+    <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
+      <Animated.View entering={FadeIn} className="gap-6">
+        <View className="items-center gap-3">
         <Chip variant="soft">
           <Chip.Label>
             {t("music.playing.questionLabel")} {state.currentQuestionIndex + 1} /{" "}
@@ -93,7 +94,11 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
             })}
           </Text>
         )}
-        <Timer expiresAt={expiresAt} duration={duration} />
+        <Timer
+          expiresAt={expiresAt}
+          duration={duration}
+          underClock={!isReveal && !alreadyAnswered && !room.isSpectator}
+        />
       </View>
 
       <Card>
@@ -219,7 +224,8 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
             </Text>
           )}
         </Card.Body>
-      </Card>
-    </Animated.View>
+        </Card>
+      </Animated.View>
+    </ScrollView>
   );
 }

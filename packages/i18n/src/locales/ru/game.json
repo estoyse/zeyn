@@ -56,6 +56,8 @@
     "loadingQuestion": "Загрузка вопроса...",
     "questionWorth": "Вопрос стоит {{points}}",
     "buzz": "ЖМИ!",
+    "out": "ВЫБЫЛ",
+    "yourTurn": "ОТВЕТ",
     "awaitingAnswer": "Ожидание ответа",
     "answerPlaceholder": "Введите ваш ответ...",
     "submit": "Отправить",
