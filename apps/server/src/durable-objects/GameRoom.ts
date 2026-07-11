@@ -2,6 +2,7 @@ import { DurableObject } from "cloudflare:workers";
 import type { Env } from "@zeyn/env/server";
 import {
   platformMessageSchema,
+  sanitizeName,
   type BaseGameState,
   type EngineDirectives,
   type PlatformMessage,
@@ -18,12 +19,26 @@ import {
 // Attachment stored on each accepted WebSocket so we can attribute close events.
 // Persisted via serializeAttachment so it survives DO hibernation (in-memory
 // properties on the socket would be lost when the DO is evicted between events).
-type SocketMeta = { playerId: string; joinTime: number };
+type SocketMeta = {
+  playerId: string;
+  joinTime: number;
+  role: "player" | "spectator";
+  isGuest: boolean;
+  name?: string;
+};
 function readMeta(ws: WebSocket): SocketMeta | null {
   const attachment = ws.deserializeAttachment();
   return attachment && typeof attachment === "object"
     ? (attachment as SocketMeta)
     : null;
+}
+
+function safeDecode(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
 }
 
 /**
@@ -69,11 +84,16 @@ export class GameRoom extends DurableObject<Env> {
   async fetch(request: Request): Promise<Response> {
     if (request.headers.get("Upgrade") === "websocket") {
       const userId = request.headers.get("x-user-id");
+      const isGuest = request.headers.get("x-guest") === "1";
+      const role =
+        request.headers.get("x-role") === "spectator" ? "spectator" : "player";
+      const rawName = request.headers.get("x-user-name");
+      const name = rawName ? safeDecode(rawName) : undefined;
       const gameId = new URL(request.url).pathname.match(
         /\/game\/([^/]+)\/ws/
       )?.[1];
       if (gameId) await this.resolveGameType(gameId);
-      return this.handleWebSocket(userId);
+      return this.handleWebSocket({ userId, isGuest, role, name, gameId });
     }
     return new Response("Not found", { status: 404 });
   }
@@ -96,26 +116,57 @@ export class GameRoom extends DurableObject<Env> {
     await this.ctx.storage.put("gameType", this.gameType);
   }
 
-  private handleWebSocket(userId: string | null): Response {
+  private async handleWebSocket(params: {
+    userId: string | null;
+    isGuest: boolean;
+    role: "player" | "spectator";
+    name?: string;
+    gameId?: string;
+  }): Promise<Response> {
     const pair = new WebSocketPair();
     const [client, server] = [pair[0], pair[1]];
     this.ctx.acceptWebSocket(server);
-    if (!userId) {
-      server.send(
-        JSON.stringify({
-          type: "ERROR",
-          message: "You must be signed in to join a game",
-          code: "UNAUTHORIZED",
-        })
-      );
-      server.close(1008, "Unauthorized");
+
+    if (params.role === "spectator" || !params.userId) {
+      server.serializeAttachment({
+        playerId: "",
+        joinTime: Date.now(),
+        role: "spectator",
+        isGuest: false,
+      } satisfies SocketMeta);
+      await this.ensureHydratedForRead(params.gameId);
+      this.sendSnapshot(server);
       return new Response(null, { status: 101, webSocket: client });
     }
+
     server.serializeAttachment({
-      playerId: userId,
+      playerId: params.userId,
       joinTime: Date.now(),
+      role: "player",
+      isGuest: params.isGuest,
+      name: params.name,
     } satisfies SocketMeta);
     return new Response(null, { status: 101, webSocket: client });
+  }
+
+  /**
+   * Load room metadata for a spectator connecting to a room the DO has not yet
+   * hydrated. Read-only: never creates a player entry, and swallows the "already
+   * started/finished" reply a spectator has no use for so they still get a
+   * snapshot of whatever state exists.
+   */
+  private async ensureHydratedForRead(gameId?: string) {
+    if (this.state.gameId || !gameId) return;
+    await this.resolveGameType(gameId);
+    const { directives, roomPassword } = await this.game.hydrate(
+      this.state,
+      gameId
+    );
+    if (!directives.reply) {
+      this.gamePassword = roomPassword;
+      await this.ctx.storage.put("gamePassword", roomPassword ?? "");
+      await this.saveState();
+    }
   }
 
   private sendSnapshot(ws: WebSocket) {
@@ -136,6 +187,7 @@ export class GameRoom extends DurableObject<Env> {
       ws.send(JSON.stringify({ type: "ERROR", message: "Unauthorized" }));
       return;
     }
+    if (auth.role === "spectator") return;
 
     // Validate the untrusted client payload before it reaches any handler: parse
     // JSON, then check the shape against the platform schema first and, failing
@@ -159,7 +211,7 @@ export class GameRoom extends DurableObject<Env> {
       const action = { ...platform.data, playerId };
       directives =
         action.type === "JOIN"
-          ? await this.onJoin(action)
+          ? await this.onJoin(action, auth)
           : await this.onStart(action, now);
     } else {
       const meta = getGameMeta(this.gameType);
@@ -186,7 +238,8 @@ export class GameRoom extends DurableObject<Env> {
 
   /** Resolve the game type, then hand off to the room game's hydrate/join. */
   private async onJoin(
-    action: Extract<PlatformMessage, { type: "JOIN" }>
+    action: Extract<PlatformMessage, { type: "JOIN" }>,
+    auth: SocketMeta
   ): Promise<EngineDirectives> {
     await this.resolveGameType(action.gameId);
 
@@ -200,9 +253,11 @@ export class GameRoom extends DurableObject<Env> {
       await this.ctx.storage.put("gamePassword", roomPassword ?? "");
     }
 
+    const name = sanitizeName(auth.name ?? action.name);
     return this.game.join(this.state, {
       playerId: action.playerId,
-      name: action.name,
+      name,
+      isGuest: auth.isGuest,
       password: action.password,
       roomPassword: this.gamePassword,
     });
@@ -223,9 +278,13 @@ export class GameRoom extends DurableObject<Env> {
   ) {
     if (ws && d.reply) ws.send(JSON.stringify(d.reply));
     if (ws && playerId && d.accepted) {
+      const prev = readMeta(ws);
       ws.serializeAttachment({
         playerId,
-        joinTime: Date.now(),
+        joinTime: prev?.joinTime ?? Date.now(),
+        role: "player",
+        isGuest: prev?.isGuest ?? false,
+        name: prev?.name,
       } satisfies SocketMeta);
     }
 

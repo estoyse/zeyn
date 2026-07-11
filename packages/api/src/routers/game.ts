@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { generateGameCode } from "../game-code";
-import { roomLimits } from "../game-types";
+import { roomLimits, sanitizeName, NAME_MAX_LENGTH } from "../game-types";
+import { signGuestToken } from "../guest-token";
 import { getGameMeta, gameMetaRegistry, type GameType } from "../games";
 import { loadResultsDetail } from "../games/results";
-import { protectedProcedure, router } from "../index";
+import { protectedProcedure, publicProcedure, router } from "../index";
 import {
   gameHistory,
   gamePlayerResults,
@@ -42,6 +43,7 @@ export const gameRouter = router({
           .default(roomLimits.defaultMaxPlayers),
         isPublic: z.boolean().default(true),
         password: z.string().optional(),
+        allowGuests: z.boolean().default(true),
         gameType: z.string().default("buzzer"),
         config: z.unknown(),
       })
@@ -77,6 +79,7 @@ export const gameRouter = router({
             maxPlayers: input.maxPlayers,
             isPublic: input.isPublic,
             password: input.password || null,
+            allowGuests: input.allowGuests,
             status: "waiting",
             config: JSON.stringify(parsedConfig.data),
             createdAt: new Date(),
@@ -143,7 +146,56 @@ export const gameRouter = router({
       };
     }),
 
-  getResults: protectedProcedure
+  createGuestToken: publicProcedure
+    .input(z.object({ name: z.string().min(1).max(NAME_MAX_LENGTH) }))
+    .mutation(async ({ ctx, input }) => {
+      const name = sanitizeName(input.name);
+      if (!name) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please provide a valid display name",
+        });
+      }
+      const { token, guestId } = await signGuestToken(
+        ctx.env.BETTER_AUTH_SECRET,
+        { name }
+      );
+      return { token, guestId, name };
+    }),
+
+  getRoomPreview: publicProcedure
+    .input(z.object({ gameId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const room = await ctx.db
+        .select({
+          id: activeGames.id,
+          name: activeGames.name,
+          gameType: activeGames.gameType,
+          status: activeGames.status,
+          maxPlayers: activeGames.maxPlayers,
+          isPublic: activeGames.isPublic,
+          password: activeGames.password,
+          allowGuests: activeGames.allowGuests,
+        })
+        .from(activeGames)
+        .where(eq(activeGames.id, input.gameId))
+        .get();
+
+      if (!room) return null;
+
+      return {
+        id: room.id,
+        name: room.name,
+        gameType: room.gameType,
+        status: room.status,
+        maxPlayers: room.maxPlayers,
+        isPublic: room.isPublic,
+        hasPassword: !!room.password,
+        allowGuests: room.allowGuests,
+      };
+    }),
+
+  getResults: publicProcedure
     .input(
       z.object({
         gameId: z.string(),
@@ -180,7 +232,7 @@ export const gameRouter = router({
       };
     }),
 
-  getRoomStatus: protectedProcedure
+  getRoomStatus: publicProcedure
     .input(z.object({ gameId: z.string() }))
     .query(async ({ ctx, input }) => {
       const room = await ctx.db

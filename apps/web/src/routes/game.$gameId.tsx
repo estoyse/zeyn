@@ -67,7 +67,14 @@ function GamePage() {
       );
 
     case "loginRequired":
-      return secondary(<LoginRequiredView gameId={gameId} />);
+      return secondary(
+        <LoginRequiredView
+          gameId={gameId}
+          onJoinAsGuest={room.joinAsGuest}
+          onWatch={room.watchAsSpectator}
+          pending={room.mintPending}
+        />
+      );
 
     case "connecting":
       return secondary(<ConnectingView />);

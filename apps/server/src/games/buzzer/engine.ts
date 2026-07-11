@@ -28,6 +28,7 @@ export interface RoomRow {
   maxPlayers: number;
   isPublic: boolean;
   password: string | null;
+  allowGuests: boolean;
   status: "waiting" | "playing" | "finished";
 }
 
@@ -59,6 +60,7 @@ export function createInitialState(): GameState {
     maxPlayers: gameConfig.maxPlayers,
     isPublic: true,
     hasPassword: false,
+    allowGuests: true,
     players: {},
     subjects: [],
     currentSubjectIndex: 0,
@@ -126,12 +128,13 @@ export function hydrateRoom(
   state.maxPlayers = room.maxPlayers;
   state.isPublic = room.isPublic;
   state.hasPassword = !!room.password;
+  state.allowGuests = room.allowGuests;
   return {};
 }
 
 /** Validate and admit a player, or reconnect an existing one. */
 export function join(state: GameState, params: JoinParams): EngineDirectives {
-  const { playerId, name, password, roomPassword } = params;
+  const { playerId, name, isGuest, password, roomPassword } = params;
 
   if (!playerId || !name) {
     return {
@@ -140,9 +143,12 @@ export function join(state: GameState, params: JoinParams): EngineDirectives {
     };
   }
 
-  if (playerId.startsWith("guest-")) {
+  if (isGuest && !state.allowGuests) {
     return {
-      reply: error("Guest access is disabled. Please login."),
+      reply: error(
+        "This room does not allow guests. Please sign in.",
+        "GUESTS_NOT_ALLOWED"
+      ),
       closeSocket: true,
     };
   }
@@ -177,12 +183,14 @@ export function join(state: GameState, params: JoinParams): EngineDirectives {
   if (existing) {
     existing.connected = true;
     existing.name = name;
+    existing.isGuest = isGuest;
   } else {
     state.players[playerId] = {
       id: playerId,
       name,
       score: 0,
       connected: true,
+      isGuest,
     };
   }
 

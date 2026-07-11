@@ -8,6 +8,7 @@ import type {
 export interface JoinParams {
   playerId: string;
   name: string;
+  isGuest: boolean;
   password?: string;
   /** The room's real password (never part of broadcast state); null if open. */
   roomPassword: string | null;

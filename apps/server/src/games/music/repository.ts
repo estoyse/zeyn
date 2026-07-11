@@ -42,6 +42,7 @@ export class MusicRepository {
       maxPlayers: room.maxPlayers,
       isPublic: room.isPublic,
       password: room.password,
+      allowGuests: room.allowGuests,
       status: room.status,
       artistIds: config.artistIds ?? [],
     };

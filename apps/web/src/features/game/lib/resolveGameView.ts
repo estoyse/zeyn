@@ -10,6 +10,8 @@ export interface GameViewInputs {
   errorCode: string | null;
   showPasswordPrompt: boolean;
   isAuthed: boolean;
+  hasIdentity: boolean;
+  isSpectating: boolean;
   sessionLoading: boolean;
   isConnecting: boolean;
   isConnected: boolean;
@@ -48,7 +50,7 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
     return { kind: "loading", message: "Checking session..." };
   }
 
-  if (!i.isAuthed) return { kind: "loginRequired" };
+  if (!i.hasIdentity && !i.isSpectating) return { kind: "loginRequired" };
 
   if (!i.hasState && (i.isConnecting || i.isConnected) && !i.error) {
     return { kind: "connecting" };

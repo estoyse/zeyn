@@ -49,6 +49,7 @@ export class GameRepository {
       maxPlayers: room.maxPlayers,
       isPublic: room.isPublic,
       password: room.password,
+      allowGuests: room.allowGuests,
       status: room.status,
       subjectIds: config.subjectIds ?? [],
     };

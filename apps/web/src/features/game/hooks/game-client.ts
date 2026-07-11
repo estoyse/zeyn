@@ -4,19 +4,35 @@ import { useSocket } from "./useSocket";
 import { useGameState } from "./useGameState";
 import type { ClientMessage } from "@zeyn/api/game-types";
 
-export function useGame(
-  gameId: string,
-  playerId: string,
-  playerName: string,
-  password?: string
-) {
+interface UseGameOptions {
+  gameId: string;
+  playerId: string;
+  playerName: string;
+  password?: string;
+  guestToken?: string;
+  spectate: boolean;
+  connect: boolean;
+}
+
+export function useGame({
+  gameId,
+  playerId,
+  playerName,
+  password,
+  guestToken,
+  spectate,
+  connect,
+}: UseGameOptions) {
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const wsUrl = useMemo(() => {
     const base = env.VITE_SERVER_URL.replace(/\/$/, "").replace(/^http/, "ws");
-    return `${base}/game/${gameId}/ws`;
-  }, [gameId]);
+    const url = `${base}/game/${gameId}/ws`;
+    if (guestToken) return `${url}?guest=${encodeURIComponent(guestToken)}`;
+    if (spectate) return `${url}?spectate=1`;
+    return url;
+  }, [gameId, guestToken, spectate]);
 
   const handleGameStateError = useCallback((err: string, code?: string) => {
     setError(err);
@@ -41,13 +57,14 @@ export function useGame(
     errorCode === "NOT_FOUND" ||
     errorCode === "ALREADY_STARTED" ||
     errorCode === "ALREADY_FINISHED" ||
-    errorCode === "UNAUTHORIZED";
+    errorCode === "UNAUTHORIZED" ||
+    errorCode === "GUESTS_NOT_ALLOWED";
 
   const { send, close, isConnecting, isConnected } = useSocket({
     url: wsUrl,
     onMessage: handleMessage,
     onError: handleSocketError,
-    enabled: !!playerId && !terminal,
+    enabled: connect && !terminal,
   });
 
   const join = useCallback(() => {
@@ -63,10 +80,10 @@ export function useGame(
   );
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && playerId && !spectate) {
       join();
     }
-  }, [isConnected, join]);
+  }, [isConnected, join, playerId, spectate]);
 
   return {
     state,
@@ -76,6 +93,7 @@ export function useGame(
     sendAction,
     isConnecting,
     isConnected,
+    close,
     join,
   };
 }
