@@ -11,6 +11,7 @@ interface LoginRequiredViewProps {
   onJoinAsGuest: (name: string) => void;
   onWatch: () => void;
   pending?: boolean;
+  allowGuests?: boolean;
 }
 
 export function LoginRequiredView({
@@ -18,6 +19,7 @@ export function LoginRequiredView({
   onJoinAsGuest,
   onWatch,
   pending = false,
+  allowGuests = true,
 }: LoginRequiredViewProps) {
   const { t } = useTranslation();
   const [name, setName] = useState("");
@@ -39,35 +41,37 @@ export function LoginRequiredView({
             </p>
           </div>
 
-          <form
-            className='mt-6 space-y-3'
-            onSubmit={e => {
-              e.preventDefault();
-              if (trimmed) onJoinAsGuest(trimmed);
-            }}
-          >
-            <Input
-              value={name}
-              maxLength={NAME_MAX_LENGTH}
-              onChange={e => setName(e.target.value)}
-              placeholder={t("game:auth.joinChoice.namePlaceholder", {
-                defaultValue: "Your display name",
-              })}
-              aria-label={t("game:auth.joinChoice.namePlaceholder", {
-                defaultValue: "Your display name",
-              })}
-            />
-            <Button
-              type='submit'
-              variant='brand'
-              className='w-full'
-              disabled={!trimmed || pending}
+          {allowGuests && (
+            <form
+              className='mt-6 space-y-3'
+              onSubmit={e => {
+                e.preventDefault();
+                if (trimmed) onJoinAsGuest(trimmed);
+              }}
             >
-              {t("game:auth.joinChoice.joinAsGuest", {
-                defaultValue: "Join as guest",
-              })}
-            </Button>
-          </form>
+              <Input
+                value={name}
+                maxLength={NAME_MAX_LENGTH}
+                onChange={e => setName(e.target.value)}
+                placeholder={t("game:auth.joinChoice.namePlaceholder", {
+                  defaultValue: "Your display name",
+                })}
+                aria-label={t("game:auth.joinChoice.namePlaceholder", {
+                  defaultValue: "Your display name",
+                })}
+              />
+              <Button
+                type='submit'
+                variant='brand'
+                className='w-full'
+                disabled={!trimmed || pending}
+              >
+                {t("game:auth.joinChoice.joinAsGuest", {
+                  defaultValue: "Join as guest",
+                })}
+              </Button>
+            </form>
+          )}
 
           <Button
             variant='outline'

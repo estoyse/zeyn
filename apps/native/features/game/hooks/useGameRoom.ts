@@ -24,6 +24,17 @@ export function useGameRoom(gameId: string) {
   );
   const [spectating, setSpectating] = useState(false);
 
+  const previewQuery = useQuery(
+    trpc.game.getRoomPreview.queryOptions({ gameId })
+  );
+  const preview = previewQuery.data;
+  const previewLoading = previewQuery.isPending;
+  const isFinished = preview?.status === "finished";
+  const roomMissing = previewQuery.isSuccess && preview === null;
+  const isArchived = isFinished || roomMissing;
+  const needsPassword = !!preview?.hasPassword;
+  const allowGuests = preview?.allowGuests ?? true;
+
   const authedId = session?.user?.id ?? "";
   const authedName = session?.user?.name ?? "";
 
@@ -32,7 +43,13 @@ export function useGameRoom(gameId: string) {
   const guestToken = isAuthed ? undefined : guest?.token;
   const cookie = isAuthed ? (authClient.getCookie() ?? undefined) : undefined;
   const isSpectator = !isAuthed && !guest && spectating;
-  const shouldConnect = isAuthed || !!guest || spectating;
+  const hasIdentity = isAuthed || !!guest;
+
+  const shouldConnect =
+    !previewLoading &&
+    !isArchived &&
+    !(needsPassword && !password) &&
+    (hasIdentity || spectating);
 
   const {
     state,
@@ -72,7 +89,9 @@ export function useGameRoom(gameId: string) {
   const watchAsSpectator = useCallback(() => setSpectating(true), []);
 
   const wantResults =
-    state?.status === "FINISHED" || errorCode === "ALREADY_FINISHED";
+    isArchived ||
+    state?.status === "FINISHED" ||
+    errorCode === "ALREADY_FINISHED";
   const resultsQuery = useQuery({
     ...trpc.game.getResults.queryOptions({ gameId }),
     enabled: wantResults,
@@ -92,11 +111,17 @@ export function useGameRoom(gameId: string) {
     status: state?.status,
     hasState: !!state,
     hasResults: !!resultsQuery.data,
+    resultsPending: wantResults && resultsQuery.isPending,
+    previewLoading,
+    isFinished,
+    roomMissing,
+    needsPassword,
+    hasPasswordEntered: !!password,
     error,
     errorCode,
     showPasswordPrompt,
     isAuthed,
-    hasIdentity: isAuthed || !!guest,
+    hasIdentity,
     isSpectating: spectating,
     sessionLoading,
     isConnecting,
@@ -109,6 +134,8 @@ export function useGameRoom(gameId: string) {
     userId: playerId,
     playerId,
     isSpectator,
+    allowGuests,
+    roomName: preview?.name,
     serverTimeOffset,
     send,
     start,

@@ -69,6 +69,7 @@
     "questionProgress": "Question {{current}} of {{total}}"
   },
   "loading": {
+    "room": "Loading room...",
     "checkingSession": "Checking session...",
     "connectingToRoom": "Connecting to room...",
     "results": "Fetching final results...",

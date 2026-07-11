@@ -71,6 +71,7 @@
     "questionProgress": "Вопрос {{current}} из {{total}}"
   },
   "loading": {
+    "room": "Загрузка комнаты...",
     "checkingSession": "Проверка сессии...",
     "connectingToRoom": "Подключение к комнате...",
     "results": "Загрузка итоговых результатов...",

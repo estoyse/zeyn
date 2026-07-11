@@ -2,6 +2,12 @@ export interface GameViewInputs {
   status?: "WAITING" | "PLAYING" | "FINISHED";
   hasState: boolean;
   hasResults: boolean;
+  resultsPending: boolean;
+  previewLoading: boolean;
+  isFinished: boolean;
+  roomMissing: boolean;
+  needsPassword: boolean;
+  hasPasswordEntered: boolean;
   error: string | null;
   errorCode: string | null;
   showPasswordPrompt: boolean;
@@ -29,6 +35,22 @@ const CONNECTION_ERROR_MESSAGES: Record<string, string> = {
 };
 
 export function resolveGameView(i: GameViewInputs): GameViewState {
+  if (i.previewLoading) {
+    return { kind: "loading", message: "loading.room" };
+  }
+
+  if (i.isFinished || i.roomMissing) {
+    if (i.hasResults) return { kind: "archive" };
+    if (i.resultsPending) {
+      return { kind: "loading", message: "loading.results" };
+    }
+    return {
+      kind: "connectionError",
+      message: "errors.connection.notFound",
+      retry: "dashboard",
+    };
+  }
+
   const isOver = i.status === "FINISHED" || !!i.error || !i.hasState;
   if (isOver && i.hasResults) return { kind: "archive" };
 
@@ -36,7 +58,11 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
     return { kind: "loading", message: "loading.results" };
   }
 
-  if (i.errorCode === "PASSWORD_REQUIRED" || i.showPasswordPrompt) {
+  if (
+    (i.needsPassword && !i.hasPasswordEntered) ||
+    i.errorCode === "PASSWORD_REQUIRED" ||
+    i.showPasswordPrompt
+  ) {
     return { kind: "passwordPrompt" };
   }
 

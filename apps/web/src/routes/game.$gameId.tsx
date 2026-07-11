@@ -73,6 +73,7 @@ function GamePage() {
           onJoinAsGuest={room.joinAsGuest}
           onWatch={room.watchAsSpectator}
           pending={room.mintPending}
+          allowGuests={room.allowGuests}
         />
       );
 

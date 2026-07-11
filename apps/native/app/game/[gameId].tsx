@@ -73,6 +73,7 @@ function GameRoom({ gameId }: { gameId: string }) {
           onJoinAsGuest={room.joinAsGuest}
           onWatch={room.watchAsSpectator}
           pending={room.mintPending}
+          allowGuests={room.allowGuests}
         />
       );
 

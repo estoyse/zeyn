@@ -16,6 +16,7 @@ interface JoinChoiceViewProps {
   onJoinAsGuest: (name: string) => void;
   onWatch: () => void;
   pending?: boolean;
+  allowGuests?: boolean;
 }
 
 export function JoinChoiceView({
@@ -23,6 +24,7 @@ export function JoinChoiceView({
   onJoinAsGuest,
   onWatch,
   pending = false,
+  allowGuests = true,
 }: JoinChoiceViewProps) {
   const { t } = useTranslation("game");
   const [name, setName] = useState("");
@@ -41,24 +43,28 @@ export function JoinChoiceView({
       </View>
 
       <View className="w-full max-w-sm gap-3">
-        <TextField>
-          <Input
-            value={name}
-            onChangeText={setName}
-            maxLength={NAME_MAX_LENGTH}
-            placeholder={t("auth.joinChoice.namePlaceholder")}
-            autoCapitalize="words"
-          />
-        </TextField>
+        {allowGuests && (
+          <>
+            <TextField>
+              <Input
+                value={name}
+                onChangeText={setName}
+                maxLength={NAME_MAX_LENGTH}
+                placeholder={t("auth.joinChoice.namePlaceholder")}
+                autoCapitalize="words"
+              />
+            </TextField>
 
-        <Button
-          isDisabled={!trimmed || pending}
-          onPress={() => {
-            if (trimmed) onJoinAsGuest(trimmed);
-          }}
-        >
-          <Button.Label>{t("auth.joinChoice.joinAsGuest")}</Button.Label>
-        </Button>
+            <Button
+              isDisabled={!trimmed || pending}
+              onPress={() => {
+                if (trimmed) onJoinAsGuest(trimmed);
+              }}
+            >
+              <Button.Label>{t("auth.joinChoice.joinAsGuest")}</Button.Label>
+            </Button>
+          </>
+        )}
 
         <Button variant="outline" isDisabled={pending} onPress={onWatch}>
           <Button.Label>{t("auth.joinChoice.watch")}</Button.Label>
