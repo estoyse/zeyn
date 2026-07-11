@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { generateGameCode } from "../game-code";
 import { roomLimits, sanitizeName, NAME_MAX_LENGTH } from "../game-types";
 import { signGuestToken } from "../guest-token";
+import { enforceRateLimit } from "../rate-limit";
 import { getGameMeta, gameMetaRegistry, type GameType } from "../games";
 import { loadResultsDetail } from "../games/results";
 import { protectedProcedure, publicProcedure, router } from "../index";
@@ -149,6 +150,16 @@ export const gameRouter = router({
   createGuestToken: publicProcedure
     .input(z.object({ name: z.string().min(1).max(NAME_MAX_LENGTH) }))
     .mutation(async ({ ctx, input }) => {
+      const allowed = await enforceRateLimit(
+        ctx.guestTokenLimiter,
+        ctx.clientIp
+      );
+      if (!allowed) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Too many guest sign-ins. Please wait a moment and retry.",
+        });
+      }
       const name = sanitizeName(input.name);
       if (!name) {
         throw new TRPCError({

@@ -13,10 +13,13 @@ export async function createContext({ context }: CreateContextOptions) {
     headers: context.req.raw.headers,
   });
   const db = createDb();
+  const env = context.env as Env;
   return {
     session,
-    env: context.env as Env,
+    env,
     db,
+    clientIp: context.req.header("cf-connecting-ip") ?? null,
+    guestTokenLimiter: env.GUEST_TOKEN_LIMITER ?? null,
   };
 }
 
