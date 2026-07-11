@@ -49,12 +49,6 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
     }
   }, [phase, player]);
 
-  useEffect(() => {
-    return () => {
-      player.pause();
-    };
-  }, [player]);
-
   if (!state?.question) {
     return (
       <View className="flex-1 items-center justify-center p-8">
