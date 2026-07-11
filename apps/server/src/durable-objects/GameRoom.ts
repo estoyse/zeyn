@@ -6,6 +6,7 @@ import {
   type BaseGameState,
   type EngineDirectives,
   type PlatformMessage,
+  type ServerMessage,
 } from "@zeyn/api/game-types";
 import { getGameMeta } from "@zeyn/api/games";
 import type { RoomGame } from "../games/contract";
@@ -134,7 +135,12 @@ export class GameRoom extends DurableObject<Env> {
         role: "spectator",
         isGuest: false,
       } satisfies SocketMeta);
-      await this.ensureHydratedForRead(params.gameId);
+      const failure = await this.ensureHydratedForRead(params.gameId);
+      if (failure) {
+        server.send(JSON.stringify(failure));
+        server.close();
+        return new Response(null, { status: 101, webSocket: client });
+      }
       this.sendSnapshot(server);
       return new Response(null, { status: 101, webSocket: client });
     }
@@ -151,22 +157,24 @@ export class GameRoom extends DurableObject<Env> {
 
   /**
    * Load room metadata for a spectator connecting to a room the DO has not yet
-   * hydrated. Read-only: never creates a player entry, and swallows the "already
-   * started/finished" reply a spectator has no use for so they still get a
-   * snapshot of whatever state exists.
+   * hydrated. Read-only: never creates a player entry. Returns the engine's
+   * error reply (room missing / already finished) so the caller can forward it
+   * instead of serving a snapshot of the empty, unhydrated state.
    */
-  private async ensureHydratedForRead(gameId?: string) {
-    if (this.state.gameId || !gameId) return;
+  private async ensureHydratedForRead(
+    gameId?: string
+  ): Promise<ServerMessage | null> {
+    if (this.state.gameId || !gameId) return null;
     await this.resolveGameType(gameId);
     const { directives, roomPassword } = await this.game.hydrate(
       this.state,
       gameId
     );
-    if (!directives.reply) {
-      this.gamePassword = roomPassword;
-      await this.ctx.storage.put("gamePassword", roomPassword ?? "");
-      await this.saveState();
-    }
+    if (directives.reply) return directives.reply;
+    this.gamePassword = roomPassword;
+    await this.ctx.storage.put("gamePassword", roomPassword ?? "");
+    await this.saveState();
+    return null;
   }
 
   private sendSnapshot(ws: WebSocket) {

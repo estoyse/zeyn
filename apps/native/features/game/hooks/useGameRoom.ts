@@ -42,7 +42,7 @@ export function useGameRoom(gameId: string) {
   const playerName = isAuthed ? authedName : (guest?.name ?? "");
   const guestToken = isAuthed ? undefined : guest?.token;
   const cookie = isAuthed ? (authClient.getCookie() ?? undefined) : undefined;
-  const isSpectator = !isAuthed && !guest && spectating;
+  const isSpectator = spectating;
   const hasIdentity = isAuthed || !!guest;
 
   const shouldConnect =

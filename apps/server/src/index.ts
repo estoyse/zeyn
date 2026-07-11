@@ -52,7 +52,11 @@ app.all("/game/:id/ws", async c => {
   headers.delete("x-role");
   headers.delete("x-user-name");
 
-  if (session?.user?.id) {
+  const wantsSpectate = url.searchParams.get("spectate") === "1";
+
+  if (wantsSpectate) {
+    headers.set("x-role", "spectator");
+  } else if (session?.user?.id) {
     headers.set("x-user-id", session.user.id);
     headers.set("x-role", "player");
     if (session.user.name) {
