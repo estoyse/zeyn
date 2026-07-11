@@ -1,5 +1,10 @@
 {
   "appName": "Zeyn",
+  "tabs": {
+    "home": "Home",
+    "games": "Games",
+    "profile": "Profile"
+  },
   "save": "Save",
   "cancel": "Cancel",
   "language": "Language",
@@ -10,6 +15,11 @@
   "toggleLanguage": "Toggle language",
   "retry": "Retry",
   "syncingData": "Syncing Data...",
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist.",
+    "goHome": "Go Home"
+  },
   "theme": {
     "light": "Light",
     "dark": "Dark",

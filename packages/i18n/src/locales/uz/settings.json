@@ -1,6 +1,7 @@
 {
   "title": "Sozlamalar",
   "subtitle": "Hisobingiz va sozlamalaringizni boshqaring",
+  "signOut": "Chiqish",
   "tabs": {
     "account": "Hisob",
     "privacy": "Maxfiylik",
@@ -21,7 +22,7 @@
   "account": {
     "displayName": "Ko'rinadigan ism",
     "username": "Foydalanuvchi nomi",
-    "bio": "Bio",
+    "bio": "Tarjimai hol",
     "bioPlaceholder": "O'zingiz haqingizda qisqacha yozing.",
     "usernameUnavailable": "Band.",
     "usernameProfileUrl": "Ochiq profilingiz /u/{{username}} manzilida joylashgan",

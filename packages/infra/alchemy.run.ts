@@ -1,6 +1,6 @@
 import alchemy from "alchemy";
 import { Vite } from "alchemy/cloudflare";
-import { Worker, DurableObjectNamespace } from "alchemy/cloudflare";
+import { Worker, DurableObjectNamespace, RateLimit } from "alchemy/cloudflare";
 import { D1Database } from "alchemy/cloudflare";
 import { CloudflareStateStore } from "alchemy/state";
 import { config } from "dotenv";
@@ -92,6 +92,10 @@ export const server = await Worker("server", {
       sqlite: true,
     }),
     DB: db,
+    GUEST_TOKEN_LIMITER: RateLimit({
+      namespace_id: 1001,
+      simple: { limit: 5, period: 60 },
+    }),
     CORS_ORIGIN: corsOrigin!,
     BETTER_AUTH_SECRET: alchemy.secret.env.BETTER_AUTH_SECRET!,
     BETTER_AUTH_URL: betterAuthUrl!,

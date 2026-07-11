@@ -1,4 +1,8 @@
 {
+  "signInCta": {
+    "title": "Sign in to view your profile",
+    "description": "Track your games, stats, and account settings."
+  },
   "onlyYou": "Only you",
   "editProfile": "Edit profile",
   "memberSince": "Member since {{date}}",

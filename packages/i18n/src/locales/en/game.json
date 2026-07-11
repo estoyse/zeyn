@@ -17,12 +17,17 @@
     },
     "connection": {
       "title": "Connection Failed",
-      "retry": "Retry Connection"
+      "retry": "Retry Connection",
+      "generic": "Could not connect to game",
+      "notFound": "This room no longer exists",
+      "alreadyStarted": "Game has already started",
+      "alreadyFinished": "This game has ended"
     }
   },
   "header": {
     "room": "Room: {{gameId}}",
     "leave": "Leave",
+    "spectating": "Spectating",
     "leaveConfirm": {
       "title": "Leave this game?",
       "description": "You will be removed from the room and your score for this game will be lost.",
@@ -30,6 +35,7 @@
     }
   },
   "lobby": {
+    "guest": "Guest",
     "playersInLobby": "Players in Lobby",
     "joined": "{{count}} / {{max}} joined",
     "host": "Host",
@@ -63,8 +69,11 @@
     "questionProgress": "Question {{current}} of {{total}}"
   },
   "loading": {
+    "room": "Loading room...",
     "checkingSession": "Checking session...",
-    "connectingToRoom": "Connecting to room..."
+    "connectingToRoom": "Connecting to room...",
+    "results": "Fetching final results...",
+    "resultsReady": "Results are ready."
   },
   "auth": {
     "loginRequired": {
@@ -79,6 +88,11 @@
       "error": "Please enter the room password.",
       "back": "Back",
       "join": "Join Room"
+    },
+    "joinChoice": {
+      "namePlaceholder": "Your display name",
+      "joinAsGuest": "Join as guest",
+      "watch": "Watch"
     }
   },
   "timer": {
@@ -115,7 +129,9 @@
       "roomPassword": "Room Password (Optional)",
       "roomPasswordPlaceholder": "Secure your borders...",
       "decreaseMaxPlayers": "Decrease max players",
-      "increaseMaxPlayers": "Increase max players"
+      "increaseMaxPlayers": "Increase max players",
+      "allowGuests": "Allow Guests",
+      "allowGuestsHint": "Let players without an account join this room."
     },
     "subject": {
       "selectSubjects": "Select Subjects",
@@ -129,6 +145,13 @@
     },
     "configure": {
       "subtitle": "Configure the battlefield before deploying."
+    },
+    "errors": {
+      "nameTooShort": "Room name must be at least {{count}} characters.",
+      "playersRange": "Max players must be between {{min}} and {{max}}.",
+      "subjectsRange": "Select between {{min}} and {{max}} subjects.",
+      "artistsRange": "Select between {{min}} and {{max}} artists.",
+      "createFailed": "Failed to create the room. Please try again."
     }
   },
   "typePage": {

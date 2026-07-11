@@ -8,16 +8,12 @@
     "serve": "vite preview",
     "start": "vite",
     "check-types": "vite build && tsc --noEmit",
-    "dev:bare": "vite dev"
+    "dev:bare": "vite dev",
+    "test": "vitest run"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@libsql/client": "catalog:",
-    "@zeyn/api": "workspace:*",
-    "@zeyn/auth": "workspace:*",
-    "@zeyn/env": "workspace:*",
-    "@zeyn/i18n": "workspace:*",
-    "@zeyn/ui": "workspace:*",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-query": "catalog:",
@@ -25,6 +21,11 @@
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "@trpc/tanstack-react-query": "catalog:",
+    "@zeyn/api": "workspace:*",
+    "@zeyn/auth": "workspace:*",
+    "@zeyn/env": "workspace:*",
+    "@zeyn/i18n": "workspace:*",
+    "@zeyn/ui": "workspace:*",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "framer-motion": "^12.38.0",
@@ -40,7 +41,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@zeyn/config": "workspace:*",
     "@tanstack/react-query-devtools": "^5.91.1",
     "@tanstack/react-router-devtools": "^1.166.13",
     "@tanstack/router-plugin": "^1.167.22",
@@ -48,10 +48,12 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "^6.0.1",
+    "@zeyn/config": "workspace:*",
     "alchemy": "catalog:",
     "postcss": "^8.5.10",
     "tailwindcss": "^4.2.2",
     "typescript": "^6",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vitest": "^4.1.9"
   }
 }

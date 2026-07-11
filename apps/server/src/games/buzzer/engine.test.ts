@@ -47,6 +47,7 @@ function room(overrides: Partial<RoomRow> = {}): RoomRow {
     maxPlayers: 10,
     isPublic: true,
     password: null,
+    allowGuests: true,
     status: "waiting",
     ...overrides,
   };
@@ -127,31 +128,74 @@ describe("clientMessageSchema (WebSocket boundary)", () => {
 describe("join", () => {
   it("admits a valid new player", () => {
     const s = createInitialState();
-    const d = join(s, { playerId: "p1", name: "Ann", roomPassword: null });
+    const d = join(s, {
+      playerId: "p1",
+      name: "Ann",
+      isGuest: false,
+      roomPassword: null,
+    });
     expect(d.accepted).toBe(true);
     expect(s.players["p1"]).toMatchObject({ name: "Ann", score: 0, connected: true });
   });
 
   it("rejects and closes for missing id/name", () => {
     const s = createInitialState();
-    expect(join(s, { playerId: "", name: "Ann", roomPassword: null })).toMatchObject({
-      closeSocket: true,
-    });
-    expect(join(s, { playerId: "p1", name: "", roomPassword: null })).toMatchObject({
-      closeSocket: true,
-    });
+    expect(
+      join(s, { playerId: "", name: "Ann", isGuest: false, roomPassword: null })
+    ).toMatchObject({ closeSocket: true });
+    expect(
+      join(s, { playerId: "p1", name: "", isGuest: false, roomPassword: null })
+    ).toMatchObject({ closeSocket: true });
   });
 
-  it("rejects guest ids", () => {
+  it("admits a guest and tags the player entry when guests are allowed", () => {
     const s = createInitialState();
-    const d = join(s, { playerId: "guest-42", name: "G", roomPassword: null });
+    s.allowGuests = true;
+    const d = join(s, {
+      playerId: "guest-42",
+      name: "G",
+      isGuest: true,
+      roomPassword: null,
+    });
+    expect(d.accepted).toBe(true);
+    expect(s.players["guest-42"]).toMatchObject({ isGuest: true, name: "G" });
+  });
+
+  it("rejects a guest when the room disallows guests", () => {
+    const s = createInitialState();
+    s.allowGuests = false;
+    const d = join(s, {
+      playerId: "guest-42",
+      name: "G",
+      isGuest: true,
+      roomPassword: null,
+    });
     expect(d.closeSocket).toBe(true);
+    expect(d.reply).toMatchObject({ code: "GUESTS_NOT_ALLOWED" });
     expect(s.players["guest-42"]).toBeUndefined();
+  });
+
+  it("still admits authed players when the room disallows guests", () => {
+    const s = createInitialState();
+    s.allowGuests = false;
+    const d = join(s, {
+      playerId: "user-1",
+      name: "Ann",
+      isGuest: false,
+      roomPassword: null,
+    });
+    expect(d.accepted).toBe(true);
+    expect(s.players["user-1"]).toMatchObject({ isGuest: false });
   });
 
   it("enforces the room password without closing the socket", () => {
     const s = createInitialState();
-    const wrong = join(s, { playerId: "p1", name: "Ann", roomPassword: "secret" });
+    const wrong = join(s, {
+      playerId: "p1",
+      name: "Ann",
+      isGuest: false,
+      roomPassword: "secret",
+    });
     expect(wrong.reply).toMatchObject({ code: "PASSWORD_REQUIRED" });
     expect(wrong.closeSocket).toBeUndefined();
     expect(s.players["p1"]).toBeUndefined();
@@ -159,6 +203,7 @@ describe("join", () => {
     const right = join(s, {
       playerId: "p1",
       name: "Ann",
+      isGuest: false,
       password: "secret",
       roomPassword: "secret",
     });
@@ -168,15 +213,25 @@ describe("join", () => {
   it("rejects a new player when the room is full but readmits existing ones", () => {
     const s = createInitialState();
     s.maxPlayers = 1;
-    join(s, { playerId: "p1", name: "Ann", roomPassword: null });
+    join(s, { playerId: "p1", name: "Ann", isGuest: false, roomPassword: null });
 
-    const full = join(s, { playerId: "p2", name: "Bob", roomPassword: null });
+    const full = join(s, {
+      playerId: "p2",
+      name: "Bob",
+      isGuest: false,
+      roomPassword: null,
+    });
     expect(full.reply).toMatchObject({ type: "ERROR", message: "Room is full" });
     expect(s.players["p2"]).toBeUndefined();
 
     // Existing player reconnecting is always allowed and flips connected back on.
     player(s, "p1").connected = false;
-    const rejoin = join(s, { playerId: "p1", name: "Ann2", roomPassword: null });
+    const rejoin = join(s, {
+      playerId: "p1",
+      name: "Ann2",
+      isGuest: false,
+      roomPassword: null,
+    });
     expect(rejoin.accepted).toBe(true);
     expect(s.players["p1"]).toMatchObject({ connected: true, name: "Ann2", score: 0 });
   });

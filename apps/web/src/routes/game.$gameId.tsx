@@ -67,7 +67,15 @@ function GamePage() {
       );
 
     case "loginRequired":
-      return secondary(<LoginRequiredView gameId={gameId} />);
+      return secondary(
+        <LoginRequiredView
+          gameId={gameId}
+          onJoinAsGuest={room.joinAsGuest}
+          onWatch={room.watchAsSpectator}
+          pending={room.mintPending}
+          allowGuests={room.allowGuests}
+        />
+      );
 
     case "connecting":
       return secondary(<ConnectingView />);
@@ -98,7 +106,7 @@ function GameScreen({
   gameId: string;
   onLeave: () => void;
 }) {
-  const { state, userId, isConnected } = room;
+  const { state, userId, isConnected, isSpectator } = room;
   if (!state) return null;
 
   const game = getClientGame(state.gameType);
@@ -106,7 +114,11 @@ function GameScreen({
   const isPlaying = state.status === "PLAYING";
 
   return (
-    <FocusLayout header={<GameHeader gameId={gameId} onLeave={onLeave} />}>
+    <FocusLayout
+      header={
+        <GameHeader gameId={gameId} onLeave={onLeave} isSpectator={isSpectator} />
+      }
+    >
       {!isConnected && <ReconnectingBanner />}
 
       <div className='min-h-full p-4 md:p-6'>

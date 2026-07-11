@@ -1,6 +1,7 @@
 {
   "title": "Settings",
   "subtitle": "Manage your account and preferences",
+  "signOut": "Sign out",
   "tabs": {
     "account": "Account",
     "privacy": "Privacy",

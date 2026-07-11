@@ -1,0 +1,19 @@
+{
+  "slide1": {
+    "title": "Jonli buzzer",
+    "description": "Do'stlaring va boshqa o'yinchilar bilan javobga birinchi bo'lib buzzer bos — g'olib birinchi bosgan."
+  },
+  "slide2": {
+    "title": "Do'stlar bilan o'yna",
+    "description": "Xona yarat yoki qo'shil, do'stlaringni taklif qil va reyting jadvalida yuksal."
+  },
+  "slide3": {
+    "title": "O'zbekiston uchun yaratilgan",
+    "description": "O'zbek, rus yoki ingliz tilida o'yna — Zeyn aynan O'zbekiston uchun yaratilgan."
+  },
+  "skip": "O'tkazib yuborish",
+  "next": "Keyingisi",
+  "getStarted": "Boshlash",
+  "createAccount": "Hisob yaratish",
+  "skipForNow": "Hozircha o'tkazib yuborish"
+}

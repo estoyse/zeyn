@@ -117,6 +117,9 @@ export const activeGames = sqliteTable("active_games", {
   maxPlayers: integer("max_players").notNull().default(10),
   isPublic: integer("is_public", { mode: "boolean" }).notNull().default(true),
   password: text("password"),
+  allowGuests: integer("allow_guests", { mode: "boolean" })
+    .notNull()
+    .default(true),
   status: text("status", { enum: ["waiting", "playing", "finished"] })
     .notNull()
     .default("waiting"),

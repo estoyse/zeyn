@@ -1,5 +1,10 @@
 {
   "appName": "Zeyn",
+  "tabs": {
+    "home": "Bosh sahifa",
+    "games": "O'yinlar",
+    "profile": "Profil"
+  },
   "save": "Saqlash",
   "cancel": "Bekor qilish",
   "language": "Til",
@@ -10,6 +15,11 @@
   "toggleLanguage": "Tilni almashtirish",
   "retry": "Qayta urinish",
   "syncingData": "Ma'lumotlar sinxronlanmoqda...",
+  "notFound": {
+    "title": "Sahifa topilmadi",
+    "description": "Siz qidirayotgan sahifa mavjud emas.",
+    "goHome": "Bosh sahifaga"
+  },
   "theme": {
     "light": "Yorug'",
     "dark": "Qorong'i",

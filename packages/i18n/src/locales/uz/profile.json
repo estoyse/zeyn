@@ -1,4 +1,8 @@
 {
+  "signInCta": {
+    "title": "Profilingizni ko'rish uchun tizimga kiring",
+    "description": "O'yinlaringiz, statistikangiz va hisob sozlamalaringizni kuzatib boring."
+  },
   "onlyYou": "Faqat siz",
   "editProfile": "Profilni tahrirlash",
   "memberSince": "A'zo bo'lgan sana: {{date}}",

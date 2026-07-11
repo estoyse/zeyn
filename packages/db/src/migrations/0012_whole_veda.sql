@@ -1,0 +1,1 @@
+ALTER TABLE `active_games` ADD `allow_guests` integer DEFAULT true NOT NULL;

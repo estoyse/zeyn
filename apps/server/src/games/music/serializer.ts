@@ -27,6 +27,7 @@ export class MusicSerializer {
       maxPlayers: state.maxPlayers,
       isPublic: state.isPublic,
       hasPassword: state.hasPassword,
+      allowGuests: state.allowGuests,
       currentQuestionIndex: state.currentQuestionIndex,
       totalQuestions: state.questions.length,
       phase: state.phase,

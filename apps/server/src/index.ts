@@ -3,6 +3,7 @@ import { createContext } from "@zeyn/api/context";
 import { appRouter } from "@zeyn/api/routers/index";
 import { createAuth } from "@zeyn/auth";
 import { parseOrigins } from "@zeyn/auth/origins";
+import { verifyGuestToken } from "@zeyn/api/guest-token";
 import { env, type Env } from "@zeyn/env/server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -36,6 +37,7 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.all("/game/:id/ws", async c => {
   const id = c.req.param("id");
+  const url = new URL(c.req.url);
   const session = await createAuth().api.getSession({
     headers: c.req.raw.headers,
   });
@@ -46,8 +48,33 @@ app.all("/game/:id/ws", async c => {
   const stub = ns.get(ns.idFromName(id));
   const headers = new Headers(c.req.raw.headers);
   headers.delete("x-user-id");
-  if (session?.user?.id) {
+  headers.delete("x-guest");
+  headers.delete("x-role");
+  headers.delete("x-user-name");
+
+  const wantsSpectate = url.searchParams.get("spectate") === "1";
+
+  if (wantsSpectate) {
+    headers.set("x-role", "spectator");
+  } else if (session?.user?.id) {
     headers.set("x-user-id", session.user.id);
+    headers.set("x-role", "player");
+    if (session.user.name) {
+      headers.set("x-user-name", encodeURIComponent(session.user.name));
+    }
+  } else {
+    const guestToken = url.searchParams.get("guest");
+    const payload = guestToken
+      ? await verifyGuestToken(c.env.BETTER_AUTH_SECRET, guestToken)
+      : null;
+    if (payload) {
+      headers.set("x-user-id", payload.gid);
+      headers.set("x-guest", "1");
+      headers.set("x-role", "player");
+      headers.set("x-user-name", encodeURIComponent(payload.name));
+    } else {
+      headers.set("x-role", "spectator");
+    }
   }
   return stub.fetch(new Request(c.req.raw, { headers }));
 });

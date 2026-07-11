@@ -17,12 +17,17 @@
     },
     "connection": {
       "title": "Ulanish amalga oshmadi",
-      "retry": "Qayta urinish"
+      "retry": "Qayta urinish",
+      "generic": "O'yinga ulanib bo'lmadi",
+      "notFound": "Bu xona endi mavjud emas",
+      "alreadyStarted": "O'yin allaqachon boshlangan",
+      "alreadyFinished": "Bu o'yin allaqachon tugagan"
     }
   },
   "header": {
     "room": "Xona: {{gameId}}",
     "leave": "Chiqish",
+    "spectating": "Kuzatuvchi",
     "leaveConfirm": {
       "title": "O'yindan chiqasizmi?",
       "description": "Siz xonadan chiqarilasiz va bu o'yindagi ochkolaringiz yo'qoladi.",
@@ -30,6 +35,7 @@
     }
   },
   "lobby": {
+    "guest": "Mehmon",
     "playersInLobby": "Kutish xonasidagi o'yinchilar",
     "joined": "{{count}} / {{max}} qo'shildi",
     "host": "Xost",
@@ -63,8 +69,11 @@
     "questionProgress": "{{total}} savoldan {{current}}-si"
   },
   "loading": {
+    "room": "Xona yuklanmoqda...",
     "checkingSession": "Sessiya tekshirilmoqda...",
-    "connectingToRoom": "Xonaga ulanmoqda..."
+    "connectingToRoom": "Xonaga ulanmoqda...",
+    "results": "Yakuniy natijalar yuklanmoqda...",
+    "resultsReady": "Natijalar tayyor."
   },
   "auth": {
     "loginRequired": {
@@ -79,6 +88,11 @@
       "error": "Iltimos, xona parolini kiriting.",
       "back": "Orqaga",
       "join": "Xonaga qo'shilish"
+    },
+    "joinChoice": {
+      "namePlaceholder": "Ismingiz",
+      "joinAsGuest": "Mehmon sifatida qo'shilish",
+      "watch": "Kuzatish"
     }
   },
   "timer": {
@@ -115,7 +129,9 @@
       "roomPassword": "Xona paroli (ixtiyoriy)",
       "roomPasswordPlaceholder": "Chegaralaringizni himoya qiling...",
       "decreaseMaxPlayers": "Maksimal o'yinchilar sonini kamaytirish",
-      "increaseMaxPlayers": "Maksimal o'yinchilar sonini oshirish"
+      "increaseMaxPlayers": "Maksimal o'yinchilar sonini oshirish",
+      "allowGuests": "Mehmonlarga ruxsat",
+      "allowGuestsHint": "Hisobga ega bo'lmagan o'yinchilarga ushbu xonaga qo'shilishga ruxsat bering."
     },
     "subject": {
       "selectSubjects": "Mavzularni tanlang",
@@ -129,6 +145,13 @@
     },
     "configure": {
       "subtitle": "Joylashtirishdan oldin jangovar maydonni sozlang."
+    },
+    "errors": {
+      "nameTooShort": "Xona nomi kamida {{count}} ta belgidan iborat bo'lishi kerak.",
+      "playersRange": "Maksimal o'yinchilar soni {{min}} va {{max}} oralig'ida bo'lishi kerak.",
+      "subjectsRange": "{{min}} dan {{max}} gacha mavzu tanlang.",
+      "artistsRange": "{{min}} dan {{max}} gacha ijrochi tanlang.",
+      "createFailed": "Xonani yaratib bo'lmadi. Qaytadan urinib ko'ring."
     }
   },
   "typePage": {

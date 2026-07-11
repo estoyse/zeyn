@@ -5,6 +5,19 @@ export interface Player {
   name: string;
   score: number;
   connected: boolean;
+  isGuest?: boolean;
+}
+
+export const NAME_MAX_LENGTH = 40;
+
+export function sanitizeName(name: string): string {
+  let cleaned = "";
+  for (const char of name) {
+    const code = char.codePointAt(0) ?? 0;
+    if (code < 0x20 || code === 0x7f) continue;
+    cleaned += char;
+  }
+  return cleaned.trim().slice(0, NAME_MAX_LENGTH);
 }
 
 export interface Question {
@@ -51,6 +64,7 @@ export interface BaseGameState {
   maxPlayers: number;
   isPublic: boolean;
   hasPassword: boolean;
+  allowGuests: boolean;
   players: Record<string, Player>;
 }
 
@@ -78,6 +92,7 @@ export interface BasePublicGameState {
   maxPlayers: number;
   isPublic: boolean;
   hasPassword: boolean;
+  allowGuests?: boolean;
   players?: Record<string, Partial<Player>>; // Only changed players
 }
 
@@ -112,7 +127,7 @@ export const platformMessageSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("JOIN"),
     playerId: z.string().max(200),
-    name: z.string().max(200),
+    name: z.string().min(1).max(NAME_MAX_LENGTH),
     gameId: z.string().max(200),
     password: z.string().max(200).optional(),
   }),

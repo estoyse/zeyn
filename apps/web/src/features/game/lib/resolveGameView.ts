@@ -6,10 +6,18 @@ export interface GameViewInputs {
   status?: "WAITING" | "PLAYING" | "FINISHED";
   hasState: boolean;
   hasResults: boolean;
+  resultsPending: boolean;
+  previewLoading: boolean;
+  isFinished: boolean;
+  roomMissing: boolean;
+  needsPassword: boolean;
+  hasPasswordEntered: boolean;
   error: string | null;
   errorCode: string | null;
   showPasswordPrompt: boolean;
   isAuthed: boolean;
+  hasIdentity: boolean;
+  isSpectating: boolean;
   sessionLoading: boolean;
   isConnecting: boolean;
   isConnected: boolean;
@@ -31,6 +39,24 @@ const CONNECTION_ERROR_MESSAGES: Record<string, string> = {
 };
 
 export function resolveGameView(i: GameViewInputs): GameViewState {
+  if (i.previewLoading) {
+    return { kind: "loading", message: "Loading room..." };
+  }
+
+  // An archived (or missing) room is served entirely from REST — no socket, and
+  // no auth gate, since the results are public.
+  if (i.isFinished || i.roomMissing) {
+    if (i.hasResults) return { kind: "archive" };
+    if (i.resultsPending) {
+      return { kind: "loading", message: "Fetching final results..." };
+    }
+    return {
+      kind: "connectionError",
+      message: CONNECTION_ERROR_MESSAGES.NOT_FOUND,
+      retry: "dashboard",
+    };
+  }
+
   // Game is over (or unreachable) and the archived results have arrived.
   const isOver = i.status === "FINISHED" || !!i.error || !i.hasState;
   if (isOver && i.hasResults) return { kind: "archive" };
@@ -40,7 +66,11 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
     return { kind: "loading", message: "Fetching final results..." };
   }
 
-  if (i.errorCode === "PASSWORD_REQUIRED" || i.showPasswordPrompt) {
+  if (
+    (i.needsPassword && !i.hasPasswordEntered) ||
+    i.errorCode === "PASSWORD_REQUIRED" ||
+    i.showPasswordPrompt
+  ) {
     return { kind: "passwordPrompt" };
   }
 
@@ -48,7 +78,7 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
     return { kind: "loading", message: "Checking session..." };
   }
 
-  if (!i.isAuthed) return { kind: "loginRequired" };
+  if (!i.hasIdentity && !i.isSpectating) return { kind: "loginRequired" };
 
   if (!i.hasState && (i.isConnecting || i.isConnected) && !i.error) {
     return { kind: "connecting" };

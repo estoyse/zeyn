@@ -16,6 +16,7 @@ interface GamePlayingProps {
   setAnswerInput: (value: string) => void;
   onBuzz: () => void;
   onSubmitAnswer: (e: React.FormEvent) => void;
+  isSpectator: boolean;
 }
 
 export function GamePlaying({
@@ -25,6 +26,7 @@ export function GamePlaying({
   setAnswerInput,
   onBuzz,
   onSubmitAnswer,
+  isSpectator,
 }: GamePlayingProps) {
   const { t } = useTranslation();
   const isMyTurn = state.activeQuestionState?.buzzedPlayerId === playerId;
@@ -85,23 +87,25 @@ export function GamePlaying({
                 )}
               </div>
 
-              <Button
-                size='lg'
-                variant='brand'
-                className='size-28 xl:size-36 rounded-full'
-                onClick={onBuzz}
-                disabled={state.activeQuestionState?.playersWhoAttempted.includes(
-                  playerId
-                )}
-                title={isBuzzedOut ? t("game:playing.buzzedOut") : undefined}
-                aria-label={isBuzzedOut ? t("game:playing.buzzedOut") : undefined}
-              >
-                <div className='flex flex-col items-center'>
-                  <Zap className='size-10 xl:size-14 xl:mb-2 mb-1' />
-                  <span className='text-xl xl:text-2xl font-bold'>{t("game:playing.buzz")}</span>
-                </div>
-              </Button>
-              {isBuzzedOut && (
+              {!isSpectator && (
+                <Button
+                  size='lg'
+                  variant='brand'
+                  className='size-28 xl:size-36 rounded-full'
+                  onClick={onBuzz}
+                  disabled={state.activeQuestionState?.playersWhoAttempted.includes(
+                    playerId
+                  )}
+                  title={isBuzzedOut ? t("game:playing.buzzedOut") : undefined}
+                  aria-label={isBuzzedOut ? t("game:playing.buzzedOut") : undefined}
+                >
+                  <div className='flex flex-col items-center'>
+                    <Zap className='size-10 xl:size-14 xl:mb-2 mb-1' />
+                    <span className='text-xl xl:text-2xl font-bold'>{t("game:playing.buzz")}</span>
+                  </div>
+                </Button>
+              )}
+              {!isSpectator && isBuzzedOut && (
                 <p className='text-sm text-destructive/80'>{t("game:playing.buzzedOut")}</p>
               )}
             </motion.div>
@@ -121,7 +125,7 @@ export function GamePlaying({
               </div>
 
               <Card>
-                {isMyTurn ? (
+                {isMyTurn && !isSpectator ? (
                   <CardContent className='p-4 space-y-3'>
                     <form onSubmit={onSubmitAnswer} className='space-y-3'>
                       <Input
