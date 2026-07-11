@@ -10,6 +10,11 @@
   "toggleLanguage": "Tilni almashtirish",
   "retry": "Qayta urinish",
   "syncingData": "Ma'lumotlar sinxronlanmoqda...",
+  "notFound": {
+    "title": "Sahifa topilmadi",
+    "description": "Siz qidirayotgan sahifa mavjud emas.",
+    "goHome": "Bosh sahifaga"
+  },
   "theme": {
     "light": "Yorug'",
     "dark": "Qorong'i",

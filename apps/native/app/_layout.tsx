@@ -25,6 +25,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { ErrorFallback } from "@/components/error-fallback";
 import { AppThemeProvider } from "@/contexts/app-theme-context";
 import i18n, { initLocale } from "@/i18n/config";
+import { useLocaleSync } from "@/i18n/use-locale-sync";
 import { queryClient } from "@/utils/trpc";
 
 SplashScreen.preventAutoHideAsync();
@@ -38,6 +39,8 @@ export const unstable_settings = {
 };
 
 function StackLayout() {
+  useLocaleSync();
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />

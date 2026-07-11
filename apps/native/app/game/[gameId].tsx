@@ -49,7 +49,7 @@ function GameRoom({ gameId }: { gameId: string }) {
       return room.results ? (
         <ArchiveScreen results={room.results} onBack={toDashboard} />
       ) : (
-        secondary(<LoadingView message="Results are ready." />)
+        secondary(<LoadingView message="loading.resultsReady" />)
       );
 
     case "loading":
@@ -148,7 +148,7 @@ function ArchiveScreen({
         {Results ? (
           <Results results={results} onBack={onBack} />
         ) : (
-          <LoadingView message="Results are ready." />
+          <LoadingView message="loading.resultsReady" />
         )}
       </ScrollView>
     </FocusLayout>

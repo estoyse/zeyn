@@ -17,7 +17,11 @@
     },
     "connection": {
       "title": "Ulanish amalga oshmadi",
-      "retry": "Qayta urinish"
+      "retry": "Qayta urinish",
+      "generic": "O'yinga ulanib bo'lmadi",
+      "notFound": "Bu xona endi mavjud emas",
+      "alreadyStarted": "O'yin allaqachon boshlangan",
+      "alreadyFinished": "Bu o'yin allaqachon tugagan"
     }
   },
   "header": {
@@ -31,6 +35,7 @@
     }
   },
   "lobby": {
+    "guest": "Mehmon",
     "playersInLobby": "Kutish xonasidagi o'yinchilar",
     "joined": "{{count}} / {{max}} qo'shildi",
     "host": "Xost",
@@ -65,7 +70,9 @@
   },
   "loading": {
     "checkingSession": "Sessiya tekshirilmoqda...",
-    "connectingToRoom": "Xonaga ulanmoqda..."
+    "connectingToRoom": "Xonaga ulanmoqda...",
+    "results": "Yakuniy natijalar yuklanmoqda...",
+    "resultsReady": "Natijalar tayyor."
   },
   "auth": {
     "loginRequired": {

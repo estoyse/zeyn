@@ -110,7 +110,9 @@ export function Scoreboard({ state, playerId, variant = "rail" }: ScoreboardProp
                     </View>
                   )}
                   {p.isGuest && (
-                    <Text className="text-muted-foreground text-[10px]">Guest</Text>
+                    <Text className="text-muted-foreground text-[10px]">
+                      {t("lobby.guest")}
+                    </Text>
                   )}
                   {p.id === playerId && (
                     <Text className="text-brand text-[10px]">

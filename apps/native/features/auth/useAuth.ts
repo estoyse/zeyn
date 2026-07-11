@@ -1,9 +1,7 @@
 import { router, type Href } from "expo-router";
 import { useToast } from "heroui-native";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import i18n, { supportedLocales, type Locale } from "@/i18n/config";
 import { authClient } from "@/lib/auth-client";
 import { queryClient } from "@/utils/trpc";
 
@@ -17,13 +15,6 @@ export function useAuth() {
   const { toast } = useToast();
   const { t } = useTranslation("auth");
   const { data: session, isPending, error: sessionError } = authClient.useSession();
-
-  useEffect(() => {
-    const userLocale = session?.user?.locale as Locale | undefined;
-    if (userLocale && supportedLocales.includes(userLocale) && userLocale !== i18n.language) {
-      i18n.changeLanguage(userLocale);
-    }
-  }, [session?.user?.locale]);
 
   function handleSuccess(successMessage: string, returnTo?: string) {
     queryClient.refetchQueries();

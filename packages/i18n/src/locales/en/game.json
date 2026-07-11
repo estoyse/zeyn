@@ -17,7 +17,11 @@
     },
     "connection": {
       "title": "Connection Failed",
-      "retry": "Retry Connection"
+      "retry": "Retry Connection",
+      "generic": "Could not connect to game",
+      "notFound": "This room no longer exists",
+      "alreadyStarted": "Game has already started",
+      "alreadyFinished": "This game has ended"
     }
   },
   "header": {
@@ -31,6 +35,7 @@
     }
   },
   "lobby": {
+    "guest": "Guest",
     "playersInLobby": "Players in Lobby",
     "joined": "{{count}} / {{max}} joined",
     "host": "Host",
@@ -65,7 +70,9 @@
   },
   "loading": {
     "checkingSession": "Checking session...",
-    "connectingToRoom": "Connecting to room..."
+    "connectingToRoom": "Connecting to room...",
+    "results": "Fetching final results...",
+    "resultsReady": "Results are ready."
   },
   "auth": {
     "loginRequired": {

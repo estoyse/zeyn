@@ -23,9 +23,9 @@ export type GameViewState =
   | { kind: "play" };
 
 const CONNECTION_ERROR_MESSAGES: Record<string, string> = {
-  NOT_FOUND: "This room no longer exists",
-  ALREADY_STARTED: "Game has already started",
-  ALREADY_FINISHED: "This game has ended",
+  NOT_FOUND: "errors.connection.notFound",
+  ALREADY_STARTED: "errors.connection.alreadyStarted",
+  ALREADY_FINISHED: "errors.connection.alreadyFinished",
 };
 
 export function resolveGameView(i: GameViewInputs): GameViewState {
@@ -33,7 +33,7 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
   if (isOver && i.hasResults) return { kind: "archive" };
 
   if (i.status === "FINISHED") {
-    return { kind: "loading", message: "Fetching final results..." };
+    return { kind: "loading", message: "loading.results" };
   }
 
   if (i.errorCode === "PASSWORD_REQUIRED" || i.showPasswordPrompt) {
@@ -41,7 +41,7 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
   }
 
   if (i.sessionLoading) {
-    return { kind: "loading", message: "Checking session..." };
+    return { kind: "loading", message: "loading.checkingSession" };
   }
 
   if (!i.hasIdentity && !i.isSpectating) return { kind: "loginRequired" };
@@ -58,7 +58,7 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
     }
     return {
       kind: "connectionError",
-      message: "Could not connect to game",
+      message: "errors.connection.generic",
       retry: "reload",
     };
   }

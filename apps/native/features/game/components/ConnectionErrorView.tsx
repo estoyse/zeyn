@@ -25,7 +25,7 @@ export function ConnectionErrorView({ error, onRetry }: ConnectionErrorViewProps
         <Heading className="text-destructive text-xl">
           {t("errors.connection.title")}
         </Heading>
-        <Text className="text-muted-foreground text-center text-sm">{error}</Text>
+        <Text className="text-muted-foreground text-center text-sm">{t(error)}</Text>
       </View>
 
       <Button className="w-full max-w-sm" onPress={onRetry}>

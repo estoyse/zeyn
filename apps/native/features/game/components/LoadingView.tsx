@@ -15,7 +15,7 @@ export function LoadingView({ message }: LoadingViewProps) {
     <View className="flex-1 items-center justify-center gap-4 bg-background px-6">
       <Spinner size="lg" />
       <Text className="text-muted-foreground text-sm">
-        {message ?? t("loading.checkingSession")}
+        {message ? t(message) : t("loading.checkingSession")}
       </Text>
     </View>
   );
