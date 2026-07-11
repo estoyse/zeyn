@@ -1,5 +1,10 @@
 {
   "appName": "Zeyn",
+  "tabs": {
+    "home": "Home",
+    "games": "Games",
+    "profile": "Profile"
+  },
   "save": "Save",
   "cancel": "Cancel",
   "language": "Language",

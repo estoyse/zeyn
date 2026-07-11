@@ -1,3 +1,4 @@
+import "@/lib/patch-fonts";
 import "@/global.css";
 import "@/i18n/config";
 import {
