@@ -1,74 +1,83 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Animated, {
-  Easing,
+  interpolate,
+  interpolateColor,
+  runOnJS,
+  useAnimatedReaction,
   useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 
 import { Text } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { useCountdown } from "@/features/game/hooks/useCountdown";
+import { haptic } from "@/lib/haptics";
+import { useAppColor, useThemeColor } from "@/lib/theme";
 
 interface TimerProps {
   expiresAt: number;
   duration?: number;
-  onTimeout?: () => void;
+  underClock?: boolean;
 }
 
-export function Timer({ expiresAt, duration = 15000, onTimeout }: TimerProps) {
+export function Timer({ expiresAt, duration = 15000, underClock = false }: TimerProps) {
   const { t } = useTranslation("game");
-  const [timeLeft, setTimeLeft] = useState(Math.max(0, expiresAt - Date.now()));
-  const progress = useSharedValue(0);
+  const { progress, remainingMs, urgency } = useCountdown(expiresAt, duration);
+  const [warning] = useThemeColor(["warning"]);
+  const [brand, destructive] = useAppColor(["brand", "destructive"]);
 
-  useEffect(() => {
-    const remaining = Math.max(0, expiresAt - Date.now());
-    progress.value = Math.min(100, (remaining / duration) * 100);
-    progress.value = withTiming(0, {
-      duration: remaining,
-      easing: Easing.linear,
-    });
-
-    const interval = setInterval(() => {
-      const left = Math.max(0, expiresAt - Date.now());
-      setTimeLeft(left);
-      if (left <= 0) {
-        clearInterval(interval);
-        onTimeout?.();
+  useAnimatedReaction(
+    () => Math.ceil(remainingMs.value / 1000),
+    (seconds, previous) => {
+      if (!underClock || previous === null || seconds === previous) return;
+      if (seconds <= 3 && seconds > 0) {
+        runOnJS(haptic)("tap");
       }
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [expiresAt, duration, onTimeout, progress]);
-
-  const isUrgent = timeLeft < 5000;
+    },
+    [underClock]
+  );
 
   const barStyle = useAnimatedStyle(() => ({
-    width: `${progress.value}%`,
+    width: `${progress.value * 100}%`,
+    backgroundColor: interpolateColor(
+      progress.value,
+      [0, 0.13, 0.33, 1],
+      [destructive, destructive, warning, brand]
+    ),
+  }));
+
+  const trackStyle = useAnimatedStyle(() => ({
+    transform: [{ scaleY: interpolate(urgency.value, [0, 1], [1, 1.25]) }],
+  }));
+
+  const idleLabelStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(urgency.value, [0, 0.6], [1, 0]),
+  }));
+
+  const urgentLabelStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(urgency.value, [0.6, 1], [0, 1]),
   }));
 
   return (
     <View className="w-full gap-2">
-      <View className="flex-row justify-between">
-        <Text
-          className={cn(
-            "text-muted-foreground text-xs",
-            isUrgent && "text-destructive"
-          )}
-        >
-          {isUrgent ? t("timer.hurryUp") : t("timer.timeRemaining")}
-        </Text>
-        <Text className="text-muted-foreground text-xs">
-          {(timeLeft / 1000).toFixed(1)}s
-        </Text>
+      <View className="h-4 justify-center">
+        <Animated.View style={idleLabelStyle} className="absolute">
+          <Text className="text-caption uppercase text-muted-foreground">
+            {t("timer.timeRemaining")}
+          </Text>
+        </Animated.View>
+        <Animated.View style={urgentLabelStyle} className="absolute">
+          <Text className="text-caption uppercase text-destructive">
+            {t("timer.hurryUp")}
+          </Text>
+        </Animated.View>
       </View>
-      <View className="h-3 w-full overflow-hidden border border-border bg-muted-surface p-px">
-        <Animated.View
-          style={barStyle}
-          className={cn("h-full", isUrgent ? "bg-destructive" : "bg-brand")}
-        />
-      </View>
+
+      <Animated.View
+        style={trackStyle}
+        className="h-2 w-full overflow-hidden rounded-pill bg-muted-surface"
+      >
+        <Animated.View style={barStyle} className="h-full rounded-pill" />
+      </Animated.View>
     </View>
   );
 }

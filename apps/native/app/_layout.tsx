@@ -31,6 +31,7 @@ import { ErrorFallback } from "@/components/error-fallback";
 import { AppThemeProvider } from "@/contexts/app-theme-context";
 import i18n, { initLocale } from "@/i18n/config";
 import { useLocaleSync } from "@/i18n/use-locale-sync";
+import { ensureAudioSession } from "@/lib/audio-session";
 import { authClient } from "@/lib/auth-client";
 import { getSeenOnboarding } from "@/lib/onboarding-storage";
 import { hydratePrefs } from "@/lib/prefs";
@@ -109,6 +110,7 @@ export default function Layout() {
   useEffect(() => {
     initLocale();
     hydratePrefs();
+    ensureAudioSession();
   }, []);
 
   const [loaded] = useFonts({

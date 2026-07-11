@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { musicGameConfig } from "@zeyn/api/games";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
@@ -26,10 +26,6 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
   const questionIndex = state?.currentQuestionIndex;
   const previewUrl = state?.question?.previewUrl;
   const phase = state?.phase;
-
-  useEffect(() => {
-    setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-  }, []);
 
   useEffect(() => {
     setPicked(null);
