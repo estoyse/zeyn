@@ -23,6 +23,7 @@
   "header": {
     "room": "Xona: {{gameId}}",
     "leave": "Chiqish",
+    "spectating": "Kuzatuvchi",
     "leaveConfirm": {
       "title": "O'yindan chiqasizmi?",
       "description": "Siz xonadan chiqarilasiz va bu o'yindagi ochkolaringiz yo'qoladi.",

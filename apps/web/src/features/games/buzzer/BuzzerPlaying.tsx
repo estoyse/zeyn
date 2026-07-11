@@ -40,6 +40,7 @@ export function BuzzerPlaying({ room }: GamePlayViewProps) {
       setAnswerInput={setAnswerInput}
       onBuzz={onBuzz}
       onSubmitAnswer={onSubmitAnswer}
+      isSpectator={room.isSpectator}
     />
   );
 }

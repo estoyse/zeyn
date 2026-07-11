@@ -23,6 +23,7 @@
   "header": {
     "room": "Room: {{gameId}}",
     "leave": "Leave",
+    "spectating": "Spectating",
     "leaveConfirm": {
       "title": "Leave this game?",
       "description": "You will be removed from the room and your score for this game will be lost.",

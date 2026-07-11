@@ -83,38 +83,40 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
             />
           )}
 
-          <div className='grid gap-3'>
-            {options.map((label, index) => {
-              const correct = isReveal && index === state.reveal?.correctIndex;
-              const wrongPick = isReveal && picked === index && !correct;
-              const isYourAnswer = isReveal && picked === index;
-              return (
-                <button
-                  key={index}
-                  onClick={() => onAnswer(index)}
-                  disabled={isReveal || alreadyAnswered}
-                  className={`flex items-center justify-between gap-2 border p-4 xl:py-5 text-left font-medium transition-all ${
-                    correct
-                      ? "border-success bg-success/10 text-success"
-                      : wrongPick
-                      ? "border-destructive bg-destructive/10 text-destructive"
-                      : picked === index
-                      ? "border-brand bg-brand/10"
-                      : "border-border hover:border-brand/50 disabled:opacity-50"
-                  }`}
-                >
-                  <span className='flex items-center gap-2'>
-                    {label}
-                    {isYourAnswer && (
-                      <Badge tone='brand'>{t("games:music.playing.yourAnswer")}</Badge>
-                    )}
-                  </span>
-                  {correct && <Check className='size-5 text-success' />}
-                  {wrongPick && <X className='size-5 text-destructive' />}
-                </button>
-              );
-            })}
-          </div>
+          {!room.isSpectator && (
+            <div className='grid gap-3'>
+              {options.map((label, index) => {
+                const correct = isReveal && index === state.reveal?.correctIndex;
+                const wrongPick = isReveal && picked === index && !correct;
+                const isYourAnswer = isReveal && picked === index;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => onAnswer(index)}
+                    disabled={isReveal || alreadyAnswered}
+                    className={`flex items-center justify-between gap-2 border p-4 xl:py-5 text-left font-medium transition-all ${
+                      correct
+                        ? "border-success bg-success/10 text-success"
+                        : wrongPick
+                        ? "border-destructive bg-destructive/10 text-destructive"
+                        : picked === index
+                        ? "border-brand bg-brand/10"
+                        : "border-border hover:border-brand/50 disabled:opacity-50"
+                    }`}
+                  >
+                    <span className='flex items-center gap-2'>
+                      {label}
+                      {isYourAnswer && (
+                        <Badge tone='brand'>{t("games:music.playing.yourAnswer")}</Badge>
+                      )}
+                    </span>
+                    {correct && <Check className='size-5 text-success' />}
+                    {wrongPick && <X className='size-5 text-destructive' />}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {isReveal && state.reveal && (
             <div className='text-center space-y-1'>

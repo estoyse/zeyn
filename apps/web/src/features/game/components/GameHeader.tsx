@@ -9,17 +9,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@zeyn/ui/components/alert-dialog";
+import { Badge } from "@zeyn/ui/components/badge";
 import { Button } from "@zeyn/ui/components/button";
 import { Logo, LogoMark } from "@zeyn/ui/components/logo";
-import { Clock, LogOut } from "lucide-react";
+import { Clock, Eye, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface GameHeaderProps {
   gameId: string;
   onLeave: () => void;
+  isSpectator?: boolean;
 }
 
-export function GameHeader({ gameId, onLeave }: GameHeaderProps) {
+export function GameHeader({ gameId, onLeave, isSpectator }: GameHeaderProps) {
   const { t } = useTranslation();
 
   return (
@@ -35,6 +37,12 @@ export function GameHeader({ gameId, onLeave }: GameHeaderProps) {
             {t("game:header.room", { gameId })}
           </p>
         </div>
+        {isSpectator && (
+          <Badge tone='default'>
+            <Eye className='size-3' />
+            {t("game:header.spectating")}
+          </Badge>
+        )}
       </div>
 
       <AlertDialog>
