@@ -1,11 +1,11 @@
 import { type GameType } from "@zeyn/api/games";
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams, type Href } from "expo-router";
-import { Button, Card, Chip, Skeleton } from "heroui-native";
+import { Card, Chip, Skeleton } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
 
-import { Heading, Screen, Text } from "@/components/ui";
+import { Button, Heading, Screen, Text } from "@/components/ui";
 import { getClientGame } from "@/features/games/registry";
 import { authClient } from "@/lib/auth-client";
 import { trpc } from "@/utils/trpc";

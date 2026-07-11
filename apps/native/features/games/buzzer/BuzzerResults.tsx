@@ -1,11 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button, Card } from "heroui-native";
+import { Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
 import { buildScoreboard } from "@/features/game/lib/scoreboard";
 import type { GameResultsViewProps } from "@/features/games/types";
 import { fadeIn, fadeUp, stagger } from "@/lib/motion";

@@ -1,8 +1,8 @@
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
 
-import { getSeenOnboarding } from "@/lib/onboarding-storage";
 import { authClient } from "@/lib/auth-client";
+import { getSeenOnboarding } from "@/lib/onboarding-storage";
 
 export default function Index() {
   const { isPending } = authClient.useSession();
@@ -16,9 +16,5 @@ export default function Index() {
     return null;
   }
 
-  if (!seenOnboarding) {
-    return <Redirect href="/(onboarding)" />;
-  }
-
-  return <Redirect href="/(tabs)/home" />;
+  return <Redirect href={seenOnboarding ? "/(tabs)/home" : "/(onboarding)"} />;
 }

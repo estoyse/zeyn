@@ -1,11 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, type Href } from "expo-router";
-import { Avatar, Button, Card } from "heroui-native";
+import { Avatar, Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
 
 import { initials, memberSince } from "../lib/format";
 

@@ -4,9 +4,8 @@ import { View } from "react-native";
 import Animated from "react-native-reanimated";
 
 import { Heading, Text } from "@/components/ui";
-import { useAppTheme } from "@/contexts/app-theme-context";
-import { getPalette } from "@/lib/colors";
 import { fadeUp, scaleIn, stagger } from "@/lib/motion";
+import { useAppColor } from "@/lib/theme";
 
 import { type OnboardingSlide } from "../onboardingContent";
 
@@ -18,8 +17,7 @@ type SlideProps = {
 
 export function Slide({ slide, isActive, width }: SlideProps) {
   const { t } = useTranslation("onboarding");
-  const { isLight } = useAppTheme();
-  const brand = getPalette(isLight ? "light" : "dark").brand;
+  const [brand] = useAppColor(["brand"]);
 
   return (
     <View style={{ width }} className="flex-1 items-center justify-center gap-6 px-10">

@@ -1,8 +1,10 @@
 import { canonicalizeGameId } from "@zeyn/api/game-code";
 import { router, type Href } from "expo-router";
-import { Button, Card, Input, TextField } from "heroui-native";
+import { Card, Input, TextField } from "heroui-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+
+import { Button } from "@/components/ui";
 
 export function JoinByIdCard() {
   const { t } = useTranslation("dashboard");

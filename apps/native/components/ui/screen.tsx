@@ -16,18 +16,21 @@ export function Screen({
   scroll = true,
   className,
   contentClassName,
+  edges = ["top"],
   refreshControl,
   children,
 }: PropsWithChildren<ScreenProps>) {
   const insets = useSafeAreaInsets();
 
+  const padding = {
+    paddingTop: edges.includes("top") ? insets.top : 0,
+    paddingBottom: edges.includes("bottom") ? insets.bottom : 0,
+    paddingLeft: edges.includes("left") ? insets.left : 0,
+    paddingRight: edges.includes("right") ? insets.right : 0,
+  };
+
   return (
-    <View
-      className={cn("flex-1 bg-background", className)}
-      style={{
-        paddingBottom: insets.bottom,
-      }}
-    >
+    <View className={cn("flex-1 bg-background", className)} style={padding}>
       {scroll ? (
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}

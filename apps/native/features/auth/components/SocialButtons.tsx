@@ -1,7 +1,8 @@
-import { Button, Spinner } from "heroui-native";
+import { Spinner } from "heroui-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/ui";
 import { useAuth } from "@/features/auth/useAuth";
 
 type SocialButtonsProps = {

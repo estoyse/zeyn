@@ -1,9 +1,9 @@
 import { router, type Href } from "expo-router";
-import { Button, Card } from "heroui-native";
+import { Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-import { Heading, Screen, Text } from "@/components/ui";
+import { Button, Heading, Screen, Text } from "@/components/ui";
 import { JoinByIdCard } from "@/features/dashboard/components/JoinByIdCard";
 import { RecentGamesSection } from "@/features/dashboard/components/RecentGamesSection";
 import { authClient } from "@/lib/auth-client";

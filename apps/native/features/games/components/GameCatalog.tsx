@@ -1,8 +1,9 @@
 import { router, type Href } from "expo-router";
-import { Button, Card, Chip } from "heroui-native";
+import { Card, Chip } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+import { Button } from "@/components/ui";
 import { listClientGames } from "@/features/games/registry";
 
 export function GameCatalog() {

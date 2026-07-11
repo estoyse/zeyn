@@ -8,6 +8,7 @@ const config = getDefaultConfig(__dirname);
 const uniwindConfig = withUniwindConfig(wrapWithReanimatedMetroConfig(config), {
   cssEntryFile: "./global.css",
   dtsFile: "./uniwind-types.d.ts",
+  extraThemes: ["arcade"],
 });
 
 module.exports = uniwindConfig;

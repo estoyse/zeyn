@@ -1,5 +1,4 @@
 import { type Href, useRouter } from "expo-router";
-import { Button } from "heroui-native";
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,7 +10,7 @@ import {
 import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Screen, Text } from "@/components/ui";
+import { Button, Screen, Text } from "@/components/ui";
 import { Dots } from "@/features/onboarding/components/Dots";
 import { Slide } from "@/features/onboarding/components/Slide";
 import { onboardingSlides } from "@/features/onboarding/onboardingContent";
@@ -47,7 +46,7 @@ export default function OnboardingScreen() {
   }
 
   return (
-    <Screen scroll={false}>
+    <Screen scroll={false} edges={["top", "bottom"]}>
       <View style={{ paddingTop: insets.top }} className="flex-row justify-end px-6">
         <Text
           weight="medium"

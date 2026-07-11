@@ -1,14 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { gameConfig } from "@zeyn/api/game-types";
 import * as Haptics from "expo-haptics";
-import { Button, Card, Chip, Input, TextField } from "heroui-native";
+import { Card, Chip, Input, TextField } from "heroui-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
 import { Timer } from "@/features/game/components/Timer";
 import type { GamePlayViewProps } from "@/features/games/types";
 import { cn } from "@/lib/utils";

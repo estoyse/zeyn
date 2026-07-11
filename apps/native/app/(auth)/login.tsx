@@ -7,7 +7,7 @@ export default function LoginScreen() {
   const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
 
   return (
-    <Screen contentClassName="items-center justify-center gap-4 px-6 py-10">
+    <Screen contentClassName="items-center justify-center gap-4 px-6 py-10" edges={["bottom"]}>
       <AuthForm returnTo={typeof returnTo === "string" ? returnTo : undefined} />
     </Screen>
   );

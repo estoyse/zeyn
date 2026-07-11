@@ -38,11 +38,43 @@ type HeadingProps = RNTextProps & {
   className?: string;
 };
 
-export function Heading({ weight = "bold", className, style, ...rest }: HeadingProps) {
+export function Heading({ weight = "semibold", className, style, ...rest }: HeadingProps) {
   return (
     <RNText
-      className={cn("text-foreground uppercase tracking-wider", className)}
+      className={cn("text-foreground", className)}
+      style={[{ fontFamily: ibmPlexSansFamily[weight] }, style]}
+      {...rest}
+    />
+  );
+}
+
+export function Display({ weight = "bold", className, style, ...rest }: HeadingProps) {
+  return (
+    <RNText
+      className={cn("text-foreground", className)}
       style={[{ fontFamily: spaceGroteskFamily[weight] }, style]}
+      {...rest}
+    />
+  );
+}
+
+export function Numeric({ weight = "semibold", className, style, ...rest }: HeadingProps) {
+  return (
+    <RNText
+      className={cn("text-foreground", className)}
+      style={[{ fontFamily: spaceGroteskFamily[weight] }, style]}
+      {...rest}
+    />
+  );
+}
+
+type EyebrowProps = RNTextProps & { className?: string };
+
+export function Eyebrow({ className, style, ...rest }: EyebrowProps) {
+  return (
+    <RNText
+      className={cn("text-caption text-muted-foreground uppercase", className)}
+      style={[{ fontFamily: ibmPlexSansFamily.semibold }, style]}
       {...rest}
     />
   );

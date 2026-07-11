@@ -539,7 +539,7 @@ export default function SettingsScreen() {
   const me = meQuery.data;
 
   return (
-    <Screen contentClassName="gap-6 px-6 py-6">
+    <Screen contentClassName="gap-6 px-6 py-6" edges={["top", "bottom"]}>
       <View className="gap-1">
         <Heading className="text-2xl">{t("title")}</Heading>
         <Text className="text-muted-foreground">{t("subtitle")}</Text>

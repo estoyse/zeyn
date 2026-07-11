@@ -2,29 +2,26 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useTranslation } from "react-i18next";
 
-import { useAppTheme } from "@/contexts/app-theme-context";
-import { getPalette } from "@/lib/colors";
+import { useAppColor, useThemeColor } from "@/lib/theme";
 
 export default function TabsLayout() {
-  const { isLight } = useAppTheme();
   const { t } = useTranslation("common");
-  const colors = getPalette(isLight ? "light" : "dark");
+  const [surface, border] = useThemeColor(["surface", "border"]);
+  const [brand, mutedForeground] = useAppColor(["brand", "mutedForeground"]);
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.brand,
-        tabBarInactiveTintColor: colors.mutedForeground,
+        tabBarActiveTintColor: brand,
+        tabBarInactiveTintColor: mutedForeground,
         tabBarStyle: {
-          backgroundColor: colors.card,
-          borderTopColor: colors.border,
+          backgroundColor: surface,
+          borderTopColor: border,
         },
         tabBarLabelStyle: {
-          fontFamily: "SpaceGrotesk_600SemiBold",
-          fontSize: 10,
-          textTransform: "uppercase",
-          letterSpacing: 1,
+          fontFamily: "IBMPlexSans_500Medium",
+          fontSize: 11,
         },
       }}
     >

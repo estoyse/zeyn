@@ -1,10 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Alert, View } from "react-native";
 import { withUniwind } from "uniwind";
 
-import { Logo, LogoMark, Text } from "@/components/ui";
+import { Button, Logo, LogoMark, Text } from "@/components/ui";
 
 const StyledIonicons = withUniwind(Ionicons);
 

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
-import { Button, Card, Skeleton } from "heroui-native";
+import { Card, Skeleton } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-import { Heading, Screen, Text } from "@/components/ui";
+import { Button, Heading, Screen, Text } from "@/components/ui";
 import { ProfileGamesList } from "@/features/profile/components/ProfileGamesList";
 import { ProfileView } from "@/features/profile/components/ProfileView";
 import { authClient } from "@/lib/auth-client";

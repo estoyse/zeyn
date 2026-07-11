@@ -1,13 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { formatGameCode } from "@zeyn/api/game-code";
 import * as Clipboard from "expo-clipboard";
-import { Button, Card, Chip, useToast } from "heroui-native";
+import { Card, Chip, useToast } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Pressable, Share, View } from "react-native";
 import Animated, { FadeIn, LinearTransition } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 

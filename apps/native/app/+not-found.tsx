@@ -1,9 +1,10 @@
 import { Link, Stack } from "expo-router";
-import { Button, Surface } from "heroui-native";
+import { Surface } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 import { Container } from "@/components/container";
+import { Button } from "@/components/ui";
 
 export default function NotFoundScreen() {
   const { t } = useTranslation("common");

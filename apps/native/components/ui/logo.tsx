@@ -1,11 +1,10 @@
 import Svg, { Path } from "react-native-svg";
 import { View } from "react-native";
 
-import { useAppTheme } from "@/contexts/app-theme-context";
-import { getPalette } from "@/lib/colors";
+import { useAppColor } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
-import { Heading } from "./text";
+import { Display } from "./text";
 
 type LogoMarkProps = {
   size?: number;
@@ -13,8 +12,8 @@ type LogoMarkProps = {
 };
 
 export function LogoMark({ size = 24, color }: LogoMarkProps) {
-  const { isLight } = useAppTheme();
-  const fill = color ?? getPalette(isLight ? "light" : "dark").brand;
+  const [brand] = useAppColor(["brand"]);
+  const fill = color ?? brand;
 
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
@@ -45,21 +44,20 @@ type LogoProps = {
 export function Logo({ size = "md", className }: LogoProps) {
   return (
     <View className={cn("flex-row items-end", className)}>
-      <Heading weight="bold" className={cn("lowercase tracking-tight", wordmarkSize[size])}>
+      <Display weight="bold" className={cn("lowercase tracking-tight", wordmarkSize[size])}>
         zeyn
-      </Heading>
+      </Display>
       <View className={cn("mb-1 ml-0.5 rounded-full bg-buzzer", dotSize[size])} />
     </View>
   );
 }
 
 export function LogoLockup({ size = "md", className }: LogoProps) {
-  const { isLight } = useAppTheme();
-  const brandForeground = getPalette(isLight ? "light" : "dark").brandForeground;
+  const [brandForeground] = useAppColor(["brandForeground"]);
 
   return (
     <View className={cn("flex-row items-center gap-2", className)}>
-      <View className="size-8 items-center justify-center bg-brand">
+      <View className="size-8 items-center justify-center rounded-lg bg-brand">
         <LogoMark size={20} color={brandForeground} />
       </View>
       <Logo size={size} />
