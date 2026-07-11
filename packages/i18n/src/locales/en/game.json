@@ -79,6 +79,11 @@
       "error": "Please enter the room password.",
       "back": "Back",
       "join": "Join Room"
+    },
+    "joinChoice": {
+      "namePlaceholder": "Your display name",
+      "joinAsGuest": "Join as guest",
+      "watch": "Watch"
     }
   },
   "timer": {
@@ -115,7 +120,9 @@
       "roomPassword": "Room Password (Optional)",
       "roomPasswordPlaceholder": "Secure your borders...",
       "decreaseMaxPlayers": "Decrease max players",
-      "increaseMaxPlayers": "Increase max players"
+      "increaseMaxPlayers": "Increase max players",
+      "allowGuests": "Allow Guests",
+      "allowGuestsHint": "Let players without an account join this room."
     },
     "subject": {
       "selectSubjects": "Select Subjects",
@@ -129,6 +136,13 @@
     },
     "configure": {
       "subtitle": "Configure the battlefield before deploying."
+    },
+    "errors": {
+      "nameTooShort": "Room name must be at least {{count}} characters.",
+      "playersRange": "Max players must be between {{min}} and {{max}}.",
+      "subjectsRange": "Select between {{min}} and {{max}} subjects.",
+      "artistsRange": "Select between {{min}} and {{max}} artists.",
+      "createFailed": "Failed to create the room. Please try again."
     }
   },
   "typePage": {

@@ -23,6 +23,7 @@
       "title": "Ijrochilarni tanlang",
       "selectedCount": "{{count}} ta tanlandi",
       "description": "Bir yoki bir nechta ijrochini tanlang. Qo'shiqlar sizning tanlovingizdan olinadi.",
+      "chooseRange": "O'yin uchun {{min}}-{{max}} ta ijrochini tanlang.",
       "empty": "Hozircha ijrochilar mavjud emas. Musiqa yuklash uchun seedni ishga tushiring."
     },
     "create": {

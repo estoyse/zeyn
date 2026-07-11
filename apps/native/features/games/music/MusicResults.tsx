@@ -1,0 +1,73 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Button, Card } from "heroui-native";
+import { useTranslation } from "react-i18next";
+import { View } from "react-native";
+import Animated, { LinearTransition } from "react-native-reanimated";
+import { withUniwind } from "uniwind";
+
+import { Heading, Text } from "@/components/ui";
+import type { GameResultsViewProps } from "@/features/games/types";
+import { cn } from "@/lib/utils";
+
+const StyledIonicons = withUniwind(Ionicons);
+
+const RANK_COLORS = ["text-brand", "text-muted-foreground", "text-muted-foreground"];
+
+export function MusicResults({ results, onBack }: GameResultsViewProps) {
+  const { t } = useTranslation("games");
+  const rows = [...results.playerResults].sort((a, b) => b.score - a.score);
+
+  return (
+    <View className="gap-8">
+      <View className="items-center gap-3">
+        <View className="bg-brand/10 p-4">
+          <StyledIonicons name="trophy" size={40} className="text-brand" />
+        </View>
+        <Heading className="text-3xl">{t("music.results.title")}</Heading>
+        <Text className="text-muted-foreground text-xs uppercase tracking-widest">
+          {t("music.results.subtitle")}
+        </Text>
+      </View>
+
+      <Card>
+        <Card.Body className="gap-2">
+          {rows.map((p, i) => (
+            <Animated.View
+              layout={LinearTransition}
+              key={p.id}
+              className={cn(
+                "flex-row items-center justify-between gap-3 border p-4",
+                i === 0 ? "border-brand bg-brand/10" : "border-border bg-muted-surface"
+              )}
+            >
+              <View className="flex-row items-center gap-3">
+                <View className="size-8 items-center justify-center">
+                  {i < 3 ? (
+                    <StyledIonicons name="medal" size={20} className={RANK_COLORS[i]} />
+                  ) : (
+                    <Text className="text-muted-foreground">{i + 1}</Text>
+                  )}
+                </View>
+                <Text weight="semibold" className="text-sm">
+                  {p.playerName}
+                </Text>
+              </View>
+              <Text weight="bold" className="text-lg">
+                {p.score}
+              </Text>
+            </Animated.View>
+          ))}
+          {rows.length === 0 && (
+            <Text className="text-muted-foreground py-4 text-center text-sm">
+              {t("music.results.noScores")}
+            </Text>
+          )}
+        </Card.Body>
+      </Card>
+
+      <Button onPress={onBack}>
+        <Button.Label>{t("music.results.backToDashboard")}</Button.Label>
+      </Button>
+    </View>
+  );
+}

@@ -79,6 +79,11 @@
       "error": "Iltimos, xona parolini kiriting.",
       "back": "Orqaga",
       "join": "Xonaga qo'shilish"
+    },
+    "joinChoice": {
+      "namePlaceholder": "Ismingiz",
+      "joinAsGuest": "Mehmon sifatida qo'shilish",
+      "watch": "Kuzatish"
     }
   },
   "timer": {
@@ -115,7 +120,9 @@
       "roomPassword": "Xona paroli (ixtiyoriy)",
       "roomPasswordPlaceholder": "Chegaralaringizni himoya qiling...",
       "decreaseMaxPlayers": "Maksimal o'yinchilar sonini kamaytirish",
-      "increaseMaxPlayers": "Maksimal o'yinchilar sonini oshirish"
+      "increaseMaxPlayers": "Maksimal o'yinchilar sonini oshirish",
+      "allowGuests": "Mehmonlarga ruxsat",
+      "allowGuestsHint": "Hisobga ega bo'lmagan o'yinchilarga ushbu xonaga qo'shilishga ruxsat bering."
     },
     "subject": {
       "selectSubjects": "Mavzularni tanlang",
@@ -129,6 +136,13 @@
     },
     "configure": {
       "subtitle": "Joylashtirishdan oldin jangovar maydonni sozlang."
+    },
+    "errors": {
+      "nameTooShort": "Xona nomi kamida {{count}} ta belgidan iborat bo'lishi kerak.",
+      "playersRange": "Maksimal o'yinchilar soni {{min}} va {{max}} oralig'ida bo'lishi kerak.",
+      "subjectsRange": "{{min}} dan {{max}} gacha mavzu tanlang.",
+      "artistsRange": "{{min}} dan {{max}} gacha ijrochi tanlang.",
+      "createFailed": "Xonani yaratib bo'lmadi. Qaytadan urinib ko'ring."
     }
   },
   "typePage": {

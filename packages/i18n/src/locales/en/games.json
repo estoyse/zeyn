@@ -23,6 +23,7 @@
       "title": "Select Artists",
       "selectedCount": "{{count}} Selected",
       "description": "Pick one or more artists. Songs are drawn from your selection.",
+      "chooseRange": "Choose {{min}}-{{max}} artists for the match.",
       "empty": "No artists available yet. Run the seed to load music."
     },
     "create": {

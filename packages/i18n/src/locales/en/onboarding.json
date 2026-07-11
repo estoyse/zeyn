@@ -1,0 +1,19 @@
+{
+  "slide1": {
+    "title": "Buzz in, live",
+    "description": "Race friends and strangers to the answer in real time — first buzz wins."
+  },
+  "slide2": {
+    "title": "Play with friends",
+    "description": "Create or join a room, invite your crew, and climb the scoreboard together."
+  },
+  "slide3": {
+    "title": "Built for Uzbekistan",
+    "description": "Play in Uzbek, Russian, or English — made with Uzbekistan in mind."
+  },
+  "skip": "Skip",
+  "next": "Next",
+  "getStarted": "Get started",
+  "createAccount": "Create account",
+  "skipForNow": "Skip for now"
+}
