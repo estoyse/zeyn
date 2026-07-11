@@ -27,7 +27,7 @@ export function useGameRoom(gameId: string) {
     trpc.game.getRoomPreview.queryOptions({ gameId })
   );
   const preview = previewQuery.data;
-  const previewLoading = previewQuery.isPending;
+  const previewLoading = !previewQuery.isFetchedAfterMount;
   const isFinished = preview?.status === "finished";
   const roomMissing = previewQuery.isSuccess && preview === null;
   const isArchived = isFinished || roomMissing;
