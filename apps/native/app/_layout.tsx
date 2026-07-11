@@ -1,4 +1,3 @@
-import "@/lib/patch-fonts";
 import "@/global.css";
 import "@/i18n/config";
 import {
@@ -49,11 +48,12 @@ function StackLayout() {
       <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen
-        name="game"
+        name="game/[gameId]"
         options={{ presentation: "fullScreenModal", animation: "slide_from_bottom" }}
       />
-      <Stack.Screen name="u" />
-      <Stack.Screen name="settings" />
+      <Stack.Screen name="game/create/[gameType]" />
+      <Stack.Screen name="u/[username]" />
+      <Stack.Screen name="settings/index" />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

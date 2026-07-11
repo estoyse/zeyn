@@ -11,6 +11,36 @@
   --font-heading: "SpaceGrotesk_700Bold";
 }
 
+@utility font-light {
+  font-family: "IBMPlexSans_400Regular";
+  font-weight: 300;
+}
+
+@utility font-normal {
+  font-family: "IBMPlexSans_400Regular";
+  font-weight: 400;
+}
+
+@utility font-medium {
+  font-family: "IBMPlexSans_500Medium";
+  font-weight: 500;
+}
+
+@utility font-semibold {
+  font-family: "IBMPlexSans_600SemiBold";
+  font-weight: 600;
+}
+
+@utility font-bold {
+  font-family: "IBMPlexSans_700Bold";
+  font-weight: 700;
+}
+
+@utility font-extrabold {
+  font-family: "IBMPlexSans_700Bold";
+  font-weight: 800;
+}
+
 @layer theme {
   :root {
     @variant light {
