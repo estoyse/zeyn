@@ -52,7 +52,11 @@
     "shareLink": "Или поделитесь ссылкой",
     "public": "Открытая комната",
     "private": "Только по приглашению",
-    "locked": "Защищено паролем"
+    "locked": "Защищено паролем",
+    "tapToCopy": "Нажмите, чтобы скопировать",
+    "needMorePlayers": "Нужен ещё {{count}} игрок",
+    "needMorePlayers_few": "Нужно ещё {{count}} игрока",
+    "needMorePlayers_many": "Нужно ещё {{count}} игроков"
   },
   "playing": {
     "loadingQuestion": "Загрузка вопроса...",

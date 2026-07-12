@@ -1,8 +1,17 @@
 import { Canvas, Circle } from "@shopify/react-native-skia";
-import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
 import Animated, {
   Easing,
+  Extrapolation,
+  interpolate,
   useAnimatedStyle,
   useDerivedValue,
   useReducedMotion,
@@ -20,6 +29,7 @@ type GameFx = {
   flash: (kind: FlashKind) => void;
   shake: () => void;
   burst: (kind?: FlashKind) => void;
+  points: (value: number) => void;
 };
 
 const FLASH_COLOR: Record<FlashKind, string> = {
@@ -59,6 +69,8 @@ export function GameFxProvider({ children }: { children: ReactNode }) {
   const shakeX = useSharedValue(0);
   const burstProgress = useSharedValue(0);
   const burstColor = useSharedValue<string>(NEON.success);
+  const pointsProgress = useSharedValue(0);
+  const [awarded, setAwarded] = useState<number | null>(null);
 
   const flash = useCallback(
     (kind: FlashKind) => {
@@ -96,7 +108,23 @@ export function GameFxProvider({ children }: { children: ReactNode }) {
     [burstColor, burstProgress, reduced]
   );
 
-  const fx = useMemo<GameFx>(() => ({ flash, shake, burst }), [flash, shake, burst]);
+  const points = useCallback(
+    (value: number) => {
+      if (value === 0) return;
+      setAwarded(value);
+      pointsProgress.value = 0;
+      pointsProgress.value = withTiming(1, {
+        duration: 1150,
+        easing: Easing.out(Easing.cubic),
+      });
+    },
+    [pointsProgress]
+  );
+
+  const fx = useMemo<GameFx>(
+    () => ({ flash, shake, burst, points }),
+    [flash, shake, burst, points]
+  );
 
   const shakeStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: shakeX.value }],
@@ -106,6 +134,19 @@ export function GameFxProvider({ children }: { children: ReactNode }) {
     opacity: flashOpacity.value,
     backgroundColor: flashColor.value,
   }));
+
+  const falling = (awarded ?? 0) < 0;
+
+  const pointsStyle = useAnimatedStyle(() => {
+    const p = pointsProgress.value;
+    return {
+      opacity: interpolate(p, [0, 0.1, 0.7, 1], [0, 1, 1, 0], Extrapolation.CLAMP),
+      transform: [
+        { translateY: (falling ? 1 : -1) * interpolate(p, [0, 1], [0, 96]) },
+        { scale: interpolate(p, [0, 0.16, 1], [0.5, 1.18, 1], Extrapolation.CLAMP) },
+      ],
+    };
+  });
 
   return (
     <GameFxContext.Provider value={fx}>
@@ -130,6 +171,23 @@ export function GameFxProvider({ children }: { children: ReactNode }) {
           />
         ))}
       </Canvas>
+
+      {awarded !== null && (
+        <Animated.View
+          pointerEvents="none"
+          style={[StyleSheet.absoluteFill, styles.pointsLayer]}
+        >
+          <Animated.Text
+            style={[
+              styles.pointsText,
+              pointsStyle,
+              { color: falling ? NEON.danger : NEON.success },
+            ]}
+          >
+            {awarded > 0 ? `+${awarded}` : String(awarded)}
+          </Animated.Text>
+        </Animated.View>
+      )}
     </GameFxContext.Provider>
   );
 }
@@ -167,4 +225,10 @@ function Particle({
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
+  pointsLayer: { alignItems: "center", justifyContent: "center" },
+  pointsText: {
+    fontSize: 56,
+    fontWeight: "800",
+    letterSpacing: -1,
+  },
 });

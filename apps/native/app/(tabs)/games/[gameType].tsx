@@ -5,7 +5,7 @@ import { Card, Chip, Skeleton } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
 
-import { Button, Heading, Screen, Text } from "@/components/ui";
+import { Button, Heading, Screen, ScreenHeader, Text } from "@/components/ui";
 import { getClientGame } from "@/features/games/registry";
 import { authClient } from "@/lib/auth-client";
 import { trpc } from "@/utils/trpc";
@@ -30,7 +30,10 @@ export default function GameTypeScreen() {
 
   if (!game) {
     return (
-      <Screen contentClassName="items-center justify-center gap-2 px-6">
+      <Screen
+        contentClassName="items-center justify-center gap-2 px-6"
+        header={<ScreenHeader back title={t("typePage.unknownTitle")} />}
+      >
         <Heading>{t("typePage.unknownTitle")}</Heading>
         <Text className="text-muted-foreground text-center">
           {t("typePage.unknownDescription", { gameType })}
@@ -46,7 +49,20 @@ export default function GameTypeScreen() {
   const recentItems = recentGamesQuery.data?.items;
 
   return (
-    <Screen contentClassName="gap-6 px-6 py-6">
+    <Screen
+      contentClassName="gap-6 px-6 py-6"
+      header={
+        <ScreenHeader
+          back
+          title={tGames(`catalog.game.${game.type}.title`, game.meta.title)}
+        />
+      }
+      refreshing={publicRoomsQuery.isRefetching || recentGamesQuery.isRefetching}
+      onRefresh={() => {
+        publicRoomsQuery.refetch();
+        recentGamesQuery.refetch();
+      }}
+    >
       <View className="gap-3">
         <View className="flex-row items-center gap-3">
           <View className="size-12 items-center justify-center rounded-full bg-brand/10">

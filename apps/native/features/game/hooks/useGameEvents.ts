@@ -39,7 +39,7 @@ export function useGameEventStream<S>(
 }
 
 export function useGameFeedback(): (event: GameEvent) => void {
-  const { flash, shake, burst } = useGameFx();
+  const { flash, shake, burst, points } = useGameFx();
 
   return useCallback(
     (event: GameEvent) => {
@@ -68,6 +68,7 @@ export function useGameFeedback(): (event: GameEvent) => void {
 
         case "answer":
           if (!event.isSelf) return;
+          points(event.points);
           if (event.correct) {
             haptic("success");
             flash("success");
@@ -82,6 +83,10 @@ export function useGameFeedback(): (event: GameEvent) => void {
           return;
 
         case "reveal":
+          if (event.selfScored) return;
+          if (event.solved) {
+            flash("neutral");
+          }
           return;
 
         case "gameEnd":
@@ -90,6 +95,6 @@ export function useGameFeedback(): (event: GameEvent) => void {
           return;
       }
     },
-    [flash, shake, burst]
+    [flash, shake, burst, points]
   );
 }

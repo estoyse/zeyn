@@ -8,7 +8,9 @@
     "title": "Kod orqali qo'shilish",
     "description": "Xona kodi bormi? Qo'shilish uchun quyiga kiriting.",
     "placeholder": "K7M2XQ4B",
-    "submit": "Qo'shilish"
+    "submit": "Qo'shilish",
+    "paste": "Qo‘yish",
+    "short": "Xonaga qo‘shilish"
   },
   "publicArenas": {
     "defaultTitle": "Ochiq xonalar",
@@ -41,5 +43,18 @@
   },
   "page": {
     "gamesHeading": "O'yinlar"
+  },
+  "greeting": {
+    "morning": "Xayrli tong",
+    "afternoon": "Xayrli kun",
+    "evening": "Xayrli kech",
+    "anon": "O‘ynashga tayyormisiz?"
+  },
+  "liveNow": {
+    "title": "Hozir jonli"
+  },
+  "playNow": {
+    "title": "Hozir o‘ynash",
+    "create": "Xona yaratish"
   }
 }

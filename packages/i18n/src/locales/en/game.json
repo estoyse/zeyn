@@ -52,7 +52,10 @@
     "shareLink": "Or share the link",
     "public": "Public room",
     "private": "Invite only",
-    "locked": "Password protected"
+    "locked": "Password protected",
+    "tapToCopy": "Tap to copy",
+    "needMorePlayers": "Need {{count}} more player to start",
+    "needMorePlayers_other": "Need {{count}} more players to start"
   },
   "playing": {
     "loadingQuestion": "Loading question...",

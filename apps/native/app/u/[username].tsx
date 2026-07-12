@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { withUniwind } from "uniwind";
 
-import { Heading, Screen, Text } from "@/components/ui";
+import { Heading, Screen, ScreenHeader, Text } from "@/components/ui";
 import { ProfileGamesList } from "@/features/profile/components/ProfileGamesList";
 import { ProfileView } from "@/features/profile/components/ProfileView";
 import { trpc } from "@/utils/trpc";
@@ -25,7 +25,11 @@ export default function PublicProfileScreen() {
 
   if (profileQuery.isLoading) {
     return (
-      <Screen contentClassName="gap-8 px-6 py-6" edges={["top", "bottom"]}>
+      <Screen
+        contentClassName="gap-8 px-6 py-6"
+        edges={["top", "bottom"]}
+        header={<ScreenHeader back title={`@${username}`} />}
+      >
         <View className="flex-row items-start gap-4">
           <Skeleton className="size-20 rounded-full" />
           <View className="flex-1 gap-2 pt-1">
@@ -41,7 +45,11 @@ export default function PublicProfileScreen() {
 
   if (profileQuery.isError || !data) {
     return (
-      <Screen contentClassName="items-center justify-center gap-3 px-6" edges={["top", "bottom"]}>
+      <Screen
+        contentClassName="items-center justify-center gap-3 px-6"
+        edges={["top", "bottom"]}
+        header={<ScreenHeader back title={`@${username}`} />}
+      >
         <StyledIonicons name="person-remove-outline" size={40} className="text-muted-foreground" />
         <Heading className="text-center">{t("notFound.title")}</Heading>
         <Text className="text-muted-foreground text-center text-sm">
@@ -52,7 +60,13 @@ export default function PublicProfileScreen() {
   }
 
   return (
-    <Screen contentClassName="gap-8 px-6 py-6" edges={["top", "bottom"]}>
+    <Screen
+      contentClassName="gap-8 px-6 py-6"
+      edges={["top", "bottom"]}
+      header={<ScreenHeader back title={data.user.name} />}
+      refreshing={profileQuery.isRefetching}
+      onRefresh={() => profileQuery.refetch()}
+    >
       <ProfileView user={data.user} stats={data.stats} isOwner={data.isOwner} />
 
       {data.history ? (

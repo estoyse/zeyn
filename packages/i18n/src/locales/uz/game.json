@@ -52,7 +52,10 @@
     "shareLink": "Yoki havolani ulashing",
     "public": "Ochiq xona",
     "private": "Faqat taklif bilan",
-    "locked": "Parol bilan himoyalangan"
+    "locked": "Parol bilan himoyalangan",
+    "tapToCopy": "Nusxalash uchun bosing",
+    "needMorePlayers": "Boshlash uchun yana {{count}} o‘yinchi kerak",
+    "needMorePlayers_other": "Boshlash uchun yana {{count}} o‘yinchi kerak"
   },
   "playing": {
     "loadingQuestion": "Savol yuklanmoqda...",

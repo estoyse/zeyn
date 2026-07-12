@@ -8,7 +8,9 @@
     "title": "Join by code",
     "description": "Have a room code? Enter it below to join.",
     "placeholder": "K7M2XQ4B",
-    "submit": "Join"
+    "submit": "Join",
+    "paste": "Paste",
+    "short": "Join a room"
   },
   "publicArenas": {
     "defaultTitle": "Public Rooms",
@@ -41,5 +43,18 @@
   },
   "page": {
     "gamesHeading": "Games"
+  },
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "anon": "Ready to play?"
+  },
+  "liveNow": {
+    "title": "Live now"
+  },
+  "playNow": {
+    "title": "Play now",
+    "create": "Create a room"
   }
 }
