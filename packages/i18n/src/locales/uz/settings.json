@@ -25,6 +25,13 @@
     "haptics": {
       "label": "Tebranish",
       "description": "Bosish va signal paytidagi tebranish"
+    },
+    "appearance": {
+      "label": "Ko‘rinish",
+      "description": "Yorug‘, qorong‘i yoki tizim bo‘yicha",
+      "light": "Yorug‘",
+      "dark": "Qorong‘i",
+      "system": "Tizim"
     }
   },
   "account": {

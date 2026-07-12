@@ -12,7 +12,6 @@ import {
   Skeleton,
   Spinner,
   Switch,
-  Tabs,
   TextField,
   useToast,
 } from "heroui-native";
@@ -22,8 +21,8 @@ import { View } from "react-native";
 import z from "zod";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Heading, Screen, Text } from "@/components/ui";
+import { AppearancePicker } from "@/components/appearance-picker";
+import { Screen, ScreenHeader, Text } from "@/components/ui";
 import { createAuthSchemas } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { useAuth } from "@/features/auth/useAuth";
@@ -421,10 +420,10 @@ function PreferencesSection() {
   return (
     <Card>
       <SectionRow
-        label={t("preferences.theme.label")}
-        description={t("preferences.theme.description")}
+        label={t("preferences.appearance.label")}
+        description={t("preferences.appearance.description")}
       >
-        <ThemeToggle />
+        <AppearancePicker />
       </SectionRow>
 
       <Separator />
@@ -554,63 +553,55 @@ function SettingsSkeleton() {
   );
 }
 
+function SettingsGroup({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <View className="gap-2">
+      <Text className="px-1 text-caption uppercase text-muted-foreground">
+        {title}
+      </Text>
+      {children}
+    </View>
+  );
+}
+
 export default function SettingsScreen() {
   const { t } = useTranslation("settings");
-  const [activeTab, setActiveTab] = useState("account");
 
   const meQuery = useQuery(trpc.profile.getMe.queryOptions());
   const me = meQuery.data;
 
   return (
-    <Screen contentClassName="gap-6 px-6 py-6" edges={["top", "bottom"]}>
-      <View className="gap-1">
-        <Heading className="text-2xl">{t("title")}</Heading>
-        <Text className="text-muted-foreground">{t("subtitle")}</Text>
-      </View>
-
+    <Screen
+      contentClassName="gap-7 px-6 pb-8 pt-2"
+      edges={["top", "bottom"]}
+      header={<ScreenHeader back title={t("title")} />}
+      refreshing={meQuery.isRefetching}
+      onRefresh={() => meQuery.refetch()}
+    >
       {!me ? (
         <SettingsSkeleton />
       ) : (
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <Tabs.List>
-            <Tabs.ScrollView>
-              <Tabs.Indicator />
-              <Tabs.Trigger value="account">
-                <Tabs.Label>{t("tabs.account")}</Tabs.Label>
-              </Tabs.Trigger>
-              <Tabs.Trigger value="privacy">
-                <Tabs.Label>{t("tabs.privacy")}</Tabs.Label>
-              </Tabs.Trigger>
-              <Tabs.Trigger value="security">
-                <Tabs.Label>{t("tabs.security")}</Tabs.Label>
-              </Tabs.Trigger>
-              <Tabs.Trigger value="preferences">
-                <Tabs.Label>{t("preferences.title")}</Tabs.Label>
-              </Tabs.Trigger>
-              <Tabs.Trigger value="danger">
-                <Tabs.Label>{t("tabs.danger")}</Tabs.Label>
-              </Tabs.Trigger>
-            </Tabs.ScrollView>
-          </Tabs.List>
+        <>
+          <SettingsGroup title={t("preferences.title")}>
+            <PreferencesSection />
+          </SettingsGroup>
 
-          <View className="mt-6">
-            <Tabs.Content value="account">
-              <AccountSection me={me} />
-            </Tabs.Content>
-            <Tabs.Content value="privacy">
-              <PrivacySection me={me} />
-            </Tabs.Content>
-            <Tabs.Content value="security">
-              <SecuritySection />
-            </Tabs.Content>
-            <Tabs.Content value="preferences">
-              <PreferencesSection />
-            </Tabs.Content>
-            <Tabs.Content value="danger">
-              <DangerSection username={me.username} />
-            </Tabs.Content>
-          </View>
-        </Tabs>
+          <SettingsGroup title={t("tabs.account")}>
+            <AccountSection me={me} />
+          </SettingsGroup>
+
+          <SettingsGroup title={t("tabs.privacy")}>
+            <PrivacySection me={me} />
+          </SettingsGroup>
+
+          <SettingsGroup title={t("tabs.security")}>
+            <SecuritySection />
+          </SettingsGroup>
+
+          <SettingsGroup title={t("tabs.danger")}>
+            <DangerSection username={me.username} />
+          </SettingsGroup>
+        </>
       )}
     </Screen>
   );

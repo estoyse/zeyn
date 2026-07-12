@@ -25,6 +25,13 @@
     "haptics": {
       "label": "Haptics",
       "description": "Vibration feedback on taps and buzzes"
+    },
+    "appearance": {
+      "label": "Appearance",
+      "description": "Light, dark, or follow the system",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
     }
   },
   "account": {

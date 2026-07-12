@@ -1,17 +1,32 @@
 import * as SecureStore from "expo-secure-store";
 import { useSyncExternalStore } from "react";
+import { Uniwind } from "uniwind";
 
 import { setHapticsEnabled } from "./haptics";
 
 const HAPTICS_KEY = "zeyn-haptics-enabled";
 const SFX_KEY = "zeyn-sfx-muted";
+const APPEARANCE_KEY = "zeyn-appearance";
+
+export type Appearance = "light" | "dark" | "system";
+
+const APPEARANCES: readonly Appearance[] = ["light", "dark", "system"];
+
+function isAppearance(value: string | null): value is Appearance {
+  return value !== null && APPEARANCES.includes(value as Appearance);
+}
 
 type Prefs = {
   hapticsEnabled: boolean;
   sfxMuted: boolean;
+  appearance: Appearance;
 };
 
-let prefs: Prefs = { hapticsEnabled: true, sfxMuted: false };
+let prefs: Prefs = {
+  hapticsEnabled: true,
+  sfxMuted: false,
+  appearance: "system",
+};
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -32,16 +47,26 @@ export function isSfxMuted() {
 }
 
 export async function hydratePrefs() {
-  const [haptics, sfx] = await Promise.all([
+  const [haptics, sfx, appearance] = await Promise.all([
     SecureStore.getItemAsync(HAPTICS_KEY),
     SecureStore.getItemAsync(SFX_KEY),
+    SecureStore.getItemAsync(APPEARANCE_KEY),
   ]);
   prefs = {
     hapticsEnabled: haptics !== "0",
     sfxMuted: sfx === "1",
+    appearance: isAppearance(appearance) ? appearance : "system",
   };
   setHapticsEnabled(prefs.hapticsEnabled);
+  Uniwind.setTheme(prefs.appearance);
   emit();
+}
+
+export function setAppearance(value: Appearance) {
+  prefs = { ...prefs, appearance: value };
+  Uniwind.setTheme(value);
+  emit();
+  SecureStore.setItemAsync(APPEARANCE_KEY, value).catch(() => {});
 }
 
 export function setHapticsPref(value: boolean) {
