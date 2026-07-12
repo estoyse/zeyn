@@ -8,6 +8,7 @@ import Animated from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
 import { Button, Heading, Text } from "@/components/ui";
+import { Countdown } from "@/features/game/components/Countdown";
 import { Timer } from "@/features/game/components/Timer";
 import { useCountdown } from "@/features/game/hooks/useCountdown";
 import type { GamePlayViewProps } from "@/features/games/types";
@@ -41,6 +42,19 @@ export function BuzzerPlaying({ room }: GamePlayViewProps) {
   );
 
   if (!state) return null;
+
+  if (state.phase === "COUNTDOWN") {
+    return (
+      <Countdown
+        expiresAt={
+          state.activeQuestionState
+            ? state.activeQuestionState.timerExpiresAt - room.serverTimeOffset
+            : 0
+        }
+        duration={gameConfig.countdownTimeMs}
+      />
+    );
+  }
 
   if (!state.currentQuestion) {
     return (

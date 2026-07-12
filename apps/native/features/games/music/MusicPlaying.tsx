@@ -9,6 +9,7 @@ import { withUniwind } from "uniwind";
 
 import { Card, Chip } from "heroui-native";
 import { Heading, Text } from "@/components/ui";
+import { Countdown } from "@/features/game/components/Countdown";
 import { Timer } from "@/features/game/components/Timer";
 import type { GamePlayViewProps } from "@/features/games/types";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,15 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
       player.pause();
     }
   }, [phase, player]);
+
+  if (state?.phase === "COUNTDOWN") {
+    return (
+      <Countdown
+        expiresAt={state.timerExpiresAt - room.serverTimeOffset}
+        duration={musicGameConfig.countdownTimeMs}
+      />
+    );
+  }
 
   if (!state?.question) {
     return (

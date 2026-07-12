@@ -177,5 +177,8 @@
   },
   "connection": {
     "reconnecting": "Reconnecting… your actions are paused until the connection returns."
+  },
+  "countdown": {
+    "getReady": "Get ready"
   }
 }

@@ -177,5 +177,8 @@
   },
   "connection": {
     "reconnecting": "Qayta ulanmoqda… ulanish tiklanmaguncha amallaringiz to'xtatiladi."
+  },
+  "countdown": {
+    "getReady": "Tayyor bo‘ling"
   }
 }
