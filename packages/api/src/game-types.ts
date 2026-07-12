@@ -75,7 +75,7 @@ export interface GameState extends BaseGameState {
   subjects: Subject[];
   currentSubjectIndex: number;
   currentQuestionIndex: number;
-  phase: "ACTIVE" | "ANSWERING" | "REVEALED";
+  phase: "COUNTDOWN" | "ACTIVE" | "ANSWERING" | "REVEALED";
   activeQuestionState: ActiveQuestionState | null;
   questionResults: QuestionResult[];
 }
@@ -103,7 +103,7 @@ export interface PublicGameState extends BasePublicGameState {
   subjectCount: number;
   currentSubjectIndex: number;
   currentQuestionIndex: number;
-  phase: "ACTIVE" | "ANSWERING" | "REVEALED";
+  phase: "COUNTDOWN" | "ACTIVE" | "ANSWERING" | "REVEALED";
   activeQuestionState: ActiveQuestionState | null;
   questionResults: QuestionResult[];
   currentSubjectName?: string;
@@ -201,6 +201,7 @@ export interface EngineDirectives {
 }
 
 export const gameConfig = {
+  countdownTimeMs: 3000,
   questionTimeMs: 15000,
   answerTimeMs: 20000,
   revealTimeMs: 5000,

@@ -49,7 +49,7 @@ export class StateSerializer {
       if (currentSubject) {
         publicState.currentSubjectName = currentSubject.name;
       }
-      if (currentQuestion) {
+      if (currentQuestion && state.phase !== "COUNTDOWN") {
         publicState.currentQuestion = {
           text: currentQuestion.text,
           points: currentQuestion.points,

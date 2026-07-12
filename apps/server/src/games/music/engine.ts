@@ -67,6 +67,13 @@ export function buildQuestions(songs: SongRow[]): MusicQuestion[] {
   });
 }
 
+function beginCountdown(state: MusicQuizState, now: number): number {
+  state.phase = "COUNTDOWN";
+  state.answers = {};
+  state.timerExpiresAt = now + musicGameConfig.countdownTimeMs;
+  return state.timerExpiresAt;
+}
+
 function beginQuestion(state: MusicQuizState, now: number): number {
   state.phase = "QUESTION";
   state.answers = {};
@@ -99,7 +106,7 @@ export function start(
   state.status = "PLAYING";
   state.currentQuestionIndex = 0;
   state.streaks = {};
-  const alarmAt = beginQuestion(state, now);
+  const alarmAt = beginCountdown(state, now);
   return { updateRoomStatus: "playing", alarmAt };
 }
 
@@ -187,6 +194,8 @@ export function handleTimeout(
 ): EngineDirectives {
   if (state.status !== "PLAYING") return { noChange: true };
   switch (state.phase) {
+    case "COUNTDOWN":
+      return { alarmAt: beginQuestion(state, now) };
     case "QUESTION":
       return reveal(state, now);
     case "REVEAL":

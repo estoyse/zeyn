@@ -39,7 +39,7 @@ export class MusicSerializer {
       publicState.players = playerDeltas;
     }
 
-    if (state.status === "PLAYING" && question) {
+    if (state.status === "PLAYING" && question && state.phase !== "COUNTDOWN") {
       publicState.question = {
         previewUrl: question.previewUrl,
         options: question.options,

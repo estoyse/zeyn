@@ -221,8 +221,19 @@ export function start(
   }
 
   state.status = "PLAYING";
-  const alarmAt = startQuestionCycle(state, now);
+  const alarmAt = startCountdown(state, now);
   return { updateRoomStatus: "playing", alarmAt };
+}
+
+function startCountdown(state: GameState, now: number): number {
+  state.phase = "COUNTDOWN";
+  state.activeQuestionState = {
+    buzzedPlayerId: null,
+    wrongAttempts: 0,
+    playersWhoAttempted: [],
+    timerExpiresAt: now + gameConfig.countdownTimeMs,
+  };
+  return state.activeQuestionState.timerExpiresAt;
 }
 
 /** Begin a fresh question: reset the buzzer and arm the question timer. */
@@ -346,6 +357,8 @@ export function handleTimeout(state: GameState, now: number): EngineDirectives {
   if (state.status !== "PLAYING") return { noChange: true };
 
   switch (state.phase) {
+    case "COUNTDOWN":
+      return { alarmAt: startQuestionCycle(state, now) };
     case "ACTIVE":
       return reveal(state, now);
     case "ANSWERING": {
