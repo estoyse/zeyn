@@ -20,6 +20,7 @@ import Animated, {
 import { Text } from "@/components/ui";
 import { haptic } from "@/lib/haptics";
 import { SPRING } from "@/lib/motion";
+import { play } from "@/lib/sfx";
 import { cn } from "@/lib/utils";
 
 import { Ring } from "./Ring";
@@ -89,6 +90,7 @@ export function RingBuzzer({
         });
       }
       runOnJS(haptic)("heavy");
+      runOnJS(play)("buzz");
       runOnJS(onBuzz)();
     })
     .onFinalize(() => {

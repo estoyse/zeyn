@@ -17,6 +17,14 @@
     "language": {
       "label": "Til",
       "description": "O'zingizga qulay tilni tanlang"
+    },
+    "sound": {
+      "label": "Ovoz effektlari",
+      "description": "O‘yin davomidagi signal, sanoq va natijalar"
+    },
+    "haptics": {
+      "label": "Tebranish",
+      "description": "Bosish va signal paytidagi tebranish"
     }
   },
   "account": {

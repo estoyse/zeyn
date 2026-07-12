@@ -32,7 +32,9 @@
       "title": "Leave this game?",
       "description": "You will be removed from the room and your score for this game will be lost.",
       "confirm": "Leave game"
-    }
+    },
+    "mute": "Mute sound",
+    "unmute": "Unmute sound"
   },
   "lobby": {
     "guest": "Guest",

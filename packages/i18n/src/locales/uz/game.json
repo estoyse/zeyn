@@ -32,7 +32,9 @@
       "title": "O'yindan chiqasizmi?",
       "description": "Siz xonadan chiqarilasiz va bu o'yindagi ochkolaringiz yo'qoladi.",
       "confirm": "O'yindan chiqish"
-    }
+    },
+    "mute": "Ovozni o‘chirish",
+    "unmute": "Ovozni yoqish"
   },
   "lobby": {
     "guest": "Mehmon",

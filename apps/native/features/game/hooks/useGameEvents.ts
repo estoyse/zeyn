@@ -9,6 +9,7 @@ import {
   type GameEventDiff,
 } from "@/features/game/lib/gameEvents";
 import { haptic } from "@/lib/haptics";
+import { play } from "@/lib/sfx";
 
 export function useGameEventStream<S>(
   state: S | null,
@@ -45,18 +46,24 @@ export function useGameFeedback(): (event: GameEvent) => void {
       switch (event.type) {
         case "gameStart":
           haptic("impact");
+          play("countdownGo");
           return;
 
         case "questionStart":
           haptic("select");
+          play("questionStart");
           return;
 
         case "buzz":
-          if (!event.isSelf) haptic("tap");
+          if (event.isSelf) return;
+          haptic("tap");
+          play("buzz");
           return;
 
         case "lockIn":
-          if (event.isSelf) haptic("tap");
+          if (!event.isSelf) return;
+          haptic("tap");
+          play("tick");
           return;
 
         case "answer":
@@ -65,10 +72,12 @@ export function useGameFeedback(): (event: GameEvent) => void {
             haptic("success");
             flash("success");
             burst("success");
+            play("correct");
           } else {
             haptic("error");
             flash("danger");
             shake();
+            play("wrong");
           }
           return;
 
@@ -77,6 +86,7 @@ export function useGameFeedback(): (event: GameEvent) => void {
 
         case "gameEnd":
           haptic("success");
+          play("win");
           return;
       }
     },

@@ -11,6 +11,7 @@ import Animated, {
 import { Text } from "@/components/ui";
 import { useCountdown } from "@/features/game/hooks/useCountdown";
 import { haptic } from "@/lib/haptics";
+import { play } from "@/lib/sfx";
 import { useAppColor, useThemeColor } from "@/lib/theme";
 
 interface TimerProps {
@@ -31,6 +32,7 @@ export function Timer({ expiresAt, duration = 15000, underClock = false }: Timer
       if (!underClock || previous === null || seconds === previous) return;
       if (seconds <= 3 && seconds > 0) {
         runOnJS(haptic)("tap");
+        runOnJS(play)("tick");
       }
     },
     [underClock]

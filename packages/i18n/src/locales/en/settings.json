@@ -17,6 +17,14 @@
     "language": {
       "label": "Language",
       "description": "Choose your preferred language"
+    },
+    "sound": {
+      "label": "Sound effects",
+      "description": "Buzzes, ticks and reveals during a game"
+    },
+    "haptics": {
+      "label": "Haptics",
+      "description": "Vibration feedback on taps and buzzes"
     }
   },
   "account": {

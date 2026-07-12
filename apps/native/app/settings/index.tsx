@@ -28,6 +28,7 @@ import { createAuthSchemas } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { useAuth } from "@/features/auth/useAuth";
 import { authClient } from "@/lib/auth-client";
+import { setHapticsPref, setSfxMuted, usePrefs } from "@/lib/prefs";
 import { trpc } from "@/utils/trpc";
 
 type MeData = {
@@ -415,6 +416,7 @@ function SecuritySection() {
 
 function PreferencesSection() {
   const { t } = useTranslation("settings");
+  const { sfxMuted, hapticsEnabled } = usePrefs();
 
   return (
     <Card>
@@ -432,6 +434,27 @@ function PreferencesSection() {
         description={t("preferences.language.description")}
       >
         <LanguageSwitcher />
+      </SectionRow>
+
+      <Separator />
+
+      <SectionRow
+        label={t("preferences.sound.label")}
+        description={t("preferences.sound.description")}
+      >
+        <Switch
+          isSelected={!sfxMuted}
+          onSelectedChange={(value) => setSfxMuted(!value)}
+        />
+      </SectionRow>
+
+      <Separator />
+
+      <SectionRow
+        label={t("preferences.haptics.label")}
+        description={t("preferences.haptics.description")}
+      >
+        <Switch isSelected={hapticsEnabled} onSelectedChange={setHapticsPref} />
       </SectionRow>
     </Card>
   );
