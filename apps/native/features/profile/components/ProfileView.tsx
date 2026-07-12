@@ -7,6 +7,7 @@ import { withUniwind } from "uniwind";
 
 import { AnimatedNumber, Button, Heading, Text } from "@/components/ui";
 import { useThemeColor } from "@/lib/theme";
+import { cn } from "@/lib/utils";
 
 import { initials, memberSince } from "../lib/format";
 
@@ -37,22 +38,42 @@ interface ProfileViewProps {
   isOwner: boolean;
 }
 
-function StatTile({ label, value }: { label: string; value: number }) {
+function StatTile({
+  label,
+  value,
+  icon,
+  tint,
+  iconClass,
+}: {
+  label: string;
+  value: number;
+  icon: keyof typeof Ionicons.glyphMap;
+  tint: string;
+  iconClass: string;
+}) {
   const [foreground] = useThemeColor(["foreground"]);
 
   return (
     <Card className="flex-1">
-      <Card.Body className="items-center gap-1">
-        <AnimatedNumber
-          value={value}
-          style={{ fontSize: 22, fontWeight: "700", color: foreground, textAlign: "center" }}
-        />
-        <Text
-          numberOfLines={1}
-          className="text-muted-foreground text-center text-[10px] font-semibold uppercase tracking-wider"
+      <Card.Body className="gap-3 p-4">
+        <View
+          className={cn("size-9 items-center justify-center rounded-pill", tint)}
         >
-          {label}
-        </Text>
+          <StyledIonicons name={icon} size={17} className={iconClass} />
+        </View>
+
+        <View className="gap-0.5">
+          <AnimatedNumber
+            value={value}
+            style={{ fontSize: 24, fontWeight: "700", color: foreground }}
+          />
+          <Text
+            numberOfLines={1}
+            className="text-caption uppercase text-muted-foreground"
+          >
+            {label}
+          </Text>
+        </View>
       </Card.Body>
     </Card>
   );
@@ -117,11 +138,39 @@ export function ProfileView({ user, stats, isOwner }: ProfileViewProps) {
             ) : null}
           </View>
 
-          <View className="flex-row gap-3">
-            <StatTile label={t("stats.played")} value={stats.gamesPlayed} />
-            <StatTile label={t("stats.hosted")} value={stats.gamesHosted} />
-            <StatTile label={t("stats.best")} value={stats.bestScore} />
-            <StatTile label={t("stats.total")} value={stats.totalScore} />
+          <View className="gap-3">
+            <View className="flex-row gap-3">
+              <StatTile
+                icon="game-controller"
+                tint="bg-brand/15"
+                iconClass="text-brand"
+                label={t("stats.played")}
+                value={stats.gamesPlayed}
+              />
+              <StatTile
+                icon="people"
+                tint="bg-buzzer/15"
+                iconClass="text-buzzer"
+                label={t("stats.hosted")}
+                value={stats.gamesHosted}
+              />
+            </View>
+            <View className="flex-row gap-3">
+              <StatTile
+                icon="trophy"
+                tint="bg-success/15"
+                iconClass="text-success"
+                label={t("stats.best")}
+                value={stats.bestScore}
+              />
+              <StatTile
+                icon="flame"
+                tint="bg-destructive/15"
+                iconClass="text-destructive"
+                label={t("stats.total")}
+                value={stats.totalScore}
+              />
+            </View>
           </View>
         </View>
       ) : null}

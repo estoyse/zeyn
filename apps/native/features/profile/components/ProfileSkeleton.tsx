@@ -17,11 +17,13 @@ export function ProfileSkeleton() {
 
       <View className="gap-3">
         <Skeleton className="h-5 w-16 rounded-md" />
-        <View className="flex-row gap-3">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 flex-1 rounded-card" />
-          ))}
-        </View>
+        {Array.from({ length: 2 }).map((_, row) => (
+          <View key={row} className="flex-row gap-3">
+            {Array.from({ length: 2 }).map((_, column) => (
+              <Skeleton key={column} className="h-[104px] flex-1 rounded-card" />
+            ))}
+          </View>
+        ))}
       </View>
 
       <View className="gap-3">
