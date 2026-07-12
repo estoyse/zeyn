@@ -78,6 +78,18 @@ describe("resolveGameView", () => {
     expect(view).toEqual({ kind: "loginRequired" });
   });
 
+  it("does not flash a connection error in the frame before the socket opens", () => {
+    const view = resolveGameView({
+      ...base,
+      hasIdentity: true,
+      hasState: false,
+      isConnecting: false,
+      isConnected: false,
+      error: null,
+    });
+    expect(view).toEqual({ kind: "connecting" });
+  });
+
   it("connects a live room once identity and password are settled", () => {
     const view = resolveGameView({
       ...base,
