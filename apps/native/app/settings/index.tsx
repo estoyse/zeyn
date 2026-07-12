@@ -8,7 +8,6 @@ import {
   FieldError,
   Input,
   Label,
-  Separator,
   Skeleton,
   Spinner,
   Switch,
@@ -22,7 +21,15 @@ import z from "zod";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { AppearancePicker } from "@/components/appearance-picker";
-import { Screen, ScreenHeader, Text } from "@/components/ui";
+import {
+  Group,
+  Row,
+  RowSeparator,
+  Screen,
+  ScreenHeader,
+  Section,
+  Text,
+} from "@/components/ui";
 import { createAuthSchemas } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { useAuth } from "@/features/auth/useAuth";
@@ -39,28 +46,6 @@ type MeData = {
   showHistory: boolean;
   showHostedGames: boolean;
 };
-
-function SectionRow({
-  label,
-  description,
-  children,
-}: {
-  label: string;
-  description: string;
-  children: ReactNode;
-}) {
-  return (
-    <View className="flex-row items-center justify-between gap-4 p-4">
-      <View className="flex-1 gap-0.5">
-        <Text weight="medium" className="text-sm">
-          {label}
-        </Text>
-        <Text className="text-muted-foreground text-xs">{description}</Text>
-      </View>
-      {children}
-    </View>
-  );
-}
 
 function AccountSection({ me }: { me: MeData }) {
   const { t } = useTranslation("settings");
@@ -232,56 +217,55 @@ function PrivacySection({ me }: { me: MeData }) {
   }
 
   return (
-    <Card>
-      <SectionRow
+    <Group>
+      <Row
         label={t("privacy.publicProfile.label")}
-        description={t("privacy.publicProfile.description")}
-      >
-        <Switch
+        caption={t("privacy.publicProfile.description")}
+        trailing={<Switch
           isSelected={state.isProfilePublic}
           onSelectedChange={(value) => update("isProfilePublic", value)}
-        />
-      </SectionRow>
+        />}
+      />
 
-      <Separator />
+      <RowSeparator />
 
-      <SectionRow
+
+      <Row
         label={t("privacy.showStats.label")}
-        description={t("privacy.showStats.description")}
-      >
-        <Switch
+        caption={t("privacy.showStats.description")}
+        trailing={<Switch
           isSelected={state.showStats}
           isDisabled={!state.isProfilePublic}
           onSelectedChange={(value) => update("showStats", value)}
-        />
-      </SectionRow>
+        />}
+      />
 
-      <Separator />
+      <RowSeparator />
 
-      <SectionRow
+
+      <Row
         label={t("privacy.showHistory.label")}
-        description={t("privacy.showHistory.description")}
-      >
-        <Switch
+        caption={t("privacy.showHistory.description")}
+        trailing={<Switch
           isSelected={state.showHistory}
           isDisabled={!state.isProfilePublic}
           onSelectedChange={(value) => update("showHistory", value)}
-        />
-      </SectionRow>
+        />}
+      />
 
-      <Separator />
+      <RowSeparator />
 
-      <SectionRow
+
+      <Row
         label={t("privacy.showHostedGames.label")}
-        description={t("privacy.showHostedGames.description")}
-      >
-        <Switch
+        caption={t("privacy.showHostedGames.description")}
+        trailing={<Switch
           isSelected={state.showHostedGames}
           isDisabled={!state.isProfilePublic}
           onSelectedChange={(value) => update("showHostedGames", value)}
-        />
-      </SectionRow>
-    </Card>
+        />}
+      />
+    </Group>
   );
 }
 
@@ -418,44 +402,43 @@ function PreferencesSection() {
   const { sfxMuted, hapticsEnabled } = usePrefs();
 
   return (
-    <Card>
-      <SectionRow
+    <Group>
+      <Row
         label={t("preferences.appearance.label")}
-        description={t("preferences.appearance.description")}
-      >
-        <AppearancePicker />
-      </SectionRow>
+        caption={t("preferences.appearance.description")}
+        trailing={<AppearancePicker />}
+      />
 
-      <Separator />
+      <RowSeparator />
 
-      <SectionRow
+
+      <Row
         label={t("preferences.language.label")}
-        description={t("preferences.language.description")}
-      >
-        <LanguageSwitcher />
-      </SectionRow>
+        caption={t("preferences.language.description")}
+        trailing={<LanguageSwitcher />}
+      />
 
-      <Separator />
+      <RowSeparator />
 
-      <SectionRow
+
+      <Row
         label={t("preferences.sound.label")}
-        description={t("preferences.sound.description")}
-      >
-        <Switch
+        caption={t("preferences.sound.description")}
+        trailing={<Switch
           isSelected={!sfxMuted}
           onSelectedChange={(value) => setSfxMuted(!value)}
-        />
-      </SectionRow>
+        />}
+      />
 
-      <Separator />
+      <RowSeparator />
 
-      <SectionRow
+
+      <Row
         label={t("preferences.haptics.label")}
-        description={t("preferences.haptics.description")}
-      >
-        <Switch isSelected={hapticsEnabled} onSelectedChange={setHapticsPref} />
-      </SectionRow>
-    </Card>
+        caption={t("preferences.haptics.description")}
+        trailing={<Switch isSelected={hapticsEnabled} onSelectedChange={setHapticsPref} />}
+      />
+    </Group>
   );
 }
 
@@ -553,17 +536,6 @@ function SettingsSkeleton() {
   );
 }
 
-function SettingsGroup({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <View className="gap-2">
-      <Text className="px-1 text-caption uppercase text-muted-foreground">
-        {title}
-      </Text>
-      {children}
-    </View>
-  );
-}
-
 export default function SettingsScreen() {
   const { t } = useTranslation("settings");
 
@@ -582,25 +554,25 @@ export default function SettingsScreen() {
         <SettingsSkeleton />
       ) : (
         <>
-          <SettingsGroup title={t("preferences.title")}>
+          <Section eyebrow={t("preferences.title")}>
             <PreferencesSection />
-          </SettingsGroup>
+          </Section>
 
-          <SettingsGroup title={t("tabs.account")}>
+          <Section eyebrow={t("tabs.account")}>
             <AccountSection me={me} />
-          </SettingsGroup>
+          </Section>
 
-          <SettingsGroup title={t("tabs.privacy")}>
+          <Section eyebrow={t("tabs.privacy")}>
             <PrivacySection me={me} />
-          </SettingsGroup>
+          </Section>
 
-          <SettingsGroup title={t("tabs.security")}>
+          <Section eyebrow={t("tabs.security")}>
             <SecuritySection />
-          </SettingsGroup>
+          </Section>
 
-          <SettingsGroup title={t("tabs.danger")}>
+          <Section eyebrow={t("tabs.danger")}>
             <DangerSection username={me.username} />
-          </SettingsGroup>
+          </Section>
         </>
       )}
     </Screen>
