@@ -21,7 +21,8 @@ import Animated, {
   type SharedValue,
 } from "react-native-reanimated";
 
-import { NEON } from "@/lib/neon";
+import { palette, REFINED } from "@/lib/neon";
+import { usePrefs } from "@/lib/prefs";
 
 export type FlashKind = "success" | "danger" | "neutral";
 
@@ -30,12 +31,6 @@ type GameFx = {
   shake: () => void;
   burst: (kind?: FlashKind) => void;
   points: (value: number) => void;
-};
-
-const FLASH_COLOR: Record<FlashKind, string> = {
-  success: NEON.success,
-  danger: NEON.danger,
-  neutral: NEON.glow,
 };
 
 const FLASH_PEAK: Record<FlashKind, number> = {
@@ -63,25 +58,35 @@ export function useGameFx(): GameFx {
 export function GameFxProvider({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const { width, height } = useWindowDimensions();
+  const { gameStyle } = usePrefs();
+
+  const tone = palette(gameStyle);
+  const damping = gameStyle === "neon" ? 1 : 0.55;
+
+  const flashColor4 = useMemo<Record<FlashKind, string>>(
+    () => ({ success: tone.success, danger: tone.danger, neutral: tone.glow }),
+    [tone]
+  );
 
   const flashOpacity = useSharedValue(0);
-  const flashColor = useSharedValue<string>(NEON.glow);
+  const flashColor = useSharedValue<string>(REFINED.glow);
   const shakeX = useSharedValue(0);
   const burstProgress = useSharedValue(0);
-  const burstColor = useSharedValue<string>(NEON.success);
+  const burstColor = useSharedValue<string>(REFINED.success);
   const pointsProgress = useSharedValue(0);
   const [awarded, setAwarded] = useState<number | null>(null);
 
   const flash = useCallback(
     (kind: FlashKind) => {
-      flashColor.value = FLASH_COLOR[kind];
-      const peak = reduced ? FLASH_PEAK[kind] * 0.4 : FLASH_PEAK[kind];
+      flashColor.value = flashColor4[kind];
+      const base = FLASH_PEAK[kind] * damping;
+      const peak = reduced ? base * 0.4 : base;
       flashOpacity.value = withSequence(
         withTiming(peak, { duration: 90, easing: Easing.out(Easing.quad) }),
         withTiming(0, { duration: 340, easing: Easing.in(Easing.quad) })
       );
     },
-    [flashColor, flashOpacity, reduced]
+    [flashColor, flashOpacity, reduced, flashColor4, damping]
   );
 
   const shake = useCallback(() => {
@@ -98,14 +103,14 @@ export function GameFxProvider({ children }: { children: ReactNode }) {
   const burst = useCallback(
     (kind: FlashKind = "success") => {
       if (reduced) return;
-      burstColor.value = FLASH_COLOR[kind];
+      burstColor.value = flashColor4[kind];
       burstProgress.value = 0;
       burstProgress.value = withTiming(1, {
         duration: 720,
         easing: Easing.out(Easing.cubic),
       });
     },
-    [burstColor, burstProgress, reduced]
+    [burstColor, burstProgress, reduced, flashColor4]
   );
 
   const points = useCallback(
@@ -181,7 +186,7 @@ export function GameFxProvider({ children }: { children: ReactNode }) {
             style={[
               styles.pointsText,
               pointsStyle,
-              { color: falling ? NEON.danger : NEON.success },
+              { color: falling ? tone.danger : tone.success },
             ]}
           >
             {awarded > 0 ? `+${awarded}` : String(awarded)}

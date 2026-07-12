@@ -34,7 +34,8 @@
       "confirm": "Leave game"
     },
     "mute": "Mute sound",
-    "unmute": "Unmute sound"
+    "unmute": "Unmute sound",
+    "style": "Visual style"
   },
   "lobby": {
     "guest": "Guest",

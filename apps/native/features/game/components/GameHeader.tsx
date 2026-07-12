@@ -4,7 +4,7 @@ import { Alert, View } from "react-native";
 import { withUniwind } from "uniwind";
 
 import { Button, Logo, LogoMark, PressableScale, Text } from "@/components/ui";
-import { setSfxMuted, usePrefs } from "@/lib/prefs";
+import { setGameStyle, setSfxMuted, usePrefs } from "@/lib/prefs";
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -15,7 +15,7 @@ interface GameHeaderProps {
 
 export function GameHeader({ gameId, onLeave }: GameHeaderProps) {
   const { t } = useTranslation("game");
-  const { sfxMuted } = usePrefs();
+  const { sfxMuted, gameStyle } = usePrefs();
 
   const confirmLeave = () => {
     Alert.alert(
@@ -45,6 +45,20 @@ export function GameHeader({ gameId, onLeave }: GameHeaderProps) {
           </Text>
         </View>
       </View>
+
+      <PressableScale
+        haptic="toggle"
+        onPress={() => setGameStyle(gameStyle === "neon" ? "refined" : "neon")}
+        accessibilityRole="button"
+        accessibilityLabel={t("header.style")}
+        className="size-10 items-center justify-center rounded-pill bg-muted-surface"
+      >
+        <StyledIonicons
+          name={gameStyle === "neon" ? "flash" : "contrast"}
+          size={17}
+          className={gameStyle === "neon" ? "text-buzzer" : "text-foreground"}
+        />
+      </PressableScale>
 
       <PressableScale
         haptic="toggle"

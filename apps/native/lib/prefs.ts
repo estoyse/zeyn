@@ -3,10 +3,12 @@ import { useSyncExternalStore } from "react";
 import { Uniwind } from "uniwind";
 
 import { setHapticsEnabled } from "./haptics";
+import type { GameStyle } from "./neon";
 
 const HAPTICS_KEY = "zeyn-haptics-enabled";
 const SFX_KEY = "zeyn-sfx-muted";
 const APPEARANCE_KEY = "zeyn-appearance";
+const GAME_STYLE_KEY = "zeyn-game-style";
 
 export type Appearance = "light" | "dark" | "system";
 
@@ -20,12 +22,14 @@ type Prefs = {
   hapticsEnabled: boolean;
   sfxMuted: boolean;
   appearance: Appearance;
+  gameStyle: GameStyle;
 };
 
 let prefs: Prefs = {
   hapticsEnabled: true,
   sfxMuted: false,
   appearance: "system",
+  gameStyle: "refined",
 };
 const listeners = new Set<() => void>();
 
@@ -47,15 +51,17 @@ export function isSfxMuted() {
 }
 
 export async function hydratePrefs() {
-  const [haptics, sfx, appearance] = await Promise.all([
+  const [haptics, sfx, appearance, gameStyle] = await Promise.all([
     SecureStore.getItemAsync(HAPTICS_KEY),
     SecureStore.getItemAsync(SFX_KEY),
     SecureStore.getItemAsync(APPEARANCE_KEY),
+    SecureStore.getItemAsync(GAME_STYLE_KEY),
   ]);
   prefs = {
     hapticsEnabled: haptics !== "0",
     sfxMuted: sfx === "1",
     appearance: isAppearance(appearance) ? appearance : "system",
+    gameStyle: gameStyle === "neon" ? "neon" : "refined",
   };
   setHapticsEnabled(prefs.hapticsEnabled);
   Uniwind.setTheme(prefs.appearance);
@@ -84,4 +90,10 @@ export function setSfxMuted(value: boolean) {
 
 export function usePrefs(): Prefs {
   return useSyncExternalStore(subscribe, snapshot);
+}
+
+export function setGameStyle(value: GameStyle) {
+  prefs = { ...prefs, gameStyle: value };
+  emit();
+  SecureStore.setItemAsync(GAME_STYLE_KEY, value).catch(() => {});
 }

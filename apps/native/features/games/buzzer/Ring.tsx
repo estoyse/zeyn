@@ -9,7 +9,7 @@ import {
 import { useMemo } from "react";
 import { useDerivedValue, type SharedValue } from "react-native-reanimated";
 
-import { NEON } from "@/lib/neon";
+import { palette, type GameStyle } from "@/lib/neon";
 
 type RingProps = {
   size: number;
@@ -18,6 +18,7 @@ type RingProps = {
   urgency: SharedValue<number>;
   pressBoost: SharedValue<number>;
   dimmed?: boolean;
+  style?: GameStyle;
 };
 
 export function Ring({
@@ -27,7 +28,11 @@ export function Ring({
   urgency,
   pressBoost,
   dimmed = false,
+  style = "refined",
 }: RingProps) {
+  const tone = palette(style);
+  const neon = style === "neon";
+
   const inset = strokeWidth / 2 + 2;
   const diameter = size - inset * 2;
 
@@ -41,17 +46,19 @@ export function Ring({
 
   const color = useDerivedValue(() =>
     dimmed
-      ? interpolateColors(0, [0, 1], [NEON.ringTrack, NEON.ringTrack])
+      ? interpolateColors(0, [0, 1], [tone.ringTrack, tone.ringTrack])
       : interpolateColors(
           progress.value,
           [0, 0.15, 0.4, 1],
-          [NEON.ringDanger, NEON.ringDanger, NEON.ringWarn, NEON.ringSafe]
+          [tone.ringDanger, tone.ringDanger, tone.ringWarn, tone.ringSafe]
         )
   );
 
-  const blur = useDerivedValue(() =>
-    dimmed ? 0 : 5 + urgency.value * 13 + pressBoost.value
-  );
+  const blur = useDerivedValue(() => {
+    if (dimmed) return 0;
+    if (neon) return 5 + urgency.value * 13 + pressBoost.value;
+    return urgency.value * urgency.value * 6 + pressBoost.value * 0.35;
+  });
 
   return (
     <Canvas style={{ width: size, height: size }}>
@@ -60,7 +67,7 @@ export function Ring({
         style="stroke"
         strokeWidth={strokeWidth}
         strokeCap="round"
-        color={NEON.ringTrack}
+        color={tone.ringTrack}
       />
       <Group>
         <Path

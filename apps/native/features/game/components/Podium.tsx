@@ -27,9 +27,14 @@ export interface PodiumEntry {
 const BAR_HEIGHT = [104, 148, 80];
 const RISE_DELAY = [220, 460, 0];
 const BAR_TONE = [
-  "bg-muted-foreground/30",
+  "bg-surface-tertiary",
   "bg-brand",
-  "bg-buzzer/60",
+  "bg-surface-secondary",
+];
+const BAR_LABEL = [
+  "text-foreground",
+  "text-brand-foreground",
+  "text-muted-foreground",
 ];
 
 export function Podium({
@@ -129,7 +134,7 @@ function Step({
           BAR_TONE[column]
         )}
       >
-        <Text weight="bold" className="text-background text-lg">
+        <Text weight="bold" className={cn("text-lg", BAR_LABEL[column])}>
           {place}
         </Text>
       </Animated.View>

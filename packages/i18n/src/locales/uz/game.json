@@ -34,7 +34,8 @@
       "confirm": "O'yindan chiqish"
     },
     "mute": "Ovozni o‘chirish",
-    "unmute": "Ovozni yoqish"
+    "unmute": "Ovozni yoqish",
+    "style": "Vizual uslub"
   },
   "lobby": {
     "guest": "Mehmon",
