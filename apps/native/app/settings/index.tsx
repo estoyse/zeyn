@@ -544,7 +544,6 @@ export default function SettingsScreen() {
 
   return (
     <Screen
-      contentClassName="gap-7 px-6 pb-8 pt-2"
       edges={["top", "bottom"]}
       header={<ScreenHeader back title={t("title")} />}
       refreshing={meQuery.isRefetching}

@@ -31,7 +31,7 @@ export default function GameTypeScreen() {
   if (!game) {
     return (
       <Screen
-        contentClassName="items-center justify-center gap-2 px-6"
+        contentClassName="items-center justify-center"
         header={<ScreenHeader back title={t("typePage.unknownTitle")} />}
       >
         <Heading>{t("typePage.unknownTitle")}</Heading>
@@ -50,7 +50,6 @@ export default function GameTypeScreen() {
 
   return (
     <Screen
-      contentClassName="gap-6 px-6 py-6"
       header={
         <ScreenHeader
           back

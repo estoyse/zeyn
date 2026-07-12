@@ -17,8 +17,12 @@ export function useScrollOffsetContext() {
   return useContext(ScrollOffsetContext);
 }
 
+export const SCREEN_PADDING = "px-6 py-6";
+export const SCREEN_GAP = "gap-6";
+
 type ScreenProps = {
   scroll?: boolean;
+  padded?: boolean;
   className?: string;
   contentClassName?: string;
   edges?: Edge[];
@@ -29,6 +33,7 @@ type ScreenProps = {
 
 export function Screen({
   scroll = true,
+  padded = true,
   className,
   contentClassName,
   edges = ["top"],
@@ -48,6 +53,13 @@ export function Screen({
     paddingLeft: edges.includes("left") ? insets.left : 0,
     paddingRight: edges.includes("right") ? insets.right : 0,
   };
+
+  const content = cn(
+    "flex-1",
+    padded && SCREEN_PADDING,
+    padded && SCREEN_GAP,
+    contentClassName
+  );
 
   const refreshControl = onRefresh ? (
     <RefreshControl
@@ -73,10 +85,10 @@ export function Screen({
             keyboardShouldPersistTaps="handled"
             refreshControl={refreshControl}
           >
-            <View className={cn("flex-1", contentClassName)}>{children}</View>
+            <View className={content}>{children}</View>
           </Animated.ScrollView>
         ) : (
-          <View className={cn("flex-1", contentClassName)}>{children}</View>
+          <View className={content}>{children}</View>
         )}
       </View>
     </ScrollOffsetContext.Provider>

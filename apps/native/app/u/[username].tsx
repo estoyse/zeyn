@@ -25,7 +25,6 @@ export default function PublicProfileScreen() {
   if (profileQuery.isLoading) {
     return (
       <Screen
-        contentClassName="gap-8 px-6 py-6"
         edges={["top", "bottom"]}
         header={<ScreenHeader back title={`@${username}`} />}
       >
@@ -39,7 +38,7 @@ export default function PublicProfileScreen() {
   if (profileQuery.isError || !data) {
     return (
       <Screen
-        contentClassName="items-center justify-center gap-3 px-6"
+        contentClassName="items-center justify-center"
         edges={["top", "bottom"]}
         header={<ScreenHeader back title={`@${username}`} />}
       >
@@ -54,7 +53,6 @@ export default function PublicProfileScreen() {
 
   return (
     <Screen
-      contentClassName="gap-8 px-6 py-6"
       edges={["top", "bottom"]}
       header={<ScreenHeader back title={data.user.name} />}
       refreshing={profileQuery.isRefetching}

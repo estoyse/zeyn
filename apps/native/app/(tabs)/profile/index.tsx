@@ -12,7 +12,7 @@ import { trpc } from "@/utils/trpc";
 
 function ProfileLoading() {
   return (
-    <Screen contentClassName="gap-8 px-6 py-6">
+    <Screen>
       <ProfileSkeleton />
     </Screen>
   );
@@ -41,7 +41,7 @@ export default function ProfileScreen() {
 
   if (!session?.user) {
     return (
-      <Screen contentClassName="items-center justify-center gap-4 px-6">
+      <Screen contentClassName="items-center justify-center">
         <Card className="w-full">
           <Card.Body className="items-center gap-2">
             <Heading className="text-center">
@@ -71,7 +71,7 @@ export default function ProfileScreen() {
   const data = profileQuery.data;
 
   return (
-    <Screen contentClassName="gap-8 px-6 py-6">
+    <Screen>
       <ProfileView user={data.user} stats={data.stats} isOwner />
 
       <ProfileGamesSection history={data.history} hostedGames={data.hostedGames} />

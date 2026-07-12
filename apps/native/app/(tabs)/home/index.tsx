@@ -26,7 +26,7 @@ export default function HomeScreen() {
     : t("greeting.anon");
 
   return (
-    <Screen contentClassName="gap-7 py-6">
+    <Screen contentClassName="px-0">
       <View className="gap-4 px-6">
         <Heading className="text-title-1">{greeting}</Heading>
         <JoinBar />

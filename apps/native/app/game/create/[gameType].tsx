@@ -12,7 +12,7 @@ export default function CreateGameScreen() {
 
   if (!game) {
     return (
-      <Screen contentClassName="items-center justify-center gap-2 px-6" edges={["top", "bottom"]}>
+      <Screen contentClassName="items-center justify-center" edges={["top", "bottom"]}>
         <Heading>{t("typePage.unknownTitle")}</Heading>
         <Text className="text-muted-foreground text-center">
           {t("typePage.unknownDescription", { gameType })}
@@ -27,7 +27,7 @@ export default function CreateGameScreen() {
   const { Create } = game;
 
   return (
-    <Screen contentClassName="gap-6 px-6 py-6" edges={["top", "bottom"]}>
+    <Screen edges={["top", "bottom"]}>
       <Heading className="text-2xl">
         {tGames(`catalog.game.${game.type}.title`, game.meta.title)}
       </Heading>
