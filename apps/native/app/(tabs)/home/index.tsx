@@ -2,7 +2,7 @@ import { router, type Href } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-import { Button, Heading, Screen, Text } from "@/components/ui";
+import { Button, EmptyState, Heading, Screen } from "@/components/ui";
 import { JoinBar } from "@/features/dashboard/components/JoinBar";
 import { LiveNowStrip } from "@/features/dashboard/components/LiveNowStrip";
 import { PlayNowTiles } from "@/features/dashboard/components/PlayNowTiles";
@@ -33,7 +33,7 @@ export default function HomeScreen() {
       </View>
 
       <View className="px-6">
-        <PlayNowTiles />
+        <PlayNowTiles enabled={!!user} />
       </View>
 
       {user ? <LiveNowStrip /> : null}
@@ -42,17 +42,16 @@ export default function HomeScreen() {
         {user ? (
           <RecentGamesSection enabled />
         ) : (
-          <View className="items-center gap-3 rounded-card border border-border bg-card p-6">
-            <Text className="text-center text-muted-foreground text-sm">
-              {t("recentGames.empty")}
-            </Text>
-            <Button
-              className="w-full"
-              onPress={() => router.push("/(auth)/login" as Href)}
-            >
-              <Button.Label>{tAuth("login.submitButton")}</Button.Label>
-            </Button>
-          </View>
+          <EmptyState
+            icon="game-controller"
+            title={t("recentGames.empty")}
+            caption={t("greeting.anon")}
+            action={
+              <Button onPress={() => router.push("/(auth)/login" as Href)}>
+                <Button.Label>{tAuth("login.submitButton")}</Button.Label>
+              </Button>
+            }
+          />
         )}
       </View>
     </Screen>

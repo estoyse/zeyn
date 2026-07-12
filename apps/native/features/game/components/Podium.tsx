@@ -9,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { AnimatedNumber, Text } from "@/components/ui";
+import { AnimatedNumber, MeshSurface, Text } from "@/components/ui";
 import { useGameFx } from "@/features/game/components/GameFxProvider";
 import { haptic } from "@/lib/haptics";
 import { SPRING } from "@/lib/motion";
@@ -129,14 +129,29 @@ function Step({
 
       <Animated.View
         style={[barStyle, { height: BAR_HEIGHT[column] }]}
-        className={cn(
-          "w-full items-center justify-start rounded-t-card pt-2",
-          BAR_TONE[column]
-        )}
+        className="w-full"
       >
-        <Text weight="bold" className={cn("text-lg", BAR_LABEL[column])}>
-          {place}
-        </Text>
+        {place === 1 ? (
+          <MeshSurface
+            tone="amber"
+            className="h-full w-full items-center justify-start rounded-b-none pt-2"
+          >
+            <Text weight="bold" className="text-lg text-white">
+              {place}
+            </Text>
+          </MeshSurface>
+        ) : (
+          <View
+            className={cn(
+              "h-full w-full items-center justify-start rounded-t-card pt-2",
+              BAR_TONE[column]
+            )}
+          >
+            <Text weight="bold" className={cn("text-lg", BAR_LABEL[column])}>
+              {place}
+            </Text>
+          </View>
+        )}
       </Animated.View>
     </View>
   );

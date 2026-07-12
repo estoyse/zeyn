@@ -1,58 +1,50 @@
+import { useQuery } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 
-import { PressableScale, Text } from "@/components/ui";
+import { Text } from "@/components/ui";
+import { GamePoster } from "@/features/games/components/GamePoster";
 import { listClientGames } from "@/features/games/registry";
 import { fadeUp, stagger } from "@/lib/motion";
+import { trpc } from "@/utils/trpc";
 
-export function PlayNowTiles() {
+export function PlayNowTiles({ enabled = false }: { enabled?: boolean }) {
   const { t } = useTranslation("dashboard");
   const games = listClientGames();
 
+  const { data: rooms } = useQuery({
+    ...trpc.game.getPublicRooms.queryOptions({ limit: 50 }),
+    enabled,
+    refetchInterval: 30000,
+  });
+
+  const liveByType = (rooms ?? []).reduce<Record<string, number>>((acc, room) => {
+    acc[room.gameType] = (acc[room.gameType] ?? 0) + 1;
+    return acc;
+  }, {});
+
   return (
     <View className="gap-3">
-      <Text weight="semibold" className="text-sm">
+      <Text weight="semibold" className="text-base">
         {t("playNow.title")}
       </Text>
 
       <View className="flex-row gap-3">
-        {games.map((game, index) => {
-          const Icon = game.Icon;
-
-          return (
-            <Animated.View
-              key={game.type}
-              entering={fadeUp(stagger(index))}
-              className="flex-1"
-            >
-              <PressableScale
-                onPress={() =>
-                  router.push(`/game/create/${game.type}` as Href)
-                }
-                accessibilityRole="button"
-                accessibilityLabel={game.meta.title}
-                className="h-32 justify-between rounded-card border border-border bg-card p-4"
-              >
-                <View className="size-10 items-center justify-center rounded-pill bg-brand/10">
-                  <Icon size={20} className="text-brand" />
-                </View>
-                <View className="gap-0.5">
-                  <Text weight="semibold" className="text-sm">
-                    {game.meta.title}
-                  </Text>
-                  <Text
-                    numberOfLines={1}
-                    className="text-caption text-muted-foreground"
-                  >
-                    {t("playNow.create")}
-                  </Text>
-                </View>
-              </PressableScale>
-            </Animated.View>
-          );
-        })}
+        {games.map((game, index) => (
+          <Animated.View
+            key={game.type}
+            entering={fadeUp(stagger(index))}
+            className="flex-1"
+          >
+            <GamePoster
+              game={game}
+              liveCount={liveByType[game.type]}
+              onPress={() => router.push(`/game/create/${game.type}` as Href)}
+            />
+          </Animated.View>
+        ))}
       </View>
     </View>
   );
