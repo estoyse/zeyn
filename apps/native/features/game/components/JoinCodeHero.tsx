@@ -13,7 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Button, Heading, PressableScale, Text } from "@/components/ui";
+import { Button, Heading, MeshSurface, PressableScale, Text } from "@/components/ui";
 import { haptic } from "@/lib/haptics";
 import { SPRING } from "@/lib/motion";
 
@@ -51,8 +51,8 @@ export function JoinCodeHero({ gameId, gameName }: JoinCodeHeroProps) {
   }));
 
   return (
-    <View className="items-center gap-4 rounded-card border border-border bg-card px-5 py-6">
-      <Text className="text-caption uppercase text-muted-foreground">
+    <MeshSurface tone="brand" className="items-center gap-4 px-5 py-6">
+      <Text className="text-caption uppercase text-white/60">
         {t("lobby.joinCode")}
       </Text>
 
@@ -63,22 +63,22 @@ export function JoinCodeHero({ gameId, gameName }: JoinCodeHeroProps) {
         className="items-center gap-2"
       >
         <Animated.View style={punchStyle}>
-          <Heading className="text-display tracking-[0.2em] text-brand">
+          <Heading className="text-display tracking-[0.2em] text-white">
             {formatGameCode(gameId)}
           </Heading>
         </Animated.View>
         <View className="flex-row items-center gap-1.5">
-          <StyledIonicons name="copy-outline" size={13} className="text-muted-foreground" />
-          <Text className="text-caption uppercase text-muted-foreground">
+          <StyledIonicons name="copy-outline" size={13} className="text-white/60" />
+          <Text className="text-caption uppercase text-white/60">
             {t("lobby.tapToCopy")}
           </Text>
         </View>
       </PressableScale>
 
-      <Button variant="outline" size="sm" onPress={shareRoom}>
-        <StyledIonicons name="share-outline" size={15} className="text-foreground" />
-        <Button.Label>{t("lobby.shareLink")}</Button.Label>
+      <Button variant="outline" size="sm" className="border-white/25 bg-white/10" onPress={shareRoom}>
+        <StyledIonicons name="share-outline" size={15} className="text-white" />
+        <Button.Label className="text-white">{t("lobby.shareLink")}</Button.Label>
       </Button>
-    </View>
+    </MeshSurface>
   );
 }

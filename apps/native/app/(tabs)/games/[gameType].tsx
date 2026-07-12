@@ -1,14 +1,19 @@
+import { Ionicons } from "@expo/vector-icons";
 import { type GameType } from "@zeyn/api/games";
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams, type Href } from "expo-router";
-import { Card, Chip, Skeleton } from "heroui-native";
+import { Card, Skeleton } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
+import { withUniwind } from "uniwind";
 
-import { Button, Heading, Screen, ScreenHeader, Text } from "@/components/ui";
+import { Button, EmptyState, Heading, MeshSurface, Screen, ScreenHeader, Text } from "@/components/ui";
 import { getClientGame } from "@/features/games/registry";
 import { authClient } from "@/lib/auth-client";
+import { toneForGame } from "@/lib/mesh";
 import { trpc } from "@/utils/trpc";
+
+const StyledIonicons = withUniwind(Ionicons);
 
 export default function GameTypeScreen() {
   const { gameType } = useLocalSearchParams<{ gameType: string }>();
@@ -62,35 +67,37 @@ export default function GameTypeScreen() {
         recentGamesQuery.refetch();
       }}
     >
-      <View className="gap-3">
+      <MeshSurface tone={toneForGame(game.type)} className="gap-3 p-5">
         <View className="flex-row items-center gap-3">
-          <View className="size-12 items-center justify-center rounded-full bg-brand/10">
-            <game.Icon size={24} className="text-brand" />
+          <View className="size-12 items-center justify-center rounded-full bg-white/15">
+            <game.Icon size={24} className="text-white" />
           </View>
-          <View className="flex-1 gap-0.5">
-            <Heading className="text-2xl">
+          <View className="flex-1 gap-1.5">
+            <Heading className="text-2xl text-white">
               {tGames(`catalog.game.${game.type}.title`, game.meta.title)}
             </Heading>
-            <Chip size="sm" variant="soft" className="self-start">
-              <Chip.Label>
+            <View className="flex-row items-center gap-1.5 self-start rounded-pill bg-white/15 px-2.5 py-1">
+              <StyledIonicons name="person" size={11} className="text-white/80" />
+              <Text weight="semibold" className="text-caption uppercase text-white/90">
                 {tGames("catalog.playersRange", {
                   min: game.meta.minPlayers,
                   max: game.meta.maxPlayers,
                 })}
-              </Chip.Label>
-            </Chip>
+              </Text>
+            </View>
           </View>
         </View>
-        <Text className="text-muted-foreground">
+        <Text className="text-white/70">
           {tGames(`catalog.game.${game.type}.description`, game.meta.description)}
         </Text>
-        <Button
-          size="lg"
-          onPress={() => router.push(`/game/create/${game.type}` as Href)}
-        >
-          <Button.Label>{t("typePage.createGame")}</Button.Label>
-        </Button>
-      </View>
+      </MeshSurface>
+
+      <Button
+        size="lg"
+        onPress={() => router.push(`/game/create/${game.type}` as Href)}
+      >
+        <Button.Label>{t("typePage.createGame")}</Button.Label>
+      </Button>
 
       {session?.user ? (
         <>
@@ -102,11 +109,7 @@ export default function GameTypeScreen() {
                 <Skeleton className="h-24 w-full rounded-lg" />
               </View>
             ) : rooms?.length === 0 ? (
-              <Card>
-                <Card.Body>
-                  <Card.Description>{tDashboard("publicArenas.emptyTitle")}</Card.Description>
-                </Card.Body>
-              </Card>
+              <EmptyState icon="people-outline" title={tDashboard("publicArenas.emptyTitle")} />
             ) : (
               <View className="gap-3">
                 {rooms?.map((room) => (
@@ -137,11 +140,7 @@ export default function GameTypeScreen() {
             {recentGamesQuery.isLoading ? (
               <Skeleton className="h-16 w-full rounded-lg" />
             ) : recentItems?.length === 0 ? (
-              <Card>
-                <Card.Body>
-                  <Card.Description>{tDashboard("recentGames.empty")}</Card.Description>
-                </Card.Body>
-              </Card>
+              <EmptyState icon="game-controller" title={tDashboard("recentGames.empty")} />
             ) : (
               <View className="gap-2">
                 {recentItems?.map((item) => (
