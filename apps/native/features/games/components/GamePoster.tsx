@@ -33,11 +33,11 @@ export function GamePoster({
       scale={0.975}
       accessibilityRole="button"
       accessibilityLabel={game.meta.title}
-      className={cn(wide ? "w-full" : "flex-1", className)}
+      className={cn("w-full", className)}
     >
       <MeshSurface
         tone={toneForGame(game.type)}
-        className={cn("gap-3 p-4", wide ? "min-h-40" : "min-h-44")}
+        className={cn("w-full gap-3 p-4", wide ? "min-h-40" : "min-h-44")}
       >
         <View className="flex-row items-start justify-between gap-2">
           <View className="size-11 items-center justify-center rounded-pill bg-white/15">

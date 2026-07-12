@@ -134,7 +134,8 @@ function Step({
         {place === 1 ? (
           <MeshSurface
             tone="amber"
-            className="h-full w-full items-center justify-start rounded-b-none pt-2"
+            radius="rounded-t-card"
+            className="h-full w-full items-center justify-start pt-2"
           >
             <Text weight="bold" className="text-lg text-white">
               {place}
