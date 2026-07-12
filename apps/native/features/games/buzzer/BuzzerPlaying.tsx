@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 import { RingBuzzer, type BuzzState } from "./RingBuzzer";
 import type { BuzzerView } from "./types";
+import { useBuzzerEvents } from "./useBuzzerEvents";
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -23,6 +24,8 @@ export function BuzzerPlaying({ room }: GamePlayViewProps) {
   const { t } = useTranslation("game");
   const [answerInput, setAnswerInput] = useState("");
   const sentForQuestion = useRef<string | null>(null);
+
+  useBuzzerEvents(room);
 
   const state = room.state as BuzzerView | null;
   const activeQuestionState = state?.activeQuestionState;

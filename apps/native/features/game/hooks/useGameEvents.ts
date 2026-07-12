@@ -1,0 +1,85 @@
+import { useCallback, useEffect, useRef } from "react";
+
+import { useGameFx } from "@/features/game/components/GameFxProvider";
+import {
+  advanceEventStream,
+  initialCursor,
+  type EventCursor,
+  type GameEvent,
+  type GameEventDiff,
+} from "@/features/game/lib/gameEvents";
+import { haptic } from "@/lib/haptics";
+
+export function useGameEventStream<S>(
+  state: S | null,
+  isConnected: boolean,
+  selfId: string,
+  diff: GameEventDiff<S>,
+  onEvent: (event: GameEvent) => void
+) {
+  const cursorRef = useRef<EventCursor<S>>(initialCursor<S>());
+  const diffRef = useRef(diff);
+  const onEventRef = useRef(onEvent);
+
+  useEffect(() => {
+    diffRef.current = diff;
+    onEventRef.current = onEvent;
+  });
+
+  useEffect(() => {
+    const step = advanceEventStream(
+      cursorRef.current,
+      { state, isConnected, selfId },
+      diffRef.current
+    );
+    cursorRef.current = step.cursor;
+    for (const event of step.events) onEventRef.current(event);
+  }, [state, isConnected, selfId]);
+}
+
+export function useGameFeedback(): (event: GameEvent) => void {
+  const { flash, shake, burst } = useGameFx();
+
+  return useCallback(
+    (event: GameEvent) => {
+      switch (event.type) {
+        case "gameStart":
+          haptic("impact");
+          return;
+
+        case "questionStart":
+          haptic("select");
+          return;
+
+        case "buzz":
+          if (!event.isSelf) haptic("tap");
+          return;
+
+        case "lockIn":
+          if (event.isSelf) haptic("tap");
+          return;
+
+        case "answer":
+          if (!event.isSelf) return;
+          if (event.correct) {
+            haptic("success");
+            flash("success");
+            burst("success");
+          } else {
+            haptic("error");
+            flash("danger");
+            shake();
+          }
+          return;
+
+        case "reveal":
+          return;
+
+        case "gameEnd":
+          haptic("success");
+          return;
+      }
+    },
+    [flash, shake, burst]
+  );
+}

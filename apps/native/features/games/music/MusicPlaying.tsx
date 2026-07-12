@@ -13,6 +13,7 @@ import { Timer } from "@/features/game/components/Timer";
 import type { GamePlayViewProps } from "@/features/games/types";
 import { cn } from "@/lib/utils";
 import type { MusicView } from "./types";
+import { useMusicEvents } from "./useMusicEvents";
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -22,6 +23,8 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
   const [picked, setPicked] = useState<number | null>(null);
   const player = useAudioPlayer(null);
   const lastPlayedUrlRef = useRef<string | null>(null);
+
+  useMusicEvents(room);
 
   const questionIndex = state?.currentQuestionIndex;
   const previewUrl = state?.question?.previewUrl;

@@ -7,6 +7,7 @@ import { ScopedTheme } from "uniwind";
 import { ConnectingView } from "@/features/game/components/ConnectingView";
 import { ConnectionErrorView } from "@/features/game/components/ConnectionErrorView";
 import { FocusLayout } from "@/features/game/components/FocusLayout";
+import { GameFxProvider } from "@/features/game/components/GameFxProvider";
 import { FocusTopBar } from "@/features/game/components/FocusTopBar";
 import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
@@ -33,7 +34,9 @@ export default function GameRoomScreen() {
 
   return (
     <ScopedTheme theme="arcade">
-      <GameRoom gameId={gameId} />
+      <GameFxProvider>
+        <GameRoom gameId={gameId} />
+      </GameFxProvider>
     </ScopedTheme>
   );
 }
