@@ -90,7 +90,10 @@ export function MusicPlaying({ room }: GamePlayViewProps) {
     : [];
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
+    <ScrollView
+      className="flex-1"
+      contentContainerStyle={{ flexGrow: 1, padding: 16, gap: 16 }}
+    >
       <Animated.View entering={FadeIn} className="gap-6">
         <View className="items-center gap-3">
         <Chip variant="soft">

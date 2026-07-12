@@ -102,7 +102,15 @@ export function BuzzerPlaying({ room }: GamePlayViewProps) {
 
   return (
     <View className="flex-1">
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 20 }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+          padding: 16,
+          gap: 20,
+        }}
+      >
         <Animated.View entering={fadeIn()} className="gap-5">
           <MatchProgress state={state} />
 

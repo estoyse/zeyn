@@ -144,6 +144,9 @@ importers:
       better-auth:
         specifier: 'catalog:'
         version: 1.5.5(@cloudflare/workers-types@4.20260502.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260502.1)(@libsql/client@0.15.15)(kysely@0.28.16))(mongodb@7.2.0(@aws-sdk/credential-providers@3.1041.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.1.9(@types/node@24.12.2)(msw@2.14.2(@types/node@24.12.2)(typescript@5.9.3))(vite@8.0.10(@types/node@24.12.2)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3)))
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       dotenv:
         specifier: 'catalog:'
         version: 17.4.2
