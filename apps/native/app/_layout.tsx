@@ -101,6 +101,7 @@ function StackLayout() {
       <Stack.Screen name="game/create/[gameType]" options={{ presentation: "modal" }} />
       <Stack.Screen name="u/[username]" />
       <Stack.Screen name="settings/index" />
+      <Stack.Screen name="settings/profile" />
       <Stack.Screen name="+not-found" options={{ animation: "fade" }} />
     </Stack>
   );

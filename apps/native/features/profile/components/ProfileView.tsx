@@ -119,7 +119,7 @@ export function ProfileView({ user, stats, isOwner }: ProfileViewProps) {
         </View>
 
         {isOwner ? (
-          <Button size="sm" variant="outline" onPress={() => router.push("/settings" as Href)}>
+          <Button size="sm" variant="outline" onPress={() => router.push("/settings/profile" as Href)}>
             <StyledIonicons name="pencil" size={14} className="text-foreground" />
             <Button.Label>{t("editProfile")}</Button.Label>
           </Button>
