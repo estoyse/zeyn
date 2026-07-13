@@ -48,7 +48,7 @@ export function Slide({ slide, index, progress, width }: SlideProps) {
   });
 
   return (
-    <View style={{ width }} className="flex-1 items-center justify-center gap-6 px-10">
+    <View style={{ width }} className="items-center justify-center gap-6 px-10">
       <Animated.View
         style={iconStyle}
         className="size-24 items-center justify-center rounded-full bg-brand/10"

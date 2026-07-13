@@ -1,15 +1,15 @@
 import { type Href, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useWindowDimensions, View } from "react-native";
+import { useWindowDimensions, View, type LayoutChangeEvent } from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedRef,
   useAnimatedReaction,
   useDerivedValue,
   useScrollOffset,
+  useSharedValue,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, PressableScale, Screen, Text } from "@/components/ui";
 import { Dots } from "@/features/onboarding/components/Dots";
@@ -20,16 +20,25 @@ import { setSeenOnboarding } from "@/lib/onboarding-storage";
 
 export default function OnboardingScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
   const { t } = useTranslation("onboarding");
 
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const offset = useScrollOffset(scrollRef);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const [slideWidth, setSlideWidth] = useState(windowWidth);
+  const pagerWidth = useSharedValue(windowWidth);
+
+  const onPagerLayout = (event: LayoutChangeEvent) => {
+    const measured = event.nativeEvent.layout.width;
+    if (measured <= 0) return;
+    pagerWidth.value = measured;
+    setSlideWidth(measured);
+  };
+
   const progress = useDerivedValue(() =>
-    width > 0 ? offset.value / width : 0
+    pagerWidth.value > 0 ? offset.value / pagerWidth.value : 0
   );
 
   useAnimatedReaction(
@@ -53,12 +62,12 @@ export default function OnboardingScreen() {
 
   const next = () => {
     const target = Math.min(activeIndex + 1, onboardingSlides.length - 1);
-    scrollRef.current?.scrollTo({ x: target * width, animated: true });
+    scrollRef.current?.scrollTo({ x: target * slideWidth, animated: true });
   };
 
   return (
-    <Screen scroll={false} edges={["top", "bottom"]}>
-      <View style={{ paddingTop: insets.top }} className="flex-row justify-end px-4">
+    <Screen scroll={false} padded={false} edges={["top", "bottom"]}>
+      <View className="flex-row justify-end px-4">
         <PressableScale
           haptic={null}
           onPress={() => finish("/(tabs)/home")}
@@ -76,6 +85,7 @@ export default function OnboardingScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
+        onLayout={onPagerLayout}
         className="flex-1"
       >
         {onboardingSlides.map((slide, index) => (
@@ -84,7 +94,7 @@ export default function OnboardingScreen() {
             slide={slide}
             index={index}
             progress={progress}
-            width={width}
+            width={slideWidth}
           />
         ))}
       </Animated.ScrollView>
