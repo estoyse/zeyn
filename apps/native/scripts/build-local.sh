@@ -22,16 +22,23 @@ if [ "${AVAIL_GB:-0}" -lt 15 ]; then
   exit 1
 fi
 
+if command -v eas >/dev/null 2>&1; then
+  EAS=(eas)
+else
+  EAS=(npx --yes eas-cli@latest)
+fi
+
 rm -rf "$WORKINGDIR"
 mkdir -p "$WORKINGDIR" "$ARTIFACTS"
 
 echo "profile=$PROFILE platform=$PLATFORM"
 echo "workingdir=$WORKINGDIR"
 echo "artifacts=$ARTIFACTS"
+echo "eas=${EAS[*]}"
 
 EAS_LOCAL_BUILD_WORKINGDIR="$WORKINGDIR" \
 EAS_LOCAL_BUILD_ARTIFACTS_DIR="$ARTIFACTS" \
-  npx eas build --platform "$PLATFORM" --profile "$PROFILE" --local
+  "${EAS[@]}" build --platform "$PLATFORM" --profile "$PROFILE" --local
 
 echo
 echo "artifacts:"
