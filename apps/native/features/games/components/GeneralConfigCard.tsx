@@ -1,11 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { roomLimits } from "@zeyn/api/game-types";
-import { Button, Card, Label, Switch, TextField, Input } from "heroui-native";
+import { Card, Label, Switch, TextField, Input } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { withUniwind } from "uniwind";
 
-import { Text } from "@/components/ui";
+import { Button, Text } from "@/components/ui";
 
 const StyledIonicons = withUniwind(Ionicons);
 

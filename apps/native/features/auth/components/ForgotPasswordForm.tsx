@@ -1,12 +1,12 @@
 import { useForm } from "@tanstack/react-form";
 import * as Linking from "expo-linking";
 import { router } from "expo-router";
-import { Button, FieldError, Input, Label, Spinner, Surface, TextField, useToast } from "heroui-native";
+import { FieldError, Input, Label, Spinner, Surface, TextField, useToast } from "heroui-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
 import { createForgotPasswordSchema } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { authClient } from "@/lib/auth-client";

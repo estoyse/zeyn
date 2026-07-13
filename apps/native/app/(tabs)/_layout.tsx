@@ -1,30 +1,34 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useTranslation } from "react-i18next";
 
-import { useAppTheme } from "@/contexts/app-theme-context";
-import { getPalette } from "@/lib/colors";
+import { TabBarButton, TabIcon } from "@/components/navigation/tab-bar-button";
+import { useAppColor, useThemeColor } from "@/lib/theme";
 
 export default function TabsLayout() {
-  const { isLight } = useAppTheme();
   const { t } = useTranslation("common");
-  const colors = getPalette(isLight ? "light" : "dark");
+  const [surface, separator] = useThemeColor(["surface", "separator"]);
+  const [brand, mutedForeground] = useAppColor(["brand", "mutedForeground"]);
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.brand,
-        tabBarInactiveTintColor: colors.mutedForeground,
+        animation: "shift",
+        freezeOnBlur: true,
+        tabBarHideOnKeyboard: true,
+        tabBarButton: (props) => <TabBarButton {...props} />,
+        tabBarActiveTintColor: brand,
+        tabBarInactiveTintColor: mutedForeground,
         tabBarStyle: {
-          backgroundColor: colors.card,
-          borderTopColor: colors.border,
+          backgroundColor: surface,
+          borderTopColor: separator,
+          borderTopWidth: 1,
+          elevation: 0,
+          shadowOpacity: 0,
         },
         tabBarLabelStyle: {
-          fontFamily: "SpaceGrotesk_600SemiBold",
-          fontSize: 10,
-          textTransform: "uppercase",
-          letterSpacing: 1,
+          fontFamily: "IBMPlexSans-Medium",
+          fontSize: 11,
         },
       }}
     >
@@ -33,7 +37,13 @@ export default function TabsLayout() {
         options={{
           title: t("tabs.home"),
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons name={focused ? "home" : "home-outline"} size={size} color={color} />
+            <TabIcon
+              name="home-outline"
+              filledName="home"
+              focused={focused}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -42,10 +52,12 @@ export default function TabsLayout() {
         options={{
           title: t("tabs.games"),
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? "game-controller" : "game-controller-outline"}
-              size={size}
+            <TabIcon
+              name="game-controller-outline"
+              filledName="game-controller"
+              focused={focused}
               color={color}
+              size={size}
             />
           ),
         }}
@@ -55,7 +67,13 @@ export default function TabsLayout() {
         options={{
           title: t("tabs.profile"),
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons name={focused ? "person" : "person-outline"} size={size} color={color} />
+            <TabIcon
+              name="person-outline"
+              filledName="person"
+              focused={focused}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />

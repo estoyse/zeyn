@@ -3,19 +3,78 @@
     "scheme": "zeyn",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
-    "web": {
-      "bundler": "metro"
-    },
-    "name": "zeyn",
+    "name": "Zeyn",
     "slug": "zeyn",
+    "icon": "./assets/images/icon.png",
+    "backgroundColor": "#F9FAFC",
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png"
+    },
     "plugins": [
-      "expo-font",
-      "expo-audio",
-      "expo-image"
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/IBMPlexSans-Regular.ttf",
+            "./assets/fonts/IBMPlexSans-Medium.ttf",
+            "./assets/fonts/IBMPlexSans-SemiBold.ttf",
+            "./assets/fonts/IBMPlexSans-Bold.ttf",
+            "./assets/fonts/SpaceGrotesk-Bold.ttf"
+          ]
+        }
+      ],
+      "expo-system-ui",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false
+        }
+      ],
+      "expo-image",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#F9FAFC",
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#0E0F13"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "android": {
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ],
+      "package": "uz.zeyn.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "ios": {
+      "bundleIdentifier": "uz.zeyn.app",
+      "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c1d3d993-4a0b-4771-9580-97a90cd0b82e"
+      }
     }
   }
 }

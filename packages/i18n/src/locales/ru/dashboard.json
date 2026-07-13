@@ -8,7 +8,9 @@
     "title": "Присоединиться по коду",
     "description": "Есть код комнаты? Введите его ниже, чтобы присоединиться.",
     "placeholder": "K7M2XQ4B",
-    "submit": "Войти"
+    "submit": "Войти",
+    "paste": "Вставить",
+    "short": "Присоединиться"
   },
   "publicArenas": {
     "defaultTitle": "Публичные комнаты",
@@ -41,5 +43,18 @@
   },
   "page": {
     "gamesHeading": "Игры"
+  },
+  "greeting": {
+    "morning": "Доброе утро",
+    "afternoon": "Добрый день",
+    "evening": "Добрый вечер",
+    "anon": "Готовы играть?"
+  },
+  "liveNow": {
+    "title": "Сейчас в эфире"
+  },
+  "playNow": {
+    "title": "Играть",
+    "create": "Создать комнату"
   }
 }

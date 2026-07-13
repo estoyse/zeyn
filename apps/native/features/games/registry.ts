@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { buzzerMeta, musicMeta, type GameModuleMeta } from "@zeyn/api/games";
 import { createElement, type ComponentType } from "react";
 import { withUniwind } from "uniwind";

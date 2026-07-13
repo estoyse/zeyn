@@ -1,49 +1,67 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedStyle,
+  type SharedValue,
+} from "react-native-reanimated";
 
 import { Heading, Text } from "@/components/ui";
-import { useAppTheme } from "@/contexts/app-theme-context";
-import { getPalette } from "@/lib/colors";
-import { fadeUp, scaleIn, stagger } from "@/lib/motion";
+import { useAppColor } from "@/lib/theme";
 
 import { type OnboardingSlide } from "../onboardingContent";
 
 type SlideProps = {
   slide: OnboardingSlide;
-  isActive: boolean;
+  index: number;
+  progress: SharedValue<number>;
   width: number;
 };
 
-export function Slide({ slide, isActive, width }: SlideProps) {
+export function Slide({ slide, index, progress, width }: SlideProps) {
   const { t } = useTranslation("onboarding");
-  const { isLight } = useAppTheme();
-  const brand = getPalette(isLight ? "light" : "dark").brand;
+  const [brand] = useAppColor(["brand"]);
+
+  const iconStyle = useAnimatedStyle(() => {
+    const distance = progress.value - index;
+    const magnitude = Math.min(Math.abs(distance), 1);
+
+    return {
+      opacity: interpolate(magnitude, [0, 0.85], [1, 0], Extrapolation.CLAMP),
+      transform: [
+        { translateX: distance * width * 0.35 },
+        { scale: interpolate(magnitude, [0, 1], [1, 0.72], Extrapolation.CLAMP) },
+      ],
+    };
+  });
+
+  const copyStyle = useAnimatedStyle(() => {
+    const distance = progress.value - index;
+    const magnitude = Math.min(Math.abs(distance), 1);
+
+    return {
+      opacity: interpolate(magnitude, [0, 0.6], [1, 0], Extrapolation.CLAMP),
+      transform: [{ translateX: distance * width * 0.18 }],
+    };
+  });
 
   return (
-    <View style={{ width }} className="flex-1 items-center justify-center gap-6 px-10">
-      {isActive ? (
-        <>
-          <Animated.View
-            entering={scaleIn()}
-            className="size-24 items-center justify-center rounded-full bg-brand/10"
-          >
-            <Ionicons name={slide.icon} size={44} color={brand} />
-          </Animated.View>
+    <View style={{ width }} className="items-center justify-center gap-6 px-10">
+      <Animated.View
+        style={iconStyle}
+        className="size-24 items-center justify-center rounded-full bg-brand/10"
+      >
+        <Ionicons name={slide.icon} size={44} color={brand} />
+      </Animated.View>
 
-          <View className="items-center gap-3">
-            <Animated.View entering={fadeUp(stagger(1))}>
-              <Heading className="text-center text-2xl">{t(slide.titleKey)}</Heading>
-            </Animated.View>
-            <Animated.View entering={fadeUp(stagger(2))}>
-              <Text className="text-center text-base text-muted-foreground">
-                {t(slide.descKey)}
-              </Text>
-            </Animated.View>
-          </View>
-        </>
-      ) : null}
+      <Animated.View style={copyStyle} className="items-center gap-3">
+        <Heading className="text-center text-title-2">{t(slide.titleKey)}</Heading>
+        <Text className="text-center text-base text-muted-foreground">
+          {t(slide.descKey)}
+        </Text>
+      </Animated.View>
     </View>
   );
 }

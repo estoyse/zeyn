@@ -80,21 +80,13 @@ export function resolveGameView(i: GameViewInputs): GameViewState {
 
   if (!i.hasIdentity && !i.isSpectating) return { kind: "loginRequired" };
 
-  if (!i.hasState && (i.isConnecting || i.isConnected) && !i.error) {
-    return { kind: "connecting" };
-  }
-
   if (!i.hasState) {
     if (i.error) {
       const message =
         (i.errorCode && CONNECTION_ERROR_MESSAGES[i.errorCode]) || i.error;
       return { kind: "connectionError", message, retry: "dashboard" };
     }
-    return {
-      kind: "connectionError",
-      message: "Could not connect to game",
-      retry: "reload",
-    };
+    return { kind: "connecting" };
   }
 
   return { kind: "play" };

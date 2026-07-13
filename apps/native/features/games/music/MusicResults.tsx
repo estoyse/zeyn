@@ -1,11 +1,12 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Button, Card } from "heroui-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
+import { Podium } from "@/features/game/components/Podium";
 import type { GameResultsViewProps } from "@/features/games/types";
 import { cn } from "@/lib/utils";
 
@@ -19,15 +20,16 @@ export function MusicResults({ results, onBack }: GameResultsViewProps) {
 
   return (
     <View className="gap-8">
-      <View className="items-center gap-3">
-        <View className="bg-brand/10 p-4">
-          <StyledIonicons name="trophy" size={40} className="text-brand" />
-        </View>
-        <Heading className="text-3xl">{t("music.results.title")}</Heading>
-        <Text className="text-muted-foreground text-xs uppercase tracking-widest">
+      <View className="items-center gap-2">
+        <Heading className="text-title-1">{t("music.results.title")}</Heading>
+        <Text className="text-caption uppercase text-muted-foreground">
           {t("music.results.subtitle")}
         </Text>
       </View>
+
+      <Podium
+        entries={rows.map(p => ({ id: p.userId, name: p.playerName, score: p.score }))}
+      />
 
       <Card>
         <Card.Body className="gap-2">

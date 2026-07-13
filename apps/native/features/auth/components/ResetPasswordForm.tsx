@@ -1,10 +1,10 @@
 import { useForm } from "@tanstack/react-form";
 import { router, useLocalSearchParams } from "expo-router";
-import { Button, FieldError, Input, Label, Spinner, Surface, TextField, useToast } from "heroui-native";
+import { FieldError, Input, Label, Spinner, Surface, TextField, useToast } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
 import { createResetPasswordSchema } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { authClient } from "@/lib/auth-client";

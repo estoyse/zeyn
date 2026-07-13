@@ -1,31 +1,54 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
-import { Button, Card, Skeleton } from "heroui-native";
+import { Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { withUniwind } from "uniwind";
 
-import { Heading, Screen, Text } from "@/components/ui";
-import { ProfileGamesList } from "@/features/profile/components/ProfileGamesList";
+import {
+  Button,
+  Heading,
+  PressableScale,
+  Screen,
+  ScreenHeader,
+  Text,
+} from "@/components/ui";
+import { ProfileGamesSection } from "@/features/profile/components/ProfileGamesSection";
+import { ProfileSkeleton } from "@/features/profile/components/ProfileSkeleton";
 import { ProfileView } from "@/features/profile/components/ProfileView";
 import { authClient } from "@/lib/auth-client";
+import { PRESS } from "@/lib/motion";
 import { trpc } from "@/utils/trpc";
 
-function ProfileSkeleton() {
+const StyledIonicons = withUniwind(Ionicons);
+
+function ProfileLoading() {
   return (
-    <Screen contentClassName="gap-8 px-6 py-6">
-      <View className="flex-row items-start gap-4">
-        <Skeleton className="size-20 rounded-full" />
-        <View className="flex-1 gap-2 pt-1">
-          <Skeleton className="h-6 w-40 rounded-md" />
-          <Skeleton className="h-4 w-28 rounded-md" />
-        </View>
-      </View>
-      <View className="flex-row flex-wrap gap-3">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-20 min-w-[45%] flex-1 rounded-xl" />
-        ))}
-      </View>
+    <Screen>
+      <ProfileSkeleton />
     </Screen>
+  );
+}
+
+function SettingsButton() {
+  const { t } = useTranslation("settings");
+
+  return (
+    <PressableScale
+      onPress={() => router.push("/settings" as Href)}
+      haptic={null}
+      hitSlop={12}
+      scale={PRESS.scaleIcon}
+      accessibilityRole="button"
+      accessibilityLabel={t("title")}
+      className="size-11 items-center justify-center"
+    >
+      <StyledIonicons
+        name="settings-outline"
+        size={22}
+        className="text-foreground"
+      />
+    </PressableScale>
   );
 }
 
@@ -47,13 +70,13 @@ export default function ProfileScreen() {
   });
 
   if (sessionPending) {
-    return <ProfileSkeleton />;
+    return <ProfileLoading />;
   }
 
   if (!session?.user) {
     return (
-      <Screen contentClassName="items-center justify-center gap-4 px-6">
-        <Card className="w-full">
+      <Screen contentClassName="items-center justify-center">
+        <Card className="w-full gap-2">
           <Card.Body className="items-center gap-2">
             <Heading className="text-center">
               {t("signInCta.title", "Sign in to view your profile")}
@@ -66,7 +89,10 @@ export default function ProfileScreen() {
             </Text>
           </Card.Body>
           <Card.Footer>
-            <Button className="w-full" onPress={() => router.push("/(auth)/login" as Href)}>
+            <Button
+              className="w-full"
+              onPress={() => router.push("/(auth)/login" as Href)}
+            >
               <Button.Label>{tAuth("login.submitButton")}</Button.Label>
             </Button>
           </Card.Footer>
@@ -76,28 +102,19 @@ export default function ProfileScreen() {
   }
 
   if (meQuery.isLoading || profileQuery.isLoading || !profileQuery.data) {
-    return <ProfileSkeleton />;
+    return <ProfileLoading />;
   }
 
   const data = profileQuery.data;
 
   return (
-    <Screen contentClassName="gap-8 px-6 py-6">
+    <Screen header={<ScreenHeader right={<SettingsButton />} />}>
       <ProfileView user={data.user} stats={data.stats} isOwner />
 
-      {data.history ? (
-        <View className="gap-3">
-          <Heading className="text-base">{t("recentGames.title")}</Heading>
-          <ProfileGamesList items={data.history} emptyLabel={t("recentGames.empty")} />
-        </View>
-      ) : null}
-
-      {data.hostedGames ? (
-        <View className="gap-3">
-          <Heading className="text-base">{t("hostedGames.title")}</Heading>
-          <ProfileGamesList items={data.hostedGames} emptyLabel={t("hostedGames.empty")} />
-        </View>
-      ) : null}
+      <ProfileGamesSection
+        history={data.history}
+        hostedGames={data.hostedGames}
+      />
     </Screen>
   );
 }

@@ -1,10 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, type Href } from "expo-router";
 import { Card } from "heroui-native";
-import { Pressable, View } from "react-native";
+import { Fragment } from "react";
+import { View } from "react-native";
 import { withUniwind } from "uniwind";
 
-import { Text } from "@/components/ui";
+import { Group, Row, RowSeparator, Text } from "@/components/ui";
 import { getClientGame } from "@/features/games/registry";
 
 const StyledIonicons = withUniwind(Ionicons);
@@ -36,24 +37,22 @@ export function ProfileGamesList({ items, emptyLabel }: ProfileGamesListProps) {
   }
 
   return (
-    <View className="gap-2">
-      {items.map((item) => {
+    <Group>
+      {items.map((item, index) => {
         const game = getClientGame(item.gameType);
         return (
-          <Pressable
-            key={item.historyId}
-            onPress={() => router.push(`/game/${item.gameId}` as Href)}
-          >
-            <Card>
-              <Card.Body className="flex-row items-center justify-between gap-3">
-                <View className="flex-1 gap-0.5">
-                  <Text weight="medium" numberOfLines={1}>
-                    {item.roomName ?? game?.meta.title ?? item.gameType}
-                  </Text>
-                  <Text className="text-muted-foreground text-xs">
-                    {new Date(item.createdAt).toLocaleDateString()}
-                  </Text>
-                </View>
+          <Fragment key={item.historyId}>
+            <Row
+              label={item.roomName ?? game?.meta.title ?? item.gameType}
+              caption={new Date(item.createdAt).toLocaleDateString()}
+              leading={
+                <StyledIonicons
+                  name="game-controller"
+                  size={18}
+                  className="text-muted-foreground"
+                />
+              }
+              trailing={
                 <View className="items-end gap-0.5">
                   <View className="flex-row items-center gap-1">
                     <StyledIonicons name="people" size={12} className="text-muted-foreground" />
@@ -68,11 +67,14 @@ export function ProfileGamesList({ items, emptyLabel }: ProfileGamesListProps) {
                     </View>
                   ) : null}
                 </View>
-              </Card.Body>
-            </Card>
-          </Pressable>
+              }
+              chevron
+              onPress={() => router.push(`/game/${item.gameId}` as Href)}
+            />
+            {index < items.length - 1 ? <RowSeparator /> : null}
+          </Fragment>
         );
       })}
-    </View>
+    </Group>
   );
 }

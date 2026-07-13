@@ -1,10 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { AnimatedNumber, Heading, Text } from "@/components/ui";
+import { useThemeColor } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import type { ClientRoomState } from "@/features/game/hooks/useGameState";
 
@@ -24,6 +25,7 @@ function rank(state: ClientRoomState) {
 
 export function Scoreboard({ state, playerId, variant = "rail" }: ScoreboardProps) {
   const { t } = useTranslation("game");
+  const [foreground] = useThemeColor(["foreground"]);
   const players = rank(state);
 
   if (variant === "strip") {
@@ -51,9 +53,10 @@ export function Scoreboard({ state, playerId, variant = "rail" }: ScoreboardProp
                   <StyledIonicons name="ribbon" size={12} className="text-brand" />
                 )}
               </View>
-              <Text weight="bold" className="text-sm">
-                {p.score}
-              </Text>
+              <AnimatedNumber
+                value={p.score}
+                style={{ fontSize: 14, fontWeight: "700", color: foreground }}
+              />
             </View>
           </Animated.View>
         ))}
@@ -121,9 +124,10 @@ export function Scoreboard({ state, playerId, variant = "rail" }: ScoreboardProp
                   )}
                 </View>
               </View>
-              <Text weight="bold" className="text-lg">
-                {p.score}
-              </Text>
+              <AnimatedNumber
+                value={p.score}
+                style={{ fontSize: 18, fontWeight: "700", color: foreground }}
+              />
             </Animated.View>
           ))}
         </View>

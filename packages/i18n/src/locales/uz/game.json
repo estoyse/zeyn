@@ -32,7 +32,10 @@
       "title": "O'yindan chiqasizmi?",
       "description": "Siz xonadan chiqarilasiz va bu o'yindagi ochkolaringiz yo'qoladi.",
       "confirm": "O'yindan chiqish"
-    }
+    },
+    "mute": "Ovozni o‘chirish",
+    "unmute": "Ovozni yoqish",
+    "style": "Vizual uslub"
   },
   "lobby": {
     "guest": "Mehmon",
@@ -50,12 +53,17 @@
     "shareLink": "Yoki havolani ulashing",
     "public": "Ochiq xona",
     "private": "Faqat taklif bilan",
-    "locked": "Parol bilan himoyalangan"
+    "locked": "Parol bilan himoyalangan",
+    "tapToCopy": "Nusxalash uchun bosing",
+    "needMorePlayers": "Boshlash uchun yana {{count}} o‘yinchi kerak",
+    "needMorePlayers_other": "Boshlash uchun yana {{count}} o‘yinchi kerak"
   },
   "playing": {
     "loadingQuestion": "Savol yuklanmoqda...",
     "questionWorth": "Savol narxi {{points}}",
     "buzz": "BOSING!",
+    "out": "TUGADI",
+    "yourTurn": "JAVOB",
     "awaitingAnswer": "Javob kutilmoqda",
     "answerPlaceholder": "Javobingizni yozing...",
     "submit": "Yuborish",
@@ -170,5 +178,8 @@
   },
   "connection": {
     "reconnecting": "Qayta ulanmoqda… ulanish tiklanmaguncha amallaringiz to'xtatiladi."
+  },
+  "countdown": {
+    "getReady": "Tayyor bo‘ling"
   }
 }

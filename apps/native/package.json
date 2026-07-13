@@ -9,17 +9,18 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "prebuild": "expo prebuild",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:local": "bash scripts/build-local.sh",
+    "test": "vitest run"
   },
   "dependencies": {
     "@better-auth/expo": "catalog:",
-    "@expo-google-fonts/ibm-plex-sans": "^0.4.1",
-    "@expo-google-fonts/space-grotesk": "^0.4.1",
     "@expo/metro-runtime": "~55.0.10",
     "@expo/vector-icons": "^15.1.1",
     "@gorhom/bottom-sheet": "^5.2.10",
     "@react-navigation/drawer": "^7.9.4",
     "@react-navigation/elements": "^2.9.14",
+    "@shopify/react-native-skia": "2.4.18",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
@@ -29,6 +30,7 @@
     "@zeyn/env": "workspace:*",
     "@zeyn/i18n": "workspace:*",
     "better-auth": "catalog:",
+    "clsx": "^2.1.1",
     "dotenv": "catalog:",
     "expo": "^55.0.17",
     "expo-audio": "~55.0.15",
@@ -43,6 +45,7 @@
     "expo-secure-store": "~55.0.13",
     "expo-splash-screen": "~55.0.22",
     "expo-status-bar": "~55.0.5",
+    "expo-system-ui": "~55.0.19",
     "expo-web-browser": "~55.0.14",
     "heroui-native": "^1.0.2",
     "i18next": "^26.3.4",
@@ -68,6 +71,7 @@
     "@types/node": "^24.10.0",
     "@types/react": "~19.2.10",
     "@zeyn/config": "workspace:*",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vitest": "^4.1.9"
   }
 }

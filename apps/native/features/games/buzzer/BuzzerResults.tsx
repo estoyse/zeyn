@@ -1,11 +1,12 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Button, Card } from "heroui-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { withUniwind } from "uniwind";
 
-import { Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/ui";
+import { Podium } from "@/features/game/components/Podium";
 import { buildScoreboard } from "@/features/game/lib/scoreboard";
 import type { GameResultsViewProps } from "@/features/games/types";
 import { fadeIn, fadeUp, stagger } from "@/lib/motion";
@@ -31,15 +32,20 @@ export function BuzzerResults({ results, onBack }: GameResultsViewProps) {
 
   return (
     <Animated.View entering={fadeIn()} className="gap-6">
-      <View className="items-center gap-3">
-        <View className="rounded-full bg-brand/10 p-4">
-          <StyledIonicons name="trophy" size={32} className="text-brand" />
-        </View>
-        <Heading className="text-center text-3xl">{t("archive.title")}</Heading>
-        <Text className="text-muted-foreground text-xs uppercase tracking-widest">
+      <View className="items-center gap-2">
+        <Heading className="text-center text-title-1">{t("archive.title")}</Heading>
+        <Text className="text-caption uppercase text-muted-foreground">
           {t("archive.subtitle")}
         </Text>
       </View>
+
+      <Podium
+        entries={ranked.map(p => ({
+          id: p.userId,
+          name: p.playerName,
+          score: p.score,
+        }))}
+      />
 
       <Card>
         <Card.Body className="gap-3">

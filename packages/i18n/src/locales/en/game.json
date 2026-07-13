@@ -32,7 +32,10 @@
       "title": "Leave this game?",
       "description": "You will be removed from the room and your score for this game will be lost.",
       "confirm": "Leave game"
-    }
+    },
+    "mute": "Mute sound",
+    "unmute": "Unmute sound",
+    "style": "Visual style"
   },
   "lobby": {
     "guest": "Guest",
@@ -50,12 +53,17 @@
     "shareLink": "Or share the link",
     "public": "Public room",
     "private": "Invite only",
-    "locked": "Password protected"
+    "locked": "Password protected",
+    "tapToCopy": "Tap to copy",
+    "needMorePlayers": "Need {{count}} more player to start",
+    "needMorePlayers_other": "Need {{count}} more players to start"
   },
   "playing": {
     "loadingQuestion": "Loading question...",
     "questionWorth": "Question worth {{points}}",
     "buzz": "BUZZ!",
+    "out": "OUT",
+    "yourTurn": "ANSWER",
     "awaitingAnswer": "Awaiting Answer",
     "answerPlaceholder": "Type your answer...",
     "submit": "Submit",
@@ -170,5 +178,8 @@
   },
   "connection": {
     "reconnecting": "Reconnecting… your actions are paused until the connection returns."
+  },
+  "countdown": {
+    "getReady": "Get ready"
   }
 }

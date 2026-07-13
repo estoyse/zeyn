@@ -2,10 +2,12 @@ import { canonicalizeGameId } from "@zeyn/api/game-code";
 import { router, useLocalSearchParams, type Href } from "expo-router";
 import { useEffect, type ReactNode } from "react";
 import { ScrollView, View } from "react-native";
+import { ScopedTheme } from "uniwind";
 
 import { ConnectingView } from "@/features/game/components/ConnectingView";
 import { ConnectionErrorView } from "@/features/game/components/ConnectionErrorView";
 import { FocusLayout } from "@/features/game/components/FocusLayout";
+import { GameFxProvider } from "@/features/game/components/GameFxProvider";
 import { FocusTopBar } from "@/features/game/components/FocusTopBar";
 import { GameHeader } from "@/features/game/components/GameHeader";
 import { GameLobby } from "@/features/game/components/GameLobby";
@@ -30,7 +32,13 @@ export default function GameRoomScreen() {
 
   if (rawGameId && gameId !== rawGameId) return null;
 
-  return <GameRoom gameId={gameId} />;
+  return (
+    <ScopedTheme theme="arcade">
+      <GameFxProvider>
+        <GameRoom gameId={gameId} />
+      </GameFxProvider>
+    </ScopedTheme>
+  );
 }
 
 function GameRoom({ gameId }: { gameId: string }) {
@@ -110,8 +118,8 @@ function GameScreen({
     <FocusLayout header={<GameHeader gameId={gameId} onLeave={onLeave} />}>
       {!isConnected && <ReconnectingBanner />}
 
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
-        {state.status === "WAITING" && (
+      {state.status === "WAITING" && (
+        <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
           <GameLobby
             state={state}
             playerId={userId}
@@ -120,15 +128,17 @@ function GameScreen({
             description={game?.meta.description ?? ""}
             isSpectator={isSpectator}
           />
-        )}
+        </ScrollView>
+      )}
 
-        {isPlaying && (
-          <View className="gap-4">
+      {isPlaying && Playing && (
+        <View className="flex-1">
+          <View className="px-4 pt-3">
             <Scoreboard state={state} playerId={userId} variant="strip" />
-            {Playing && <Playing room={room} />}
           </View>
-        )}
-      </ScrollView>
+          <Playing room={room} />
+        </View>
+      )}
     </FocusLayout>
   );
 }

@@ -7,7 +7,7 @@ export default function GamesScreen() {
   const { t } = useTranslation("dashboard");
 
   return (
-    <Screen contentClassName="gap-6 px-6 py-6">
+    <Screen>
       <Heading className="text-2xl">{t("page.gamesHeading")}</Heading>
       <GameCatalog />
     </Screen>

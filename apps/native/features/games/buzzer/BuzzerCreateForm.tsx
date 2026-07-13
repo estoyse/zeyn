@@ -2,10 +2,11 @@ import { roomLimits } from "@zeyn/api/game-types";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { router, type Href } from "expo-router";
-import { Button, Card, Chip, FieldError, Skeleton, Spinner, useToast } from "heroui-native";
+import { Card, Chip, FieldError, Skeleton, Spinner, useToast } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
+import { Button } from "@/components/ui";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { GeneralConfigCard } from "@/features/games/components/GeneralConfigCard";
 import { createBuzzerRoomSchema } from "@/features/games/lib/createRoomSchemas";

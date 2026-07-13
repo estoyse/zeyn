@@ -16,6 +16,7 @@ export type MusicConfig = z.infer<typeof musicConfigSchema>;
 export const musicGameConfig = {
   questionCount: 10,
   optionsPerQuestion: 3,
+  countdownTimeMs: 3000,
   questionTimeMs: 20000,
   revealTimeMs: 6000,
   basePoints: 100,
@@ -46,7 +47,7 @@ export interface MusicQuizState extends BaseGameState {
   artistIds: string[];
   questions: MusicQuestion[];
   currentQuestionIndex: number;
-  phase: "QUESTION" | "REVEAL";
+  phase: "COUNTDOWN" | "QUESTION" | "REVEAL";
   timerExpiresAt: number;
   answers: Record<string, MusicPlayerAnswer>;
   streaks: Record<string, number>;
@@ -62,7 +63,7 @@ export interface MusicPublicReveal {
 export interface MusicPublicState extends BasePublicGameState {
   currentQuestionIndex: number;
   totalQuestions: number;
-  phase: "QUESTION" | "REVEAL";
+  phase: "COUNTDOWN" | "QUESTION" | "REVEAL";
   timerExpiresAt: number;
   answeredPlayerIds: string[];
   question?: { previewUrl: string; options: string[] };

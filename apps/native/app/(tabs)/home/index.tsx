@@ -1,12 +1,19 @@
 import { router, type Href } from "expo-router";
-import { Button, Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
-import { Heading, Screen, Text } from "@/components/ui";
-import { JoinByIdCard } from "@/features/dashboard/components/JoinByIdCard";
+import { Button, EmptyState, Heading, Screen } from "@/components/ui";
+import { JoinBar } from "@/features/dashboard/components/JoinBar";
+import { LiveNowStrip } from "@/features/dashboard/components/LiveNowStrip";
+import { PlayNowTiles } from "@/features/dashboard/components/PlayNowTiles";
 import { RecentGamesSection } from "@/features/dashboard/components/RecentGamesSection";
 import { authClient } from "@/lib/auth-client";
+
+function greetingKey(hour: number) {
+  if (hour < 12) return "greeting.morning";
+  if (hour < 18) return "greeting.afternoon";
+  return "greeting.evening";
+}
 
 export default function HomeScreen() {
   const { t } = useTranslation("dashboard");
@@ -14,38 +21,39 @@ export default function HomeScreen() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
+  const greeting = user
+    ? `${t(greetingKey(new Date().getHours()))}, ${user.name}`
+    : t("greeting.anon");
+
   return (
-    <Screen contentClassName="gap-6 px-6 py-6">
-      <View className="gap-1">
-        <Heading className="text-2xl">{t("header.title")}</Heading>
-        {user ? (
-          <Text className="text-muted-foreground">
-            {t("header.welcome", { name: user.name })}
-          </Text>
-        ) : null}
+    <Screen contentClassName="px-0">
+      <View className="gap-4 px-6">
+        <Heading className="text-title-1">{greeting}</Heading>
+        <JoinBar />
       </View>
 
-      <JoinByIdCard />
+      <View className="px-6">
+        <PlayNowTiles enabled={!!user} />
+      </View>
 
-      {user ? (
-        <RecentGamesSection enabled={!!user} />
-      ) : (
-        <Card>
-          <Card.Body className="gap-3">
-            <Card.Title>{t("recentGames.title")}</Card.Title>
-            <Card.Description>{t("recentGames.empty")}</Card.Description>
-          </Card.Body>
-          <Card.Footer>
-            <Button className="w-full" onPress={() => router.push("/(auth)/login" as Href)}>
-              <Button.Label>{tAuth("login.submitButton")}</Button.Label>
-            </Button>
-          </Card.Footer>
-        </Card>
-      )}
+      {user ? <LiveNowStrip /> : null}
 
-      <Button variant="outline" onPress={() => router.push("/(tabs)/games" as Href)}>
-        <Button.Label>{t("page.gamesHeading")}</Button.Label>
-      </Button>
+      <View className="px-6">
+        {user ? (
+          <RecentGamesSection enabled />
+        ) : (
+          <EmptyState
+            icon="game-controller"
+            title={t("recentGames.empty")}
+            caption={t("greeting.anon")}
+            action={
+              <Button onPress={() => router.push("/(auth)/login" as Href)}>
+                <Button.Label>{tAuth("login.submitButton")}</Button.Label>
+              </Button>
+            }
+          />
+        )}
+      </View>
     </Screen>
   );
 }

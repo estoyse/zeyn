@@ -141,7 +141,59 @@ describe("music start", () => {
     const d = start(state, "host", NOW);
     expect(state.status).toBe("PLAYING");
     expect(d.updateRoomStatus).toBe("playing");
-    expect(d.alarmAt).toBe(NOW + musicGameConfig.questionTimeMs);
+    expect(d.alarmAt).toBe(NOW + musicGameConfig.countdownTimeMs);
+  });
+});
+
+function countdownState(): MusicQuizState {
+  const state = playingState();
+  state.status = "WAITING";
+  start(state, "host", NOW);
+  return state;
+}
+
+describe("music countdown", () => {
+  it("enters COUNTDOWN and does not start question 1", () => {
+    const state = countdownState();
+    expect(state.status).toBe("PLAYING");
+    expect(state.phase).toBe("COUNTDOWN");
+    expect(state.currentQuestionIndex).toBe(0);
+    expect(state.timerExpiresAt).toBe(NOW + musicGameConfig.countdownTimeMs);
+    expect(answer(state, "host", 0, NOW)).toEqual({ noChange: true });
+    expect(state.answers.host).toBeUndefined();
+  });
+
+  it("starts question 1 with a full-length timer when the countdown alarm fires", () => {
+    const state = countdownState();
+    const firesAt = NOW + musicGameConfig.countdownTimeMs;
+    const d = handleTimeout(state, firesAt);
+
+    expect(state.phase).toBe("QUESTION");
+    expect(state.currentQuestionIndex).toBe(0);
+    expect(state.answers).toEqual({});
+    expect(state.timerExpiresAt).toBe(firesAt + musicGameConfig.questionTimeMs);
+    expect(d.alarmAt).toBe(firesAt + musicGameConfig.questionTimeMs);
+  });
+
+  it("ignores a second START during the countdown", () => {
+    const state = countdownState();
+    const d = start(state, "host", NOW + 1000);
+    expect(d.reply?.type).toBe("ERROR");
+    expect(d.alarmAt).toBeUndefined();
+    expect(d.updateRoomStatus).toBeUndefined();
+    expect(state.phase).toBe("COUNTDOWN");
+    expect(state.timerExpiresAt).toBe(NOW + musicGameConfig.countdownTimeMs);
+  });
+
+  it("does not re-start question 1 when the alarm fires outside COUNTDOWN", () => {
+    const state = countdownState();
+    const firesAt = NOW + musicGameConfig.countdownTimeMs;
+    handleTimeout(state, firesAt);
+    const d = handleTimeout(state, firesAt);
+
+    expect(state.phase).toBe("REVEAL");
+    expect(state.currentQuestionIndex).toBe(0);
+    expect(d.alarmAt).toBe(firesAt + musicGameConfig.revealTimeMs);
   });
 });
 

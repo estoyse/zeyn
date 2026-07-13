@@ -1,9 +1,9 @@
 import { Link, Stack } from "expo-router";
-import { Button, Surface } from "heroui-native";
+import { Surface } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
-import { Container } from "@/components/container";
+import { Button, Screen } from "@/components/ui";
 
 export default function NotFoundScreen() {
   const { t } = useTranslation("common");
@@ -11,7 +11,7 @@ export default function NotFoundScreen() {
   return (
     <>
       <Stack.Screen options={{ title: t("notFound.title") }} />
-      <Container>
+      <Screen edges={["top", "bottom"]}>
         <View className="flex-1 justify-center items-center p-4">
           <Surface variant="secondary" className="items-center p-6 max-w-sm rounded-lg">
             <Text className="text-4xl mb-3">🤔</Text>
@@ -26,7 +26,7 @@ export default function NotFoundScreen() {
             </Link>
           </Surface>
         </View>
-      </Container>
+      </Screen>
     </>
   );
 }

@@ -1,20 +1,19 @@
 import { useForm } from "@tanstack/react-form";
-import { Button, FieldError, Input, Label, Spinner, TextField } from "heroui-native";
+import { FieldError, Input, Label, Spinner, TextField } from "heroui-native";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TextInput, View } from "react-native";
 
-import { Text } from "@/components/ui";
+import { Button, Text } from "@/components/ui";
 import { createRegisterSchema } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { useAuth } from "@/features/auth/useAuth";
 
 type RegisterFormProps = {
-  onSwitch: () => void;
   returnTo?: string;
 };
 
-export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
+export function RegisterForm({ returnTo }: RegisterFormProps) {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const { t } = useTranslation("auth");
@@ -125,12 +124,6 @@ export function RegisterForm({ onSwitch, returnTo }: RegisterFormProps) {
         )}
       </form.Subscribe>
 
-      <View className="mt-1 flex-row items-center justify-center gap-1">
-        <Text className="text-muted-foreground text-sm">{t("register.haveAccountText")}</Text>
-        <Text weight="semibold" className="text-sm" onPress={onSwitch}>
-          {t("register.switchToLogin")}
-        </Text>
-      </View>
     </View>
   );
 }

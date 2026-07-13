@@ -81,6 +81,15 @@ function startedState(): GameState {
   state.players["host"] = { id: "host", name: "Host", score: 0, connected: true };
   state.players["p1"] = { id: "p1", name: "P1", score: 0, connected: true };
   start(state, "host", NOW);
+  handleTimeout(state, NOW);
+  return state;
+}
+
+function countdownState(): GameState {
+  const state = seededState();
+  state.players["host"] = { id: "host", name: "Host", score: 0, connected: true };
+  state.players["p1"] = { id: "p1", name: "P1", score: 0, connected: true };
+  start(state, "host", NOW);
   return state;
 }
 
@@ -281,14 +290,67 @@ describe("start", () => {
     expect(s.status).toBe("WAITING");
   });
 
-  it("starts the match, arms the question timer, and flags the DB write", () => {
+  it("enters the countdown, arms the countdown alarm, and flags the DB write", () => {
     const s = seededState();
     const d = start(s, "host", NOW);
     expect(s.status).toBe("PLAYING");
-    expect(s.phase).toBe("ACTIVE");
+    expect(s.phase).toBe("COUNTDOWN");
     expect(d.updateRoomStatus).toBe("playing");
-    expect(d.alarmAt).toBe(NOW + gameConfig.questionTimeMs);
-    expect(s.activeQuestionState?.timerExpiresAt).toBe(NOW + gameConfig.questionTimeMs);
+    expect(d.alarmAt).toBe(NOW + gameConfig.countdownTimeMs);
+    expect(s.activeQuestionState?.timerExpiresAt).toBe(
+      NOW + gameConfig.countdownTimeMs
+    );
+  });
+
+  it("does not start question 1 while the countdown is running", () => {
+    const s = countdownState();
+    expect(s.phase).toBe("COUNTDOWN");
+    expect(s.currentSubjectIndex).toBe(0);
+    expect(s.currentQuestionIndex).toBe(0);
+    expect(s.activeQuestionState?.timerExpiresAt).not.toBe(
+      NOW + gameConfig.questionTimeMs
+    );
+    expect(buzz(s, "p1", NOW)).toEqual({ noChange: true });
+  });
+
+  it("ignores a second START during the countdown", () => {
+    const s = countdownState();
+    const expiresAt = s.activeQuestionState?.timerExpiresAt;
+    const d = start(s, "host", NOW + 1000);
+    expect(errText(d.reply)).toBe("Game already started");
+    expect(d.alarmAt).toBeUndefined();
+    expect(d.updateRoomStatus).toBeUndefined();
+    expect(s.phase).toBe("COUNTDOWN");
+    expect(s.activeQuestionState?.timerExpiresAt).toBe(expiresAt);
+  });
+});
+
+describe("countdown", () => {
+  it("starts question 1 with a full-length timer when the countdown alarm fires", () => {
+    const s = countdownState();
+    const firesAt = NOW + gameConfig.countdownTimeMs;
+    const d = handleTimeout(s, firesAt);
+
+    expect(s.phase).toBe("ACTIVE");
+    expect(s.currentSubjectIndex).toBe(0);
+    expect(s.currentQuestionIndex).toBe(0);
+    expect(d.alarmAt).toBe(firesAt + gameConfig.questionTimeMs);
+    expect(s.activeQuestionState).toMatchObject({
+      buzzedPlayerId: null,
+      wrongAttempts: 0,
+      playersWhoAttempted: [],
+      timerExpiresAt: firesAt + gameConfig.questionTimeMs,
+    });
+  });
+
+  it("does not re-start question 1 when the alarm fires outside COUNTDOWN", () => {
+    const s = countdownState();
+    handleTimeout(s, NOW + gameConfig.countdownTimeMs);
+    const d = handleTimeout(s, NOW + gameConfig.countdownTimeMs);
+
+    expect(s.phase).toBe("REVEALED");
+    expect(s.currentQuestionIndex).toBe(0);
+    expect(d.alarmAt).toBe(NOW + gameConfig.countdownTimeMs + gameConfig.revealTimeMs);
   });
 });
 

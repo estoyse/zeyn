@@ -1,11 +1,11 @@
 import { useForm } from "@tanstack/react-form";
 import { router } from "expo-router";
-import { Button, FieldError, Input, Label, Spinner, TextField } from "heroui-native";
+import { FieldError, Input, Label, Spinner, TextField } from "heroui-native";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { TextInput, View } from "react-native";
 
-import { Text } from "@/components/ui";
+import { Button, Text } from "@/components/ui";
 import { createLoginSchema } from "@/features/auth/authSchemas";
 import { getErrorMessage } from "@/features/auth/lib/getErrorMessage";
 import { useAuth } from "@/features/auth/useAuth";
@@ -13,11 +13,10 @@ import { useAuth } from "@/features/auth/useAuth";
 import { SocialButtons } from "./SocialButtons";
 
 type LoginFormProps = {
-  onSwitch: () => void;
   returnTo?: string;
 };
 
-export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
+export function LoginForm({ returnTo }: LoginFormProps) {
   const passwordInputRef = useRef<TextInput>(null);
   const { t } = useTranslation("auth");
   const { signIn } = useAuth();
@@ -116,12 +115,6 @@ export function LoginForm({ onSwitch, returnTo }: LoginFormProps) {
 
       <SocialButtons returnTo={returnTo} />
 
-      <View className="mt-1 flex-row items-center justify-center gap-1">
-        <Text className="text-muted-foreground text-sm">{t("login.noAccountText")}</Text>
-        <Text weight="semibold" className="text-sm" onPress={onSwitch}>
-          {t("login.switchToRegister")}
-        </Text>
-      </View>
     </View>
   );
 }

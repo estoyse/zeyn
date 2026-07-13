@@ -4,160 +4,306 @@
 
 @source './node_modules/heroui-native/lib';
 
+/*
+  THEME CONTRACT — read before editing.
+
+  uniwind errors at build time if any theme declares a variable the others do not.
+  light, dark, and arcade must each declare the EXACT same variable list below.
+  Adding a variable means adding it to all three, even as a no-op.
+
+  background foreground
+  surface surface-foreground surface-secondary surface-secondary-foreground
+  surface-tertiary surface-tertiary-foreground
+  overlay overlay-foreground
+  muted default default-foreground
+  accent accent-foreground
+  field-background field-foreground field-placeholder
+  success success-foreground warning warning-foreground danger danger-foreground
+  border separator focus link
+  brand brand-foreground buzzer buzzer-foreground
+  primary primary-foreground secondary secondary-foreground
+  card card-foreground muted-surface muted-foreground
+  input ring destructive destructive-foreground
+  elev-1 elev-2 elev-3
+
+  Plus the variables heroui itself declares in its light/dark variants, which
+  arcade must therefore also declare (uniwind compares the union of all themes):
+  backdrop field-border segment segment-foreground
+  surface-shadow overlay-shadow field-shadow
+
+  Hue anchors: lapis 264, amber 80/84. Neutrals carry hue 264 at low chroma so
+  white surfaces read as the same family as the brand. Chrome and arcade differ
+  only in the lightness/chroma envelope — arcade is the chrome pushed to the edge
+  of the gamut on a near-black floor.
+*/
+
 @theme {
-  --radius: 0rem;
-  --field-radius: 0rem;
-  --font-sans: "IBMPlexSans_400Regular";
-  --font-heading: "SpaceGrotesk_700Bold";
+  --radius: 0.5rem;
+  --field-radius: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-row: 0.875rem;
+  --radius-pill: 9999px;
+
+  --font-sans: "IBMPlexSans-Regular";
+  --font-heading: "IBMPlexSans-SemiBold";
+  --font-display: "SpaceGrotesk-Bold";
+  --font-numeric: "SpaceGrotesk-Bold";
+
+  --text-display: 2rem;
+  --text-display--line-height: 2.25rem;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-title-1: 1.75rem;
+  --text-title-1--line-height: 2.125rem;
+  --text-title-1--letter-spacing: -0.015em;
+
+  --text-title-2: 1.375rem;
+  --text-title-2--line-height: 1.75rem;
+  --text-title-2--letter-spacing: -0.01em;
+
+  --text-title-3: 1.0625rem;
+  --text-title-3--line-height: 1.375rem;
+  --text-title-3--letter-spacing: -0.005em;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+
+  --text-callout: 0.9375rem;
+  --text-callout--line-height: 1.3125rem;
+
+  --text-footnote: 0.8125rem;
+  --text-footnote--line-height: 1.125rem;
+
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 0.875rem;
+  --text-caption--letter-spacing: 0.06em;
 }
 
 @utility font-light {
-  font-family: "IBMPlexSans_400Regular";
+  font-family: "IBMPlexSans-Regular";
   font-weight: 300;
 }
 
 @utility font-normal {
-  font-family: "IBMPlexSans_400Regular";
+  font-family: "IBMPlexSans-Regular";
   font-weight: 400;
 }
 
 @utility font-medium {
-  font-family: "IBMPlexSans_500Medium";
+  font-family: "IBMPlexSans-Medium";
   font-weight: 500;
 }
 
 @utility font-semibold {
-  font-family: "IBMPlexSans_600SemiBold";
+  font-family: "IBMPlexSans-SemiBold";
   font-weight: 600;
 }
 
 @utility font-bold {
-  font-family: "IBMPlexSans_700Bold";
+  font-family: "IBMPlexSans-Bold";
   font-weight: 700;
 }
 
 @utility font-extrabold {
-  font-family: "IBMPlexSans_700Bold";
+  font-family: "IBMPlexSans-Bold";
   font-weight: 800;
 }
 
 @layer theme {
   :root {
     @variant light {
-      --background: oklch(1 0 0);
-      --foreground: oklch(0.148 0.004 228.8);
+      --background: oklch(0.985 0.003 264);
+      --foreground: oklch(0.19 0.012 264);
 
       --surface: oklch(1 0 0);
-      --surface-foreground: oklch(0.148 0.004 228.8);
-      --surface-secondary: oklch(0.963 0.002 197.1);
-      --surface-secondary-foreground: oklch(0.218 0.008 223.9);
-      --surface-tertiary: oklch(0.925 0.005 214.3);
-      --surface-tertiary-foreground: oklch(0.218 0.008 223.9);
+      --surface-foreground: oklch(0.19 0.012 264);
+      --surface-secondary: oklch(0.965 0.005 264);
+      --surface-secondary-foreground: oklch(0.28 0.012 264);
+      --surface-tertiary: oklch(0.93 0.007 264);
+      --surface-tertiary-foreground: oklch(0.28 0.012 264);
 
       --overlay: oklch(1 0 0);
-      --overlay-foreground: oklch(0.148 0.004 228.8);
+      --overlay-foreground: oklch(0.19 0.012 264);
 
-      --muted: oklch(0.56 0.021 213.5);
+      --muted: oklch(0.56 0.02 264);
 
-      --default: oklch(0.963 0.002 197.1);
-      --default-foreground: oklch(0.218 0.008 223.9);
+      --default: oklch(0.965 0.005 264);
+      --default-foreground: oklch(0.28 0.012 264);
 
-      --accent: oklch(0.56 0.21 267);
-      --accent-foreground: oklch(0.987 0.002 197.1);
+      --accent: oklch(0.55 0.19 264);
+      --accent-foreground: oklch(0.99 0.002 264);
 
       --field-background: oklch(1 0 0);
-      --field-foreground: oklch(0.148 0.004 228.8);
-      --field-placeholder: oklch(0.56 0.021 213.5);
+      --field-foreground: oklch(0.19 0.012 264);
+      --field-placeholder: oklch(0.6 0.018 264);
 
       --success: oklch(0.58 0.15 152);
-      --success-foreground: oklch(0.987 0.002 197.1);
-      --warning: oklch(0.72 0.17 75);
-      --warning-foreground: oklch(0.216 0.006 56.043);
+      --success-foreground: oklch(0.99 0.002 264);
+      --warning: oklch(0.74 0.14 80);
+      --warning-foreground: oklch(0.24 0.04 80);
       --danger: oklch(0.577 0.245 27.325);
-      --danger-foreground: oklch(0.987 0.002 197.1);
+      --danger-foreground: oklch(0.99 0.002 264);
 
-      --border: oklch(0.925 0.005 214.3);
-      --separator: oklch(0.925 0.005 214.3);
-      --focus: oklch(0.56 0.21 267);
-      --link: oklch(0.56 0.21 267);
+      --border: oklch(0.92 0.006 264);
+      --separator: oklch(0.93 0.006 264);
+      --focus: oklch(0.55 0.19 264);
+      --link: oklch(0.55 0.19 264);
 
-      --brand: oklch(0.56 0.21 267);
-      --brand-foreground: oklch(0.987 0.002 197.1);
-      --buzzer: oklch(0.84 0.14 80);
-      --buzzer-foreground: oklch(0.22 0.03 264);
-      --primary: oklch(0% 0 0);
-      --primary-foreground: oklch(0.987 0.002 197.1);
-      --secondary: oklch(0.963 0.002 197.1);
-      --secondary-foreground: oklch(0.218 0.008 223.9);
+      --brand: oklch(0.55 0.19 264);
+      --brand-foreground: oklch(0.99 0.002 264);
+      --buzzer: oklch(0.74 0.14 80);
+      --buzzer-foreground: oklch(0.24 0.04 80);
+      --primary: oklch(0.19 0.012 264);
+      --primary-foreground: oklch(0.99 0.002 264);
+      --secondary: oklch(0.965 0.005 264);
+      --secondary-foreground: oklch(0.28 0.012 264);
       --card: oklch(1 0 0);
-      --card-foreground: oklch(0.148 0.004 228.8);
-      --muted-surface: oklch(0.963 0.002 197.1);
-      --muted-foreground: oklch(0.56 0.021 213.5);
-      --input: oklch(0.925 0.005 214.3);
-      --ring: oklch(0.723 0.014 214.4);
+      --card-foreground: oklch(0.19 0.012 264);
+      --muted-surface: oklch(0.965 0.005 264);
+      --muted-foreground: oklch(0.52 0.02 264);
+      --input: oklch(0.92 0.006 264);
+      --ring: oklch(0.55 0.19 264);
       --destructive: oklch(0.577 0.245 27.325);
-      --destructive-foreground: oklch(0.987 0.002 197.1);
+      --destructive-foreground: oklch(0.99 0.002 264);
+
+      --elev-1: 0 1px 2px 0 oklch(0.19 0.012 264 / 0.05),
+        0 1px 1px 0 oklch(0.19 0.012 264 / 0.03);
+      --elev-2: 0 4px 12px -2px oklch(0.19 0.012 264 / 0.08);
+      --elev-3: 0 16px 40px -8px oklch(0.19 0.012 264 / 0.14);
     }
 
     @variant dark {
-      --background: oklch(0.148 0.004 228.8);
-      --foreground: oklch(0.987 0.002 197.1);
+      --background: oklch(0.17 0.008 264);
+      --foreground: oklch(0.97 0.003 264);
 
-      --surface: oklch(0.218 0.008 223.9);
-      --surface-foreground: oklch(0.987 0.002 197.1);
-      --surface-secondary: oklch(0.275 0.011 216.9);
-      --surface-secondary-foreground: oklch(0.987 0.002 197.1);
-      --surface-tertiary: oklch(0.275 0.011 216.9);
-      --surface-tertiary-foreground: oklch(0.987 0.002 197.1);
+      --surface: oklch(0.215 0.01 264);
+      --surface-foreground: oklch(0.97 0.003 264);
+      --surface-secondary: oklch(0.26 0.012 264);
+      --surface-secondary-foreground: oklch(0.97 0.003 264);
+      --surface-tertiary: oklch(0.3 0.014 264);
+      --surface-tertiary-foreground: oklch(0.97 0.003 264);
 
-      --overlay: oklch(0.218 0.008 223.9);
-      --overlay-foreground: oklch(0.987 0.002 197.1);
+      --overlay: oklch(0.24 0.012 264);
+      --overlay-foreground: oklch(0.97 0.003 264);
 
-      --muted: oklch(0.723 0.014 214.4);
+      --muted: oklch(0.7 0.016 264);
 
-      --default: oklch(0.275 0.011 216.9);
-      --default-foreground: oklch(0.987 0.002 197.1);
+      --default: oklch(0.26 0.012 264);
+      --default-foreground: oklch(0.97 0.003 264);
 
-      --accent: oklch(0.68 0.18 267);
-      --accent-foreground: oklch(0.987 0.002 197.1);
+      --accent: oklch(0.68 0.18 264);
+      --accent-foreground: oklch(0.99 0.002 264);
 
-      --field-background: oklch(0.218 0.008 223.9);
-      --field-foreground: oklch(0.987 0.002 197.1);
-      --field-placeholder: oklch(0.723 0.014 214.4);
+      --field-background: oklch(0.215 0.01 264);
+      --field-foreground: oklch(0.97 0.003 264);
+      --field-placeholder: oklch(0.62 0.016 264);
 
-      --success: oklch(0.7 0.16 155);
-      --success-foreground: oklch(0.148 0.004 228.8);
-      --warning: oklch(0.8 0.16 80);
-      --warning-foreground: oklch(0.148 0.004 228.8);
+      --success: oklch(0.72 0.16 155);
+      --success-foreground: oklch(0.17 0.008 264);
+      --warning: oklch(0.8 0.15 80);
+      --warning-foreground: oklch(0.17 0.008 264);
       --danger: oklch(0.704 0.191 22.216);
-      --danger-foreground: oklch(0.987 0.002 197.1);
+      --danger-foreground: oklch(0.99 0.002 264);
 
       --border: oklch(1 0 0 / 10%);
-      --separator: oklch(1 0 0 / 15%);
-      --focus: oklch(0.68 0.18 267);
-      --link: oklch(0.68 0.18 267);
+      --separator: oklch(1 0 0 / 8%);
+      --focus: oklch(0.68 0.18 264);
+      --link: oklch(0.68 0.18 264);
 
-      --brand: oklch(0.68 0.18 267);
-      --brand-foreground: oklch(0.987 0.002 197.1);
-      --buzzer: oklch(0.84 0.14 80);
-      --buzzer-foreground: oklch(0.22 0.03 264);
-      --primary: oklch(0.925 0.005 214.3);
-      --primary-foreground: oklch(0.218 0.008 223.9);
-      --secondary: oklch(0.275 0.011 216.9);
-      --secondary-foreground: oklch(0.987 0.002 197.1);
-      --card: oklch(0.218 0.008 223.9);
-      --card-foreground: oklch(0.987 0.002 197.1);
-      --muted-surface: oklch(0.275 0.011 216.9);
-      --muted-foreground: oklch(0.723 0.014 214.4);
-      --input: oklch(1 0 0 / 15%);
-      --ring: oklch(0.56 0.021 213.5);
+      --brand: oklch(0.68 0.18 264);
+      --brand-foreground: oklch(0.99 0.002 264);
+      --buzzer: oklch(0.82 0.15 82);
+      --buzzer-foreground: oklch(0.2 0.03 80);
+      --primary: oklch(0.97 0.003 264);
+      --primary-foreground: oklch(0.215 0.01 264);
+      --secondary: oklch(0.26 0.012 264);
+      --secondary-foreground: oklch(0.97 0.003 264);
+      --card: oklch(0.215 0.01 264);
+      --card-foreground: oklch(0.97 0.003 264);
+      --muted-surface: oklch(0.26 0.012 264);
+      --muted-foreground: oklch(0.7 0.016 264);
+      --input: oklch(1 0 0 / 14%);
+      --ring: oklch(0.68 0.18 264);
       --destructive: oklch(0.704 0.191 22.216);
-      --destructive-foreground: oklch(0.987 0.002 197.1);
+      --destructive-foreground: oklch(0.99 0.002 264);
+
+      --elev-1: 0 0 0 0 oklch(0 0 0 / 0);
+      --elev-2: 0 6px 16px -4px oklch(0 0 0 / 0.45);
+      --elev-3: 0 20px 48px -12px oklch(0 0 0 / 0.6);
+    }
+
+    @variant arcade {
+      --background: oklch(0.09 0.012 268);
+      --foreground: oklch(0.97 0.01 264);
+
+      --surface: oklch(0.14 0.018 268);
+      --surface-foreground: oklch(0.97 0.01 264);
+      --surface-secondary: oklch(0.18 0.022 268);
+      --surface-secondary-foreground: oklch(0.97 0.01 264);
+      --surface-tertiary: oklch(0.23 0.028 268);
+      --surface-tertiary-foreground: oklch(0.97 0.01 264);
+
+      --overlay: oklch(0.12 0.016 268);
+      --overlay-foreground: oklch(0.97 0.01 264);
+
+      --muted: oklch(0.62 0.03 268);
+
+      --default: oklch(0.18 0.022 268);
+      --default-foreground: oklch(0.97 0.01 264);
+
+      --accent: oklch(0.72 0.26 264);
+      --accent-foreground: oklch(0.09 0.012 268);
+
+      --field-background: oklch(0.14 0.018 268);
+      --field-foreground: oklch(0.97 0.01 264);
+      --field-placeholder: oklch(0.55 0.03 268);
+
+      --success: oklch(0.78 0.21 150);
+      --success-foreground: oklch(0.09 0.012 268);
+      --warning: oklch(0.86 0.19 84);
+      --warning-foreground: oklch(0.09 0.012 268);
+      --danger: oklch(0.66 0.26 25);
+      --danger-foreground: oklch(0.97 0.01 264);
+
+      --border: oklch(1 0 0 / 12%);
+      --separator: oklch(1 0 0 / 8%);
+      --focus: oklch(0.72 0.26 264);
+      --link: oklch(0.72 0.26 264);
+
+      --brand: oklch(0.72 0.26 264);
+      --brand-foreground: oklch(0.09 0.012 268);
+      --buzzer: oklch(0.86 0.19 84);
+      --buzzer-foreground: oklch(0.15 0.04 80);
+      --primary: oklch(0.97 0.01 264);
+      --primary-foreground: oklch(0.09 0.012 268);
+      --secondary: oklch(0.18 0.022 268);
+      --secondary-foreground: oklch(0.97 0.01 264);
+      --card: oklch(0.14 0.018 268);
+      --card-foreground: oklch(0.97 0.01 264);
+      --muted-surface: oklch(0.18 0.022 268);
+      --muted-foreground: oklch(0.62 0.03 268);
+      --input: oklch(1 0 0 / 16%);
+      --ring: oklch(0.72 0.26 264);
+      --destructive: oklch(0.66 0.26 25);
+      --destructive-foreground: oklch(0.97 0.01 264);
+
+      --elev-1: 0 0 0 0 oklch(0 0 0 / 0);
+      --elev-2: 0 8px 24px -6px oklch(0 0 0 / 0.7);
+      --elev-3: 0 24px 56px -12px oklch(0 0 0 / 0.85);
+
+      /* Declared by heroui in light + dark; arcade must match the variable set. */
+      --backdrop: oklch(0% 0 0 / 60%);
+      --field-border: transparent;
+      --segment: oklch(0.18 0.022 268);
+      --segment-foreground: oklch(0.97 0.01 264);
+      --surface-shadow: 0 0 0 0 transparent inset;
+      --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.15) inset;
+      --field-shadow: 0 0 0 0 transparent inset;
     }
   }
 }
 
-@theme inline {
+@theme inline static {
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-buzzer: var(--buzzer);
@@ -174,4 +320,8 @@
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+
+  --shadow-e1: var(--elev-1);
+  --shadow-e2: var(--elev-2);
+  --shadow-e3: var(--elev-3);
 }

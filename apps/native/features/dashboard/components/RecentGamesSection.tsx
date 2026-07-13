@@ -4,7 +4,7 @@ import { Card, Skeleton } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { Pressable, View } from "react-native";
 
-import { Heading, Text } from "@/components/ui";
+import { EmptyState, Heading, Text } from "@/components/ui";
 import { getClientGame } from "@/features/games/registry";
 import { trpc } from "@/utils/trpc";
 
@@ -31,11 +31,7 @@ export function RecentGamesSection({ enabled }: RecentGamesSectionProps) {
           <Skeleton className="h-16 w-full rounded-lg" />
         </View>
       ) : items?.length === 0 ? (
-        <Card>
-          <Card.Body>
-            <Card.Description>{t("recentGames.empty")}</Card.Description>
-          </Card.Body>
-        </Card>
+        <EmptyState icon="game-controller" title={t("recentGames.empty")} />
       ) : (
         <View className="gap-2">
           {items?.map((item) => {

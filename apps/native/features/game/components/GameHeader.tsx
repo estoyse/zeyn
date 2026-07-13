@@ -1,10 +1,10 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Button } from "heroui-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useTranslation } from "react-i18next";
 import { Alert, View } from "react-native";
 import { withUniwind } from "uniwind";
 
-import { Logo, LogoMark, Text } from "@/components/ui";
+import { Button, Logo, LogoMark, PressableScale, Text } from "@/components/ui";
+import { setGameStyle, setSfxMuted, usePrefs } from "@/lib/prefs";
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -15,6 +15,7 @@ interface GameHeaderProps {
 
 export function GameHeader({ gameId, onLeave }: GameHeaderProps) {
   const { t } = useTranslation("game");
+  const { sfxMuted, gameStyle } = usePrefs();
 
   const confirmLeave = () => {
     Alert.alert(
@@ -34,16 +35,45 @@ export function GameHeader({ gameId, onLeave }: GameHeaderProps) {
   return (
     <View className="flex-row items-center justify-between gap-3 border-b border-border px-4 py-3">
       <View className="min-w-0 flex-1 flex-row items-center gap-3">
-        <View className="size-10 items-center justify-center bg-brand">
+        <View className="size-10 items-center justify-center rounded-card bg-brand">
           <LogoMark size={20} />
         </View>
         <View className="min-w-0 flex-1">
           <Logo size="sm" />
-          <Text className="text-muted-foreground text-xs uppercase tracking-widest">
+          <Text className="text-caption uppercase text-muted-foreground">
             {t("header.room", { gameId })}
           </Text>
         </View>
       </View>
+
+      <PressableScale
+        haptic="toggle"
+        onPress={() => setGameStyle(gameStyle === "neon" ? "refined" : "neon")}
+        accessibilityRole="button"
+        accessibilityLabel={t("header.style")}
+        className="size-10 items-center justify-center rounded-pill bg-muted-surface"
+      >
+        <StyledIonicons
+          name={gameStyle === "neon" ? "flash" : "contrast"}
+          size={17}
+          className={gameStyle === "neon" ? "text-buzzer" : "text-foreground"}
+        />
+      </PressableScale>
+
+      <PressableScale
+        haptic="toggle"
+        onPress={() => setSfxMuted(!sfxMuted)}
+        accessibilityRole="switch"
+        accessibilityState={{ checked: !sfxMuted }}
+        accessibilityLabel={t(sfxMuted ? "header.unmute" : "header.mute")}
+        className="size-10 items-center justify-center rounded-pill bg-muted-surface"
+      >
+        <StyledIonicons
+          name={sfxMuted ? "volume-mute" : "volume-medium"}
+          size={18}
+          className={sfxMuted ? "text-muted-foreground" : "text-foreground"}
+        />
+      </PressableScale>
 
       <Button variant="danger" size="sm" onPress={confirmLeave}>
         <StyledIonicons name="log-out-outline" size={16} className="text-danger-foreground" />

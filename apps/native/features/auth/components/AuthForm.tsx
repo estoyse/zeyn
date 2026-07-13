@@ -1,11 +1,9 @@
-import { Surface } from "heroui-native";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Animated, { FadeOut } from "react-native-reanimated";
 import { View } from "react-native";
 
-import { Heading, LogoLockup } from "@/components/ui";
-import { fadeIn } from "@/lib/motion";
+import { FadeSwap, Heading, LogoLockup, PressableScale, Text } from "@/components/ui";
+import { cn } from "@/lib/utils";
 
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
@@ -19,29 +17,64 @@ export function AuthForm({ returnTo }: AuthFormProps) {
   const { t } = useTranslation("auth");
 
   return (
-    <View className="w-full max-w-sm gap-6">
+    <View className="w-full max-w-sm gap-7">
       <View className="items-center gap-3">
         <LogoLockup size="lg" />
-        <Heading className="text-center">
-          {isRegister
-            ? t("register.title", "Create your account")
-            : t("login.title", "Welcome back")}
+        <Heading className="text-center text-title-2">
+          {isRegister ? t("register.title") : t("login.title")}
         </Heading>
       </View>
 
-      <Surface variant="secondary" className="rounded-lg p-4">
-        <Animated.View
-          key={isRegister ? "register" : "login"}
-          entering={fadeIn()}
-          exiting={FadeOut}
-        >
-          {isRegister ? (
-            <RegisterForm returnTo={returnTo} onSwitch={() => setIsRegister(false)} />
-          ) : (
-            <LoginForm returnTo={returnTo} onSwitch={() => setIsRegister(true)} />
-          )}
-        </Animated.View>
-      </Surface>
+      <View className="flex-row gap-1 rounded-pill bg-muted-surface p-1">
+        <Segment
+          label={t("login.submitButton")}
+          active={!isRegister}
+          onPress={() => setIsRegister(false)}
+        />
+        <Segment
+          label={t("register.submitButton")}
+          active={isRegister}
+          onPress={() => setIsRegister(true)}
+        />
+      </View>
+
+      <FadeSwap swapKey={isRegister ? "register" : "login"}>
+        {isRegister ? (
+          <RegisterForm returnTo={returnTo} />
+        ) : (
+          <LoginForm returnTo={returnTo} />
+        )}
+      </FadeSwap>
     </View>
+  );
+}
+
+function Segment({
+  label,
+  active,
+  onPress,
+}: {
+  label: string;
+  active: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <PressableScale
+      haptic="select"
+      onPress={onPress}
+      accessibilityRole="tab"
+      accessibilityState={{ selected: active }}
+      className={cn(
+        "h-10 flex-1 items-center justify-center rounded-pill",
+        active && "bg-surface"
+      )}
+    >
+      <Text
+        weight={active ? "semibold" : "medium"}
+        className={cn("text-sm", !active && "text-muted-foreground")}
+      >
+        {label}
+      </Text>
+    </PressableScale>
   );
 }
