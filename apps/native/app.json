@@ -3,20 +3,37 @@
     "scheme": "zeyn",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
-    "web": {
-      "bundler": "metro"
-    },
-    "name": "zeyn",
+    "name": "Zeyn",
     "slug": "zeyn",
+    "icon": "./assets/images/icon.png",
+    "backgroundColor": "#F9FAFC",
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png"
+    },
     "plugins": [
       "expo-font",
+      "expo-system-ui",
       [
         "expo-audio",
         {
           "microphonePermission": false
         }
       ],
-      "expo-image"
+      "expo-image",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#F9FAFC",
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#0E0F13"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -29,10 +46,17 @@
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
-      "package": "uz.zeyn.app"
+      "package": "uz.zeyn.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "edgeToEdgeEnabled": true
     },
     "ios": {
-      "bundleIdentifier": "uz.zeyn.app"
+      "bundleIdentifier": "uz.zeyn.app",
+      "supportsTablet": true
     }
   }
 }

@@ -37,7 +37,7 @@ export function GamePoster({
     >
       <MeshSurface
         tone={toneForGame(game.type)}
-        className={cn("w-full gap-3 p-4", wide ? "min-h-40" : "min-h-44")}
+        className={cn("w-full gap-3 p-4", )}
       >
         <View className="flex-row items-start justify-between gap-2">
           <View className="size-11 items-center justify-center rounded-pill bg-white/15">

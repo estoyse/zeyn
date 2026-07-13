@@ -55,7 +55,7 @@ function StatTile({
 
   return (
     <Card className="flex-1">
-      <Card.Body className="gap-3 p-4">
+      <Card.Body className="gap-3 p-1">
         <View
           className={cn("size-9 items-center justify-center rounded-pill", tint)}
         >
