@@ -5,18 +5,13 @@ import { cn } from "@/lib/utils";
 export type FontWeight = "regular" | "medium" | "semibold" | "bold";
 
 const ibmPlexSansFamily: Record<FontWeight, string> = {
-  regular: "IBMPlexSans_400Regular",
-  medium: "IBMPlexSans_500Medium",
-  semibold: "IBMPlexSans_600SemiBold",
-  bold: "IBMPlexSans_700Bold",
+  regular: "IBMPlexSans-Regular",
+  medium: "IBMPlexSans-Medium",
+  semibold: "IBMPlexSans-SemiBold",
+  bold: "IBMPlexSans-Bold",
 };
 
-const spaceGroteskFamily: Record<FontWeight, string> = {
-  regular: "SpaceGrotesk_400Regular",
-  medium: "SpaceGrotesk_500Medium",
-  semibold: "SpaceGrotesk_600SemiBold",
-  bold: "SpaceGrotesk_700Bold",
-};
+const DISPLAY_FAMILY = "SpaceGrotesk-Bold";
 
 type TextProps = RNTextProps & {
   weight?: FontWeight;
@@ -48,21 +43,15 @@ export function Heading({ weight = "semibold", className, style, ...rest }: Head
   );
 }
 
-export function Display({ weight = "bold", className, style, ...rest }: HeadingProps) {
-  return (
-    <RNText
-      className={cn("text-foreground", className)}
-      style={[{ fontFamily: spaceGroteskFamily[weight] }, style]}
-      {...rest}
-    />
-  );
-}
+type DisplayProps = RNTextProps & {
+  className?: string;
+};
 
-export function Numeric({ weight = "semibold", className, style, ...rest }: HeadingProps) {
+export function Display({ className, style, ...rest }: DisplayProps) {
   return (
     <RNText
       className={cn("text-foreground", className)}
-      style={[{ fontFamily: spaceGroteskFamily[weight] }, style]}
+      style={[{ fontFamily: DISPLAY_FAMILY }, style]}
       {...rest}
     />
   );

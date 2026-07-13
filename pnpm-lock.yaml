@@ -93,12 +93,6 @@ importers:
       '@better-auth/expo':
         specifier: 'catalog:'
         version: 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(@cloudflare/workers-types@4.20260502.1)(better-call@1.3.2(zod@4.4.2))(jose@6.2.3)(kysely@0.28.16)(nanostores@1.3.0))(better-auth@1.5.5(@cloudflare/workers-types@4.20260502.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@4.20260502.1)(@libsql/client@0.15.15)(kysely@0.28.16))(mongodb@7.2.0(@aws-sdk/credential-providers@3.1041.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.1.9(@types/node@24.12.2)(msw@2.14.2(@types/node@24.12.2)(typescript@5.9.3))(vite@8.0.10(@types/node@24.12.2)(esbuild@0.27.7)(jiti@2.6.1)(terser@5.46.2)(tsx@4.21.0)(yaml@2.8.3))))(expo-constants@55.0.15)(expo-linking@55.0.14)(expo-network@55.0.13(expo@55.0.19)(react@19.2.0))(expo-web-browser@55.0.14(expo@55.0.19)(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0)))
-      '@expo-google-fonts/ibm-plex-sans':
-        specifier: ^0.4.1
-        version: 0.4.1
-      '@expo-google-fonts/space-grotesk':
-        specifier: ^0.4.1
-        version: 0.4.1
       '@expo/metro-runtime':
         specifier: ~55.0.10
         version: 55.0.10(@expo/dom-webview@55.0.5)(expo@55.0.19)(react-dom@19.2.0(react@19.2.0))(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)
@@ -2199,14 +2193,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@expo-google-fonts/ibm-plex-sans@0.4.1':
-    resolution: {integrity: sha512-allsuhZbvKoKDTB/U8creFVYYzhI97Nw9MgyyNjFzqISNc/sURpA7ZY37Rr+IRI567OV9BWQ/ioUCjAQrVGRbw==}
-
   '@expo-google-fonts/material-symbols@0.4.34':
     resolution: {integrity: sha512-PdwETUhvu1gHF1e8eIyEHnBJLq/dRNoTrT5yhsGUfGyRxH5pbm54dF3+QPknxwMKj0M1trN7PSelYz+yzlt3lA==}
-
-  '@expo-google-fonts/space-grotesk@0.4.1':
-    resolution: {integrity: sha512-ZVQYw4Ok/pgcSJiufP8oRZE3AVxS9xtmKEUfsurbHkHNdMc/GA1gDXP9G4Cr7KL4KqSc0haexR2TuMigotCn4Q==}
 
   '@expo/cli@55.0.27':
     resolution: {integrity: sha512-FF/qWyHikqvVd5GBDiLII2PRgToNGz5MjxHw76a7aufbe5kCRpAqAy7HRoio1PlF5g9UIYnFjs333a3fWTlgMw==}
@@ -9592,11 +9580,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.7':
     optional: true
 
-  '@expo-google-fonts/ibm-plex-sans@0.4.1': {}
-
   '@expo-google-fonts/material-symbols@0.4.34': {}
-
-  '@expo-google-fonts/space-grotesk@0.4.1': {}
 
   '@expo/cli@55.0.27(@expo/dom-webview@55.0.5)(@expo/metro-runtime@55.0.10)(expo-constants@55.0.15)(expo-font@55.0.6)(expo-router@55.0.13)(expo@55.0.19)(react-dom@19.2.0(react@19.2.0))(react-native@0.83.6(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
     dependencies:

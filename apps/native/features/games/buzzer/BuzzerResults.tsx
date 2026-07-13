@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Card } from "heroui-native";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";

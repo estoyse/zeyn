@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { roomLimits } from "@zeyn/api/game-types";
 import { Card, Label, Switch, TextField, Input } from "heroui-native";
 import { useTranslation } from "react-i18next";

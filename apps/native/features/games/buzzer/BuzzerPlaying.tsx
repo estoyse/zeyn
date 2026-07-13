@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { gameConfig } from "@zeyn/api/game-types";
 import { Card, Chip, Input, TextField } from "heroui-native";
 import { useRef, useState } from "react";

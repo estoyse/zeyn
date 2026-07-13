@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { NAME_MAX_LENGTH } from "@zeyn/api/game-types";
 import { router, type Href } from "expo-router";
 import { Input, TextField } from "heroui-native";

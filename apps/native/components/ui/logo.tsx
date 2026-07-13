@@ -44,7 +44,7 @@ type LogoProps = {
 export function Logo({ size = "md", className }: LogoProps) {
   return (
     <View className={cn("flex-row items-end", className)}>
-      <Display weight="bold" className={cn("lowercase tracking-tight", wordmarkSize[size])}>
+      <Display className={cn("lowercase tracking-tight", wordmarkSize[size])}>
         zeyn
       </Display>
       <View className={cn("mb-1 ml-0.5 rounded-full bg-buzzer", dotSize[size])} />

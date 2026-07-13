@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { canonicalizeGameId } from "@zeyn/api/game-code";
 import * as Clipboard from "expo-clipboard";
 import { router, type Href } from "expo-router";

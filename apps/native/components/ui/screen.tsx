@@ -77,19 +77,16 @@ export function Screen({
     <ScrollOffsetContext.Provider value={offset}>
       <View className={cn("flex-1 bg-background", className)} style={padding}>
         {header}
-        {scroll ? (
-          <Animated.ScrollView
-            ref={scrollRef}
-            scrollEventThrottle={16}
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-            refreshControl={refreshControl}
-          >
-            <View className={content}>{children}</View>
-          </Animated.ScrollView>
-        ) : (
+        <Animated.ScrollView
+          ref={scrollRef}
+          scrollEnabled={scroll}
+          scrollEventThrottle={16}
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          refreshControl={refreshControl}
+        >
           <View className={content}>{children}</View>
-        )}
+        </Animated.ScrollView>
       </View>
     </ScrollOffsetContext.Provider>
   );

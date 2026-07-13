@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { formatGameCode } from "@zeyn/api/game-code";
 import * as Clipboard from "expo-clipboard";
 import { useToast } from "heroui-native";

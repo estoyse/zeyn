@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { musicGameConfig } from "@zeyn/api/games";
 import { useAudioPlayer } from "expo-audio";
 import { useEffect, useRef, useState } from "react";

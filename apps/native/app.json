@@ -12,7 +12,18 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/IBMPlexSans-Regular.ttf",
+            "./assets/fonts/IBMPlexSans-Medium.ttf",
+            "./assets/fonts/IBMPlexSans-SemiBold.ttf",
+            "./assets/fonts/IBMPlexSans-Bold.ttf",
+            "./assets/fonts/SpaceGrotesk-Bold.ttf"
+          ]
+        }
+      ],
       "expo-system-ui",
       [
         "expo-audio",
@@ -40,7 +51,9 @@
       "reactCompiler": true
     },
     "android": {
-      "permissions": ["android.permission.MODIFY_AUDIO_SETTINGS"],
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.FOREGROUND_SERVICE",

@@ -27,7 +27,7 @@ export default function TabsLayout() {
           shadowOpacity: 0,
         },
         tabBarLabelStyle: {
-          fontFamily: "IBMPlexSans_500Medium",
+          fontFamily: "IBMPlexSans-Medium",
           fontSize: 11,
         },
       }}

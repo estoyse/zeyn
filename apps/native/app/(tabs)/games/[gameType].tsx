@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { type GameType } from "@zeyn/api/games";
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams, type Href } from "expo-router";

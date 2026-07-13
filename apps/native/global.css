@@ -44,10 +44,10 @@
   --radius-row: 0.875rem;
   --radius-pill: 9999px;
 
-  --font-sans: "IBMPlexSans_400Regular";
-  --font-heading: "IBMPlexSans_600SemiBold";
-  --font-display: "SpaceGrotesk_700Bold";
-  --font-numeric: "SpaceGrotesk_600SemiBold";
+  --font-sans: "IBMPlexSans-Regular";
+  --font-heading: "IBMPlexSans-SemiBold";
+  --font-display: "SpaceGrotesk-Bold";
+  --font-numeric: "SpaceGrotesk-Bold";
 
   --text-display: 2rem;
   --text-display--line-height: 2.25rem;
@@ -80,32 +80,32 @@
 }
 
 @utility font-light {
-  font-family: "IBMPlexSans_400Regular";
+  font-family: "IBMPlexSans-Regular";
   font-weight: 300;
 }
 
 @utility font-normal {
-  font-family: "IBMPlexSans_400Regular";
+  font-family: "IBMPlexSans-Regular";
   font-weight: 400;
 }
 
 @utility font-medium {
-  font-family: "IBMPlexSans_500Medium";
+  font-family: "IBMPlexSans-Medium";
   font-weight: 500;
 }
 
 @utility font-semibold {
-  font-family: "IBMPlexSans_600SemiBold";
+  font-family: "IBMPlexSans-SemiBold";
   font-weight: 600;
 }
 
 @utility font-bold {
-  font-family: "IBMPlexSans_700Bold";
+  font-family: "IBMPlexSans-Bold";
   font-weight: 700;
 }
 
 @utility font-extrabold {
-  font-family: "IBMPlexSans_700Bold";
+  font-family: "IBMPlexSans-Bold";
   font-weight: 800;
 }
 
