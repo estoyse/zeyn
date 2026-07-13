@@ -10,6 +10,7 @@
     "ios": "expo run:ios",
     "prebuild": "expo prebuild",
     "web": "expo start --web",
+    "build:local": "bash scripts/build-local.sh",
     "test": "vitest run"
   },
   "dependencies": {
