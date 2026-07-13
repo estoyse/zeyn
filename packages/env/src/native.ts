@@ -6,6 +6,8 @@ export const env = createEnv({
   client: {
     EXPO_PUBLIC_SERVER_URL: z.url().transform((v) => v.replace(/\/+$/, "")),
   },
-  runtimeEnv: process.env,
+  runtimeEnv: {
+    EXPO_PUBLIC_SERVER_URL: process.env.EXPO_PUBLIC_SERVER_URL,
+  },
   emptyStringAsUndefined: true,
 });

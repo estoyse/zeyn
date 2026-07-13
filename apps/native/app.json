@@ -52,7 +52,10 @@
     },
     "android": {
       "permissions": [
-        "android.permission.MODIFY_AUDIO_SETTINGS"
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
@@ -70,6 +73,11 @@
     "ios": {
       "bundleIdentifier": "uz.zeyn.app",
       "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c1d3d993-4a0b-4771-9580-97a90cd0b82e"
+      }
     }
   }
 }
