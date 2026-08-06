@@ -15,6 +15,7 @@ import z from "zod";
 
 import { ConfirmDelete } from "@/shared/components/ConfirmDelete";
 import { DataTable, type Column } from "@/shared/components/DataTable";
+import type { ArtistListItem } from "@/shared/lib/api-types";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { TablePager } from "@/shared/components/TablePager";
@@ -32,10 +33,6 @@ const searchSchema = z.object({
   offset: z.number().int().min(0).optional(),
 });
 
-interface ArtistRow extends ArtistSummary {
-  songCount: number;
-}
-
 export const Route = createFileRoute("/_admin/artists/")({
   validateSearch: searchSchema,
   component: ArtistsPage,
@@ -46,8 +43,8 @@ function ArtistsPage() {
   const navigate = useNavigate({ from: Route.fullPath });
 
   const [creating, setCreating] = useState(false);
-  const [editing, setEditing] = useState<ArtistRow | null>(null);
-  const [deleting, setDeleting] = useState<ArtistRow | null>(null);
+  const [editing, setEditing] = useState<ArtistListItem | null>(null);
+  const [deleting, setDeleting] = useState<ArtistListItem | null>(null);
 
   const listQuery = useQuery(
     trpc.admin.music.listArtists.queryOptions({
@@ -71,7 +68,7 @@ function ArtistsPage() {
     }
   );
 
-  const columns: Column<ArtistRow>[] = [
+  const columns: Column<ArtistListItem>[] = [
     {
       id: "artwork",
       header: "",

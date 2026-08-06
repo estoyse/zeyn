@@ -15,10 +15,8 @@ import { ConfirmDelete } from "@/shared/components/ConfirmDelete";
 import { DataTable, type Column } from "@/shared/components/DataTable";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { PageHeader } from "@/shared/components/PageHeader";
-import {
-  QuestionDialog,
-  type QuestionSummary,
-} from "@/features/content/QuestionDialog";
+import { QuestionDialog } from "@/features/content/QuestionDialog";
+import type { QuestionItem } from "@/shared/lib/api-types";
 import { SubjectDialog } from "@/features/content/SubjectDialog";
 import { trpc } from "@/shared/lib/trpc";
 import { useAdminMutation } from "@/shared/lib/useAdminMutation";
@@ -32,8 +30,8 @@ function SubjectDetailPage() {
 
   const [renaming, setRenaming] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [editing, setEditing] = useState<QuestionSummary | null>(null);
-  const [deleting, setDeleting] = useState<QuestionSummary | null>(null);
+  const [editing, setEditing] = useState<QuestionItem | null>(null);
+  const [deleting, setDeleting] = useState<QuestionItem | null>(null);
 
   const subjectQuery = useQuery(
     trpc.admin.content.getSubject.queryOptions({ id: subjectId })
@@ -56,7 +54,7 @@ function SubjectDetailPage() {
   const belowMinimum =
     subject !== undefined && questions.length < subject.minQuestions;
 
-  const columns: Column<QuestionSummary>[] = [
+  const columns: Column<QuestionItem>[] = [
     {
       id: "points",
       header: "Points",

@@ -15,6 +15,7 @@ import z from "zod";
 
 import { ConfirmDelete } from "@/shared/components/ConfirmDelete";
 import { DataTable, type Column } from "@/shared/components/DataTable";
+import type { SubjectListItem } from "@/shared/lib/api-types";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { TablePager } from "@/shared/components/TablePager";
@@ -29,12 +30,6 @@ const searchSchema = z.object({
   offset: z.number().int().min(0).optional(),
 });
 
-interface SubjectRow {
-  id: string;
-  name: string;
-  questionCount: number;
-}
-
 export const Route = createFileRoute("/_admin/subjects/")({
   validateSearch: searchSchema,
   component: SubjectsPage,
@@ -45,8 +40,8 @@ function SubjectsPage() {
   const navigate = useNavigate({ from: Route.fullPath });
 
   const [creating, setCreating] = useState(false);
-  const [editing, setEditing] = useState<SubjectRow | null>(null);
-  const [deleting, setDeleting] = useState<SubjectRow | null>(null);
+  const [editing, setEditing] = useState<SubjectListItem | null>(null);
+  const [deleting, setDeleting] = useState<SubjectListItem | null>(null);
 
   const listInput = { search: q, limit: PAGE_SIZE, offset };
   const listQuery = useQuery(
@@ -65,7 +60,7 @@ function SubjectsPage() {
     }
   );
 
-  const columns: Column<SubjectRow>[] = [
+  const columns: Column<SubjectListItem>[] = [
     {
       id: "name",
       header: "Name",

@@ -16,7 +16,8 @@ import { EmptyState } from "@/shared/components/EmptyState";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { ArtistDialog } from "@/features/content/ArtistDialog";
 import { PreviewButton } from "@/features/content/PreviewButton";
-import { SongDialog, type SongSummary } from "@/features/content/SongDialog";
+import { SongDialog } from "@/features/content/SongDialog";
+import type { SongItem } from "@/shared/lib/api-types";
 import { trpc } from "@/shared/lib/trpc";
 import { useAdminMutation } from "@/shared/lib/useAdminMutation";
 
@@ -29,8 +30,8 @@ function ArtistDetailPage() {
 
   const [editingArtist, setEditingArtist] = useState(false);
   const [creating, setCreating] = useState(false);
-  const [editing, setEditing] = useState<SongSummary | null>(null);
-  const [deleting, setDeleting] = useState<SongSummary | null>(null);
+  const [editing, setEditing] = useState<SongItem | null>(null);
+  const [deleting, setDeleting] = useState<SongItem | null>(null);
 
   const artistQuery = useQuery(
     trpc.admin.music.getArtist.queryOptions({ id: artistId })
@@ -52,7 +53,7 @@ function ArtistDetailPage() {
   const songs = artist?.songs ?? [];
   const belowMinimum = artist !== undefined && songs.length < artist.minSongs;
 
-  const columns: Column<SongSummary>[] = [
+  const columns: Column<SongItem>[] = [
     {
       id: "preview",
       header: "",

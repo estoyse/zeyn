@@ -4,10 +4,12 @@ import { user } from "@zeyn/db/schema";
 import { adminProcedure, router } from "../../index";
 import { contentRouter } from "./content";
 import { musicRouter } from "./music";
+import { usersRouter } from "./users";
 
 export const adminRouter = router({
   content: contentRouter,
   music: musicRouter,
+  users: usersRouter,
   whoami: adminProcedure.query(async ({ ctx }) => {
     const row = await ctx.db
       .select({

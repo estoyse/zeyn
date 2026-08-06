@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@zeyn/ui/components/alert-dialog";
+import type { ReactNode } from "react";
 
 interface ConfirmDeleteProps {
   open: boolean;
@@ -17,6 +18,7 @@ interface ConfirmDeleteProps {
   confirmLabel?: string;
   isPending: boolean;
   onConfirm: () => void;
+  children?: ReactNode;
 }
 
 export function ConfirmDelete({
@@ -27,6 +29,7 @@ export function ConfirmDelete({
   confirmLabel = "Delete",
   isPending,
   onConfirm,
+  children,
 }: ConfirmDeleteProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -35,6 +38,7 @@ export function ConfirmDelete({
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+        {children}
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
