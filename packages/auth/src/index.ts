@@ -4,6 +4,7 @@ import * as schema from "@zeyn/db/schema/auth";
 import { env } from "@zeyn/env/server";
 import { t, type Locale } from "@zeyn/i18n/server";
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { hashPassword, verifyPassword } from "./password";
 import { sendEmail } from "./email";
@@ -42,6 +43,20 @@ export function createAuth() {
       additionalFields: {
         username: { type: "string", required: false, input: true },
         locale: { type: "string", required: false, input: true },
+        role: {
+          type: "string",
+          required: false,
+          input: false,
+          defaultValue: "user",
+        },
+        banned: {
+          type: "boolean",
+          required: false,
+          input: false,
+          defaultValue: false,
+        },
+        banReason: { type: "string", required: false, input: false },
+        banExpires: { type: "date", required: false, input: false },
       },
     },
     databaseHooks: {
@@ -57,6 +72,34 @@ export function createAuth() {
           },
         },
       },
+      session: {
+        create: {
+          before: async (session, ctx) => {
+            if (!ctx) return;
+            const found = await ctx.context.internalAdapter.findUserById(
+              session.userId
+            );
+            const banned = (found as { banned?: boolean } | null)?.banned;
+            if (!banned) return;
+
+            const banExpires = (found as { banExpires?: Date | null } | null)
+              ?.banExpires;
+            if (banExpires && new Date(banExpires).getTime() < Date.now()) {
+              await ctx.context.internalAdapter.updateUser(session.userId, {
+                banned: false,
+                banReason: null,
+                banExpires: null,
+              });
+              return;
+            }
+
+            throw APIError.from("FORBIDDEN", {
+              message: "Your account has been suspended.",
+              code: "BANNED_USER",
+            });
+          },
+        },
+      },
     },
     trustedOrigins: [
       ...parseOrigins(env.CORS_ORIGIN),
@@ -68,6 +111,7 @@ export function createAuth() {
             "exp://192.168.*.*:*/**",
             "http://localhost:8081",
             "http://localhost:3001",
+            "http://localhost:3002",
           ]
         : []),
     ],
@@ -117,7 +161,7 @@ export function createAuth() {
     session: {
       cookieCache: {
         enabled: true,
-        maxAge: 60 * 60 * 24 * 7, // 1 week
+        maxAge: 60 * 5,
       },
     },
     secret: env.BETTER_AUTH_SECRET,

@@ -9,7 +9,7 @@ import {
   type ServerMessage,
 } from "@zeyn/api/game-types";
 import { getGameMeta } from "@zeyn/api/games";
-import type { RoomGame } from "../games/contract";
+import type { ServerRoomGame } from "../games/contract";
 import {
   createRoomGame,
   getRoomGameType,
@@ -50,7 +50,7 @@ function safeDecode(value: string): string {
  * state. It knows no game's rules — those live behind the `RoomGame` interface.
  */
 export class GameRoom extends DurableObject<Env> {
-  private game: RoomGame;
+  private game: ServerRoomGame;
   private state: BaseGameState;
   private gameType: string;
   private gameTypeResolved = false;
@@ -362,6 +362,45 @@ export class GameRoom extends DurableObject<Env> {
 
   async webSocketError(ws: WebSocket) {
     await this.webSocketClose(ws, 1011, "Error", false);
+  }
+
+  async adminClose(reason?: string): Promise<{ closedSockets: number }> {
+    const sockets = this.ctx.getWebSockets();
+    const payload = JSON.stringify({
+      type: "ERROR",
+      message: reason ?? "This room was closed by an administrator",
+      code: "ROOM_CLOSED",
+    });
+
+    for (const ws of sockets) {
+      try {
+        ws.send(payload);
+        ws.close(1000, "closed by admin");
+      } catch {
+        continue;
+      }
+    }
+
+    await this.guard(
+      () => this.ctx.storage.deleteAlarm(),
+      "clear alarm on admin close"
+    );
+    await this.guard(
+      () => this.ctx.storage.deleteAll(),
+      "clear storage on admin close"
+    );
+
+    return { closedSockets: sockets.length };
+  }
+
+  async adminSnapshot(): Promise<{
+    connectedSockets: number;
+    status: string | null;
+  }> {
+    return {
+      connectedSockets: this.ctx.getWebSockets().length,
+      status: this.state?.status ?? null,
+    };
   }
 
   private broadcast() {

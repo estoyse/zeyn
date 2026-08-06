@@ -1,4 +1,6 @@
 import { initTRPC, TRPCError } from "@trpc/server";
+import { eq } from "@zeyn/db";
+import { user } from "@zeyn/db/schema";
 
 import type { Context } from "./context";
 
@@ -20,6 +22,30 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     ctx: {
       ...ctx,
       session: ctx.session,
+    },
+  });
+});
+
+export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  const actorId = ctx.session.user.id;
+  const row = await ctx.db
+    .select({ role: user.role, banned: user.banned })
+    .from(user)
+    .where(eq(user.id, actorId))
+    .limit(1)
+    .get();
+
+  if (!row || row.banned || row.role !== "admin") {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Admin access required",
+    });
+  }
+
+  return next({
+    ctx: {
+      ...ctx,
+      adminId: actorId,
     },
   });
 });

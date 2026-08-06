@@ -16,6 +16,12 @@ export const user = sqliteTable(
     showHistory: integer("show_history", { mode: "boolean" }).default(true).notNull(),
     showHostedGames: integer("show_hosted_games", { mode: "boolean" }).default(true).notNull(),
     locale: text("locale").default("uz").notNull(),
+    role: text("role", { enum: ["user", "admin"] })
+      .default("user")
+      .notNull(),
+    banned: integer("banned", { mode: "boolean" }).default(false).notNull(),
+    banReason: text("ban_reason"),
+    banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
@@ -24,6 +30,7 @@ export const user = sqliteTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
+  (table) => [index("user_role_idx").on(table.role)],
 );
 
 export const session = sqliteTable(

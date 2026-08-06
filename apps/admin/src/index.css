@@ -1,0 +1,5 @@
+@import "@zeyn/ui/globals.css";
+
+body {
+  @apply bg-background text-foreground;
+}

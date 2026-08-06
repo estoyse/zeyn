@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure, router } from "../index";
+import { adminRouter } from "./admin";
 import { gameRouter } from "./game";
 import { buzzerRouter } from "./buzzer";
 import { musicRouter } from "./music";
@@ -8,6 +9,7 @@ export const appRouter = router({
   healthCheck: publicProcedure.query(() => {
     return "OK";
   }),
+  admin: adminRouter,
   game: gameRouter,
   buzzer: buzzerRouter,
   music: musicRouter,
