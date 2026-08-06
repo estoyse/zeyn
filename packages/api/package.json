@@ -12,7 +12,11 @@
       "default": "./src/*.ts"
     }
   },
-  "scripts": {},
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "@zeyn/auth": "workspace:*",
     "@zeyn/db": "workspace:*",
@@ -20,11 +24,14 @@
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "dotenv": "catalog:",
+    "drizzle-orm": "^0.45.1",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@zeyn/config": "workspace:*",
+    "@types/node": "^22.13.14",
     "hono": "catalog:",
-    "typescript": "^6"
+    "typescript": "^6",
+    "vitest": "^4.1.9"
   }
 }

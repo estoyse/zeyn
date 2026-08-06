@@ -2,8 +2,10 @@ import { eq } from "@zeyn/db";
 import { user } from "@zeyn/db/schema";
 
 import { adminProcedure, router } from "../../index";
+import { contentRouter } from "./content";
 
 export const adminRouter = router({
+  content: contentRouter,
   whoami: adminProcedure.query(async ({ ctx }) => {
     const row = await ctx.db
       .select({
