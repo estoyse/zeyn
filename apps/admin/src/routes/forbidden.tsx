@@ -4,7 +4,7 @@ import { Button } from "@zeyn/ui/components/button";
 import { ShieldAlert } from "lucide-react";
 
 import { authClient } from "@/shared/lib/auth-client";
-import { sessionQueryKey, sessionQueryOptions } from "@/shared/lib/session";
+import { refreshSession, sessionQueryOptions } from "@/shared/lib/session";
 
 export const Route = createFileRoute("/forbidden")({
   component: ForbiddenPage,
@@ -17,7 +17,7 @@ function ForbiddenPage() {
 
   const signOut = async () => {
     await authClient.signOut();
-    await queryClient.invalidateQueries({ queryKey: sessionQueryKey });
+    await refreshSession(queryClient);
     navigate({ to: "/login" });
   };
 

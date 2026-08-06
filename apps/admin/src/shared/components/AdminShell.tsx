@@ -14,7 +14,7 @@ import { AdminNav } from "@/shared/components/AdminNav";
 import { ModeToggle } from "@/shared/components/ModeToggle";
 import { authClient } from "@/shared/lib/auth-client";
 import { queryClient } from "@/shared/lib/trpc";
-import { sessionQueryKey } from "@/shared/lib/session";
+import { refreshSession } from "@/shared/lib/session";
 
 interface AdminShellProps {
   user: { name: string; email: string };
@@ -26,7 +26,7 @@ export function AdminShell({ user, children }: AdminShellProps) {
 
   const signOut = async () => {
     await authClient.signOut();
-    await queryClient.invalidateQueries({ queryKey: sessionQueryKey });
+    await refreshSession(queryClient);
     navigate({ to: "/login" });
   };
 
