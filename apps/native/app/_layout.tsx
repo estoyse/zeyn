@@ -86,6 +86,25 @@ function StackLayout() {
         }}
       />
       <Stack.Screen name="game/create/[gameType]" options={{ presentation: "modal" }} />
+      <Stack.Screen
+        name="local/host"
+        options={{
+          presentation: "fullScreenModal",
+          animation: "slide_from_bottom",
+          animationDuration: 420,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="local/join"
+        options={{
+          presentation: "fullScreenModal",
+          animation: "slide_from_bottom",
+          animationDuration: 420,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen name="local/scan" options={{ presentation: "modal" }} />
       <Stack.Screen name="u/[username]" />
       <Stack.Screen name="settings/index" />
       <Stack.Screen name="settings/profile" />

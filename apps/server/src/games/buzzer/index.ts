@@ -4,7 +4,8 @@ import type {
   GameState,
   PublicGameState,
 } from "@zeyn/api/game-types";
-import type { HydrateResult, JoinParams, RoomGame } from "../contract";
+import type { HydrateResult, ServerRoomGame } from "../contract";
+import type { JoinParams } from "@zeyn/game-engine";
 import {
   buzz,
   createInitialState,
@@ -24,7 +25,7 @@ import { StateSerializer } from "./serializer";
  * casts reflect that the DO holds this instance's state opaquely as
  * `BaseGameState` but it is always the buzzer's concrete state.
  */
-class BuzzerGame implements RoomGame {
+class BuzzerGame implements ServerRoomGame {
   readonly type = "buzzer";
   private readonly repo: GameRepository;
   private readonly serializer = new StateSerializer();
@@ -89,6 +90,6 @@ class BuzzerGame implements RoomGame {
   }
 }
 
-export function createBuzzerGame(db: D1Database): RoomGame {
+export function createBuzzerGame(db: D1Database): ServerRoomGame {
   return new BuzzerGame(db);
 }

@@ -1,8 +1,9 @@
 import { getGameMeta } from "@zeyn/api/games";
 import { createDb, eq, schema } from "@zeyn/db";
-import type { RoomGame, RoomGameFactory } from "./contract";
+import type { RoomGameFactory, ServerRoomGame } from "./contract";
 import { createBuzzerGame } from "./buzzer";
 import { createMusicGame } from "./music";
+import { createLivebuzzerGame } from "./livebuzzer";
 
 // Maps a game type to the factory that builds its per-room engine instance. The
 // GameRoom durable object reads the room's `gameType` and resolves the engine
@@ -11,6 +12,7 @@ import { createMusicGame } from "./music";
 const factories: Record<string, RoomGameFactory> = {
   buzzer: createBuzzerGame,
   music: createMusicGame,
+  livebuzzer: createLivebuzzerGame,
 };
 
 export const DEFAULT_GAME_TYPE = "buzzer";
@@ -19,7 +21,7 @@ export const DEFAULT_GAME_TYPE = "buzzer";
  * Build the engine for a room's game type. Falls back to the default type for an
  * unknown/empty value (e.g. legacy rows written before `gameType` existed).
  */
-export function createRoomGame(gameType: string, db: D1Database): RoomGame {
+export function createRoomGame(gameType: string, db: D1Database): ServerRoomGame {
   const factory = factories[gameType] ?? factories[DEFAULT_GAME_TYPE]!;
   return factory(db);
 }

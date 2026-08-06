@@ -5,8 +5,14 @@ const CODE_RE = /^[0-9A-HJKMNP-TV-Z]{8}$/;
 const UUID_RE =
   /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-export function generateGameCode(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(GAME_CODE_LENGTH));
+export type RandomBytes = (length: number) => Uint8Array;
+
+function webRandomBytes(length: number): Uint8Array {
+  return crypto.getRandomValues(new Uint8Array(length));
+}
+
+export function generateGameCode(randomBytes: RandomBytes = webRandomBytes): string {
+  const bytes = randomBytes(GAME_CODE_LENGTH);
   let out = "";
   for (const byte of bytes) out += GAME_CODE_ALPHABET[byte % 32];
   return out;

@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { canonicalizeGameId } from "@zeyn/api/game-code";
+import { parseLocalCode, parseLocalGuestUrl } from "@zeyn/api/local-code";
 import * as Clipboard from "expo-clipboard";
 import { router, type Href } from "expo-router";
 import { Input, TextField } from "heroui-native";
@@ -9,6 +10,7 @@ import { View } from "react-native";
 import { withUniwind } from "uniwind";
 
 import { PressableScale, Text } from "@/components/ui";
+import { localRoomCode } from "@/features/local/local-room";
 import { haptic } from "@/lib/haptics";
 
 const StyledIonicons = withUniwind(Ionicons);
@@ -20,6 +22,13 @@ export function JoinBar() {
   const join = (value: string) => {
     const trimmed = value.trim();
     if (!trimmed) return;
+
+    const local = parseLocalCode(trimmed) ?? parseLocalGuestUrl(trimmed);
+    if (local) {
+      router.push(`/local/join?c=${localRoomCode(local)}` as Href);
+      return;
+    }
+
     router.push(`/game/${canonicalizeGameId(trimmed)}` as Href);
   };
 
@@ -47,6 +56,15 @@ export function JoinBar() {
           />
         </TextField>
       </View>
+
+      <PressableScale
+        onPress={() => router.push("/local/scan" as Href)}
+        accessibilityRole="button"
+        accessibilityLabel={t("joinById.scan")}
+        className="size-12 items-center justify-center rounded-pill bg-muted-surface"
+      >
+        <StyledIonicons name="qr-code-outline" size={17} className="text-foreground" />
+      </PressableScale>
 
       <PressableScale
         onPress={pasteCode}

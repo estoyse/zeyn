@@ -74,7 +74,8 @@
     "attemptsLeft_other": "{{count}} attempts left",
     "buzzedOut": "You are out for this question",
     "subjectProgress": "Subject {{current}} of {{total}}",
-    "questionProgress": "Question {{current}} of {{total}}"
+    "questionProgress": "Question {{current}} of {{total}}",
+    "idleListen": "Listen for the question…"
   },
   "loading": {
     "room": "Loading room...",
@@ -181,5 +182,55 @@
   },
   "countdown": {
     "getReady": "Get ready"
+  },
+  "local": {
+    "host": {
+      "roomName": "Local room",
+      "defaultName": "Host",
+      "starting": "Starting the local room…",
+      "roomCode": "Room code",
+      "tapToCopy": "Tap to copy",
+      "copyCode": "Copy room code",
+      "codeCopied": "Room code copied",
+      "scanHint": "Guests scan this with their phone camera and play in the browser — no app needed.",
+      "codeHint": "No camera? Type this code into the Zeyn app.",
+      "ipLabel": "On this network: {{ip}}",
+      "keepOpen": "Keep this screen open — closing the app ends the game."
+    },
+    "join": {
+      "title": "Local game",
+      "subtitle": "You need to be on the same Wi-Fi as the host.",
+      "codeLabel": "Room code",
+      "namePrompt": "What should we call you?",
+      "namePlaceholder": "Your name",
+      "join": "Join game"
+    },
+    "scan": {
+      "permissionTitle": "Camera access needed",
+      "permissionDescription": "Zeyn needs the camera to scan the host's QR code. You can also type the room code by hand.",
+      "grant": "Allow camera",
+      "enterCode": "Type the code instead",
+      "hint": "Point your camera at the QR code on the host's screen.",
+      "invalid": "That QR code isn't a Zeyn local game."
+    },
+    "errors": {
+      "title": "Can't reach the game",
+      "back": "Back",
+      "retry": "Try again",
+      "changeName": "Change name",
+      "invalidCode": "That room code isn't valid. Check it and try again.",
+      "wrongCode": "Wrong room code — the host gets a new code every time they open a room.",
+      "throttled": "Too many failed attempts. Wait 30 seconds, then try again.",
+      "handshake": "The host didn't accept the connection.",
+      "roomFull": "That room is full.",
+      "finished": "That game has already finished.",
+      "started": "That game has already started.",
+      "timeout": "Couldn't reach the host.",
+      "lost": "Lost the connection to the host.",
+      "sameWifiHint": "Make sure you're on the same Wi-Fi network as the host.",
+      "apIsolationHint": "Some Wi-Fi networks (offices, cafés, guest networks) block phones from talking to each other. Ask the host to turn on their phone's hotspot and have everyone join that.",
+      "hostFailed": "Couldn't start the local room.",
+      "hostWifiHint": "Check that Wi-Fi is on, or turn on your phone's hotspot and have everyone join it."
+    }
   }
 }

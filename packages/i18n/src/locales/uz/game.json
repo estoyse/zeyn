@@ -74,7 +74,8 @@
     "attemptsLeft_other": "{{count}} urinish qoldi",
     "buzzedOut": "Bu savol uchun imkoningiz tugadi",
     "subjectProgress": "{{total}} mavzudan {{current}}-si",
-    "questionProgress": "{{total}} savoldan {{current}}-si"
+    "questionProgress": "{{total}} savoldan {{current}}-si",
+    "idleListen": "Savolni tinglang…"
   },
   "loading": {
     "room": "Xona yuklanmoqda...",
@@ -181,5 +182,55 @@
   },
   "countdown": {
     "getReady": "Tayyor bo‘ling"
+  },
+  "local": {
+    "host": {
+      "roomName": "Mahalliy xona",
+      "defaultName": "Boshlovchi",
+      "starting": "Mahalliy xona ishga tushirilmoqda…",
+      "roomCode": "Xona kodi",
+      "tapToCopy": "Nusxalash uchun bosing",
+      "copyCode": "Xona kodidan nusxa olish",
+      "codeCopied": "Xona kodi nusxalandi",
+      "scanHint": "Mehmonlar buni telefon kamerasi bilan skanerlab, brauzerda o‘ynaydi — ilova kerak emas.",
+      "codeHint": "Kamera yo‘qmi? Zeyn ilovasiga shu kodni kiriting.",
+      "ipLabel": "Shu tarmoqda: {{ip}}",
+      "keepOpen": "Bu ekranni yopmang — ilovadan chiqsangiz, o‘yin tugaydi."
+    },
+    "join": {
+      "title": "Mahalliy o‘yin",
+      "subtitle": "Boshlovchi bilan bir xil Wi-Fi tarmog‘ida bo‘lishingiz kerak.",
+      "codeLabel": "Xona kodi",
+      "namePrompt": "Sizni qanday chaqiraylik?",
+      "namePlaceholder": "Ismingiz",
+      "join": "O‘yinga qo‘shilish"
+    },
+    "scan": {
+      "permissionTitle": "Kameraga ruxsat kerak",
+      "permissionDescription": "Boshlovchining QR kodini skanerlash uchun Zeynga kamera kerak. Kodni qo‘lda ham kiritsangiz bo‘ladi.",
+      "grant": "Kameraga ruxsat berish",
+      "enterCode": "Kodni qo‘lda kiritish",
+      "hint": "Kamerani boshlovchi ekranidagi QR kodga qarating.",
+      "invalid": "Bu QR kod Zeyn mahalliy o‘yiniga tegishli emas."
+    },
+    "errors": {
+      "title": "O‘yinga ulanib bo‘lmadi",
+      "back": "Orqaga",
+      "retry": "Qayta urinish",
+      "changeName": "Ismni o‘zgartirish",
+      "invalidCode": "Bu xona kodi noto‘g‘ri. Tekshirib, qayta urinib ko‘ring.",
+      "wrongCode": "Xona kodi noto‘g‘ri — boshlovchi xona ochganda kod har safar yangilanadi.",
+      "throttled": "Juda ko‘p muvaffaqiyatsiz urinish. 30 soniya kutib, qayta urinib ko‘ring.",
+      "handshake": "Boshlovchi ulanishni qabul qilmadi.",
+      "roomFull": "Xona to‘lgan.",
+      "finished": "Bu o‘yin allaqachon tugagan.",
+      "started": "Bu o‘yin allaqachon boshlangan.",
+      "timeout": "Boshlovchiga ulanib bo‘lmadi.",
+      "lost": "Boshlovchi bilan aloqa uzildi.",
+      "sameWifiHint": "Boshlovchi bilan bir xil Wi-Fi tarmog‘ida ekaningizni tekshiring.",
+      "apIsolationHint": "Ba’zi Wi-Fi tarmoqlari (ofis, kafe, mehmon tarmoqlari) qurilmalarning bir-biri bilan bog‘lanishiga yo‘l qo‘ymaydi. Boshlovchidan telefonida hotspot yoqishini so‘rang va hamma o‘shanga ulansin.",
+      "hostFailed": "Mahalliy xonani ishga tushirib bo‘lmadi.",
+      "hostWifiHint": "Wi-Fi yoqilganini tekshiring yoki telefoningizda hotspot yoqib, hammani unga ulang."
+    }
   }
 }

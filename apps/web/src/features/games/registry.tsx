@@ -1,5 +1,5 @@
-import { Zap, Music2 } from "lucide-react";
-import { buzzerMeta, musicMeta } from "@zeyn/api/games";
+import { Zap, Music2, Mic } from "lucide-react";
+import { buzzerMeta, musicMeta, livebuzzerMeta } from "@zeyn/api/games";
 import type { ClientGameModule } from "./types";
 import { BuzzerCreateForm } from "./buzzer/BuzzerCreateForm";
 import { BuzzerPlaying } from "./buzzer/BuzzerPlaying";
@@ -7,6 +7,9 @@ import { BuzzerResults } from "./buzzer/BuzzerResults";
 import { MusicCreateForm } from "./music/MusicCreateForm";
 import { MusicPlaying } from "./music/MusicPlaying";
 import { MusicResults } from "./music/MusicResults";
+import { LivebuzzerCreateForm } from "./livebuzzer/LivebuzzerCreateForm";
+import { LivebuzzerPlaying } from "./livebuzzer/LivebuzzerPlaying";
+import { LivebuzzerResults } from "./livebuzzer/LivebuzzerResults";
 
 const buzzer: ClientGameModule = {
   type: "buzzer",
@@ -26,9 +29,19 @@ const music: ClientGameModule = {
   Results: MusicResults,
 };
 
+const livebuzzer: ClientGameModule = {
+  type: "livebuzzer",
+  meta: livebuzzerMeta,
+  Icon: Mic,
+  Create: LivebuzzerCreateForm,
+  Playing: LivebuzzerPlaying,
+  Results: LivebuzzerResults,
+};
+
 export const clientGames: Record<string, ClientGameModule> = {
   buzzer,
   music,
+  livebuzzer,
 };
 
 export function getClientGame(type: string): ClientGameModule | undefined {
