@@ -11,6 +11,13 @@ import { PageHeader } from "@/shared/components/PageHeader";
 import { trpc } from "@/shared/lib/trpc";
 import { useAdminMutation } from "@/shared/lib/useAdminMutation";
 
+function isRateLimited(error: unknown): boolean {
+  return (
+    (error as { data?: { code?: string } | null } | null)?.data?.code ===
+    "TOO_MANY_REQUESTS"
+  );
+}
+
 export const Route = createFileRoute("/_admin/import/music")({
   component: ImportMusicPage,
 });
@@ -22,13 +29,17 @@ function ImportMusicPage() {
   const [importing, setImporting] = useState<string | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebounced(term.trim()), 300);
+    const timer = setTimeout(() => setDebounced(term.trim()), 700);
     return () => clearTimeout(timer);
   }, [term]);
 
   const searchQuery = useQuery({
     ...trpc.admin.import.searchItunes.queryOptions({ term: debounced }),
     enabled: debounced.length >= 2,
+    retry: false,
+    staleTime: 60 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const importMutation = useAdminMutation(
@@ -71,6 +82,19 @@ function ImportMusicPage() {
         />
       ) : searchQuery.isLoading ? (
         <p className='text-sm text-muted-foreground'>Searching…</p>
+      ) : searchQuery.isError ? (
+        <EmptyState
+          title={isRateLimited(searchQuery.error) ? "Rate limited by iTunes" : "Search failed"}
+          description={
+            isRateLimited(searchQuery.error)
+              ? "iTunes allows only a handful of searches per minute and the limit is shared across everything running on this Worker. Wait about a minute, then try again — repeating a search you already ran is free, because results are cached for an hour."
+              : searchQuery.error.message
+          }
+        >
+          <Button variant='outline' onClick={() => searchQuery.refetch()}>
+            Try again
+          </Button>
+        </EmptyState>
       ) : !result || result.artists.length === 0 ? (
         <EmptyState title='No results' description='Try a different spelling.' />
       ) : (

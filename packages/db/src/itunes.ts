@@ -23,17 +23,56 @@ export interface ITunesSongSeed {
 
 export const ITUNES_SEARCH_URL = "https://itunes.apple.com/search";
 
+export const ITUNES_CACHE_TTL_SECONDS = 3600;
+const RETRY_DELAYS_MS = [600, 1800];
+
+export class ItunesRateLimitError extends Error {
+  readonly status = 429;
+  constructor(attempts: number) {
+    super(
+      `iTunes is rate limiting this request (429) after ${attempts} attempt(s)`
+    );
+    this.name = "ItunesRateLimitError";
+  }
+}
+
+export function itunesSearchUrl(term: string, limit: number): string {
+  return `${ITUNES_SEARCH_URL}?term=${encodeURIComponent(
+    term
+  )}&entity=song&limit=${limit}`;
+}
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export async function searchItunesTracks(
   term: string,
   limit = 60
 ): Promise<ITunesTrack[]> {
-  const url = `${ITUNES_SEARCH_URL}?term=${encodeURIComponent(
-    term
-  )}&entity=song&limit=${limit}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`iTunes responded ${res.status}`);
-  const data = (await res.json()) as { results?: ITunesTrack[] };
-  return data.results ?? [];
+  const url = itunesSearchUrl(term, limit);
+  const init = {
+    cf: { cacheEverything: true, cacheTtl: ITUNES_CACHE_TTL_SECONDS },
+  } as RequestInit;
+
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, init);
+
+    if (res.ok) {
+      const data = (await res.json()) as { results?: ITunesTrack[] };
+      return data.results ?? [];
+    }
+
+    const delay = RETRY_DELAYS_MS[attempt];
+    if (res.status === 429 && delay !== undefined) {
+      await sleep(delay);
+      continue;
+    }
+
+    if (res.status === 429) {
+      throw new ItunesRateLimitError(attempt + 1);
+    }
+
+    throw new Error(`iTunes responded ${res.status}`);
+  }
 }
 
 export function usableTracks(tracks: ITunesTrack[]): ITunesTrack[] {
