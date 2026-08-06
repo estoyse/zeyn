@@ -14,7 +14,9 @@ import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as AdminIndexRouteImport } from './routes/_admin.index'
 import { Route as AdminSubjectsIndexRouteImport } from './routes/_admin.subjects.index'
+import { Route as AdminArtistsIndexRouteImport } from './routes/_admin.artists.index'
 import { Route as AdminSubjectsSubjectIdRouteImport } from './routes/_admin.subjects.$subjectId'
+import { Route as AdminArtistsArtistIdRouteImport } from './routes/_admin.artists.$artistId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -40,9 +42,19 @@ const AdminSubjectsIndexRoute = AdminSubjectsIndexRouteImport.update({
   path: '/subjects/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminArtistsIndexRoute = AdminArtistsIndexRouteImport.update({
+  id: '/artists/',
+  path: '/artists/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSubjectsSubjectIdRoute = AdminSubjectsSubjectIdRouteImport.update({
   id: '/subjects/$subjectId',
   path: '/subjects/$subjectId',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminArtistsArtistIdRoute = AdminArtistsArtistIdRouteImport.update({
+  id: '/artists/$artistId',
+  path: '/artists/$artistId',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -50,14 +62,18 @@ export interface FileRoutesByFullPath {
   '/': typeof AdminIndexRoute
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
+  '/artists/$artistId': typeof AdminArtistsArtistIdRoute
   '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
+  '/artists/': typeof AdminArtistsIndexRoute
   '/subjects/': typeof AdminSubjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
   '/': typeof AdminIndexRoute
+  '/artists/$artistId': typeof AdminArtistsArtistIdRoute
   '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
+  '/artists': typeof AdminArtistsIndexRoute
   '/subjects': typeof AdminSubjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -66,7 +82,9 @@ export interface FileRoutesById {
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
   '/_admin/': typeof AdminIndexRoute
+  '/_admin/artists/$artistId': typeof AdminArtistsArtistIdRoute
   '/_admin/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
+  '/_admin/artists/': typeof AdminArtistsIndexRoute
   '/_admin/subjects/': typeof AdminSubjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -75,17 +93,28 @@ export interface FileRouteTypes {
     | '/'
     | '/forbidden'
     | '/login'
+    | '/artists/$artistId'
     | '/subjects/$subjectId'
+    | '/artists/'
     | '/subjects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/forbidden' | '/login' | '/' | '/subjects/$subjectId' | '/subjects'
+  to:
+    | '/forbidden'
+    | '/login'
+    | '/'
+    | '/artists/$artistId'
+    | '/subjects/$subjectId'
+    | '/artists'
+    | '/subjects'
   id:
     | '__root__'
     | '/_admin'
     | '/forbidden'
     | '/login'
     | '/_admin/'
+    | '/_admin/artists/$artistId'
     | '/_admin/subjects/$subjectId'
+    | '/_admin/artists/'
     | '/_admin/subjects/'
   fileRoutesById: FileRoutesById
 }
@@ -132,6 +161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSubjectsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/artists/': {
+      id: '/_admin/artists/'
+      path: '/artists'
+      fullPath: '/artists/'
+      preLoaderRoute: typeof AdminArtistsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/subjects/$subjectId': {
       id: '/_admin/subjects/$subjectId'
       path: '/subjects/$subjectId'
@@ -139,18 +175,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSubjectsSubjectIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/artists/$artistId': {
+      id: '/_admin/artists/$artistId'
+      path: '/artists/$artistId'
+      fullPath: '/artists/$artistId'
+      preLoaderRoute: typeof AdminArtistsArtistIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminArtistsArtistIdRoute: typeof AdminArtistsArtistIdRoute
   AdminSubjectsSubjectIdRoute: typeof AdminSubjectsSubjectIdRoute
+  AdminArtistsIndexRoute: typeof AdminArtistsIndexRoute
   AdminSubjectsIndexRoute: typeof AdminSubjectsIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminArtistsArtistIdRoute: AdminArtistsArtistIdRoute,
   AdminSubjectsSubjectIdRoute: AdminSubjectsSubjectIdRoute,
+  AdminArtistsIndexRoute: AdminArtistsIndexRoute,
   AdminSubjectsIndexRoute: AdminSubjectsIndexRoute,
 }
 
