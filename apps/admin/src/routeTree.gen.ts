@@ -13,11 +13,14 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as AdminIndexRouteImport } from './routes/_admin.index'
+import { Route as AdminRoomsRouteImport } from './routes/_admin.rooms'
 import { Route as AdminUsersIndexRouteImport } from './routes/_admin.users.index'
 import { Route as AdminSubjectsIndexRouteImport } from './routes/_admin.subjects.index'
+import { Route as AdminHistoryIndexRouteImport } from './routes/_admin.history.index'
 import { Route as AdminArtistsIndexRouteImport } from './routes/_admin.artists.index'
 import { Route as AdminUsersUserIdRouteImport } from './routes/_admin.users.$userId'
 import { Route as AdminSubjectsSubjectIdRouteImport } from './routes/_admin.subjects.$subjectId'
+import { Route as AdminHistoryHistoryIdRouteImport } from './routes/_admin.history.$historyId'
 import { Route as AdminArtistsArtistIdRouteImport } from './routes/_admin.artists.$artistId'
 
 const LoginRoute = LoginRouteImport.update({
@@ -39,6 +42,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminRoomsRoute = AdminRoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -47,6 +55,11 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
 const AdminSubjectsIndexRoute = AdminSubjectsIndexRouteImport.update({
   id: '/subjects/',
   path: '/subjects/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHistoryIndexRoute = AdminHistoryIndexRouteImport.update({
+  id: '/history/',
+  path: '/history/',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminArtistsIndexRoute = AdminArtistsIndexRouteImport.update({
@@ -64,6 +77,11 @@ const AdminSubjectsSubjectIdRoute = AdminSubjectsSubjectIdRouteImport.update({
   path: '/subjects/$subjectId',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHistoryHistoryIdRoute = AdminHistoryHistoryIdRouteImport.update({
+  id: '/history/$historyId',
+  path: '/history/$historyId',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminArtistsArtistIdRoute = AdminArtistsArtistIdRouteImport.update({
   id: '/artists/$artistId',
   path: '/artists/$artistId',
@@ -74,21 +92,27 @@ export interface FileRoutesByFullPath {
   '/': typeof AdminIndexRoute
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
+  '/rooms': typeof AdminRoomsRoute
   '/artists/$artistId': typeof AdminArtistsArtistIdRoute
+  '/history/$historyId': typeof AdminHistoryHistoryIdRoute
   '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
   '/users/$userId': typeof AdminUsersUserIdRoute
   '/artists/': typeof AdminArtistsIndexRoute
+  '/history/': typeof AdminHistoryIndexRoute
   '/subjects/': typeof AdminSubjectsIndexRoute
   '/users/': typeof AdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
+  '/rooms': typeof AdminRoomsRoute
   '/': typeof AdminIndexRoute
   '/artists/$artistId': typeof AdminArtistsArtistIdRoute
+  '/history/$historyId': typeof AdminHistoryHistoryIdRoute
   '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
   '/users/$userId': typeof AdminUsersUserIdRoute
   '/artists': typeof AdminArtistsIndexRoute
+  '/history': typeof AdminHistoryIndexRoute
   '/subjects': typeof AdminSubjectsIndexRoute
   '/users': typeof AdminUsersIndexRoute
 }
@@ -97,11 +121,14 @@ export interface FileRoutesById {
   '/_admin': typeof AdminRouteWithChildren
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
+  '/_admin/rooms': typeof AdminRoomsRoute
   '/_admin/': typeof AdminIndexRoute
   '/_admin/artists/$artistId': typeof AdminArtistsArtistIdRoute
+  '/_admin/history/$historyId': typeof AdminHistoryHistoryIdRoute
   '/_admin/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
   '/_admin/users/$userId': typeof AdminUsersUserIdRoute
   '/_admin/artists/': typeof AdminArtistsIndexRoute
+  '/_admin/history/': typeof AdminHistoryIndexRoute
   '/_admin/subjects/': typeof AdminSubjectsIndexRoute
   '/_admin/users/': typeof AdminUsersIndexRoute
 }
@@ -111,21 +138,27 @@ export interface FileRouteTypes {
     | '/'
     | '/forbidden'
     | '/login'
+    | '/rooms'
     | '/artists/$artistId'
+    | '/history/$historyId'
     | '/subjects/$subjectId'
     | '/users/$userId'
     | '/artists/'
+    | '/history/'
     | '/subjects/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forbidden'
     | '/login'
+    | '/rooms'
     | '/'
     | '/artists/$artistId'
+    | '/history/$historyId'
     | '/subjects/$subjectId'
     | '/users/$userId'
     | '/artists'
+    | '/history'
     | '/subjects'
     | '/users'
   id:
@@ -133,11 +166,14 @@ export interface FileRouteTypes {
     | '/_admin'
     | '/forbidden'
     | '/login'
+    | '/_admin/rooms'
     | '/_admin/'
     | '/_admin/artists/$artistId'
+    | '/_admin/history/$historyId'
     | '/_admin/subjects/$subjectId'
     | '/_admin/users/$userId'
     | '/_admin/artists/'
+    | '/_admin/history/'
     | '/_admin/subjects/'
     | '/_admin/users/'
   fileRoutesById: FileRoutesById
@@ -178,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/rooms': {
+      id: '/_admin/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof AdminRoomsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/users/': {
       id: '/_admin/users/'
       path: '/users'
@@ -190,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/subjects'
       fullPath: '/subjects/'
       preLoaderRoute: typeof AdminSubjectsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/history/': {
+      id: '/_admin/history/'
+      path: '/history'
+      fullPath: '/history/'
+      preLoaderRoute: typeof AdminHistoryIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/_admin/artists/': {
@@ -213,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSubjectsSubjectIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/history/$historyId': {
+      id: '/_admin/history/$historyId'
+      path: '/history/$historyId'
+      fullPath: '/history/$historyId'
+      preLoaderRoute: typeof AdminHistoryHistoryIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/artists/$artistId': {
       id: '/_admin/artists/$artistId'
       path: '/artists/$artistId'
@@ -224,21 +281,27 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminRoomsRoute: typeof AdminRoomsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminArtistsArtistIdRoute: typeof AdminArtistsArtistIdRoute
+  AdminHistoryHistoryIdRoute: typeof AdminHistoryHistoryIdRoute
   AdminSubjectsSubjectIdRoute: typeof AdminSubjectsSubjectIdRoute
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
   AdminArtistsIndexRoute: typeof AdminArtistsIndexRoute
+  AdminHistoryIndexRoute: typeof AdminHistoryIndexRoute
   AdminSubjectsIndexRoute: typeof AdminSubjectsIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminRoomsRoute: AdminRoomsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminArtistsArtistIdRoute: AdminArtistsArtistIdRoute,
+  AdminHistoryHistoryIdRoute: AdminHistoryHistoryIdRoute,
   AdminSubjectsSubjectIdRoute: AdminSubjectsSubjectIdRoute,
   AdminUsersUserIdRoute: AdminUsersUserIdRoute,
   AdminArtistsIndexRoute: AdminArtistsIndexRoute,
+  AdminHistoryIndexRoute: AdminHistoryIndexRoute,
   AdminSubjectsIndexRoute: AdminSubjectsIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
