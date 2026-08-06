@@ -1,5 +1,6 @@
 import { count, eq, inArray } from "@zeyn/db";
 import {
+  ItunesRateLimitError,
   searchItunesTracks,
   toArtistAndSongs,
   usableTracks,
@@ -10,6 +11,20 @@ import z from "zod";
 
 import { adminProcedure, router } from "../../index";
 import { chunk, recordAudit, rowsPerStatement } from "./_shared";
+
+function itunesError(error: unknown): TRPCError {
+  if (error instanceof ItunesRateLimitError) {
+    return new TRPCError({
+      code: "TOO_MANY_REQUESTS",
+      message:
+        "iTunes is rate limiting searches right now. Wait a moment and try again; repeating the same search is free because results are cached.",
+    });
+  }
+  return new TRPCError({
+    code: "BAD_GATEWAY",
+    message: `iTunes search failed: ${(error as Error).message}`,
+  });
+}
 
 const QUESTION_COLUMNS = 5;
 const SONG_COLUMNS = 5;
@@ -123,10 +138,7 @@ export const importQuestionsRouter = router({
       try {
         tracks = await searchItunesTracks(input.term, input.limit);
       } catch (error) {
-        throw new TRPCError({
-          code: "BAD_GATEWAY",
-          message: `iTunes search failed: ${(error as Error).message}`,
-        });
+        throw itunesError(error);
       }
 
       const usable = usableTracks(tracks);
@@ -200,10 +212,7 @@ export const importQuestionsRouter = router({
       try {
         tracks = await searchItunesTracks(input.term);
       } catch (error) {
-        throw new TRPCError({
-          code: "BAD_GATEWAY",
-          message: `iTunes search failed: ${(error as Error).message}`,
-        });
+        throw itunesError(error);
       }
 
       const built = toArtistAndSongs(tracks, input.songLimit);
