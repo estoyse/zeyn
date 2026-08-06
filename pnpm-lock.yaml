@@ -114,6 +114,9 @@ importers:
       '@zeyn/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@zeyn/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@zeyn/env':
         specifier: workspace:*
         version: link:../../packages/env
