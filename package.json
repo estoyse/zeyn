@@ -39,6 +39,7 @@
     "db:studio": "turbo -F @zeyn/db db:studio",
     "db:seed": "turbo -F @zeyn/db db:seed",
     "db:seed:sql": "turbo -F @zeyn/db db:seed:sql",
+    "db:promote": "pnpm -F @zeyn/db db:promote",
     "deploy": "turbo -F @zeyn/infra deploy",
     "destroy": "turbo -F @zeyn/infra destroy"
   },
