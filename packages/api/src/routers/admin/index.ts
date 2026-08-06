@@ -5,12 +5,14 @@ import { adminProcedure, router } from "../../index";
 import { contentRouter } from "./content";
 import { musicRouter } from "./music";
 import { roomsRouter } from "./rooms";
+import { statsRouter } from "./stats";
 import { usersRouter } from "./users";
 
 export const adminRouter = router({
   content: contentRouter,
   music: musicRouter,
   rooms: roomsRouter,
+  stats: statsRouter,
   users: usersRouter,
   whoami: adminProcedure.query(async ({ ctx }) => {
     const row = await ctx.db
