@@ -13,6 +13,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as AdminIndexRouteImport } from './routes/_admin.index'
+import { Route as AdminSubjectsIndexRouteImport } from './routes/_admin.subjects.index'
+import { Route as AdminSubjectsSubjectIdRouteImport } from './routes/_admin.subjects.$subjectId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -33,16 +35,30 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSubjectsIndexRoute = AdminSubjectsIndexRouteImport.update({
+  id: '/subjects/',
+  path: '/subjects/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSubjectsSubjectIdRoute = AdminSubjectsSubjectIdRouteImport.update({
+  id: '/subjects/$subjectId',
+  path: '/subjects/$subjectId',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AdminIndexRoute
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
+  '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
+  '/subjects/': typeof AdminSubjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
   '/': typeof AdminIndexRoute
+  '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
+  '/subjects': typeof AdminSubjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,13 +66,27 @@ export interface FileRoutesById {
   '/forbidden': typeof ForbiddenRoute
   '/login': typeof LoginRoute
   '/_admin/': typeof AdminIndexRoute
+  '/_admin/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
+  '/_admin/subjects/': typeof AdminSubjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forbidden' | '/login'
+  fullPaths:
+    | '/'
+    | '/forbidden'
+    | '/login'
+    | '/subjects/$subjectId'
+    | '/subjects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/forbidden' | '/login' | '/'
-  id: '__root__' | '/_admin' | '/forbidden' | '/login' | '/_admin/'
+  to: '/forbidden' | '/login' | '/' | '/subjects/$subjectId' | '/subjects'
+  id:
+    | '__root__'
+    | '/_admin'
+    | '/forbidden'
+    | '/login'
+    | '/_admin/'
+    | '/_admin/subjects/$subjectId'
+    | '/_admin/subjects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,15 +125,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/subjects/': {
+      id: '/_admin/subjects/'
+      path: '/subjects'
+      fullPath: '/subjects/'
+      preLoaderRoute: typeof AdminSubjectsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/subjects/$subjectId': {
+      id: '/_admin/subjects/$subjectId'
+      path: '/subjects/$subjectId'
+      fullPath: '/subjects/$subjectId'
+      preLoaderRoute: typeof AdminSubjectsSubjectIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminSubjectsSubjectIdRoute: typeof AdminSubjectsSubjectIdRoute
+  AdminSubjectsIndexRoute: typeof AdminSubjectsIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminSubjectsSubjectIdRoute: AdminSubjectsSubjectIdRoute,
+  AdminSubjectsIndexRoute: AdminSubjectsIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

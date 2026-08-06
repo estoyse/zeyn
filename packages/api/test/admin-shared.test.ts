@@ -93,12 +93,13 @@ describe("likeTerm", () => {
 describe("searchLike", () => {
   const dialect = new SQLiteSyncDialect();
 
-  it("emits an ESCAPE clause, without which the backslashes are literal", () => {
+  it("emits ESCAPE with a literal backslash, not an empty escape char", () => {
     const { sql, params } = dialect.sqlToQuery(
       searchLike(subjects.name, "a_b")
     );
-    expect(sql).toContain("LIKE");
-    expect(sql).toContain("ESCAPE");
+    expect(sql).toContain("LIKE ?");
+    expect(sql).toContain("ESCAPE '\\'");
+    expect(sql).not.toContain("ESCAPE ''");
     expect(params).toEqual(["%a\\_b%"]);
   });
 

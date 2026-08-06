@@ -1,4 +1,4 @@
-import { and, count, eq, sql } from "@zeyn/db";
+import { and, count, eq } from "@zeyn/db";
 import { questions, subjects } from "@zeyn/db/schema";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
@@ -31,12 +31,12 @@ export const contentRouter = router({
           .select({
             id: subjects.id,
             name: subjects.name,
-            questionCount: sql<number>`(select count(*) from ${questions} where ${questions.subjectId} = ${subjects.id})`.mapWith(
-              Number
-            ),
+            questionCount: count(questions.id),
           })
           .from(subjects)
+          .leftJoin(questions, eq(questions.subjectId, subjects.id))
           .where(where)
+          .groupBy(subjects.id)
           .orderBy(subjects.name)
           .limit(input.limit)
           .offset(input.offset),

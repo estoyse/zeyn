@@ -46,7 +46,7 @@ export function likeTerm(search: string): string {
 }
 
 export function searchLike(column: SQLiteColumn, search: string) {
-  return sql`${column} LIKE ${likeTerm(search)} ESCAPE '\'`;
+  return sql`${column} LIKE ${likeTerm(search)} ESCAPE '\\'`;
 }
 
 type AdminContext = Context & { adminId: string };
