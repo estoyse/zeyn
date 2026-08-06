@@ -11,6 +11,7 @@ const loadEnvs = () => {
   // files only outside production.
   if (process.env.NODE_ENV !== "production") {
     config({ path: "../../apps/web/.env" });
+    config({ path: "../../apps/admin/.env" });
     config({ path: "../../apps/server/.env" });
   }
 };
@@ -25,8 +26,16 @@ const workerName = (base: string) =>
   stage === "production" ? base : stage ? `${base}-${stage}` : undefined;
 
 const domainsByStage = {
-  production: { web: "zeyn.uz", server: "api.zeyn.uz" },
-  dev: { web: "dev.zeyn.uz", server: "dev-api.zeyn.uz" },
+  production: {
+    web: "zeyn.uz",
+    admin: "admin.zeyn.uz",
+    server: "api.zeyn.uz",
+  },
+  dev: {
+    web: "dev.zeyn.uz",
+    admin: "dev-admin.zeyn.uz",
+    server: "dev-api.zeyn.uz",
+  },
 } as const;
 
 const domains =
@@ -35,10 +44,13 @@ const domains =
     : undefined;
 
 const webUrl = domains ? `https://${domains.web}` : undefined;
+const adminUrl = domains ? `https://${domains.admin}` : undefined;
 const serverUrl = domains ? `https://${domains.server}` : undefined;
 
 const viteServerUrl = serverUrl ?? process.env.VITE_SERVER_URL;
-const corsOrigin = webUrl ?? process.env.CORS_ORIGIN;
+const corsOrigin = domains
+  ? [webUrl, adminUrl].filter(Boolean).join(",")
+  : process.env.CORS_ORIGIN;
 const betterAuthUrl = serverUrl ?? process.env.BETTER_AUTH_URL;
 
 const hasRemoteState =
@@ -76,6 +88,17 @@ export const web = await Vite("web", {
   },
 });
 
+export const admin = await Vite("admin", {
+  cwd: "../../apps/admin",
+  assets: "dist",
+  name: workerName("zeyn-admin"),
+  adopt: true,
+  domains: domains ? [domains.admin] : undefined,
+  bindings: {
+    VITE_SERVER_URL: viteServerUrl!,
+  },
+});
+
 export const server = await Worker("server", {
   cwd: "../../apps/server",
   entrypoint: "src/index.ts",
@@ -108,6 +131,7 @@ export const server = await Worker("server", {
 });
 
 console.log(`Web    -> ${web.url}`);
+console.log(`Admin  -> ${admin.url}`);
 console.log(`Server -> ${server.url}`);
 
 await app.finalize();
