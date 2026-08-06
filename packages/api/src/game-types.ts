@@ -94,6 +94,7 @@ export interface BasePublicGameState {
   hasPassword: boolean;
   allowGuests?: boolean;
   players?: Record<string, Partial<Player>>; // Only changed players
+  nonScoringPlayerIds?: string[];
 }
 
 // The buzzer game's public (client-facing) state. The buzzer-specific fields
@@ -160,15 +161,48 @@ export const musicActionSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
+export const livebuzzerActionSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("BUZZ"),
+    playerId: z.string().max(200),
+    reactionMs: z.number(),
+  }),
+  z.object({
+    type: z.literal("ARM"),
+    playerId: z.string().max(200),
+  }),
+  z.object({
+    type: z.literal("JUDGE"),
+    playerId: z.string().max(200),
+    correct: z.boolean(),
+  }),
+  z.object({
+    type: z.literal("SKIP_ROUND"),
+    playerId: z.string().max(200),
+  }),
+  z.object({
+    type: z.literal("ADJUST_SCORE"),
+    playerId: z.string().max(200),
+    targetId: z.string().max(200),
+    delta: z.number().int().min(-10000).max(10000),
+  }),
+  z.object({
+    type: z.literal("END_GAME"),
+    playerId: z.string().max(200),
+  }),
+]);
+
 export const clientMessageSchema = z.union([
   platformMessageSchema,
   buzzerActionSchema,
   musicActionSchema,
+  livebuzzerActionSchema,
 ]);
 
 export type PlatformMessage = z.infer<typeof platformMessageSchema>;
 export type BuzzerAction = z.infer<typeof buzzerActionSchema>;
 export type MusicAction = z.infer<typeof musicActionSchema>;
+export type LivebuzzerAction = z.infer<typeof livebuzzerActionSchema>;
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 
 export type ServerMessage =

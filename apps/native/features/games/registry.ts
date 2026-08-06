@@ -1,11 +1,19 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { buzzerMeta, musicMeta, type GameModuleMeta } from "@zeyn/api/games";
+import {
+  buzzerMeta,
+  livebuzzerMeta,
+  musicMeta,
+  type GameModuleMeta,
+} from "@zeyn/api/games";
 import { createElement, type ComponentType } from "react";
 import { withUniwind } from "uniwind";
 
 import { BuzzerCreateForm } from "@/features/games/buzzer/BuzzerCreateForm";
 import { BuzzerPlaying } from "@/features/games/buzzer/BuzzerPlaying";
 import { BuzzerResults } from "@/features/games/buzzer/BuzzerResults";
+import { LivebuzzerCreateForm } from "@/features/games/livebuzzer/LivebuzzerCreateForm";
+import { LivebuzzerPlaying } from "@/features/games/livebuzzer/LivebuzzerPlaying";
+import { LivebuzzerResults } from "@/features/games/livebuzzer/LivebuzzerResults";
 import { MusicCreateForm } from "@/features/games/music/MusicCreateForm";
 import { MusicPlaying } from "@/features/games/music/MusicPlaying";
 import { MusicResults } from "@/features/games/music/MusicResults";
@@ -24,6 +32,10 @@ function BuzzerIcon(props: IconProps) {
 
 function MusicIcon(props: IconProps) {
   return createElement(StyledIonicons, { name: "musical-notes", ...props });
+}
+
+function LivebuzzerIcon(props: IconProps) {
+  return createElement(StyledIonicons, { name: "mic", ...props });
 }
 
 export interface ClientGameModule {
@@ -53,9 +65,19 @@ const music: ClientGameModule = {
   Results: MusicResults,
 };
 
+const livebuzzer: ClientGameModule = {
+  type: "livebuzzer",
+  meta: livebuzzerMeta,
+  Icon: LivebuzzerIcon,
+  Create: LivebuzzerCreateForm,
+  Playing: LivebuzzerPlaying,
+  Results: LivebuzzerResults,
+};
+
 export const clientGames: Record<string, ClientGameModule> = {
   buzzer,
   music,
+  livebuzzer,
 };
 
 export function getClientGame(type: string): ClientGameModule | undefined {

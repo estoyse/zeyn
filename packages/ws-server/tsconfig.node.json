@@ -1,0 +1,8 @@
+{
+  "extends": "@zeyn/config/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": ["node/**/*.ts", "test/**/*.ts", "autobahn/**/*.ts", "vitest.config.ts"]
+}

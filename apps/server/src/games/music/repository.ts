@@ -1,6 +1,6 @@
 import { createDb, inArray, eq, schema } from "@zeyn/db";
 import type { MusicQuizState } from "@zeyn/api/games";
-import type { RoomMeta } from "../base";
+import type { RoomMeta } from "@zeyn/game-engine";
 import type { SongRow } from "./engine";
 
 const D1_MAX_PARAMS_PER_QUERY = 99;

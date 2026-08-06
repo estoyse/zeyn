@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Card, Chip } from "heroui-native";
+import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Animated, { FadeIn, LinearTransition } from "react-native-reanimated";
@@ -21,6 +22,7 @@ interface GameLobbyProps {
   minPlayers: number;
   description: string;
   isSpectator?: boolean;
+  hero?: ReactNode;
 }
 
 export function GameLobby({
@@ -30,6 +32,7 @@ export function GameLobby({
   minPlayers,
   description,
   isSpectator = false,
+  hero,
 }: GameLobbyProps) {
   const { t } = useTranslation("game");
   const isHost = state.hostId === playerId;
@@ -43,9 +46,10 @@ export function GameLobby({
         <Heading className="text-center text-title-2">{state.gameName}</Heading>
       ) : null}
 
-      {state.gameId ? (
-        <JoinCodeHero gameId={state.gameId} gameName={state.gameName} />
-      ) : null}
+      {hero ??
+        (state.gameId ? (
+          <JoinCodeHero gameId={state.gameId} gameName={state.gameName} />
+        ) : null)}
 
       <Card>
         <Card.Body className="gap-4">

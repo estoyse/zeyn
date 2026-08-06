@@ -1,0 +1,32 @@
+{
+  "name": "@zeyn/ws-server",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./node": {
+      "default": "./node/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "autobahn:serve": "tsx autobahn/serve.ts",
+    "autobahn": "tsx autobahn/run.ts",
+    "autobahn:strict": "tsx autobahn/run.ts strict"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "@zeyn/config": "workspace:*",
+    "tsx": "^4.21.0",
+    "typescript": "^6",
+    "vitest": "^4.1.9"
+  }
+}

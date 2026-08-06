@@ -42,7 +42,78 @@
       "music": {
         "title": "Music Quiz",
         "description": "Listen to a clip and pick the right song from three options. Answer fast and keep a streak to score big."
+      },
+      "livebuzzer": {
+        "title": "Live Buzzer",
+        "description": "You read the questions out loud, the room races to buzz in. Winners are ranked by reaction time, not by who has the better Wi-Fi."
       }
+    }
+  },
+  "livebuzzer": {
+    "create": {
+      "rulesTitle": "Buzzer Rules",
+      "pointsPerCorrect": "Points per correct answer",
+      "penaltyPerWrong": "Penalty per wrong buzz",
+      "maxWrongPerRound": "Max wrong buzzes per round",
+      "hostPlays": "Host plays too",
+      "hostPlaysHint": "Let the host join the buzzer race instead of only moderating.",
+      "buzzWindow": "Buzz window",
+      "buzzWindowHint": "How long players have to buzz in. Off means you control the pace.",
+      "answerTime": "Answer time",
+      "answerTimeHint": "How long the locked-in player has to answer once buzzed. Off means no clock.",
+      "clockOff": "Off",
+      "clockSeconds": "{{count}}s",
+      "decreasePoints": "Decrease points per correct answer",
+      "increasePoints": "Increase points per correct answer",
+      "decreasePenalty": "Decrease penalty per wrong buzz",
+      "increasePenalty": "Increase penalty per wrong buzz",
+      "decreaseMaxWrong": "Decrease max wrong buzzes per round",
+      "increaseMaxWrong": "Increase max wrong buzzes per round",
+      "modeTitle": "Where should this game run?",
+      "modeCloud": "Online",
+      "modeCloudHint": "Players join from anywhere. Needs internet.",
+      "modeLocal": "This phone (Wi-Fi)",
+      "modeLocalHint": "Your phone hosts the game. No internet needed.",
+      "modeLocalNote": "Players on the same Wi-Fi scan a QR code and buzz in from their browser. Keep the app open while you play.",
+      "startLocal": "Start local game"
+    },
+    "player": {
+      "buzz": "Buzz!",
+      "buzzerOpen": "Buzzer open",
+      "lockedOut": "Locked out",
+      "lockedReaction": "{{name}} — {{ms}}ms",
+      "lockingIn": "Locking in…",
+      "someone": "Someone",
+      "yourTurn": "Your turn — answer!"
+    },
+    "host": {
+      "round": "Round {{round}}",
+      "wrongAttempts": "{{count}} / {{max}} wrong",
+      "idleHint": "Read the question aloud, then open the buzzer.",
+      "openBuzzer": "Open buzzer",
+      "armedHint": "Buzzer is open — first fair buzz wins.",
+      "cancelRound": "Cancel round",
+      "lockingIn": "Locking in…",
+      "lockedReaction": "{{name}} — {{ms}}ms",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "skipRound": "Skip round",
+      "scoreboardTitle": "Scoreboard",
+      "decreaseScore": "Decrease score by {{amount}}",
+      "increaseScore": "Increase score by {{amount}}",
+      "endGame": "End game",
+      "endGameConfirm": {
+        "title": "End the game?",
+        "description": "This finishes the match now and locks in final scores.",
+        "cancel": "Cancel",
+        "confirm": "End game"
+      }
+    },
+    "results": {
+      "title": "Final Leaderboard",
+      "subtitle": "Live Buzzer",
+      "noScores": "No scores recorded.",
+      "backToDashboard": "Back to Dashboard"
     }
   }
 }
