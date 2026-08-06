@@ -4,7 +4,7 @@ import {
   type MusicQuizState,
 } from "@zeyn/api/games";
 import type { EngineDirectives } from "@zeyn/api/game-types";
-import { gameError, initBaseState } from "../base";
+import { gameError, initBaseState } from "@zeyn/game-engine";
 
 export interface SongRow {
   id: string;

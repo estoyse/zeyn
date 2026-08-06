@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 
 import { Ring } from "./Ring";
 
-export type BuzzState = "armed" | "out" | "won" | "spectator";
+export type BuzzState = "idle" | "armed" | "out" | "won" | "spectator";
 
 type RingBuzzerProps = {
   progress: SharedValue<number>;
@@ -122,7 +122,8 @@ export function RingBuzzer({
     armed && (neon ? "bg-buzzer" : "border border-border bg-surface-secondary"),
     state === "won" && "bg-success",
     state === "out" && "border-2 border-destructive bg-muted-surface opacity-50",
-    state === "spectator" && "bg-muted-surface opacity-60"
+    state === "spectator" && "bg-muted-surface opacity-60",
+    state === "idle" && "bg-muted-surface opacity-60"
   );
 
   const labelClass = cn(
@@ -172,7 +173,9 @@ export function RingBuzzer({
               ? t("playing.out")
               : state === "won"
                 ? t("playing.yourTurn")
-                : t("playing.buzz")}
+                : state === "idle"
+                  ? t("playing.idleListen")
+                  : t("playing.buzz")}
           </Text>
         </Animated.View>
       </GestureDetector>

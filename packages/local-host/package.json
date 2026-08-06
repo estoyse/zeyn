@@ -1,0 +1,33 @@
+{
+  "name": "@zeyn/local-host",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@zeyn/api": "workspace:*",
+    "@zeyn/game-engine": "workspace:*",
+    "@zeyn/ws-server": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "@types/ws": "^8.18.1",
+    "@zeyn/config": "workspace:*",
+    "typescript": "^6",
+    "vitest": "^4.1.9",
+    "ws": "^8.18.0"
+  }
+}

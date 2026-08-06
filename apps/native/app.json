@@ -33,6 +33,15 @@
       ],
       "expo-image",
       [
+        "expo-camera",
+        {
+          "cameraPermission": "Zeyn uses the camera to scan a host's QR code so you can join their local game.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": true
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
@@ -69,7 +78,10 @@
     },
     "ios": {
       "bundleIdentifier": "uz.zeyn.app",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "Zeyn uses your local network to let nearby players join a game hosted on this phone, even without an internet connection."
+      }
     },
     "extra": {
       "eas": {

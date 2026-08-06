@@ -93,7 +93,9 @@ export function joinPlayer(
   }
 
   const isNewPlayer = !state.players[playerId];
-  if (isNewPlayer && state.status !== "WAITING") {
+  const lateJoinAllowed =
+    params.allowLateJoin === true && state.status === "PLAYING";
+  if (isNewPlayer && state.status !== "WAITING" && !lateJoinAllowed) {
     return {
       reply: gameError(
         state.status === "FINISHED"

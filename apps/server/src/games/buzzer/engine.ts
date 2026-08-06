@@ -19,7 +19,7 @@ import {
   type Subject,
 } from "@zeyn/api/game-types";
 import { isFuzzyMatch } from "./fuzzy-match";
-import type { JoinParams } from "../contract";
+import type { JoinParams } from "@zeyn/game-engine";
 
 /** The subset of the `active_games` row the engine reads during hydration. */
 export interface RoomRow {

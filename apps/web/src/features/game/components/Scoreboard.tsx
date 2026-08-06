@@ -12,9 +12,10 @@ interface ScoreboardProps {
 }
 
 function rank(state: ClientRoomState) {
-  return Object.values(state.players).sort(
-    (a, b) => b.score - a.score || a.name.localeCompare(b.name)
-  );
+  const nonScoring = new Set(state.nonScoringPlayerIds ?? []);
+  return Object.values(state.players)
+    .filter(p => !nonScoring.has(p.id))
+    .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
 }
 
 export function Scoreboard({ state, playerId, variant = "rail" }: ScoreboardProps) {

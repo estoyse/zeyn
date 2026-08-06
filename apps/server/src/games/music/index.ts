@@ -4,8 +4,9 @@ import type {
   BasePublicGameState,
   EngineDirectives,
 } from "@zeyn/api/game-types";
-import type { HydrateResult, JoinParams, RoomGame } from "../contract";
-import { hydrateBase, joinPlayer } from "../base";
+import type { HydrateResult, ServerRoomGame } from "../contract";
+import type { JoinParams } from "@zeyn/game-engine";
+import { hydrateBase, joinPlayer } from "@zeyn/game-engine";
 import {
   answer,
   buildQuestions,
@@ -16,7 +17,7 @@ import {
 import { MusicRepository } from "./repository";
 import { MusicSerializer } from "./serializer";
 
-class MusicGame implements RoomGame {
+class MusicGame implements ServerRoomGame {
   readonly type = "music";
   private readonly repo: MusicRepository;
   private readonly serializer = new MusicSerializer();
@@ -80,6 +81,6 @@ class MusicGame implements RoomGame {
   }
 }
 
-export function createMusicGame(db: D1Database): RoomGame {
+export function createMusicGame(db: D1Database): ServerRoomGame {
   return new MusicGame(db);
 }

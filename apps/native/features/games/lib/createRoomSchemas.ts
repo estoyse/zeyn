@@ -75,3 +75,15 @@ export function createMusicRoomSchema(t: Translate) {
       ),
   });
 }
+
+export function createLivebuzzerRoomSchema(t: Translate) {
+  return z.object({
+    ...generalRoomShape(t),
+    buzzWindowMs: z.number(),
+    answerTimeMs: z.number(),
+    pointsPerCorrect: z.number(),
+    penaltyPerWrong: z.number(),
+    maxWrongPerRound: z.number(),
+    hostPlays: z.boolean(),
+  });
+}

@@ -42,7 +42,78 @@
       "music": {
         "title": "Musiqa viktorinasi",
         "description": "Klipni tinglang va uchta variantdan to'g'ri qo'shiqni tanlang. Tez javob bering va ketma-ketlikni saqlab ko'proq ochko to'plang."
+      },
+      "livebuzzer": {
+        "title": "Jonli signal",
+        "description": "Siz savollarni ovoz chiqarib o'qiysiz, xona esa signal berish uchun poyga qiladi. G'oliblar reaksiya tezligi bo'yicha aniqlanadi, kimning Wi-Fi'i yaxshiroq ekaniga qarab emas."
       }
+    }
+  },
+  "livebuzzer": {
+    "create": {
+      "rulesTitle": "Signal qoidalari",
+      "pointsPerCorrect": "To'g'ri javob uchun ball",
+      "penaltyPerWrong": "Noto'g'ri signal uchun jarima",
+      "maxWrongPerRound": "Turda maksimal noto'g'ri signallar",
+      "hostPlays": "Boshqaruvchi ham o'ynaydi",
+      "hostPlaysHint": "Boshqaruvchi faqat kuzatib turmasdan, signal poygasida ham qatnashsin.",
+      "buzzWindow": "Signal vaqti",
+      "buzzWindowHint": "O'yinchilarga signal berish uchun qancha vaqt berilishi. O'chirilgan bo'lsa, tezlikni o'zingiz belgilaysiz.",
+      "answerTime": "Javob berish vaqti",
+      "answerTimeHint": "Signal bergan o'yinchiga javob berish uchun qancha vaqt beriladi. O'chirilgan bo'lsa, vaqt chegarasi yo'q.",
+      "clockOff": "O'chiq",
+      "clockSeconds": "{{count}}s",
+      "decreasePoints": "To'g'ri javob ballini kamaytirish",
+      "increasePoints": "To'g'ri javob ballini oshirish",
+      "decreasePenalty": "Noto'g'ri signal jarimasini kamaytirish",
+      "increasePenalty": "Noto'g'ri signal jarimasini oshirish",
+      "decreaseMaxWrong": "Turdagi maksimal noto'g'ri signallarni kamaytirish",
+      "increaseMaxWrong": "Turdagi maksimal noto'g'ri signallarni oshirish",
+      "modeTitle": "O‘yin qayerda ishlasin?",
+      "modeCloud": "Onlayn",
+      "modeCloudHint": "O‘yinchilar istalgan joydan qo‘shiladi. Internet kerak.",
+      "modeLocal": "Shu telefonda (Wi-Fi)",
+      "modeLocalHint": "Telefoningiz o‘yinni o‘zi olib boradi. Internet shart emas.",
+      "modeLocalNote": "Bir xil Wi-Fi’dagi o‘yinchilar QR kodni skanerlab, brauzerdan tugma bosadi. O‘yin davomida ilovani yopmang.",
+      "startLocal": "Mahalliy o‘yinni boshlash"
+    },
+    "player": {
+      "buzz": "Bos!",
+      "buzzerOpen": "Signal ochiq",
+      "lockedOut": "Siz bloklangansiz",
+      "lockedReaction": "{{name}} — {{ms}}ms",
+      "lockingIn": "Qayd etilmoqda…",
+      "someone": "Kimdir",
+      "yourTurn": "Sizning navbatingiz — javob bering!"
+    },
+    "host": {
+      "round": "{{round}}-tur",
+      "wrongAttempts": "{{count}} / {{max}} noto'g'ri",
+      "idleHint": "Savolni ovoz chiqarib o'qing, so'ng signalni oching.",
+      "openBuzzer": "Signalni ochish",
+      "armedHint": "Signal ochiq — birinchi adolatli signal g'alaba qozonadi.",
+      "cancelRound": "Turni bekor qilish",
+      "lockingIn": "Qayd etilmoqda…",
+      "lockedReaction": "{{name}} — {{ms}}ms",
+      "correct": "To'g'ri",
+      "wrong": "Noto'g'ri",
+      "skipRound": "Turni o'tkazib yuborish",
+      "scoreboardTitle": "Hisob jadvali",
+      "decreaseScore": "Ballni {{amount}} taga kamaytirish",
+      "increaseScore": "Ballni {{amount}} taga oshirish",
+      "endGame": "O'yinni yakunlash",
+      "endGameConfirm": {
+        "title": "O'yin yakunlansinmi?",
+        "description": "Bu o'yinni hoziroq tugatadi va yakuniy ballarni qat'iylashtiradi.",
+        "cancel": "Bekor qilish",
+        "confirm": "O'yinni yakunlash"
+      }
+    },
+    "results": {
+      "title": "Yakuniy reyting",
+      "subtitle": "Jonli signal",
+      "noScores": "Ballar qayd etilmagan.",
+      "backToDashboard": "Boshqaruv paneliga qaytish"
     }
   }
 }
