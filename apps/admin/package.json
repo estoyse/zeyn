@@ -8,7 +8,8 @@
     "serve": "vite preview",
     "start": "vite",
     "check-types": "vite build && tsc --noEmit",
-    "dev:bare": "vite dev"
+    "dev:bare": "vite dev",
+    "test": "vitest run"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
@@ -42,6 +43,7 @@
     "postcss": "^8.5.10",
     "tailwindcss": "^4.2.2",
     "typescript": "^6",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vitest": "^4.1.9"
   }
 }

@@ -3,6 +3,7 @@ import { user } from "@zeyn/db/schema";
 
 import { adminProcedure, router } from "../../index";
 import { contentRouter } from "./content";
+import { importQuestionsRouter } from "./import";
 import { musicRouter } from "./music";
 import { roomsRouter } from "./rooms";
 import { statsRouter } from "./stats";
@@ -10,6 +11,7 @@ import { usersRouter } from "./users";
 
 export const adminRouter = router({
   content: contentRouter,
+  import: importQuestionsRouter,
   music: musicRouter,
   rooms: roomsRouter,
   stats: statsRouter,

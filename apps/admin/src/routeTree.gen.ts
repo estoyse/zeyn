@@ -20,6 +20,8 @@ import { Route as AdminHistoryIndexRouteImport } from './routes/_admin.history.i
 import { Route as AdminArtistsIndexRouteImport } from './routes/_admin.artists.index'
 import { Route as AdminUsersUserIdRouteImport } from './routes/_admin.users.$userId'
 import { Route as AdminSubjectsSubjectIdRouteImport } from './routes/_admin.subjects.$subjectId'
+import { Route as AdminImportQuestionsRouteImport } from './routes/_admin.import.questions'
+import { Route as AdminImportMusicRouteImport } from './routes/_admin.import.music'
 import { Route as AdminHistoryHistoryIdRouteImport } from './routes/_admin.history.$historyId'
 import { Route as AdminArtistsArtistIdRouteImport } from './routes/_admin.artists.$artistId'
 
@@ -77,6 +79,16 @@ const AdminSubjectsSubjectIdRoute = AdminSubjectsSubjectIdRouteImport.update({
   path: '/subjects/$subjectId',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminImportQuestionsRoute = AdminImportQuestionsRouteImport.update({
+  id: '/import/questions',
+  path: '/import/questions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminImportMusicRoute = AdminImportMusicRouteImport.update({
+  id: '/import/music',
+  path: '/import/music',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminHistoryHistoryIdRoute = AdminHistoryHistoryIdRouteImport.update({
   id: '/history/$historyId',
   path: '/history/$historyId',
@@ -95,6 +107,8 @@ export interface FileRoutesByFullPath {
   '/rooms': typeof AdminRoomsRoute
   '/artists/$artistId': typeof AdminArtistsArtistIdRoute
   '/history/$historyId': typeof AdminHistoryHistoryIdRoute
+  '/import/music': typeof AdminImportMusicRoute
+  '/import/questions': typeof AdminImportQuestionsRoute
   '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
   '/users/$userId': typeof AdminUsersUserIdRoute
   '/artists/': typeof AdminArtistsIndexRoute
@@ -109,6 +123,8 @@ export interface FileRoutesByTo {
   '/': typeof AdminIndexRoute
   '/artists/$artistId': typeof AdminArtistsArtistIdRoute
   '/history/$historyId': typeof AdminHistoryHistoryIdRoute
+  '/import/music': typeof AdminImportMusicRoute
+  '/import/questions': typeof AdminImportQuestionsRoute
   '/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
   '/users/$userId': typeof AdminUsersUserIdRoute
   '/artists': typeof AdminArtistsIndexRoute
@@ -125,6 +141,8 @@ export interface FileRoutesById {
   '/_admin/': typeof AdminIndexRoute
   '/_admin/artists/$artistId': typeof AdminArtistsArtistIdRoute
   '/_admin/history/$historyId': typeof AdminHistoryHistoryIdRoute
+  '/_admin/import/music': typeof AdminImportMusicRoute
+  '/_admin/import/questions': typeof AdminImportQuestionsRoute
   '/_admin/subjects/$subjectId': typeof AdminSubjectsSubjectIdRoute
   '/_admin/users/$userId': typeof AdminUsersUserIdRoute
   '/_admin/artists/': typeof AdminArtistsIndexRoute
@@ -141,6 +159,8 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/artists/$artistId'
     | '/history/$historyId'
+    | '/import/music'
+    | '/import/questions'
     | '/subjects/$subjectId'
     | '/users/$userId'
     | '/artists/'
@@ -155,6 +175,8 @@ export interface FileRouteTypes {
     | '/'
     | '/artists/$artistId'
     | '/history/$historyId'
+    | '/import/music'
+    | '/import/questions'
     | '/subjects/$subjectId'
     | '/users/$userId'
     | '/artists'
@@ -170,6 +192,8 @@ export interface FileRouteTypes {
     | '/_admin/'
     | '/_admin/artists/$artistId'
     | '/_admin/history/$historyId'
+    | '/_admin/import/music'
+    | '/_admin/import/questions'
     | '/_admin/subjects/$subjectId'
     | '/_admin/users/$userId'
     | '/_admin/artists/'
@@ -263,6 +287,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSubjectsSubjectIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/import/questions': {
+      id: '/_admin/import/questions'
+      path: '/import/questions'
+      fullPath: '/import/questions'
+      preLoaderRoute: typeof AdminImportQuestionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/import/music': {
+      id: '/_admin/import/music'
+      path: '/import/music'
+      fullPath: '/import/music'
+      preLoaderRoute: typeof AdminImportMusicRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/history/$historyId': {
       id: '/_admin/history/$historyId'
       path: '/history/$historyId'
@@ -285,6 +323,8 @@ interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminArtistsArtistIdRoute: typeof AdminArtistsArtistIdRoute
   AdminHistoryHistoryIdRoute: typeof AdminHistoryHistoryIdRoute
+  AdminImportMusicRoute: typeof AdminImportMusicRoute
+  AdminImportQuestionsRoute: typeof AdminImportQuestionsRoute
   AdminSubjectsSubjectIdRoute: typeof AdminSubjectsSubjectIdRoute
   AdminUsersUserIdRoute: typeof AdminUsersUserIdRoute
   AdminArtistsIndexRoute: typeof AdminArtistsIndexRoute
@@ -298,6 +338,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminArtistsArtistIdRoute: AdminArtistsArtistIdRoute,
   AdminHistoryHistoryIdRoute: AdminHistoryHistoryIdRoute,
+  AdminImportMusicRoute: AdminImportMusicRoute,
+  AdminImportQuestionsRoute: AdminImportQuestionsRoute,
   AdminSubjectsSubjectIdRoute: AdminSubjectsSubjectIdRoute,
   AdminUsersUserIdRoute: AdminUsersUserIdRoute,
   AdminArtistsIndexRoute: AdminArtistsIndexRoute,

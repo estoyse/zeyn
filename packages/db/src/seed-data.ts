@@ -1,3 +1,5 @@
+import { searchItunesTracks, toArtistAndSongs } from "./itunes";
+
 export interface SubjectSeed {
   id: string;
   name: string;
@@ -82,25 +84,6 @@ export const SONGS_PER_ARTIST = 15;
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-interface ITunesTrack {
-  artistId: number;
-  artistName: string;
-  trackId: number;
-  trackName: string;
-  previewUrl?: string;
-  artworkUrl100?: string;
-}
-
-async function fetchArtistTracks(name: string): Promise<ITunesTrack[]> {
-  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(
-    name
-  )}&entity=song&limit=60`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`iTunes responded ${res.status}`);
-  const data = (await res.json()) as { results?: ITunesTrack[] };
-  return data.results ?? [];
-}
-
 export async function fetchMusicContent(
   log: (msg: string) => void = () => {}
 ): Promise<{ artists: ArtistSeed[]; songs: SongSeed[] }> {
@@ -109,40 +92,15 @@ export async function fetchMusicContent(
 
   for (const name of MUSIC_ARTISTS) {
     try {
-      const tracks = await fetchArtistTracks(name);
-      const usable = tracks.filter(
-        t => t.previewUrl && t.trackName && t.artistId
-      );
-      if (usable.length === 0) {
+      const tracks = await searchItunesTracks(name);
+      const built = toArtistAndSongs(tracks, SONGS_PER_ARTIST);
+      if (!built) {
         log(`  no preview tracks found for ${name}, skipping`);
         continue;
       }
-
-      const primary = usable[0]!;
-      const artistId = `a_${primary.artistId}`;
-      artistRows.push({
-        id: artistId,
-        name: primary.artistName,
-        artworkUrl: primary.artworkUrl100 ?? null,
-      });
-
-      const seen = new Set<string>();
-      let picked = 0;
-      for (const t of usable) {
-        if (t.artistId !== primary.artistId) continue;
-        const key = t.trackName.toLowerCase();
-        if (seen.has(key)) continue;
-        seen.add(key);
-        songRows.push({
-          id: `s_${t.trackId}`,
-          artistId,
-          title: t.trackName,
-          previewUrl: t.previewUrl!,
-          artworkUrl: t.artworkUrl100 ?? null,
-        });
-        if (++picked >= SONGS_PER_ARTIST) break;
-      }
-      log(`  ${primary.artistName}: ${picked} songs`);
+      artistRows.push(built.artist);
+      songRows.push(...built.songs);
+      log(`  ${built.artist.name}: ${built.songs.length} songs`);
       await sleep(300);
     } catch (e) {
       log(`  failed to fetch ${name}: ${(e as Error).message}`);

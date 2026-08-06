@@ -4,6 +4,7 @@ import {
   History,
   LayoutDashboard,
   Library,
+  Music,
   Radio,
   Upload,
   Users,
@@ -31,7 +32,8 @@ const GROUPS: NavGroup[] = [
     items: [
       { to: "/subjects", label: "Subjects", icon: Library },
       { to: "/artists", label: "Artists", icon: Disc3 },
-      { to: "/import/questions", label: "Import", icon: Upload },
+      { to: "/import/questions", label: "Import questions", icon: Upload },
+      { to: "/import/music", label: "Import music", icon: Music },
     ],
   },
   {
