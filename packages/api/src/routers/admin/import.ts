@@ -1,10 +1,4 @@
 import { count, eq, inArray } from "@zeyn/db";
-import {
-  ItunesRateLimitError,
-  searchItunesTracks,
-  toArtistAndSongs,
-  usableTracks,
-} from "@zeyn/db/itunes";
 import { artists, questions, songs, subjects } from "@zeyn/db/schema";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
@@ -12,19 +6,19 @@ import z from "zod";
 import { adminProcedure, router } from "../../index";
 import { chunk, recordAudit, rowsPerStatement } from "./_shared";
 
-function itunesError(error: unknown): TRPCError {
-  if (error instanceof ItunesRateLimitError) {
-    return new TRPCError({
-      code: "TOO_MANY_REQUESTS",
-      message:
-        "iTunes is rate limiting searches right now. Wait a moment and try again; repeating the same search is free because results are cached.",
-    });
-  }
-  return new TRPCError({
-    code: "BAD_GATEWAY",
-    message: `iTunes search failed: ${(error as Error).message}`,
-  });
-}
+const itunesArtistSchema = z.object({
+  id: z.string().regex(/^a_\d+$/, "Expected an iTunes artist id"),
+  name: z.string().trim().min(1).max(120),
+  artworkUrl: z.url().max(500).nullable(),
+});
+
+const itunesSongSchema = z.object({
+  id: z.string().regex(/^s_\d+$/, "Expected an iTunes track id"),
+  artistId: z.string().regex(/^a_\d+$/),
+  title: z.string().trim().min(1).max(200),
+  previewUrl: z.url().max(500),
+  artworkUrl: z.url().max(500).nullable(),
+});
 
 const QUESTION_COLUMNS = 5;
 const SONG_COLUMNS = 5;
@@ -126,109 +120,46 @@ export const importQuestionsRouter = router({
       };
     }),
 
-  searchItunes: adminProcedure
-    .input(
-      z.object({
-        term: z.string().trim().min(2).max(100),
-        limit: z.number().int().min(1).max(60).default(60),
-      })
-    )
+  importedArtistIds: adminProcedure
+    .input(z.object({ artistIds: z.array(z.string().max(64)).max(60) }))
     .query(async ({ ctx, input }) => {
-      let tracks;
-      try {
-        tracks = await searchItunesTracks(input.term, input.limit);
-      } catch (error) {
-        throw itunesError(error);
-      }
-
-      const usable = usableTracks(tracks);
-      const byArtist = new Map<
-        number,
-        {
-          itunesArtistId: number;
-          artistId: string;
-          name: string;
-          artworkUrl: string | null;
-          trackCount: number;
-          tracksWithoutPreview: number;
-        }
-      >();
-
-      for (const track of tracks) {
-        const existing = byArtist.get(track.artistId);
-        const hasPreview = Boolean(track.previewUrl && track.trackName);
-        if (existing) {
-          if (hasPreview) existing.trackCount += 1;
-          else existing.tracksWithoutPreview += 1;
-          continue;
-        }
-        byArtist.set(track.artistId, {
-          itunesArtistId: track.artistId,
-          artistId: `a_${track.artistId}`,
-          name: track.artistName,
-          artworkUrl: track.artworkUrl100 ?? null,
-          trackCount: hasPreview ? 1 : 0,
-          tracksWithoutPreview: hasPreview ? 0 : 1,
-        });
-      }
-
-      const candidates = [...byArtist.values()].sort(
-        (a, b) => b.trackCount - a.trackCount
-      );
-
-      const imported =
-        candidates.length > 0
-          ? await ctx.db
-              .select({ id: artists.id })
-              .from(artists)
-              .where(
-                inArray(
-                  artists.id,
-                  candidates.map(candidate => candidate.artistId)
-                )
-              )
-          : [];
-      const importedIds = new Set(imported.map(row => row.id));
-
-      return {
-        totalTracks: tracks.length,
-        usableTracks: usable.length,
-        artists: candidates.map(candidate => ({
-          ...candidate,
-          alreadyImported: importedIds.has(candidate.artistId),
-        })),
-      };
+      if (input.artistIds.length === 0) return [];
+      const rows = await ctx.db
+        .select({ id: artists.id })
+        .from(artists)
+        .where(inArray(artists.id, input.artistIds));
+      return rows.map(row => row.id);
     }),
 
-  importItunesArtist: adminProcedure
+  importArtist: adminProcedure
     .input(
       z.object({
-        term: z.string().trim().min(1).max(100),
-        songLimit: z.number().int().min(1).max(30).default(15),
+        artist: itunesArtistSchema,
+        songs: z.array(itunesSongSchema).min(1).max(30),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      let tracks;
-      try {
-        tracks = await searchItunesTracks(input.term);
-      } catch (error) {
-        throw itunesError(error);
-      }
+      const validSongs = input.songs
+        .filter(song => song.artistId === input.artist.id)
+        .slice(0, 30);
 
-      const built = toArtistAndSongs(tracks, input.songLimit);
-      if (!built) {
+      if (validSongs.length === 0) {
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "No tracks with playable previews were found for that term",
+          code: "BAD_REQUEST",
+          message: "No songs were supplied for this artist",
         });
       }
 
       await ctx.db
         .insert(artists)
-        .values(built.artist)
+        .values({
+          id: input.artist.id,
+          name: input.artist.name,
+          artworkUrl: input.artist.artworkUrl,
+        })
         .onConflictDoNothing();
 
-      const batches = chunk(built.songs, rowsPerStatement(SONG_COLUMNS));
+      const batches = chunk(validSongs, rowsPerStatement(SONG_COLUMNS));
       for (const batch of batches) {
         if (batch.length === 0) continue;
         await ctx.db.insert(songs).values(batch).onConflictDoNothing();
@@ -237,19 +168,18 @@ export const importQuestionsRouter = router({
       const totalRow = await ctx.db
         .select({ value: count() })
         .from(songs)
-        .where(eq(songs.artistId, built.artist.id))
+        .where(eq(songs.artistId, input.artist.id))
         .get();
 
-      await recordAudit(ctx, "artist.importItunes", "artist", built.artist.id, {
-        term: input.term,
-        artistName: built.artist.name,
-        songsFetched: built.songs.length,
+      await recordAudit(ctx, "artist.importItunes", "artist", input.artist.id, {
+        artistName: input.artist.name,
+        songsSubmitted: validSongs.length,
       });
 
       return {
-        artistId: built.artist.id,
-        artistName: built.artist.name,
-        songsFetched: built.songs.length,
+        artistId: input.artist.id,
+        artistName: input.artist.name,
+        songsFetched: validSongs.length,
         songsTotal: totalRow?.value ?? 0,
       };
     }),
