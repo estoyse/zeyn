@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import z from "zod";
 
 import { authClient } from "@/shared/lib/auth-client";
-import { sessionQueryKey, sessionQueryOptions } from "@/shared/lib/session";
+import { refreshSession, sessionQueryOptions } from "@/shared/lib/session";
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -23,9 +23,10 @@ const credentialsSchema = z.object({
 export const Route = createFileRoute("/login")({
   validateSearch: searchSchema,
   beforeLoad: async ({ context, search }) => {
-    const session = await context.queryClient.ensureQueryData(
-      sessionQueryOptions
-    );
+    const session = await context.queryClient.ensureQueryData({
+      ...sessionQueryOptions,
+      revalidateIfStale: true,
+    });
     if (session && session.user.role === "admin") {
       throw redirect({ to: search.redirect ?? "/" });
     }
@@ -55,7 +56,7 @@ function LoginPage() {
         return;
       }
 
-      await queryClient.invalidateQueries({ queryKey: sessionQueryKey });
+      await refreshSession(queryClient);
       navigate({ to: search.redirect ?? "/" });
     },
   });

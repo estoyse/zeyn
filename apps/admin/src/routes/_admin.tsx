@@ -5,9 +5,10 @@ import { sessionQueryOptions } from "@/shared/lib/session";
 
 export const Route = createFileRoute("/_admin")({
   beforeLoad: async ({ context, location }) => {
-    const session = await context.queryClient.ensureQueryData(
-      sessionQueryOptions
-    );
+    const session = await context.queryClient.ensureQueryData({
+      ...sessionQueryOptions,
+      revalidateIfStale: true,
+    });
 
     if (!session) {
       throw redirect({ to: "/login", search: { redirect: location.href } });
