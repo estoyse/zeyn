@@ -99,7 +99,9 @@ export async function generateUniqueUsername(
   name: string
 ): Promise<string> {
   let base = slugifyName(name);
-  if (base.length < USERNAME_MIN) base = `user${randomSuffix(3)}`;
+  if (base.length < USERNAME_MIN || RESERVED.has(base)) {
+    base = `user${randomSuffix(3)}`;
+  }
 
   if (!(await isUsernameTaken(db, base))) return base;
 
