@@ -78,7 +78,7 @@ const db = await D1Database("database", {
 
 export const web = await Vite("web", {
   cwd: "../../apps/web",
-  assets: { directory: "dist", run_worker_first: ["/"] },
+  assets: { directory: "dist", run_worker_first: true },
   build: "pnpm run build",
   // Fixed name so the production URL drops the stage suffix.
   name: workerName("zeyn-web"),
