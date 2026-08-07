@@ -78,13 +78,23 @@ const db = await D1Database("database", {
 
 export const web = await Vite("web", {
   cwd: "../../apps/web",
-  assets: "dist",
+  assets: { directory: "dist", run_worker_first: ["/"] },
   build: "pnpm run build",
   // Fixed name so the production URL drops the stage suffix.
   name: workerName("zeyn-web"),
   adopt: true,
   domains: domains ? [domains.web] : undefined,
-  script: `export default { async fetch(request, env) { return env.ASSETS.fetch(request); } };`,
+  script: `
+    export default {
+      async fetch(request, env) {
+        const url = new URL(request.url);
+        if (url.pathname === "/") {
+          return env.ASSETS.fetch(new URL("/home.html", url));
+        }
+        return env.ASSETS.fetch(request);
+      },
+    };
+  `,
   bindings: {
     VITE_SERVER_URL: viteServerUrl!,
   },
