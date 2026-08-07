@@ -13,12 +13,14 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
+import { Route as AuthVerifyRouteImport } from './routes/auth.verify'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
-import { Route as AuthVerifyVerifyRouteImport } from './routes/auth.verify/verify'
 import { Route as AppUUsernameRouteImport } from './routes/_app.u.$username'
 import { Route as AppGamesGameTypeRouteImport } from './routes/_app.games.$gameType'
 import { Route as AppGameCreateIndexRouteImport } from './routes/_app.game.create.index'
@@ -43,9 +45,24 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/legal/terms',
+  path: '/legal/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GameGameIdRoute = GameGameIdRouteImport.update({
   id: '/game/$gameId',
   path: '/game/$gameId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthVerifyRoute = AuthVerifyRouteImport.update({
+  id: '/auth/verify',
+  path: '/auth/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
@@ -67,11 +84,6 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => AppRoute,
-} as any)
-const AuthVerifyVerifyRoute = AuthVerifyVerifyRouteImport.update({
-  id: '/auth/verify/verify',
-  path: '/auth/verify/verify',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const AppUUsernameRoute = AppUUsernameRouteImport.update({
   id: '/u/$username',
@@ -102,10 +114,12 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/games/$gameType': typeof AppGamesGameTypeRoute
   '/u/$username': typeof AppUUsernameRoute
-  '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof AppGameCreateGameTypeRoute
   '/game/create/': typeof AppGameCreateIndexRoute
 }
@@ -116,11 +130,13 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/': typeof AppIndexRoute
   '/games/$gameType': typeof AppGamesGameTypeRoute
   '/u/$username': typeof AppUUsernameRoute
-  '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/game/create/$gameType': typeof AppGameCreateGameTypeRoute
   '/game/create': typeof AppGameCreateIndexRoute
 }
@@ -133,11 +149,13 @@ export interface FileRoutesById {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/verify': typeof AuthVerifyRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/_app/': typeof AppIndexRoute
   '/_app/games/$gameType': typeof AppGamesGameTypeRoute
   '/_app/u/$username': typeof AppUUsernameRoute
-  '/auth/verify/verify': typeof AuthVerifyVerifyRoute
   '/_app/game/create/$gameType': typeof AppGameCreateGameTypeRoute
   '/_app/game/create/': typeof AppGameCreateIndexRoute
 }
@@ -151,10 +169,12 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/auth/verify'
     | '/game/$gameId'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/games/$gameType'
     | '/u/$username'
-    | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create/'
   fileRoutesByTo: FileRoutesByTo
@@ -165,11 +185,13 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/auth/verify'
     | '/game/$gameId'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/'
     | '/games/$gameType'
     | '/u/$username'
-    | '/auth/verify/verify'
     | '/game/create/$gameType'
     | '/game/create'
   id:
@@ -181,11 +203,13 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/reset-password'
+    | '/auth/verify'
     | '/game/$gameId'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/_app/'
     | '/_app/games/$gameType'
     | '/_app/u/$username'
-    | '/auth/verify/verify'
     | '/_app/game/create/$gameType'
     | '/_app/game/create/'
   fileRoutesById: FileRoutesById
@@ -197,8 +221,10 @@ export interface RootRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthVerifyRoute: typeof AuthVerifyRoute
   GameGameIdRoute: typeof GameGameIdRoute
-  AuthVerifyVerifyRoute: typeof AuthVerifyVerifyRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalTermsRoute: typeof LegalTermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -231,11 +257,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/legal/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/game/$gameId': {
       id: '/game/$gameId'
       path: '/game/$gameId'
       fullPath: '/game/$gameId'
       preLoaderRoute: typeof GameGameIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/verify': {
+      id: '/auth/verify'
+      path: '/auth/verify'
+      fullPath: '/auth/verify'
+      preLoaderRoute: typeof AuthVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/reset-password': {
@@ -265,13 +312,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
-    }
-    '/auth/verify/verify': {
-      id: '/auth/verify/verify'
-      path: '/auth/verify/verify'
-      fullPath: '/auth/verify/verify'
-      preLoaderRoute: typeof AuthVerifyVerifyRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/_app/u/$username': {
       id: '/_app/u/$username'
@@ -331,8 +371,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthVerifyRoute: AuthVerifyRoute,
   GameGameIdRoute: GameGameIdRoute,
-  AuthVerifyVerifyRoute: AuthVerifyVerifyRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalTermsRoute: LegalTermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

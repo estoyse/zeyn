@@ -158,6 +158,20 @@ export function createAuth() {
         });
       },
     },
+    socialProviders: {
+      google: {
+        enabled: Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
+        clientId: env.GOOGLE_CLIENT_ID ?? "",
+        clientSecret: env.GOOGLE_CLIENT_SECRET ?? "",
+        prompt: "select_account",
+      },
+    },
+    account: {
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ["google"],
+      },
+    },
     session: {
       cookieCache: {
         enabled: true,

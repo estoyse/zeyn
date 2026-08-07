@@ -8,6 +8,7 @@ import enGames from "./locales/en/games.json";
 import enProfile from "./locales/en/profile.json";
 import enEmail from "./locales/en/email.json";
 import enOnboarding from "./locales/en/onboarding.json";
+import enLegal from "./locales/en/legal.json";
 import uzCommon from "./locales/uz/common.json";
 import uzSettings from "./locales/uz/settings.json";
 import uzAuth from "./locales/uz/auth.json";
@@ -18,6 +19,7 @@ import uzGames from "./locales/uz/games.json";
 import uzProfile from "./locales/uz/profile.json";
 import uzEmail from "./locales/uz/email.json";
 import uzOnboarding from "./locales/uz/onboarding.json";
+import uzLegal from "./locales/uz/legal.json";
 import ruCommon from "./locales/ru/common.json";
 import ruSettings from "./locales/ru/settings.json";
 import ruAuth from "./locales/ru/auth.json";
@@ -28,6 +30,7 @@ import ruGames from "./locales/ru/games.json";
 import ruProfile from "./locales/ru/profile.json";
 import ruEmail from "./locales/ru/email.json";
 import ruOnboarding from "./locales/ru/onboarding.json";
+import ruLegal from "./locales/ru/legal.json";
 
 export const resources = {
   en: {
@@ -41,6 +44,7 @@ export const resources = {
     profile: enProfile,
     email: enEmail,
     onboarding: enOnboarding,
+    legal: enLegal,
   },
   uz: {
     common: uzCommon,
@@ -53,6 +57,7 @@ export const resources = {
     profile: uzProfile,
     email: uzEmail,
     onboarding: uzOnboarding,
+    legal: uzLegal,
   },
   ru: {
     common: ruCommon,
@@ -65,6 +70,7 @@ export const resources = {
     profile: ruProfile,
     email: ruEmail,
     onboarding: ruOnboarding,
+    legal: ruLegal,
   },
 } as const;
 
@@ -82,4 +88,5 @@ export const namespaces = [
   "profile",
   "email",
   "onboarding",
+  "legal",
 ] as const;

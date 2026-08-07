@@ -48,7 +48,11 @@ export function useAuth() {
 
   async function signInWithGoogle(returnTo?: string) {
     await authClient.signIn.social(
-      { provider: "google", callbackURL: returnTo || "/(tabs)/home" },
+      {
+        provider: "google",
+        callbackURL: returnTo || "/home",
+        errorCallbackURL: "/(auth)/login",
+      },
       {
         onSuccess: () => handleSuccess(t("toast.signInSuccess"), returnTo),
         onError: (ctx) =>

@@ -123,6 +123,14 @@ export const server = await Worker("server", {
     BETTER_AUTH_SECRET: alchemy.secret.env.BETTER_AUTH_SECRET!,
     BETTER_AUTH_URL: betterAuthUrl!,
     RESEND_API_KEY: alchemy.secret.env.RESEND_API_KEY!,
+    GOOGLE_CLIENT_ID: alchemy.secret.env(
+      "GOOGLE_CLIENT_ID",
+      process.env.GOOGLE_CLIENT_ID ?? "",
+    ),
+    GOOGLE_CLIENT_SECRET: alchemy.secret.env(
+      "GOOGLE_CLIENT_SECRET",
+      process.env.GOOGLE_CLIENT_SECRET ?? "",
+    ),
     NODE_ENV: process.env.NODE_ENV!,
   },
   dev: {
