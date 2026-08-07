@@ -3,8 +3,7 @@
     "lastUpdated": "Last updated: {{date}}",
     "backHome": "Back to Zeyn",
     "privacyLink": "Privacy Policy",
-    "termsLink": "Terms of Service",
-    "operatorNotice": "Zeyn is operated by [OPERATOR FULL NAME], a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan, STIR [STIR NUMBER], [REGISTERED ADDRESS]."
+    "termsLink": "Terms of Service"
   },
   "privacy": {
     "title": "Privacy Policy",
@@ -14,13 +13,15 @@
       {
         "heading": "Who we are",
         "body": [
-          "Zeyn is a real-time multiplayer trivia service operated by [OPERATOR FULL NAME], a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan, STIR [STIR NUMBER], with a registered address at [REGISTERED ADDRESS].",
+          "Zeyn is a real-time multiplayer trivia service operated by Izzatillo Azimov, a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan.",
           "We are the data controller for the personal data described in this policy. For any question about your data, or to exercise any of the rights described below, write to support@zeyn.uz."
         ]
       },
       {
         "heading": "What we collect",
-        "body": ["We collect the following categories of data, and nothing beyond them:"],
+        "body": [
+          "We collect the following categories of data, and nothing beyond them:"
+        ],
         "items": [
           "Account details you provide: your email address, display name, and a username. You may optionally add a short bio and a profile picture.",
           "Authentication data: a hash of your password if you sign up with email (we never store the password itself), or the identifiers described in the Google sign-in section below.",
@@ -40,7 +41,9 @@
       },
       {
         "heading": "Why we use it",
-        "body": ["We process your data only for these purposes:"],
+        "body": [
+          "We process your data only for these purposes:"
+        ],
         "items": [
           "To create your account, sign you in, and keep your session active.",
           "To run games: matching players, scoring answers, and showing results.",
@@ -120,7 +123,7 @@
       {
         "heading": "Who we are",
         "body": [
-          "Zeyn is operated by [OPERATOR FULL NAME], a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan, STIR [STIR NUMBER], [REGISTERED ADDRESS]. In these terms, 'we' and 'Zeyn' mean that operator, and 'you' means you as a user."
+          "Zeyn is operated by Izzatillo Azimov, a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan. In these terms, 'we' and 'Zeyn' mean that operator, and 'you' means you as a user."
         ]
       },
       {
@@ -140,7 +143,9 @@
       },
       {
         "heading": "Acceptable use",
-        "body": ["While using Zeyn, you may not:"],
+        "body": [
+          "While using Zeyn, you may not:"
+        ],
         "items": [
           "Cheat, use automated players or scripts, or otherwise manipulate scores and rankings.",
           "Harass, threaten, or abuse other players, or post content that is unlawful, hateful, or sexually explicit.",
@@ -203,7 +208,9 @@
       },
       {
         "heading": "Contact",
-        "body": ["Questions about these terms: support@zeyn.uz."]
+        "body": [
+          "Questions about these terms: support@zeyn.uz."
+        ]
       }
     ]
   }

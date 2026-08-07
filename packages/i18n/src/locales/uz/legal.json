@@ -3,8 +3,7 @@
     "lastUpdated": "Oxirgi yangilanish: {{date}}",
     "backHome": "Zeynga qaytish",
     "privacyLink": "Maxfiylik siyosati",
-    "termsLink": "Foydalanish shartlari",
-    "operatorNotice": "Zeyn O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) [OPERATOR FULL NAME] tomonidan boshqariladi, STIR [STIR NUMBER], [REGISTERED ADDRESS]."
+    "termsLink": "Foydalanish shartlari"
   },
   "privacy": {
     "title": "Maxfiylik siyosati",
@@ -14,13 +13,15 @@
       {
         "heading": "Biz kimmiz",
         "body": [
-          "Zeyn — O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) [OPERATOR FULL NAME] tomonidan boshqariladigan real vaqtda ko'p o'yinchili viktorina xizmati bo'lib, STIR [STIR NUMBER], ro'yxatdan o'tgan manzili [REGISTERED ADDRESS].",
+          "Zeyn — O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) Izzatillo Azimov tomonidan boshqariladigan real vaqtda ko'p o'yinchili viktorina xizmati.",
           "Ushbu siyosatda tavsiflangan shaxsiy ma'lumotlarga nisbatan biz ma'lumotlarni nazorat qiluvchi shaxs hisoblanamiz. Ma'lumotlaringiz bo'yicha har qanday savol yuzasidan yoki quyida tavsiflangan huquqlardan foydalanish uchun support@zeyn.uz manziliga yozing."
         ]
       },
       {
         "heading": "Nimalarni to'playmiz",
-        "body": ["Biz quyidagi toifadagi ma'lumotlarni to'playmiz va bulardan boshqa hech narsani to'plamaymiz:"],
+        "body": [
+          "Biz quyidagi toifadagi ma'lumotlarni to'playmiz va bulardan boshqa hech narsani to'plamaymiz:"
+        ],
         "items": [
           "Siz taqdim etadigan hisob ma'lumotlari: elektron pochta manzilingiz, ko'rsatiladigan ismingiz va foydalanuvchi nomingiz. Xohishingizga ko'ra qisqa bio va profil rasmini qo'shishingiz mumkin.",
           "Autentifikatsiya ma'lumotlari: agar elektron pochta orqali ro'yxatdan o'tsangiz, parolingizning xesh qiymati (parolning o'zini hech qachon saqlamaymiz) yoki quyida Google orqali kirish bo'limida tavsiflangan identifikatorlar.",
@@ -40,7 +41,9 @@
       },
       {
         "heading": "Nima uchun ulardan foydalanamiz",
-        "body": ["Biz ma'lumotlaringizni faqat quyidagi maqsadlarda qayta ishlaymiz:"],
+        "body": [
+          "Biz ma'lumotlaringizni faqat quyidagi maqsadlarda qayta ishlaymiz:"
+        ],
         "items": [
           "Hisobingizni yaratish, sizni tizimga kiritish va sessiyangizni faol saqlash uchun.",
           "O'yinlarni boshqarish uchun: o'yinchilarni moslashtirish, javoblarni baholash va natijalarni ko'rsatish.",
@@ -120,7 +123,7 @@
       {
         "heading": "Biz kimmiz",
         "body": [
-          "Zeyn O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) [OPERATOR FULL NAME] tomonidan boshqariladi, STIR [STIR NUMBER], [REGISTERED ADDRESS]. Ushbu shartlarda 'biz' va 'Zeyn' ushbu operatorni, 'siz' esa foydalanuvchi sifatida sizni anglatadi."
+          "Zeyn O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) Izzatillo Azimov tomonidan boshqariladi. Ushbu shartlarda 'biz' va 'Zeyn' ushbu operatorni, 'siz' esa foydalanuvchi sifatida sizni anglatadi."
         ]
       },
       {
@@ -140,7 +143,9 @@
       },
       {
         "heading": "Ruxsat etilgan foydalanish",
-        "body": ["Zeyndan foydalanish jarayonida siz quyidagilarga yo'l qo'ymasligingiz kerak:"],
+        "body": [
+          "Zeyndan foydalanish jarayonida siz quyidagilarga yo'l qo'ymasligingiz kerak:"
+        ],
         "items": [
           "Firibgarlik qilish, avtomatlashtirilgan o'yinchilar yoki skriptlardan foydalanish yoki boshqa yo'l bilan ochkolar va reytinglarni manipulyatsiya qilish.",
           "Boshqa o'yinchilarni ta'qib qilish, tahdid qilish yoki haqorat qilish, yoki noqonuniy, nafrat uyg'otuvchi yoki jinsiy tarzda ochiq kontent joylashtirish.",
@@ -203,7 +208,9 @@
       },
       {
         "heading": "Aloqa",
-        "body": ["Ushbu shartlar bo'yicha savollar: support@zeyn.uz."]
+        "body": [
+          "Ushbu shartlar bo'yicha savollar: support@zeyn.uz."
+        ]
       }
     ]
   }
