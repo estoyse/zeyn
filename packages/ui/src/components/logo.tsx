@@ -25,6 +25,8 @@ interface LogoProps extends ComponentProps<"span"> {
 export function Logo({ size = "md", dot = true, className, ...props }: LogoProps) {
   return (
     <span
+      role="img"
+      aria-label="Zeyn"
       className={cn(
         "font-heading font-bold lowercase leading-none tracking-tight select-none inline-flex items-baseline",
         wordmarkSizes[size],

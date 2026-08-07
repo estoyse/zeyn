@@ -8,7 +8,7 @@ const distDir = path.join(appRoot, "dist");
 const shellPath = path.join(distDir, "index.html");
 const prerenderEntry = path.join(appRoot, "src", "prerender.tsx");
 
-const PRERENDER_LOCALE = "uz";
+const PRERENDER_LOCALE = "en";
 const MIN_RENDERED_BYTES = 2000;
 const APP_MOUNT_POINT = '<div id="app"></div>';
 
