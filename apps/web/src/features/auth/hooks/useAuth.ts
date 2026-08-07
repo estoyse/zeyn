@@ -92,10 +92,13 @@ export function useAuth(): UseAuthReturn {
   };
 
   const signInWithGoogle = (returnTo?: string) => {
-    const redirectUrl = returnTo
-      ? `${window.location.origin}/auth/verify?returnTo=${encodeURIComponent(returnTo)}`
-      : undefined;
-    authClient.signIn.social({ provider: "google", callbackURL: redirectUrl });
+    const origin = window.location.origin;
+    const returnToParam = returnTo ? `returnTo=${encodeURIComponent(returnTo)}` : "";
+    authClient.signIn.social({
+      provider: "google",
+      callbackURL: `${origin}/auth/verify${returnToParam ? `?${returnToParam}` : ""}`,
+      errorCallbackURL: `${origin}/auth/verify?error=oauth${returnToParam ? `&${returnToParam}` : ""}`,
+    });
   };
 
   const signOut = async () => {
