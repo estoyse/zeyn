@@ -27,19 +27,35 @@
     "rounds": {
       "planet": {
         "question": "Which planet is known as the Red Planet?",
-        "options": ["Venus", "Mars", "Jupiter"]
+        "options": [
+          "Venus",
+          "Mars",
+          "Jupiter"
+        ]
       },
       "monaLisa": {
         "question": "Who painted the Mona Lisa?",
-        "options": ["Da Vinci", "Picasso", "Van Gogh"]
+        "options": [
+          "Da Vinci",
+          "Picasso",
+          "Van Gogh"
+        ]
       },
       "japanCapital": {
         "question": "What is the capital of Japan?",
-        "options": ["Seoul", "Beijing", "Tokyo"]
+        "options": [
+          "Seoul",
+          "Beijing",
+          "Tokyo"
+        ]
       },
       "guitarStrings": {
         "question": "How many strings on a guitar?",
-        "options": ["Six", "Four", "Eight"]
+        "options": [
+          "Six",
+          "Four",
+          "Eight"
+        ]
       }
     }
   },
@@ -121,23 +137,43 @@
     "questions": {
       "redPlanet": {
         "question": "Which planet is known as the Red Planet?",
-        "options": ["Venus", "Mars", "Jupiter"]
+        "options": [
+          "Venus",
+          "Mars",
+          "Jupiter"
+        ]
       },
       "shakespeare": {
         "question": "Who wrote 'Romeo and Juliet'?",
-        "options": ["Dickens", "Shakespeare", "Tolstoy"]
+        "options": [
+          "Dickens",
+          "Shakespeare",
+          "Tolstoy"
+        ]
       },
       "ocean": {
         "question": "What is the largest ocean on Earth?",
-        "options": ["Atlantic", "Indian", "Pacific"]
+        "options": [
+          "Atlantic",
+          "Indian",
+          "Pacific"
+        ]
       },
       "byte": {
         "question": "How many bits are in a byte?",
-        "options": ["8", "16", "4"]
+        "options": [
+          "8",
+          "16",
+          "4"
+        ]
       },
       "goldSymbol": {
         "question": "Which element has the symbol 'Au'?",
-        "options": ["Silver", "Gold", "Iron"]
+        "options": [
+          "Silver",
+          "Gold",
+          "Iron"
+        ]
       }
     }
   },
@@ -166,6 +202,26 @@
       "instantScoring": "Instant Scoring",
       "multiplayer": "Multiplayer"
     }
+  },
+  "accountsAndData": {
+    "eyebrow": "Accounts and your data",
+    "title": "Sign in with Google, and nothing more",
+    "intro": "Zeyn is a free trivia game you play against other people in real time. You can host a room, invite friends with a code, buzz in to answer questions against the clock, and watch every player's score update live. Browsing games and playing as a guest needs no account at all. You only need to sign in to keep a profile, save your match history, and host your own rooms.",
+    "cards": {
+      "whatWeAsk": {
+        "title": "What we ask Google for",
+        "description": "Only your name, email address and profile picture. Those are the standard email, profile and openid scopes, and we request nothing beyond them."
+      },
+      "whyWeNeedIt": {
+        "title": "Why we need it",
+        "description": "Your email identifies your account so you can sign back in and we can send password resets. Your name and picture are how other players recognise you in a game."
+      },
+      "whatWeNeverTouch": {
+        "title": "What we never touch",
+        "description": "We never read your Gmail, contacts, calendar or files, and we never post anything to your Google account. We do not sell your data or use it for advertising."
+      }
+    },
+    "privacyNote": "You can disconnect Zeyn from your Google account at any time. For the full detail, read our"
   },
   "footer": {
     "description": "Real-time multiplayer trivia. Fast games, live scoring, endless rematches.",

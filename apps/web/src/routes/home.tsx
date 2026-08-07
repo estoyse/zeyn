@@ -9,6 +9,7 @@ import { GamesShowcase } from "@/features/landing/components/GamesShowcase";
 import { HowItWorks } from "@/features/landing/components/HowItWorks";
 import { BentoFeatures } from "@/features/landing/components/BentoFeatures";
 import { Stats } from "@/features/landing/components/Stats";
+import { AccountsAndData } from "@/features/landing/components/AccountsAndData";
 import { CTA } from "@/features/landing/components/CTA";
 import { ScrollProgress } from "@/features/landing/components/ScrollProgress";
 
@@ -60,6 +61,7 @@ function HomeComponent() {
       <BentoFeatures />
       <HowItWorks />
       <Stats />
+      <AccountsAndData />
       <CTA />
       <Footer />
     </div>

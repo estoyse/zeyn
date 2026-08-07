@@ -27,19 +27,35 @@
     "rounds": {
       "planet": {
         "question": "Qaysi sayyora Qizil sayyora deb ataladi?",
-        "options": ["Venera", "Mars", "Yupiter"]
+        "options": [
+          "Venera",
+          "Mars",
+          "Yupiter"
+        ]
       },
       "monaLisa": {
         "question": "Mona Lizani kim chizgan?",
-        "options": ["Da Vinchi", "Pikasso", "Van Gog"]
+        "options": [
+          "Da Vinchi",
+          "Pikasso",
+          "Van Gog"
+        ]
       },
       "japanCapital": {
         "question": "Yaponiya poytaxti qaysi shahar?",
-        "options": ["Seul", "Pekin", "Tokio"]
+        "options": [
+          "Seul",
+          "Pekin",
+          "Tokio"
+        ]
       },
       "guitarStrings": {
         "question": "Gitarada nechta sim bo'ladi?",
-        "options": ["Olti", "To'rt", "Sakkiz"]
+        "options": [
+          "Olti",
+          "To'rt",
+          "Sakkiz"
+        ]
       }
     }
   },
@@ -121,23 +137,43 @@
     "questions": {
       "redPlanet": {
         "question": "Qaysi sayyora Qizil sayyora deb ataladi?",
-        "options": ["Venera", "Mars", "Yupiter"]
+        "options": [
+          "Venera",
+          "Mars",
+          "Yupiter"
+        ]
       },
       "shakespeare": {
         "question": "\"Romeo va Julietta\"ni kim yozgan?",
-        "options": ["Dikkens", "Shekspir", "Tolstoy"]
+        "options": [
+          "Dikkens",
+          "Shekspir",
+          "Tolstoy"
+        ]
       },
       "ocean": {
         "question": "Yer sayyorasidagi eng katta okean qaysi?",
-        "options": ["Atlantika", "Hind", "Tinch"]
+        "options": [
+          "Atlantika",
+          "Hind",
+          "Tinch"
+        ]
       },
       "byte": {
         "question": "Bir baytda nechta bit bor?",
-        "options": ["8", "16", "4"]
+        "options": [
+          "8",
+          "16",
+          "4"
+        ]
       },
       "goldSymbol": {
         "question": "\"Au\" belgisi qaysi elementga tegishli?",
-        "options": ["Kumush", "Oltin", "Temir"]
+        "options": [
+          "Kumush",
+          "Oltin",
+          "Temir"
+        ]
       }
     }
   },
@@ -166,6 +202,26 @@
       "instantScoring": "Zumdagi ballash",
       "multiplayer": "Ko'p o'yinchili"
     }
+  },
+  "accountsAndData": {
+    "eyebrow": "Hisoblar va ma'lumotlaringiz",
+    "title": "Google orqali kiring, boshqa hech narsa emas",
+    "intro": "Zeyn — bu boshqa odamlar bilan real vaqtda o'ynaydigan bepul viktorina o'yini. Siz xona ochishingiz, do'stlaringizni kod orqali taklif qilishingiz, vaqtga qarshi savollarga javob berish uchun tugmani bosishingiz va har bir o'yinchining hisobi jonli yangilanishini kuzatishingiz mumkin. O'yinlarni ko'rish va mehmon sifatida o'ynash uchun hisob umuman kerak emas. Kirish faqat profilni saqlash, o'yinlar tarixini yuritish va o'z xonalaringizni ochish uchun kerak.",
+    "cards": {
+      "whatWeAsk": {
+        "title": "Google'dan nima so'raymiz",
+        "description": "Faqat ismingiz, elektron pochta manzilingiz va profil rasmingiz. Bular standart email, profile va openid ruxsatlari bo'lib, biz bundan ortig'ini so'ramaymiz."
+      },
+      "whyWeNeedIt": {
+        "title": "Bu bizga nima uchun kerak",
+        "description": "Elektron pochtangiz hisobingizni aniqlaydi, shunda siz qayta kira olasiz va biz parolni tiklash xatlarini yubora olamiz. Ismingiz va rasmingiz orqali boshqa o'yinchilar sizni o'yinda taniydi."
+      },
+      "whatWeNeverTouch": {
+        "title": "Biz hech qachon tegmaydigan narsalar",
+        "description": "Biz hech qachon Gmail xatlaringizni, kontaktlaringizni, kalendaringizni yoki fayllaringizni o'qimaymiz va Google hisobingizga hech narsa joylamaymiz. Ma'lumotlaringizni sotmaymiz va reklama uchun ishlatmaymiz."
+      }
+    },
+    "privacyNote": "Zeynni Google hisobingizdan istalgan vaqtda uzib qo'yishingiz mumkin. To'liq ma'lumot uchun o'qing:"
   },
   "footer": {
     "description": "Real vaqtda ko'p o'yinchili viktorina. Tezkor o'yinlar, jonli hisob, cheksiz qayta o'yinlar.",
