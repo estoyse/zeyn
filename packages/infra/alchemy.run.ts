@@ -83,6 +83,7 @@ export const web = await Vite("web", {
   name: workerName("zeyn-web"),
   adopt: true,
   domains: domains ? [domains.web] : undefined,
+  script: `export default { async fetch(request, env) { return env.ASSETS.fetch(request); } };`,
   bindings: {
     VITE_SERVER_URL: viteServerUrl!,
   },

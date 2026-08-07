@@ -40,6 +40,7 @@ if (!rootElement) {
 }
 
 if (!rootElement.innerHTML) {
+  document.getElementById("static-intro")?.remove();
   const root = ReactDOM.createRoot(rootElement);
   root.render(<RouterProvider router={router} />);
 }
