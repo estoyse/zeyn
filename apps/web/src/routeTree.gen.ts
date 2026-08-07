@@ -13,6 +13,8 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthVerifyRouteImport } from './routes/auth.verify'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
@@ -42,6 +44,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/legal/terms',
+  path: '/legal/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const GameGameIdRoute = GameGameIdRouteImport.update({
   id: '/game/$gameId',
@@ -104,6 +116,8 @@ export interface FileRoutesByFullPath {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/games/$gameType': typeof AppGamesGameTypeRoute
   '/u/$username': typeof AppUUsernameRoute
   '/game/create/$gameType': typeof AppGameCreateGameTypeRoute
@@ -118,6 +132,8 @@ export interface FileRoutesByTo {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/': typeof AppIndexRoute
   '/games/$gameType': typeof AppGamesGameTypeRoute
   '/u/$username': typeof AppUUsernameRoute
@@ -135,6 +151,8 @@ export interface FileRoutesById {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/game/$gameId': typeof GameGameIdRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
   '/_app/': typeof AppIndexRoute
   '/_app/games/$gameType': typeof AppGamesGameTypeRoute
   '/_app/u/$username': typeof AppUUsernameRoute
@@ -153,6 +171,8 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/verify'
     | '/game/$gameId'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/games/$gameType'
     | '/u/$username'
     | '/game/create/$gameType'
@@ -167,6 +187,8 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/verify'
     | '/game/$gameId'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/'
     | '/games/$gameType'
     | '/u/$username'
@@ -183,6 +205,8 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/verify'
     | '/game/$gameId'
+    | '/legal/privacy'
+    | '/legal/terms'
     | '/_app/'
     | '/_app/games/$gameType'
     | '/_app/u/$username'
@@ -199,6 +223,8 @@ export interface RootRouteChildren {
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyRoute: typeof AuthVerifyRoute
   GameGameIdRoute: typeof GameGameIdRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalTermsRoute: typeof LegalTermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -230,6 +256,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/legal/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/game/$gameId': {
       id: '/game/$gameId'
@@ -333,6 +373,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyRoute: AuthVerifyRoute,
   GameGameIdRoute: GameGameIdRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalTermsRoute: LegalTermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

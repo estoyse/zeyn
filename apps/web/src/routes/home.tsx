@@ -30,6 +30,8 @@ function useFooterSections() {
     {
       heading: t("landing:footer.sections.company.heading"),
       links: [
+        { label: t("legal:common.privacyLink"), to: "/legal/privacy" as const },
+        { label: t("legal:common.termsLink"), to: "/legal/terms" as const },
         { label: t("landing:footer.sections.company.aboutUs"), disabled: true },
         { label: t("landing:footer.sections.company.blog"), disabled: true },
         { label: t("landing:footer.sections.company.contact"), disabled: true },

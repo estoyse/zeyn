@@ -1,0 +1,210 @@
+{
+  "common": {
+    "lastUpdated": "Oxirgi yangilanish: {{date}}",
+    "backHome": "Zeynga qaytish",
+    "privacyLink": "Maxfiylik siyosati",
+    "termsLink": "Foydalanish shartlari",
+    "operatorNotice": "Zeyn O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) [OPERATOR FULL NAME] tomonidan boshqariladi, STIR [STIR NUMBER], [REGISTERED ADDRESS]."
+  },
+  "privacy": {
+    "title": "Maxfiylik siyosati",
+    "date": "2026-yil 7-avgust",
+    "intro": "Ushbu siyosat zeyn.uz saytidan yoki Zeyn mobil ilovasidan foydalanganingizda Zeyn qanday shaxsiy ma'lumotlarni to'plashini, nima uchun to'plashini, ularni kim bilan bo'lishishini va sizning ular ustidan qanday nazoratingiz borligini tushuntiradi. U zeyn.uz domeni ostida biz boshqaradigan barcha narsalarga tatbiq etiladi.",
+    "sections": [
+      {
+        "heading": "Biz kimmiz",
+        "body": [
+          "Zeyn — O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) [OPERATOR FULL NAME] tomonidan boshqariladigan real vaqtda ko'p o'yinchili viktorina xizmati bo'lib, STIR [STIR NUMBER], ro'yxatdan o'tgan manzili [REGISTERED ADDRESS].",
+          "Ushbu siyosatda tavsiflangan shaxsiy ma'lumotlarga nisbatan biz ma'lumotlarni nazorat qiluvchi shaxs hisoblanamiz. Ma'lumotlaringiz bo'yicha har qanday savol yuzasidan yoki quyida tavsiflangan huquqlardan foydalanish uchun support@zeyn.uz manziliga yozing."
+        ]
+      },
+      {
+        "heading": "Nimalarni to'playmiz",
+        "body": ["Biz quyidagi toifadagi ma'lumotlarni to'playmiz va bulardan boshqa hech narsani to'plamaymiz:"],
+        "items": [
+          "Siz taqdim etadigan hisob ma'lumotlari: elektron pochta manzilingiz, ko'rsatiladigan ismingiz va foydalanuvchi nomingiz. Xohishingizga ko'ra qisqa bio va profil rasmini qo'shishingiz mumkin.",
+          "Autentifikatsiya ma'lumotlari: agar elektron pochta orqali ro'yxatdan o'tsangiz, parolingizning xesh qiymati (parolning o'zini hech qachon saqlamaymiz) yoki quyida Google orqali kirish bo'limida tavsiflangan identifikatorlar.",
+          "O'yin ma'lumotlari: siz boshlagan yoki qo'shilgan o'yinlar, javoblaringiz, har bir javob to'g'ri bo'lganmi, berilgan ballar, yakuniy natijalar va o'yin davomida ko'rsatiladigan ismingiz.",
+          "Texnik ma'lumotlar: har bir kirish sessiyasida qayd etiladigan IP-manzil va brauzer user-agent'i, ular sizni tizimga kirgan holda saqlash va suiiste'molni aniqlash uchun ishlatiladi.",
+          "Sozlamalar: interfeys tilingiz va profil ko'rinuvchanligi sozlamalaringiz."
+        ]
+      },
+      {
+        "heading": "Google orqali kirish",
+        "body": [
+          "Agar Google orqali kirishni tanlasangiz, Google bizga ismingizni, elektron pochta manzilingizni, profil rasmi URL manzilini, ushbu elektron pochta manzili Google tomonidan tasdiqlanganligini va Google hisobingiz uchun barqaror identifikatorni yuboradi. Biz faqat standart email, profile va openid ruxsat doiralarini (scope) so'raymiz.",
+          "Biz bundan faqat Zeyn hisobingizni yaratish va sizni unga kiritish uchun foydalanamiz. Biz sizning Gmail, kontaktlar, taqvim, fayllar yoki boshqa har qanday Google ma'lumotlaringizni o'qimaymiz va ularga hech qachon kirish huquqini so'ramaymiz. Biz Google hisobingizga hech narsa joylashtirmaymiz.",
+          "Agar bir xil tasdiqlangan elektron pochta manziliga ega Zeyn hisobi allaqachon mavjud bo'lsa, biz ikkalasini bog'laymiz, shunda siz dublikat yaratish o'rniga bitta hisobga ega bo'lasiz.",
+          "Zeynni istalgan vaqtda Google hisobingizning ruxsatlar sahifasidan uzishingiz mumkin. Bu keyingi Google orqali kirishlarni to'xtatadi, ammo o'z-o'zidan Zeyn hisobingizni o'chirmaydi — uni o'chirish uchun pastdagi 'Sizning huquqlaringiz' bo'limiga qarang."
+        ]
+      },
+      {
+        "heading": "Nima uchun ulardan foydalanamiz",
+        "body": ["Biz ma'lumotlaringizni faqat quyidagi maqsadlarda qayta ishlaymiz:"],
+        "items": [
+          "Hisobingizni yaratish, sizni tizimga kiritish va sessiyangizni faol saqlash uchun.",
+          "O'yinlarni boshqarish uchun: o'yinchilarni moslashtirish, javoblarni baholash va natijalarni ko'rsatish.",
+          "Siz tanlagan ko'rinuvchanlik sozlamalariga muvofiq profilingiz va statistikangizni ko'rsatish uchun.",
+          "Parolni tiklash xabarlari kabi tranzaksion elektron xatlarni yuborish uchun. Biz marketing xatlarini yubormaymiz.",
+          "Xizmatni ishlaydigan va adolatli saqlash uchun: so'rovlar chastotasini cheklash, suiiste'molning oldini olish va Foydalanish shartlarimizni ta'minlash."
+        ]
+      },
+      {
+        "heading": "Boshqalar nimani ko'ra oladi",
+        "body": [
+          "Foydalanuvchi nomingiz, ko'rsatiladigan ismingiz va profil rasmingiz siz qo'shilgan yoki boshlagan har qanday o'yindagi boshqa o'yinchilarga ko'rinadi.",
+          "Profil sahifangizda profilning umuman ochiq bo'lish-bo'lmasligini hamda statistikangiz, o'yinlar tarixi va boshlagan o'yinlaringiz ko'rsatilish-ko'rsatilmasligini boshqaradigan alohida tugmalar mavjud. Bularni istalgan vaqtda Sozlamalarda o'zgartirishingiz mumkin; profilni o'chirish uni faqat sizga ko'rinadigan qiladi.",
+          "Elektron pochta manzilingiz boshqa o'yinchilarga hech qachon ko'rsatilmaydi."
+        ]
+      },
+      {
+        "heading": "Kim bilan bo'lishamiz",
+        "body": [
+          "Biz shaxsiy ma'lumotlaringizni sotmaymiz va ularni reklama maqsadida bo'lishmaymiz. Biz ularni faqat Zeynning ishlashini ta'minlaydigan xizmat ko'rsatuvchilar bilan bo'lishamiz:"
+        ],
+        "items": [
+          "Google LLC — faqat Google orqali kirishni tanlaganingizda va faqat sizni autentifikatsiya qilish uchun.",
+          "Cloudflare, Inc. — hosting, ma'lumotlar bazasini saqlash va tarmoq himoyasi. Barcha hisob va o'yin ma'lumotlari Cloudflare infratuzilmasida saqlanadi.",
+          "Resend — parolni tiklash kabi tranzaksion elektron xatlarni yetkazib berish. Resend elektron pochta manzilingiz va xat matnini oladi."
+        ],
+        "note": "Ushbu xizmat ko'rsatuvchilar O'zbekistondan tashqarida faoliyat yuritadi, shuning uchun Zeyndan foydalanish ma'lumotlaringizni chet elga uzatishni o'z ichiga oladi. Shuningdek, O'zbekiston Respublikasi qonunchiligi talab qilgan hollarda ma'lumotlarni oshkor qilishimiz mumkin."
+      },
+      {
+        "heading": "Qancha muddat saqlaymiz",
+        "body": [
+          "Hisob ma'lumotlaringizni hisobingiz mavjud bo'lgan davomida saqlaymiz. Kirish sessiyalari avtomatik ravishda muddati tugaydi va muddati tugagan sessiyalar o'chiriladi.",
+          "Hisobingizni o'chirganingizda, biz hisob ma'lumotlaringizni, autentifikatsiya yozuvlarini va profilingizni o'chiramiz. Boshqa o'yinchilar ishtirok etgan o'yin yozuvlari ularning o'z o'yinlar tarixi buzilmasligi uchun anonimlashtirilgan shaklda saqlanishi mumkin.",
+          "Yozuvlarni faqat qonun talab qilgan hollardagina uzoqroq saqlaymiz."
+        ]
+      },
+      {
+        "heading": "Sizning huquqlaringiz",
+        "body": [
+          "Siz bizdan ma'lumotlaringiz nusxasini berishimizni, noto'g'ri ma'lumotlarni tuzatishimizni yoki hisobingiz va unga bog'liq ma'lumotlarni o'chirishimizni so'rashingiz mumkin. Ko'pgina ma'lumotlarni Sozlamalarda o'zingiz tuzatishingiz mumkin.",
+          "Ushbu so'rovlardan birortasini yuborish uchun hisobingizdagi elektron pochta manzilidan support@zeyn.uz ga yozing. Biz 30 kun ichida javob beramiz.",
+          "Agar ma'lumotlaringiz noto'g'ri qayta ishlangan deb hisoblasangiz, O'zbekiston Respublikasining shaxsiy ma'lumotlarni himoya qilish bo'yicha vakolatli organiga shikoyat qilishingiz mumkin."
+        ]
+      },
+      {
+        "heading": "Bolalar",
+        "body": [
+          "Zeyn 13 yoshgacha bo'lgan bolalarga mo'ljallanmagan va biz ularning ma'lumotlarini bilib turib to'plamaymiz. Agar 13 yoshgacha bo'lgan bola hisob yaratgan deb hisoblasangiz, support@zeyn.uz manziliga yozing va biz uni o'chiramiz."
+        ]
+      },
+      {
+        "heading": "Xavfsizlik",
+        "body": [
+          "Parollar faqat Argon2id xesh shaklida saqlanadi va ochiq matn ko'rinishida hech qachon tiklab bo'lmaydi. Qurilmangiz va Zeyn o'rtasidagi trafik uzatish jarayonida shifrlanadi, sessiya cookie-fayllari esa sahifadagi skriptlar ularni o'qiy olmasligi uchun cheklangan.",
+          "Hech qanday xizmat mukammal xavfsizlikni va'da qila olmaydi, ammo biz ma'lumotlaringizni himoya qilish uchun ishlaymiz va agar buzilish ularga ta'sir qilsa, sizga xabar beramiz."
+        ]
+      },
+      {
+        "heading": "Ushbu siyosatga kiritiladigan o'zgarishlar",
+        "body": [
+          "Agar ushbu siyosatga jiddiy o'zgartirish kiritsak, ushbu sahifa boshidagi sanani yangilaymiz va o'zgarish sizga sezilarli ta'sir qilsa, bu haqda ilovada xabar beramiz. O'zgarishdan keyin Zeyndan foydalanishni davom ettirish yangilangan siyosatni qabul qilganingizni bildiradi."
+        ]
+      },
+      {
+        "heading": "Aloqa",
+        "body": [
+          "Savollar, ma'lumot so'rovlari va shikoyatlar: support@zeyn.uz. Zeyndan avtomatik xabarlar noreply@zeyn.uz manzilidan yuboriladi, u javoblarni qabul qilmaydi."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Foydalanish shartlari",
+    "date": "2026-yil 7-avgust",
+    "intro": "Ushbu shartlar Zeyndan foydalanishingizni tartibga soladi. Hisob yaratish yoki o'yin o'ynash orqali siz ularga rozilik bildirasiz. Agar rozi bo'lmasangiz, xizmatdan foydalanmang.",
+    "sections": [
+      {
+        "heading": "Biz kimmiz",
+        "body": [
+          "Zeyn O'zbekiston Respublikasida ro'yxatdan o'tgan yakka tartibdagi tadbirkor (YaTT) [OPERATOR FULL NAME] tomonidan boshqariladi, STIR [STIR NUMBER], [REGISTERED ADDRESS]. Ushbu shartlarda 'biz' va 'Zeyn' ushbu operatorni, 'siz' esa foydalanuvchi sifatida sizni anglatadi."
+        ]
+      },
+      {
+        "heading": "Kim Zeyndan foydalanishi mumkin",
+        "body": [
+          "Hisob yaratish uchun kamida 13 yoshda bo'lishingiz kerak. Agar 18 yoshdan kichik bo'lsangiz, Zeyndan faqat ota-ona yoki vasiyning ruxsati bilan foydalanishingiz mumkin.",
+          "Ba'zi o'yinlarni hisobsiz, mehmon sifatida o'ynashingiz mumkin. Mehmon sifatida o'ynash cheklangan bo'lib, istalgan vaqtda cheklanishi mumkin."
+        ]
+      },
+      {
+        "heading": "Hisobingiz",
+        "body": [
+          "Hisobingiz ostida sodir bo'ladigan har qanday harakat va parolingiz xavfsizligini ta'minlash uchun siz javobgarsiz. Agar boshqa birov unga kirish huquqiga ega deb hisoblasangiz, support@zeyn.uz orqali bizga xabar bering.",
+          "Ro'yxatdan o'tishda aniq ma'lumot bering. Foydalanuvchi nomlari noyob bo'lib, band qilingan nomlar to'plami foydalanish uchun mavjud emas. Boshqa birovni taqlid qiluvchi yoki ushbu shartlarni buzadigan foydalanuvchi nomini biz qaytarib olishimiz mumkin.",
+          "Agar biz yozma ravishda boshqacha kelishmasak, sizda faqat bitta hisob bo'lishi mumkin."
+        ]
+      },
+      {
+        "heading": "Ruxsat etilgan foydalanish",
+        "body": ["Zeyndan foydalanish jarayonida siz quyidagilarga yo'l qo'ymasligingiz kerak:"],
+        "items": [
+          "Firibgarlik qilish, avtomatlashtirilgan o'yinchilar yoki skriptlardan foydalanish yoki boshqa yo'l bilan ochkolar va reytinglarni manipulyatsiya qilish.",
+          "Boshqa o'yinchilarni ta'qib qilish, tahdid qilish yoki haqorat qilish, yoki noqonuniy, nafrat uyg'otuvchi yoki jinsiy tarzda ochiq kontent joylashtirish.",
+          "Boshqa shaxsni taqlid qilish yoki aldash maqsadida foydalanuvchi nomi, ko'rsatiladigan ism, bio yoki xona nomini tanlash.",
+          "Xizmatni yoki boshqa foydalanuvchilarning hisoblarini buzishga, ortiqcha yuklashga, tekshirishga yoki ruxsatsiz kirishga urinish.",
+          "Bizning savollarimiz, javoblarimiz yoki boshqa kontentimizni ommaviy tarzda skreyping qilish, nusxalash yoki qayta tarqatish."
+        ]
+      },
+      {
+        "heading": "Siz taqdim etadigan kontent",
+        "body": [
+          "Siz qo'shgan kontent — ko'rsatiladigan ismingiz, bio va o'yinlarga bergan nomlaringiz — sizga tegishli bo'lib qoladi. Uni qo'shish orqali siz bizga xizmatni ishlatish uchun zarur bo'lgan tarzda uni saqlash va ko'rsatish huquqini berasiz.",
+          "Ushbu kontent uchun siz javobgarsiz va undan foydalanish huquqiga ega ekanligingizni tasdiqlaysiz. Ushbu shartlarni buzadigan kontentni biz olib tashlashimiz mumkin."
+        ]
+      },
+      {
+        "heading": "To'xtatib qo'yish va bekor qilish",
+        "body": [
+          "Ushbu shartlarni buzadigan, boshqa o'yinchilarga zarar yetkazadigan yoki xizmatni xavf ostiga qo'yadigan hisobni biz to'xtatib qo'yishimiz yoki bloklashimiz mumkin. Bloklash vaqtinchalik yoki doimiy bo'lishi mumkin, va imkon qadar sababini sizga aytamiz.",
+          "Siz istalgan vaqtda support@zeyn.uz manziliga yozib, Zeyndan foydalanishni to'xtatishingiz va hisobingizni o'chirishingiz mumkin."
+        ]
+      },
+      {
+        "heading": "Uchinchi tomon kontenti",
+        "body": [
+          "Ba'zi o'yinlarda Apple iTunes Search API kabi uchinchi tomon kataloglari tomonidan taqdim etilgan qisqa musiqa namunalari va muqova rasmlari ishlatiladi. Ushbu kontent o'z huquq egalariga tegishli bo'lib, faqat o'yin davomida identifikatsiya qilish uchun taqdim etiladi.",
+          "Agar Zeynda ko'rsatilgan materialga huquqingiz bo'lsa va uni olib tashlashni istasangiz, support@zeyn.uz manziliga yozing."
+        ]
+      },
+      {
+        "heading": "Pullik funksiyalar",
+        "body": [
+          "Hozirda Zeyndan foydalanish bepul bo'lib, biz to'lovlarni qabul qilmaymiz. Agar biz pullik funksiyalarni joriy qilsak, narxlar, to'lov va pulni qaytarish bo'yicha alohida shartlarni e'lon qilamiz, va sizdan pul yechib olinishidan oldin ushbu shartlarga qo'shimcha ravishda o'sha shartlar qo'llaniladi. Biz sizning aniq roziligingizsiz hech qachon sizdan pul undirmaymiz."
+        ]
+      },
+      {
+        "heading": "Mavjudlik",
+        "body": [
+          "Biz Zeynning ishlashini ta'minlash uchun harakat qilamiz, ammo uning uzluksiz yoki xatosiz bo'lishini kafolatlamaymiz. Biz xizmatning istalgan qismini o'zgartirishimiz, to'xtatib qo'yishimiz yoki bekor qilishimiz mumkin va imkon qadar jiddiy o'zgarishlar haqida oldindan xabar beramiz.",
+          "Zeyn 'bor holicha' taqdim etiladi. Qonun ruxsat bergan darajada, biz xizmat bo'yicha hech qanday kafolat bermaymiz va undan foydalanishingiz natijasida yuzaga keladigan bilvosita yoki oqibatli zararlar uchun javobgar emasmiz. Ushbu shartlarda hech narsa qonun bilan cheklab bo'lmaydigan javobgarlikni cheklamaydi."
+        ]
+      },
+      {
+        "heading": "Bizning kontentimiz",
+        "body": [
+          "Zeyn nomi, interfeysi hamda biz yaratgan savollar va o'yinlar bizga tegishli. Ulardan faqat xizmat orqali va ushbu shartlar ruxsat bergan tarzda foydalanishingiz mumkin."
+        ]
+      },
+      {
+        "heading": "Amal qiluvchi qonunchilik",
+        "body": [
+          "Ushbu shartlar O'zbekiston Respublikasi qonunchiligiga muvofiq amal qiladi. Norasmiy tarzda hal qila olmagan nizolarimiz O'zbekiston Respublikasining vakolatli sudlari tomonidan ko'rib chiqiladi."
+        ]
+      },
+      {
+        "heading": "Ushbu shartlarga kiritiladigan o'zgarishlar",
+        "body": [
+          "Biz ushbu shartlarni yangilashimiz mumkin. Sahifa boshidagi sanani o'zgartiramiz va jiddiy o'zgarishlar haqida ilovada xabar beramiz. O'zgarishdan keyin Zeyndan foydalanishni davom ettirish yangilangan shartlarni qabul qilganingizni bildiradi."
+        ]
+      },
+      {
+        "heading": "Aloqa",
+        "body": ["Ushbu shartlar bo'yicha savollar: support@zeyn.uz."]
+      }
+    ]
+  }
+}

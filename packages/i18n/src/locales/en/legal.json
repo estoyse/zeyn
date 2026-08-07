@@ -1,0 +1,210 @@
+{
+  "common": {
+    "lastUpdated": "Last updated: {{date}}",
+    "backHome": "Back to Zeyn",
+    "privacyLink": "Privacy Policy",
+    "termsLink": "Terms of Service",
+    "operatorNotice": "Zeyn is operated by [OPERATOR FULL NAME], a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan, STIR [STIR NUMBER], [REGISTERED ADDRESS]."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "date": "7 August 2026",
+    "intro": "This policy explains what personal data Zeyn collects when you use zeyn.uz or the Zeyn mobile app, why we collect it, who we share it with, and what control you have over it. It applies to everything we operate under the zeyn.uz domain.",
+    "sections": [
+      {
+        "heading": "Who we are",
+        "body": [
+          "Zeyn is a real-time multiplayer trivia service operated by [OPERATOR FULL NAME], a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan, STIR [STIR NUMBER], with a registered address at [REGISTERED ADDRESS].",
+          "We are the data controller for the personal data described in this policy. For any question about your data, or to exercise any of the rights described below, write to support@zeyn.uz."
+        ]
+      },
+      {
+        "heading": "What we collect",
+        "body": ["We collect the following categories of data, and nothing beyond them:"],
+        "items": [
+          "Account details you provide: your email address, display name, and a username. You may optionally add a short bio and a profile picture.",
+          "Authentication data: a hash of your password if you sign up with email (we never store the password itself), or the identifiers described in the Google sign-in section below.",
+          "Gameplay data: games you host or join, your answers, whether each answer was correct, points awarded, final scores, and the display name shown during the game.",
+          "Technical data: the IP address and browser user-agent recorded with each login session, used to keep you signed in and to detect abuse.",
+          "Preferences: your interface language and your profile visibility settings."
+        ]
+      },
+      {
+        "heading": "Signing in with Google",
+        "body": [
+          "If you choose to sign in with Google, Google sends us your name, email address, profile picture URL, whether Google has verified that email address, and a stable identifier for your Google account. We request only the standard email, profile, and openid scopes.",
+          "We use this solely to create and sign you into your Zeyn account. We do not read your Gmail, contacts, calendar, files, or any other Google data, and we never request access to them. We do not post anything to your Google account.",
+          "If a Zeyn account already exists with the same verified email address, we link the two so you keep one account rather than creating a duplicate.",
+          "You can disconnect Zeyn at any time from your Google account permissions page. Doing so stops future Google sign-in but does not by itself delete your Zeyn account — to delete it, see 'Your rights' below."
+        ]
+      },
+      {
+        "heading": "Why we use it",
+        "body": ["We process your data only for these purposes:"],
+        "items": [
+          "To create your account, sign you in, and keep your session active.",
+          "To run games: matching players, scoring answers, and showing results.",
+          "To display your profile and statistics according to the visibility settings you choose.",
+          "To send transactional email, such as password reset messages. We do not send marketing email.",
+          "To keep the service working and fair: rate limiting, preventing abuse, and enforcing our Terms of Service."
+        ]
+      },
+      {
+        "heading": "What other people can see",
+        "body": [
+          "Your username, display name, and profile picture are visible to other players in any game you join or host.",
+          "Your profile page has separate switches controlling whether the profile is public at all, and whether your statistics, match history, and hosted games are shown. You can change these at any time in Settings; turning the profile off makes it visible only to you.",
+          "Your email address is never shown to other players."
+        ]
+      },
+      {
+        "heading": "Who we share it with",
+        "body": [
+          "We do not sell your personal data, and we do not share it for advertising. We share it only with the service providers that make Zeyn work:"
+        ],
+        "items": [
+          "Google LLC — only if you choose Google sign-in, and only to authenticate you.",
+          "Cloudflare, Inc. — hosting, database storage, and network protection. All account and gameplay data is stored on Cloudflare infrastructure.",
+          "Resend — delivery of transactional email such as password resets. Resend receives your email address and the message content."
+        ],
+        "note": "These providers operate outside Uzbekistan, so using Zeyn involves transferring your data abroad. We may also disclose data where the law of the Republic of Uzbekistan requires it."
+      },
+      {
+        "heading": "How long we keep it",
+        "body": [
+          "We keep your account data for as long as your account exists. Login sessions expire automatically, and expired sessions are removed.",
+          "When you delete your account, we delete your account details, authentication records, and profile. Gameplay records that involve other players may be retained in anonymised form so that their own match history stays intact.",
+          "We keep records longer only where we are legally required to."
+        ]
+      },
+      {
+        "heading": "Your rights",
+        "body": [
+          "You can ask us to give you a copy of your data, correct anything inaccurate, or delete your account and the data attached to it. You can correct most details yourself in Settings.",
+          "To make any of these requests, write to support@zeyn.uz from the email address on your account. We will respond within 30 days.",
+          "If you believe we have handled your data improperly, you may complain to the competent personal data protection authority of the Republic of Uzbekistan."
+        ]
+      },
+      {
+        "heading": "Children",
+        "body": [
+          "Zeyn is not directed at children under 13, and we do not knowingly collect their data. If you believe a child under 13 has created an account, write to support@zeyn.uz and we will remove it."
+        ]
+      },
+      {
+        "heading": "Security",
+        "body": [
+          "Passwords are stored only as Argon2id hashes and are never recoverable in plain text. Traffic between your device and Zeyn is encrypted in transit, and session cookies are restricted so that scripts on the page cannot read them.",
+          "No service can promise perfect security, but we work to protect your data and will notify you if a breach affects it."
+        ]
+      },
+      {
+        "heading": "Changes to this policy",
+        "body": [
+          "If we change this policy materially, we will update the date at the top of this page and, where the change significantly affects you, tell you in the app. Continuing to use Zeyn after a change means you accept the updated policy."
+        ]
+      },
+      {
+        "heading": "Contact",
+        "body": [
+          "Questions, data requests, and complaints: support@zeyn.uz. Automated messages from Zeyn are sent from noreply@zeyn.uz, which does not accept replies."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "date": "7 August 2026",
+    "intro": "These terms govern your use of Zeyn. By creating an account or playing a game, you agree to them. If you do not agree, please do not use the service.",
+    "sections": [
+      {
+        "heading": "Who we are",
+        "body": [
+          "Zeyn is operated by [OPERATOR FULL NAME], a self-employed entrepreneur (YaTT) registered in the Republic of Uzbekistan, STIR [STIR NUMBER], [REGISTERED ADDRESS]. In these terms, 'we' and 'Zeyn' mean that operator, and 'you' means you as a user."
+        ]
+      },
+      {
+        "heading": "Who may use Zeyn",
+        "body": [
+          "You must be at least 13 years old to create an account. If you are under 18, you may use Zeyn only with the permission of a parent or guardian.",
+          "You may play some games as a guest without an account. Guest play is limited and may be restricted at any time."
+        ]
+      },
+      {
+        "heading": "Your account",
+        "body": [
+          "You are responsible for what happens under your account and for keeping your password secure. Tell us at support@zeyn.uz if you believe someone else has access to it.",
+          "Give accurate information when you sign up. Usernames are unique, and a set of reserved names is not available. We may reclaim a username that impersonates someone else or violates these terms.",
+          "You may have only one account unless we agree otherwise in writing."
+        ]
+      },
+      {
+        "heading": "Acceptable use",
+        "body": ["While using Zeyn, you may not:"],
+        "items": [
+          "Cheat, use automated players or scripts, or otherwise manipulate scores and rankings.",
+          "Harass, threaten, or abuse other players, or post content that is unlawful, hateful, or sexually explicit.",
+          "Impersonate another person, or choose a username, display name, bio, or room name intended to deceive.",
+          "Attempt to break, overload, probe, or gain unauthorised access to the service or to other users' accounts.",
+          "Scrape, copy, or redistribute our questions, answers, or other content in bulk."
+        ]
+      },
+      {
+        "heading": "Content you provide",
+        "body": [
+          "You keep ownership of the content you add — your display name, bio, and the names you give games. By adding it, you grant us permission to store and display it as needed to run the service.",
+          "You are responsible for that content, and you confirm you have the right to use it. We may remove content that breaks these terms."
+        ]
+      },
+      {
+        "heading": "Suspension and termination",
+        "body": [
+          "We may suspend or ban an account that breaks these terms, harms other players, or puts the service at risk. A ban may be temporary or permanent, and we will tell you the reason where we can.",
+          "You may stop using Zeyn and delete your account at any time by writing to support@zeyn.uz."
+        ]
+      },
+      {
+        "heading": "Third-party content",
+        "body": [
+          "Some games use short music previews and cover artwork supplied by third-party catalogues, including the Apple iTunes Search API. That content belongs to its rights holders and is provided for identification during play only.",
+          "If you hold rights to material shown in Zeyn and want it removed, write to support@zeyn.uz."
+        ]
+      },
+      {
+        "heading": "Paid features",
+        "body": [
+          "Zeyn is currently free to use, and we do not accept payments. If we introduce paid features, we will publish separate terms covering prices, payment, and refunds, and those terms will apply in addition to these before you are charged. We will never charge you without your explicit agreement."
+        ]
+      },
+      {
+        "heading": "Availability",
+        "body": [
+          "We work to keep Zeyn running, but we do not guarantee that it will be uninterrupted or error-free. We may change, suspend, or discontinue any part of the service, and we will give notice of significant changes where practical.",
+          "Zeyn is provided 'as is'. To the extent the law allows, we make no warranties about the service and are not liable for indirect or consequential loss arising from your use of it. Nothing in these terms limits liability that cannot be limited by law."
+        ]
+      },
+      {
+        "heading": "Our content",
+        "body": [
+          "The Zeyn name, interface, and the questions and games we create belong to us. You may use them only through the service as these terms allow."
+        ]
+      },
+      {
+        "heading": "Governing law",
+        "body": [
+          "These terms are governed by the law of the Republic of Uzbekistan. Disputes that we cannot resolve informally will be heard by the competent courts of the Republic of Uzbekistan."
+        ]
+      },
+      {
+        "heading": "Changes to these terms",
+        "body": [
+          "We may update these terms. We will change the date at the top of this page and, for significant changes, tell you in the app. Continuing to use Zeyn after a change means you accept the updated terms."
+        ]
+      },
+      {
+        "heading": "Contact",
+        "body": ["Questions about these terms: support@zeyn.uz."]
+      }
+    ]
+  }
+}
